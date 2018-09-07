@@ -1,0 +1,76 @@
+options {
+  DEBUG_PARSER = false;
+  DEBUG_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(Compilador)
+import java.io.*;
+public class Compilador { 
+   public static void main(String args[])  throws ParseException  {
+      Compilador compilador = null;
+      try {
+         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
+         Compilador.inicio();
+      }
+      catch(FileNotFoundException e) {
+         System.out.println("Erro: arquivo nao encontrado");
+      }
+      catch(TokenMgrError e) {
+         System.out.println("Erro lexico\n" + e.getMessage());
+      }
+   }
+}
+PARSER_END(Compilador)
+ 
+SKIP : { " " | "\t" | "\r" | "\n" }
+
+//TOKENS DE COMANDOS 
+TOKEN [IGNORE_CASE] : {
+  		<EXIBE: "exibe" >  |
+  		<LEITURA: "le" > | 
+		<SE: "se" > |
+      	<FIMSE: "fim-se" > |
+      	<ENQUANTO: "enquanto" > |
+      	<FIMENQUANTO: "fim-enquanto" > 
+}
+//TOKENS DE TIPOS 
+TOKEN [IGNORE_CASE] : {
+  		<NUMERO: "numero" >  |
+  		<PALAVRA: "palavra" >  
+}
+//----------CARACTERES----------
+TOKEN : {
+		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+   		< AP: "(" > |
+    	< FP: ")" > |
+		< PV: ";" > |
+		< VIRGULA: "," > |
+    	< STRING: "\"" (~["\""])* "\"" > |
+   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+}
+//-----------NUMEROS-----------
+TOKEN : {
+	< #DIGIT: ["0"-"9"] > |  
+    < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
+}
+//----------OPERADORES---------
+TOKEN : {
+ 	< SOMA: "+" > |
+	< SUB: "-" > |
+	< MUL: "*" > |
+    < DIV: "/" > |
+    < OU: "OR" > |
+    < ATRIB: "<-"  > |
+    < IGUAL: "=" > |
+   	< CONCAT: "&" > 
+}
+  
+JAVACODE void inicio()
+{
+      Token t;
+   do {
+      t = getNextToken();
+      System.out.println(tokenImage[t.kind]+"\t"+t.image);
+   }
+   while(t.kind != EOF);
+}
