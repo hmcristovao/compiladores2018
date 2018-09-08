@@ -3,6 +3,10 @@ options {
   DEBUG_TOKEN_MANAGER = false;
 }
 
+//teste novo branch do grupo 8
+//modificando arquivo
+
+
 PARSER_BEGIN(Compilador)
 import java.io.*;
 public class Compilador { 
