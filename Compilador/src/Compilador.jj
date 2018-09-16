@@ -1,76 +1,145 @@
+
 options {
-  DEBUG_PARSER = false;
-  DEBUG_TOKEN_MANAGER = false;
+   DEBUG_PARSER = false;
+   DEBUG_TOKEN_MANAGER = false;
 }
+
 
 PARSER_BEGIN(Compilador)
+
 import java.io.*;
-public class Compilador { 
+public class Compilador {
    public static void main(String args[])  throws ParseException  {
-      Compilador compilador = null;
+      Compilador analisador = null;
+
       try {
-         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
-         Compilador.inicio();
+
+        analisador = new Compilador(new FileInputStream("exemplo01.spc"));
+        Compilador.inicio();
+        System.out.println("Análise léxica e sintática sem erros!");
       }
       catch(FileNotFoundException e) {
-         System.out.println("Erro: arquivo nao encontrado");
+         System.out.println("Erro: arquivo não encontrado");
       }
       catch(TokenMgrError e) {
-         System.out.println("Erro lexico\n" + e.getMessage());
+         System.out.println("Erro léxico\n" + e.getMessage());
+      }
+      catch(ParseException e) {
+         System.out.println("Erro sintático\n" + e.getMessage());
       }
    }
 }
-PARSER_END(Compilador)
- 
-SKIP : { " " | "\t" | "\r" | "\n" }
 
-//TOKENS DE COMANDOS 
+PARSER_END(Compilador)
+
+SKIP : { " " | "\t" | "\r" | "\n" } 
+
 TOKEN [IGNORE_CASE] : {
-  		<EXIBE: "exibe" >  |
-  		<LEITURA: "le" > | 
-		<SE: "se" > |
-      	<FIMSE: "fim-se" > |
-      	<ENQUANTO: "enquanto" > |
-      	<FIMENQUANTO: "fim-enquanto" > 
+         <EXIBE: "exibe" > |
+         <LEITURA: "le" > | 
+         <SE: "se" > |
+         <FIMSE: "fim-se" > |
+         <ENQUANTO: "enquanto" >   |
+         <FIMENQUANTO: "fim-enquanto" >
 }
-//TOKENS DE TIPOS 
+
 TOKEN [IGNORE_CASE] : {
-  		<NUMERO: "numero" >  |
-  		<PALAVRA: "palavra" >  
-}
-//----------CARACTERES----------
+	<NUMERO: "numero" >  |
+	<PALAVRA: "palavra" >  
+ }
+
 TOKEN : {
-		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
-   		< AP: "(" > |
-    	< FP: ")" > |
-		< PV: ";" > |
-		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > |
-   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
-}
-//-----------NUMEROS-----------
-TOKEN : {
+	< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+	< AP: "(" > |
+	< FP: ")" > |
+	< PV: ";" > |
+	< VIRGULA: "," > |
+	        < STRING: "\"" (~["\""])* "\"" > |
+	< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+ }
+
+ TOKEN : {
 	< #DIGIT: ["0"-"9"] > |  
-    < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
-}
-//----------OPERADORES---------
+	< NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
+ }
+
 TOKEN : {
- 	< SOMA: "+" > |
+	< SOMA: "+" > |
 	< SUB: "-" > |
 	< MUL: "*" > |
-    < DIV: "/" > |
-    < OU: "OR" > |
-    < ATRIB: "<-"  > |
-    < IGUAL: "=" > |
-   	< CONCAT: "&" > 
+	< DIV: "/" > |
+	< OU: "OR" > |
+	< ATRIB: "<-"  > |
+	< IGUAL: "=" > |
+	< CONCAT: "&" > 
+ }
+
+void inicio() : {}
+{
+   ( comando() )* <EOF>
+}
+void comando() : {} 
+{
+      atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+}
+
+void expressao(): { }
+{
+  termo() (<OU> termo())*
+}
+  	
+
+void termo() : { }
+{
+  termo1() (<IGUAL> termo1())?
 }
   
-JAVACODE void inicio()
+void termo1() : { }
 {
-      Token t;
-   do {
-      t = getNextToken();
-      System.out.println(tokenImage[t.kind]+"\t"+t.image);
-   }
-   while(t.kind != EOF);
+  termo2() (<CONCAT> termo2())*
+}
+  
+void termo2() : { }
+{
+  termo3() ((<SOMA>|<SUB>) termo3())*
+}
+
+void termo3() : { }
+{
+  termo4() ((<MUL>|<DIV>) termo4())*
+}
+
+void termo4() : { }
+{
+  <AP> expressao() <FP> |<NUM> |<SOMA><NUM> |<SUB><NUM> |<VAR> |<STRING>
+}
+
+void atribuicao() : {} 
+{
+      <VAR> <ATRIB> expressao() <PV>
+}
+
+void declaracao() : { }
+{
+	(<NUMERO>|<PALAVRA>) <VAR> ( <ATRIB> expressao() )? (<VIRGULA> <VAR> ( <ATRIB> expressao() )? )* <PV>
+}
+
+void se() : { }
+{
+  	<SE> <AP> expressao() <FP> inicio() <FIMSE>
+}
+
+void enquanto() : { }
+{
+  	<ENQUANTO> <AP> expressao() <FP> inicio() <FIMENQUANTO>
+}
+
+void le() : { }
+{
+  	<LEITURA> <VAR> ( <VIRGULA> <VAR> )* <PV>
+}
+
+void exibe() : { }
+{
+  	<EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
 }
