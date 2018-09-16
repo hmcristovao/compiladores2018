@@ -13,6 +13,8 @@ public class Compilador {
 		String s = (String) JOptionPane.showInputDialog(null, "Analisador Sintático", "Digite o Nome do Arquivo", JOptionPane.QUESTION_MESSAGE, null, null, "exemplos/01.spc");
 		
 		try {
+			// Troque 's' pelo caminho e comente a linha da Janela,
+			// caso não queira usar a janela de seleção
 			compilador = new Compilador(new FileInputStream(s));
 			Compilador.inicio();
 			System.out.println("Análise léxica e sintática sem erros!");
