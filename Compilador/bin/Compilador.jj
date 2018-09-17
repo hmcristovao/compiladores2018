@@ -17,7 +17,7 @@ public class Compilador {
 		  						null, "RemoveName",
 								"Digite o Nome do Arquivo",
 								JOptionPane.QUESTION_MESSAGE,
-								null, null, "exemplos/15.spc");
+								null, null, "exemplos/.spc");
 		try {
 			// Troque 's' pelo caminho e comente a linha da Janela,
 			// caso não queira usar a janela de seleção
