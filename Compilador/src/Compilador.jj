@@ -14,7 +14,7 @@ public class Compilador {
 
       try {
 
-        analisador = new Compilador(new FileInputStream("exemplo01.spc"));
+        analisador = new Compilador(new FileInputStream("exemplo01.spc")); //entrada do arquivo
         Compilador.inicio();
         System.out.println("Análise léxica e sintática sem erros!");
       }
