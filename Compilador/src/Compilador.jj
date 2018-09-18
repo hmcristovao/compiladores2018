@@ -4,13 +4,23 @@ options {
 }
 
 PARSER_BEGIN(Compilador)
+
 import java.io.*;
-public class Compilador { 
+import java.util.Scanner;
+import utility.*;
+public class Compilador {
+  
+	static Tabela tabela = new Tabela();
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
+      Scanner ler=new Scanner(System.in);
       try {
-         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
+        System.out.print("Insira o nome do arquivo a ser analisado: ");
+        String arq=ler.nextLine();
+        System.out.println();
+         compilador = new Compilador(new FileInputStream(arq));
          Compilador.inicio();
+         //System.out.println(tabela.imprime());
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -18,8 +28,10 @@ public class Compilador {
       catch(TokenMgrError e) {
          System.out.println("Erro lexico\n" + e.getMessage());
       }
+      System.out.println("Sem erros sintáticos");
    }
 }
+
 PARSER_END(Compilador)
  
 SKIP : { " " | "\t" | "\r" | "\n" }
@@ -65,12 +77,112 @@ TOKEN : {
    	< CONCAT: "&" > 
 }
   
-JAVACODE void inicio()
+void inicio() : { }
 {
-      Token t;
-   do {
-      t = getNextToken();
-      System.out.println(tokenImage[t.kind]+"\t"+t.image);
-   }
-   while(t.kind != EOF);
+   
+	 try {
+	   (comando())*
+	 }
+	catch (ParseException e) {
+	    System.out.println("\n"+e.toString()+"\nErro sintático encontrado, continuando análise após próximo \";\"\n");
+	    Token t;
+	    
+	    do {
+	      t = getNextToken();
+	    } while (t.kind != PV);
+	    inicio();
+  	}
+  }
+
+void comando(): { }
+{
+	atribuicao() | declaracao() | se()
+| enquanto() | le() | exibe()
 }
+
+void atribuicao() : { Token t; }
+{
+	t=< VAR > {
+		if(!tabela.existe(t.image)) System.out.println("Erro semântico: variável "+t.image+" não declarada na linha "+t.beginLine);
+	} < ATRIB > expressao() < PV >
+}
+
+void declaracao() : { Simbolo simb; Token t; int f=0;}
+{
+  (    < NUMERO > { f=2; }| < PALAVRA > { f=1; })
+    t=< VAR >
+    {
+      	Simbolo novo;
+		if(f==1) { novo=new Simbolo(t.image,f);}
+		else { novo=new Simbolo(t.image,f);}
+		boolean ver=tabela.push(novo);
+		if(ver==false) System.out.println("Erro semântico: variável "+t.image+" repetida na linha "+t.beginLine);
+    }(< ATRIB >expressao())?
+	(	  < VIRGULA >t=< VAR >
+	  {
+		if(f==1) { novo=new Simbolo(t.image,f);}
+		else { novo=new Simbolo(t.image,f);}
+		ver=tabela.push(novo);
+		if(ver==false) System.out.println("Erro semântico: variável "+t.image+" repetida na linha "+t.beginLine);
+    }
+    (< ATRIB > expressao())?)*< PV >
+}
+
+void se() : { }
+{
+  < SE >< AP > expressao() < FP > inicio() < FIMSE >
+}
+
+void enquanto() : { }
+{
+  < ENQUANTO > < AP > expressao() < FP > inicio() < FIMENQUANTO >
+}
+
+void le() : { }
+{
+	< LEITURA >< VAR > (< VIRGULA > < VAR >)* < PV >
+}
+
+void exibe() : { }
+{
+  < EXIBE > expressao() (< VIRGULA >expressao())* < PV >
+}
+
+void expressao() : { }
+{
+  termo()(< OU >termo())*
+}
+
+void termo() : { }
+{
+  termo1()(< IGUAL >termo1())?
+}
+
+void termo1() : { }
+{
+  termo2()(< CONCAT >termo2())*
+}
+
+void termo2() : { }
+{
+  termo3()((< SOMA >|< SUB >)termo3())*
+}
+
+void termo3() : { }
+{
+  termo4()((< MUL >|< DIV >)termo4())*
+}
+
+void termo4() : { }
+{
+  < AP >expressao()< FP >
+| < NUM >
+| < SOMA ><NUM >
+| < SUB ><NUM >
+| < VAR >
+| < STRING >
+}
+
+
+
+
