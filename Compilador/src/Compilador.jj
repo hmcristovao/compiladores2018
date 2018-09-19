@@ -9,6 +9,7 @@ public class Compilador {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
       try {
+         System.out.println("Copilando");
          compilador = new Compilador(new FileInputStream("exemplo01.spc"));
          Compilador.inicio();
       }
@@ -65,12 +66,106 @@ TOKEN : {
    	< CONCAT: "&" > 
 }
   
-JAVACODE void inicio()
+//JAVACODE void inicio()
+//{
+//      Token t;
+//   do {
+//      t = getNextToken();
+//      System.out.println(tokenImage[t.kind]+"\t"+t.image);
+//   }
+//   while(t.kind != EOF);
+//}
+
+//Gramatica de expressoes:
+
+void expressao():
+{}
 {
-      Token t;
-   do {
-      t = getNextToken();
-      System.out.println(tokenImage[t.kind]+"\t"+t.image);
-   }
-   while(t.kind != EOF);
+	 termo()(< OU > termo())*
 }
+
+void  termo():
+{}
+{
+  	termo1() (< IGUAL > termo1())?
+}
+
+void termo1():
+{}
+{
+  	termo2() (< CONCAT > termo2())*
+} 
+void termo2():
+{}
+{
+  	termo3() ((< SOMA >|< SUB >) termo3())*
+}
+
+void termo3():
+{}
+{
+   termo4() ((< MUL >|< DIV >) termo4())*
+}
+
+void termo4():
+{}
+{
+  <AP> expressao() <FP> 
+|<NUM> 
+|<SOMA><NUM> 
+|<SUB><NUM> 
+|<VAR> 
+|<STRING>
+
+}
+ 
+//GRAMATICA COMPLETA 
+void inicio() :
+{}
+{
+  (comando())*
+
+}
+
+void comando():
+{}
+{
+    atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+}
+
+void atribuicao():
+{}
+{
+  	< VAR > < ATRIB > expressao() < PV >
+}
+
+void declaracao():
+{}
+{
+  	(<NUMERO>|<PALAVRA>) <VAR> ( <ATRIB> expressao() )? (<VIRGULA> <VAR> ( <ATRIB> expressao() )? )* <PV>
+}
+
+void se():
+{}
+{
+  	<SE> <AP> expressao() <FP> inicio() <FIMSE>
+}
+ 
+void enquanto():
+{}
+{
+  	<ENQUANTO> <AP> expressao() <FP> inicio() <FIMENQUANTO>
+}
+ 
+void le():
+{}
+{
+  	<LEITURA> <VAR> ( <VIRGULA> <VAR> )* <PV>
+}
+ 
+void exibe():
+{}
+{
+	<EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
+}
+	
