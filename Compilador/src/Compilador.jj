@@ -9,14 +9,17 @@ PARSER_BEGIN(Compilador)
 
 import java.io.*;
 public class Compilador {
-   public static void main(String args[])  throws ParseException  {
-      Compilador analisador = null;
+	static Tabela tabela = new Tabela();
+	
+	public static void main(String args[])  throws ParseException  {
 
+	   Compilador analisador = null;
+	
       try {
 
         analisador = new Compilador(new FileInputStream("exemplo01.spc")); //entrada do arquivo
         Compilador.inicio();
-        System.out.println("Análise léxica e sintática sem erros!");
+        System.out.println("Análise léxica, sintática e semântico sem erros!");
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo não encontrado");
@@ -83,63 +86,95 @@ void comando() : {}
       atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
 }
 
-void expressao(): { }
+void expressao(): { } 
 {
   termo() (<OU> termo())*
 }
   	
 
-void termo() : { }
+void termo() : { } //igualdade
 {
   termo1() (<IGUAL> termo1())?
 }
   
-void termo1() : { }
+void termo1() : { } //concatenacao
 {
   termo2() (<CONCAT> termo2())*
 }
   
-void termo2() : { }
+void termo2() : { } //soma e subtração
 {
   termo3() ((<SOMA>|<SUB>) termo3())*
 }
 
-void termo3() : { }
+void termo3() : { } //multiplicacao e divisao
 {
   termo4() ((<MUL>|<DIV>) termo4())*
 }
 
-void termo4() : { }
+void termo4() : {Token t; } //expressao entre parenteces
 {
-  <AP> expressao() <FP> |<NUM> |<SOMA><NUM> |<SUB><NUM> |<VAR> |<STRING>
+  	<AP> expressao() <FP>
+  	|<NUM>
+   	|<SOMA><NUM>
+	|<SUB><NUM>
+	|t = <VAR> {
+		if(!tabela.isExiste(t.image)) { 
+			System.out.println("Erro semântico \n A variável "+t.image+ " não foi inicializada");
+			System.exit(1);
+		}
+	 }
+	|<STRING>
 }
 
-void atribuicao() : {} 
+void atribuicao() : {Simbolo simb; Token t;} //atribuição
 {
-      <VAR> <ATRIB> expressao() <PV>
+      t = <VAR> {
+        simb = new Simbolo(t.image);
+        tabela.inclui(simb);
+        }
+       <ATRIB> expressao() <PV>
 }
 
-void declaracao() : { }
+void declaracao() : {Simbolo simb; Token t; }
 {
-	(<NUMERO>|<PALAVRA>) <VAR> ( <ATRIB> expressao() )? (<VIRGULA> <VAR> ( <ATRIB> expressao() )? )* <PV>
+	(<NUMERO>|<PALAVRA>)
+	t = <VAR>
+	(  <ATRIB>
+	{simb = new Simbolo(t.image);
+	 tabela.inclui(simb);
+	}
+	expressao() )? (<VIRGULA>
+	t = <VAR>
+	( <ATRIB>
+	{simb = new Simbolo(t.image);
+	 tabela.inclui(simb);
+	}
+	expressao() )? )* <PV>
 }
 
-void se() : { }
+void se() : { } //if
 {
   	<SE> <AP> expressao() <FP> inicio() <FIMSE>
 }
 
-void enquanto() : { }
+void enquanto() : { } //while
 {
   	<ENQUANTO> <AP> expressao() <FP> inicio() <FIMENQUANTO>
 }
 
-void le() : { }
+void le() : { Token t; Simbolo simb; } //read
 {
-  	<LEITURA> <VAR> ( <VIRGULA> <VAR> )* <PV>
+  	<LEITURA> t = <VAR> {
+  	  if(!tabela.isExiste(t.image)) { 
+			simb = new Simbolo(t.image);
+	 		tabela.inclui(simb);
+		}
+  	   }
+  	( <VIRGULA> <VAR> )* <PV>
 }
 
-void exibe() : { }
+void exibe() : { } //print
 {
   	<EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
 }
