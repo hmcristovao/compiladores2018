@@ -151,7 +151,7 @@ void termo1() : { }
 
 void termo2() : { }
 {
-  termo3()((<SOMA>|<SUB>) termo3())*
+  termo3()((<SOMA>|<SUB>) termo3())* 
 }
 
 void termo3() : { }

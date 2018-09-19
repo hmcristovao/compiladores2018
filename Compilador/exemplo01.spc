@@ -1,7 +1,7 @@
 exibe "Ola Mundo!";
 palavra aux, exe, x;
 palavra aux;
-palavra aux;
+palavra aux; 
 numero aux2, aux4 <- 5;
 numero aux3;
 numero aux4 <- 200;
