@@ -5,13 +5,21 @@ options {
 
 PARSER_BEGIN(Compilador)
 import java.io.*;
-public class Compilador { 
+import java.util.*;
+public class Compilador {  
+   public static HashMap<String, Simbolo> tab;
+   
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
+      tab = new HashMap<String, Simbolo>();
+      
       try {
          compilador = new Compilador(new FileInputStream("exemplo01.spc"));
          Compilador.inicio();
-      }
+         System.out.println("\n---------------------------\n");
+         System.out.println("TABELA DE SIMBOLOS");
+         System.out.println(tab);
+      } 
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
       }
@@ -24,53 +32,141 @@ PARSER_END(Compilador)
  
 SKIP : { " " | "\t" | "\r" | "\n" }
 
-//TOKENS DE COMANDOS 
+
+//TOKENS DE COMANDOS
+
 TOKEN [IGNORE_CASE] : {
-  		<EXIBE: "exibe" >  |
-  		<LEITURA: "le" > | 
-		<SE: "se" > |
-      	<FIMSE: "fim-se" > |
-      	<ENQUANTO: "enquanto" > |
-      	<FIMENQUANTO: "fim-enquanto" > 
+         <EXIBE: "exibe" > |
+         <LEITURA: "le" > | 
+         <SE: "se" > |
+         <FIMSE: "fim-se" > |
+         <ENQUANTO: "enquanto" >   |
+         <FIMENQUANTO: "fim-enquanto" >
 }
-//TOKENS DE TIPOS 
-TOKEN [IGNORE_CASE] : {
-  		<NUMERO: "numero" >  |
-  		<PALAVRA: "palavra" >  
-}
-//----------CARACTERES----------
-TOKEN : {
-		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
-   		< AP: "(" > |
-    	< FP: ")" > |
-		< PV: ";" > |
-		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > |
-   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
-}
-//-----------NUMEROS-----------
-TOKEN : {
+
+//TOKENS DE TIPOS
+
+ TOKEN [IGNORE_CASE] : {
+	<NUMERO: "numero" >  |
+	<PALAVRA: "palavra" >  
+ }
+
+//CARACTERES
+
+ TOKEN : {
+	< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+	< AP: "(" > |
+	< FP: ")" > |
+	< PV: ";" > |
+	< VIRGULA: "," > |
+    < STRING: "\"" (~["\""])* "\"" > |
+	< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+ }
+
+//NÚMEROS
+
+ TOKEN : {
 	< #DIGIT: ["0"-"9"] > |  
-    < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
-}
-//----------OPERADORES---------
-TOKEN : {
- 	< SOMA: "+" > |
+	< NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
+ }
+
+//OPERADORES
+
+ TOKEN : {
+	< SOMA: "+" > |
 	< SUB: "-" > |
 	< MUL: "*" > |
-    < DIV: "/" > |
-    < OU: "OR" > |
-    < ATRIB: "<-"  > |
-    < IGUAL: "=" > |
-   	< CONCAT: "&" > 
-}
+	< DIV: "/" > |
+	< OU: "OR" > |
+	< ATRIB: "<-"  > |
+	< IGUAL: "=" > |
+	< CONCAT: "&" > 
+ }
   
-JAVACODE void inicio()
+void inicio() : { }
 {
-      Token t;
-   do {
-      t = getNextToken();
-      System.out.println(tokenImage[t.kind]+"\t"+t.image);
-   }
-   while(t.kind != EOF);
+  ( comando() )*
+}
+
+void comando() : { }
+{
+  atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+}
+
+void atribuicao() : {
+	Token v;
+}
+{
+  v = <VAR> { Tabela.verificaDeclarada(tab, v); }<ATRIB> expressao() <PV>
+}
+
+void declaracao() : {
+	Simbolo simb;
+	Token t, v; //t - recebe o tipo, v - recebe o nome da variavel
+}
+{
+  	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
+		{ Tabela.addVar(tab, t, v); }
+	( <ATRIB> expressao() )? (<VIRGULA> v = <VAR>
+		{ Tabela.addVar(tab, t, v); }
+	( <ATRIB> expressao() )? )* <PV>
+}
+
+void se() : { }
+{
+  <SE> <AP> expressao() <FP> inicio() <FIMSE>
+}
+
+void enquanto() : { }
+{
+  <ENQUANTO> <AP> expressao() <FP> inicio() <FIMENQUANTO>
+}
+
+void le() : {
+	Token v;
+}
+{
+  <LEITURA> v = <VAR> { Tabela.verificaDeclarada(tab, v); } ( <VIRGULA> v = <VAR> { Tabela.verificaDeclarada(tab, v); } )* <PV>
+}
+
+void exibe() : { }
+{
+  <EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
+}
+
+void expressao() : { }
+{
+  termo()(<OU> termo())*
+}
+
+void termo() : { }
+{
+  termo1()(<IGUAL> termo1())?
+}
+
+void termo1() : { }
+{
+  termo2()(<CONCAT> termo2())*
+}
+
+void termo2() : { }
+{
+  termo3()((<SOMA>|<SUB>) termo3())*
+}
+
+void termo3() : { }
+{
+  termo4()((<MUL>|<DIV>) termo4())*
+}
+
+void termo4() : {
+	Token v;
+}
+{
+  <AP> expressao() <FP>
+  |<NUM>
+  |<SOMA><NUM>
+  |<SUB><NUM>
+  | v = <VAR> { Tabela.verificaDeclarada(tab, v); }
+  |<STRING>
 }
