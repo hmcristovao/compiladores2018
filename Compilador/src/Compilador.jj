@@ -5,13 +5,19 @@ options {
 
 PARSER_BEGIN(Compilador)
 import java.io.*;
-public class Compilador { 
+import files.*;
+public class Compilador {
+
+   public static Tabela tab = new Tabela();
+  
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
+      
       try {
-         System.out.println("Copilando");
-         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
+       	 
+         compilador = new Compilador(new FileInputStream("exemplo08.spc"));
          Compilador.inicio();
+         tab.imprimeTabela();
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -140,9 +146,21 @@ void atribuicao():
 }
 
 void declaracao():
-{}
+{ 	Simbolo simbolo;
+ 	Token tipo, variavel;
+}
 {
-  	(<NUMERO>|<PALAVRA>) <VAR> ( <ATRIB> expressao() )? (<VIRGULA> <VAR> ( <ATRIB> expressao() )? )* <PV>
+  	(tipo=<NUMERO>|tipo=<PALAVRA>) variavel=<VAR>
+  	{
+  	  simbolo = new Simbolo();
+  	  simbolo.setTipo(tipo.image);
+  	  simbolo.setNome(variavel.image);
+  	  simbolo.setReferencia();
+  	  simbolo.incrementaMarcador(tipo.image);
+  	  tab.insereSimbolo(simbolo);  	  
+
+  	}
+  	( <ATRIB> expressao() )? (<VIRGULA> <VAR> ( <ATRIB> expressao() )? )* <PV>
 }
 
 void se():
