@@ -15,7 +15,7 @@ public class Compilador {
       
       try {
        	 
-         compilador = new Compilador(new FileInputStream("exemplo08.spc"));
+         compilador = new Compilador(new FileInputStream("exemplo18.spc"));
          Compilador.inicio();
          tab.imprimeTabela();
       }
@@ -114,13 +114,19 @@ void termo3():
 }
 
 void termo4():
-{}
+{Token t;}
 {
   <AP> expressao() <FP> 
 |<NUM> 
 |<SOMA><NUM> 
 |<SUB><NUM> 
-|<VAR> 
+|t=<VAR>
+{
+  	if(tab.verificaSimbolo(t.image) == false) {
+  	  	System.out.println("Variavel nao Declarada");
+  	  	return;
+  	}
+}
 |<STRING>
 
 }
@@ -152,12 +158,17 @@ void declaracao():
 {
   	(tipo=<NUMERO>|tipo=<PALAVRA>) variavel=<VAR>
   	{
-  	  simbolo = new Simbolo();
-  	  simbolo.setTipo(tipo.image);
-  	  simbolo.setNome(variavel.image);
-  	  simbolo.setReferencia();
-  	  simbolo.incrementaMarcador(tipo.image);
-  	  tab.insereSimbolo(simbolo);  	  
+	  if(tab.verificaSimbolo(variavel.image) == false) { 
+	  	  simbolo = new Simbolo();
+	  	  simbolo.setTipo(tipo.image);
+	  	  simbolo.setNome(variavel.image);
+	  	  simbolo.setReferencia();
+	  	  simbolo.incrementaMarcador(tipo.image);
+	  	  tab.insereSimbolo(simbolo);
+  	  }else {
+  	    	System.out.println("Variavel "+ variavel.image + " Duplicada");
+  	    	return;
+  	  }
 
   	}
   	( <ATRIB> expressao() )? (<VIRGULA> <VAR> ( <ATRIB> expressao() )? )* <PV>

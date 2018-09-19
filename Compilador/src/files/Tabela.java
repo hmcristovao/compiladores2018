@@ -11,8 +11,8 @@ public class Tabela {
 		tab.put(simbolo.getNome(), simbolo);
 	}
 
-	public boolean verificaSimbolo(Simbolo simbolo) {
-		return tab.containsKey(simbolo.getNome());
+	public boolean verificaSimbolo(String chave) {
+		return tab.containsKey(chave);
 	}
 
 	public int tamanhoTabela() {
