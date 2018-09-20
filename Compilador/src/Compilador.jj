@@ -18,7 +18,7 @@ public class Compilador {
 		tabela.marcador = 1;
     	Compilador analisador = null;
       	try {
-	         analisador = new Compilador(new FileInputStream("exemplo10.spc2"));
+	         analisador = new Compilador(new FileInputStream("exemplo.spc2"));
 	         Compilador.inicio();
 	         if(erro == 1) 
 	         System.out.println("Erro semântico\n"); 
@@ -99,7 +99,7 @@ void inicio() : {}
 	{
 	      atribui() | declaracao() | se() | enquanto() | le() | exibe()  
 	}
-	void atribui() : {Token t;} 
+	void atribui() : {Token t;LinkedList<Item> listaExp;} 
 	{
 		t = < VAR > {
 			if (!tabela.isExiste(t.image)) {
@@ -108,7 +108,7 @@ void inicio() : {}
 			}
 		}  <RECEBE> listaExp = expressao(){
             	System.out.println(listaExp);  // só exibe a expressão no formato posfixo
-      		}expressao()	< PV >
+      	}< PV >
 	}
 	void declaracao() : {Simbolo simb; Token t; char tp;}
 	{
@@ -163,93 +163,97 @@ void inicio() : {}
 	}
 
 	//==========GRAM�TICA DE EXPRESS�ES==============
-	LinkedList<Item> expressao() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	LinkedList<Item> expressaoPrincipal() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
 	{
-	      item = termo() {
+	      termo(listaExp) {
 				listaExp.add(item);
 	      }
-	      ( < OU > item = termo()
+	      ( (t = < OU >) termo(listaExp)
 	      	{
 				listaExp.add(item);
-				listaExp.add( new Item('o',"ou"));
+				listaExp.add(new Item('o',t.image));
 	        }
 	      )*
-	         { return listaExp; }
+	       { System.out.println(listaExp); }
 	}
-	/*LinkedList<Item> termo() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	void expressao() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
 	{
-	      item = termo1() {
+	      termo(listaExp) {
 				listaExp.add(item);
 	      }
-	        ( < IGUAL > item = termo1()
+	      ( (t = < OU >) termo(listaExp)
+	      	{
+				listaExp.add(item);
+				listaExp.add(new Item('o',t.image));
+	        }
+	      )*
+	       { System.out.println(listaExp); }
+	}
+	void termo() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	{
+	      termo1(listaExp) {
+				listaExp.add(item);
+	      }
+	        ( (t = < IGUAL >) termo1(listaExp)
 	        	{
 					listaExp.add(item);
-					listaExp.add( new Item('o',"="));
+					listaExp.add(new Item('o',t.image));
 	          	}
 	         )*
-	         { return listaExp; }
+	         
 	}
-	LinkedList<Item> termo1() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	void termo1() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
 	{
-	      item = termo2() {
+	     termo2(listaExp) {
 				listaExp.add(item);
 	      }
-	        ( < CONCAT > item = termo() {
+	        ((t = < CONCAT >) termo2(listaExp) {
 				listaExp.add(item);
-				listaExp.add( new Item('o',"&"));
+				listaExp.add(new Item('o',t.image));
 	          	}
 	         )*
-	         { return listaExp; }
+	         
 	}
-LinkedList<Item> termo2() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
+    void termo2() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
 	{
-	      item = termo3() {
+	  		termo3(listaExp) {
 				listaExp.add(item);
 	      }
-	        ( (< SOMA >)  item = termo3() {
+	        ( (t = < SOMA > | t = < SUB > )termo3(listaExp) {
 				listaExp.add(item);
-				listaExp.add( new Item('o',"+"));
-	          	}
-	       | (< SUB >)  item = termo3() {
-				listaExp.add(item);
-				listaExp.add( new Item('o',"-"));
+				listaExp.add(new Item('o',t.image));
 	          	}
 	       )*
-	         { return listaExp; }
 	}
-	LinkedList<Item> termo3() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
+	void termo3() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
 	{
-	      item = termo4() {
+	      termo4(listaExp) {
 				listaExp.add(item);
 	      }
-	        ( (< MUL >)  item = termo3() {
+	        ( (t = < MUL > | t = < DIV >) termo4(listaExp) {
 				listaExp.add(item);
-				listaExp.add( new Item('o',"+"));
-	          	}
-	       | (< DIV >)  item = termo4() {
-				listaExp.add(item);
-				listaExp.add( new Item('o',"-"));
+				listaExp.add(new Item('o',t.image));
 	          	}
 	       )*
-	         { return listaExp; }
 	}
-	
 	void termo4() : {Token t; Item item = null;} 
 	{
 			< AP > expressao() < FP >
-		  |t = < VAR > { 
+		 	|t = < VAR > { 
 		  		if (!tabela.isExiste(t.image)) {
 					System.out.println("Erro semântico \n Variável " +"'"+ t.image +"'" + " não foi declarada!");
 					erro = 1;
      			}
      			item = new Item('v',t.image);
-         		return item;
-     		}
-		  | < STRING >
-		  |(< SOMA > | < SUB >)?  t =  <NUM> {
-        	 item = new Item('n',"" + t.image);
-         return item;
-      }
-	*/	  
-		   		
+     			listaExp.add(item);
+         	}
+		  	|t = < STRING > {
+				item = new Item('n',t.image);
+     			listaExp.add(item);
+		  	}
+		  	
+		  	|(< SOMA > | < SUB >)?  t =  <NUM> {
+        	 	item = new Item('n',"" + t.image);
+         		listaExp.add(item);
+      		}	
 	}
