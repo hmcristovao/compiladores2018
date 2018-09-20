@@ -1,6 +1,9 @@
 public enum Tipo {
 	NUMERO("numero"),
-	PALAVRA("palavra"); 
+	PALAVRA("palavra"),
+	OPERANDO("operando"),
+	STRING("string"),
+	VARIAVEL("variavel");
 	
 	private String nome;
 	Tipo(String nome){

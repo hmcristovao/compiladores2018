@@ -134,39 +134,57 @@ void exibe() : { }
   <EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
 }
 
-void expressao() : { }
+void expressao() : { LinkedList<Item> listaExp = new LinkedList<Item>(); }
 {
-  termo()(<OU> termo())*
+  termo(listaExp)(<OU> termo(listaExp))*
 }
 
-void termo() : { }
+void termo(LinkedList<Item> listaExp) : { }
 {
-  termo1()(<IGUAL> termo1())?
+  termo1(listaExp)(<IGUAL> termo1(listaExp))?
 }
 
-void termo1() : { }
+void termo1(LinkedList<Item> listaExp) : { }
 {
-  termo2()(<CONCAT> termo2())*
+  termo2(listaExp)(<CONCAT> termo2(listaExp))*
 }
 
-void termo2() : { }
+String termo2(LinkedList<Item> listaExp) : {
+	String a, b="";
+	Token sinal;
+}
 {
-  termo3()((<SOMA>|<SUB>) termo3())* 
+  a = termo3(listaExp)((sinal = <SOMA>| sinal = <SUB>) b = termo3(listaExp) {
+//pegar o operador aqui e botar na lista
+    Item isinal = new Item();
+    isinal.setValor(sinal.image);    
+    listaExp.add(isinal);
+    
+    a = a+b+sinal.image;
+    
+    System.out.println("posfixo "+a);
+    System.out.println(Arrays.toString(listaExp.toArray()));
+
+    })* { return a; } 
 }
 
-void termo3() : { }
+String termo3(LinkedList<Item> listaExp) : {
+	String a, b="";
+	Token sinal;
+}
 {
-  termo4()((<MUL>|<DIV>) termo4())*
+  a = termo4(listaExp)((sinal = <MUL>|sinal = <DIV>) b = termo4(listaExp) { a = a+b+sinal.image; })* { return a; }
 }
 
-void termo4() : {
+String termo4(LinkedList<Item> listaExp) : { 
 	Token v;
+	String a;
 }
 {
-  <AP> expressao() <FP>
-  |<NUM>
-  |<SOMA><NUM>
-  |<SUB><NUM>
-  | v = <VAR> { tabela.verificaDeclarada(v); }
-  |<STRING>
+  <AP> expressao() <FP> { return ""; }
+  |v = <NUM> { Item vItem = new Item(); vItem.setValor(v.image); listaExp.add(vItem); return v.image; }//jah colocar na lista imediatamente
+  |v = <SOMA><NUM>{ return v.image; }
+  |v = <SUB><NUM>{ return v.image; }
+  |v = <VAR> { tabela.verificaDeclarada(v); return v.image; }
+  |v = <STRING>{ return v.image; }
 }
