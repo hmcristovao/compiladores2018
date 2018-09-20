@@ -1,27 +1,48 @@
+
 options {
+	
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
+
 }
 
 PARSER_BEGIN(Compilador)
 import java.io.*;
-public class Compilador { 
-   public static void main(String args[])  throws ParseException  {
-      Compilador compilador = null;
-      try {
-         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
-         Compilador.inicio();
-      }
-      catch(FileNotFoundException e) {
-         System.out.println("Erro: arquivo nao encontrado");
-      }
-      catch(TokenMgrError e) {
-         System.out.println("Erro lexico\n" + e.getMessage());
-      }
+import minhasClasses.*;
+import java.util.LinkedList;
+
+public class Compilador {
+	static Tabela tabela = new Tabela();
+	public static int erro = 0;
+	public static void main(String args[])  throws ParseException  {
+		tabela.marcador = 1;
+    	Compilador analisador = null;
+      	try {
+	         analisador = new Compilador(new FileInputStream("exemplo10.spc2"));
+	         Compilador.inicio();
+	         if(erro == 1) 
+	         System.out.println("Erro semântico\n"); 
+			 else {  
+				System.out.println("Análise léxica, sintática e semântica sem erros!");
+	          	System.out.println("\nTabela de Simbolos:");
+	 		 	System.out.println(tabela);
+	 		 	System.out.println("\nMarcador:\n" + tabela.marcador);
+	       	}
+       	 }
+	     catch(FileNotFoundException e) {
+	         System.out.println("Erro: arquivo não encontrado");
+	     }
+	     catch(TokenMgrError e) {
+	        System.out.println("Erro léxico\n" + e.getMessage());
+	     }
+	     catch(ParseException e) {
+	         System.out.println("Erro sintático\n" + e.getMessage());
+	     }
    }
 }
+
 PARSER_END(Compilador)
- 
+
 SKIP : { " " | "\t" | "\r" | "\n" }
 
 //TOKENS DE COMANDOS 
@@ -29,9 +50,9 @@ TOKEN [IGNORE_CASE] : {
   		<EXIBE: "exibe" >  |
   		<LEITURA: "le" > | 
 		<SE: "se" > |
-      	<FIMSE: "fim-se" > |
+      	<FIMSE: "fimse" > |
       	<ENQUANTO: "enquanto" > |
-      	<FIMENQUANTO: "fim-enquanto" > 
+      	<FIMENQUANTO: "fimenquanto" > 
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -46,7 +67,7 @@ TOKEN : {
 		< PV: ";" > |
 		< VIRGULA: "," > |
     	< STRING: "\"" (~["\""])* "\"" > |
-   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "-"])* > 
 }
 //-----------NUMEROS-----------
 TOKEN : {
@@ -59,18 +80,119 @@ TOKEN : {
 	< SUB: "-" > |
 	< MUL: "*" > |
     < DIV: "/" > |
-    < OU: "OR" > |
-    < ATRIB: "<-"  > |
+    < POT: "^" > |
+    < OU: "OU" > |
+    < RECEBE: "<-"  > |
     < IGUAL: "=" > |
    	< CONCAT: "&" > 
 }
-  
-JAVACODE void inicio()
-{
-      Token t;
-   do {
-      t = getNextToken();
-      System.out.println(tokenImage[t.kind]+"\t"+t.image);
-   }
-   while(t.kind != EOF);
-}
+
+void inicio() : {}	
+	{
+	      programa()  < EOF >
+	}  
+	void programa() : {}	
+	{
+	      (comando())*
+	}
+	void comando() : {} 
+	{
+	      atribui() | declaracao() | se() | enquanto() | le() | exibe()  
+	}
+	void atribui() : {Token t;} 
+	{
+		t = < VAR > {
+			if (!tabela.isExiste(t.image)) {
+					System.out.println("Variável " + "'" + t.image + "'" + " não foi declarada!");
+					erro = 1;
+			}
+		}  <RECEBE> listaExp = expressao(){
+            	System.out.println(listaExp);  // só exibe a expressão no formato posfixo
+      		}expressao()	< PV >
+	}
+	void declaracao() : {Simbolo simb; Token t; char tp;}
+	{
+		(< NUMERO > {tp = 'n';} | < PALAVRA > { tp = 'p' ;}) t = < VAR > {
+			if (tabela.isExiste(t.image)) {
+				System.out.println("Variável " + "'" + t.image + "'" + " já declarada!");
+				erro = 1;
+      		}
+			else if(tp == 'n') {
+				  simb = new Simbolo(t.image, Tipo.numero);
+				  tabela.inclui(simb);
+				  tabela.marcador += 2;
+			}
+      		else {
+				  simb = new Simbolo(Tipo.palavra, t.image);
+				  tabela.inclui(simb);
+				  tabela.marcador += 1;
+		 	}
+	  }
+		(< RECEBE > expressao())? (< VIRGULA > t = < VAR > {
+			if (tabela.isExiste(t.image)) {
+				System.out.println("Variável " +"'"+ t.image +"'" + " já declarada!");
+				erro = 1;
+      		}
+			else if(tp == 'n') {
+				  simb = new Simbolo(t.image, Tipo.numero);
+				  tabela.inclui(simb);
+				  tabela.marcador += 2;
+      		}
+      		else {
+				  simb = new Simbolo(Tipo.palavra, t.image);
+				  tabela.inclui(simb);
+				  tabela.marcador += 1;
+      		}
+	   	} (< RECEBE > expressao() )? )* < PV >
+	}
+	void se() : {}
+	{
+	      < SE > < AP > expressao() < FP > programa() < FIMSE >
+	}
+	void enquanto() : {}
+	{
+	      < ENQUANTO > < AP > expressao() < FP > programa() < FIMENQUANTO > 
+	}
+	void le() : {}
+	{
+	      <LEITURA> <VAR> ( < VIRGULA > < VAR > )* < PV > 
+	}
+	void exibe() : {}
+	{
+	      <EXIBE> expressao() ( < VIRGULA > expressao() )*   < PV > 
+	}
+
+	//==========GRAM�TICA DE EXPRESS�ES==============
+	LinkedList<Item> expressao() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	{
+	      termo() ( < OU > termo()  )*
+	}
+	void termo() : {} 
+	{
+	      termo1() ( < IGUAL >  termo1())*
+	}
+	void termo1() : {} 
+	{
+	      termo2() ( < CONCAT > termo2())*
+	}
+	void termo2() : {} 
+	{
+	      termo3() ( (< SOMA > |  <  SUB >) termo3())*
+	}
+	void termo3() : {} 
+	{
+	      termo4() ( ( < MUL > |<  DIV >) termo4())*
+	}
+	void termo4() : {Token t;} 
+	{
+			< AP > expressao() < FP >
+		  |t = < VAR > { 
+		  		if (!tabela.isExiste(t.image)) {
+				System.out.println("Erro semântico \n Variável " +"'"+ t.image +"'" + " não foi declarada!");
+				erro = 1;
+     			}
+     		}
+		  | < STRING >
+		  |(< SOMA > | < SUB >)?  <NUM>
+		   		
+	}
