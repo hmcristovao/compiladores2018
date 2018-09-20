@@ -9,7 +9,7 @@ public class Simbolo {
 
 	private int referencia;   // é uma referência usada na geração do código destino
 
-	private static int marcador = 1; // armazena a última referência incluída na tabela
+	
 		
 
 	public String getNome() {
@@ -36,21 +36,12 @@ public class Simbolo {
 		return referencia;
 	}
 
-	public void setReferencia() {
+	public void setReferencia(int marcador) {
 		this.referencia = marcador;
 	}
 	
 	
-	public static void incrementaMarcador(String tipo) {
-				
-		if(tipo.equals("numero")) {
-			
-			marcador+=2;
-		}
-		if(tipo.equals("palavra")) {
-			marcador+=1;
-		}
-	}
+
 	
 	public String toString() {
 

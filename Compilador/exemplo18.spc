@@ -1,7 +1,7 @@
-numero x;
+numero x, y, x;
 numero y;
+numero x;
 
-
-y <- 10 + a; 
+y <- 10; 
 
 
