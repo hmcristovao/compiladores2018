@@ -5,27 +5,74 @@ options {
 
 PARSER_BEGIN(Compilador)
 import java.io.*;
-public class Compilador { 
-   public static void main(String args[])  throws ParseException  {
+public class Compilador
+{
+   // Tabela de símbolos do compilador
+   static public Tabela tab;
+    
+   public static void main(String args[])  throws ParseException
+   {
       Compilador compilador = null;
-      try {
-         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
+	  tab = new Tabela();
+
+      try
+      {
+         compilador = new Compilador(new FileInputStream("exemplo16.spc"));
          Compilador.inicio();
+		 System.out.println(tab);
+         System.out.println("Execução finalizada com sucesso!\n");
       }
-      catch(FileNotFoundException e) {
-         System.out.println("Erro: arquivo nao encontrado");
+      catch(FileNotFoundException e)
+      {
+         System.out.println("Erro: arquivo nao encontrado\n");
       }
-      catch(TokenMgrError e) {
-         System.out.println("Erro lexico\n" + e.getMessage());
+      catch(TokenMgrError e)
+      {
+         System.out.println("Erro lexico:\n" + e.getMessage());
       }
+      catch(ParseException e)
+      {
+		System.out.println("Erro Sintático:\n" + e.getMessage());
+      }
+      
    }
+
+   public static void declaracaoPrevia( Token t )
+   {
+     	if ( !tab.isExiste( t.image ) )
+		{
+			System.out.println("erro: variável " + t.image + " não declarada na linha " + t.beginLine + "\n");
+		}
+   }
+
+   public static void criarVariavel( Token t, char _c_tp )
+   {
+		Simbolo simb = null;
+		switch ( _c_tp )
+		{
+			case 'N':
+				simb = new Simbolo( t.image );
+				break;
+			case 'S':
+				simb = new Simbolo( t.image, Tipo.PALAVRA );
+				break;
+
+		}
+
+	  	if ( !tab.incluir( simb ) )
+	  	{
+			System.out.println("erro: variável " + t.image + " repetida na linha " + t.beginLine + "\n");
+	  	}
+	 
+   }  
 }
 PARSER_END(Compilador)
  
 SKIP : { " " | "\t" | "\r" | "\n" }
 
 //TOKENS DE COMANDOS 
-TOKEN [IGNORE_CASE] : {
+TOKEN [IGNORE_CASE] :
+{
   		<EXIBE: "exibe" >  |
   		<LEITURA: "le" > | 
 		<SE: "se" > |
@@ -33,8 +80,10 @@ TOKEN [IGNORE_CASE] : {
       	<ENQUANTO: "enquanto" > |
       	<FIMENQUANTO: "fim-enquanto" > 
 }
+
 //TOKENS DE TIPOS 
-TOKEN [IGNORE_CASE] : {
+TOKEN [IGNORE_CASE] :
+{
   		<NUMERO: "numero" >  |
   		<PALAVRA: "palavra" >  
 }
@@ -65,12 +114,84 @@ TOKEN : {
    	< CONCAT: "&" > 
 }
   
-JAVACODE void inicio()
+void inicio() : { }
 {
-      Token t;
-   do {
-      t = getNextToken();
-      System.out.println(tokenImage[t.kind]+"\t"+t.image);
-   }
-   while(t.kind != EOF);
+	( comando() )* < EOF > 
+}
+
+void expressao() : { }
+{
+	termo() ( < OU > termo() )*
+}
+
+void termo() : { }
+{
+	termo1()( < IGUAL > termo1() )?
+}
+
+void termo1() : { }
+{
+	termo2()( < CONCAT > termo2() )*
+}
+
+void termo2() : { }
+{
+	termo3()( ( < SOMA > | < SUB > ) termo3() )*
+}
+
+void termo3() : { }
+{
+	termo4()( ( < MUL > | < DIV > ) termo4() )*
+}
+
+void termo4() : { Token t; }
+{
+	< AP > expressao() < FP > |
+	< NUM > |
+	< SOMA > < NUM > |
+	< SUB > < NUM > |
+	t = < VAR > { declaracaoPrevia(t); } |
+	< STRING >
+}
+
+void comando() : { }
+{
+	atribuicao() |
+	declaracao() |
+	se() |
+	enquanto() |
+	le() |
+	exibe()
+}
+
+void atribuicao() : { Token t;}
+{
+	t = < VAR > { declaracaoPrevia(t);} < ATRIB > expressao() < PV >
+}
+
+void declaracao() : {Token t; char c_tp; }
+{
+	( < NUMERO > { c_tp = 'N'; } | < PALAVRA > { c_tp = 'S'; } )
+	t = < VAR > { criarVariavel( t, c_tp ); }( < ATRIB > expressao() )?
+	( < VIRGULA > t =  < VAR > ( < ATRIB > expressao() )? { criarVariavel( t, c_tp ); } )* < PV >
+}
+
+void se() : { }
+{
+	< SE > < AP > expressao() < FP > ( comando() )* < FIMSE >
+}
+
+void enquanto() : { }
+{
+	< ENQUANTO > < AP > expressao() < FP > ( comando() )* < FIMENQUANTO >
+}
+
+void le() : { Token t; }
+{
+	< LEITURA > t = < VAR > { declaracaoPrevia(t); } ( < VIRGULA > t = < VAR > { declaracaoPrevia(t); } )* < PV >
+}
+
+void exibe() : { }
+{
+	< EXIBE > expressao() ( < VIRGULA > expressao() )* < PV >
 }
