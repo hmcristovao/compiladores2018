@@ -9,7 +9,7 @@ public class Compilador {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
       try {
-         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
+         compilador = new Compilador(new FileInputStream("exemplo01.spc2"));
          Compilador.inicio();
       }
       catch(FileNotFoundException e) {
