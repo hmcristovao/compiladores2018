@@ -76,9 +76,21 @@ TOKEN : {
 
 //Gramatica de expressoes:
 
-void expressao():
-{LinkedList<Item> listaExp = new LinkedList<Item>();
-Item item = new Item(); Token t;
+void inicioGramatica():
+{LinkedList<Item> listaExp = new LinkedList<Item>();}
+{
+	expressao(listaExp)
+	{	
+	  for (Item i : listaExp) {
+        System.out.print(i.getValor() + "(" + i.getTipo() +") ");
+      }
+      
+      System.out.println("\n");
+    }
+}
+
+void expressao(LinkedList<Item> listaExp):
+{Item item = new Item(); Token t;
 }
 {
 	 termo(listaExp)(t=< OU > termo(listaExp)
@@ -89,13 +101,7 @@ Item item = new Item(); Token t;
 	 	
 	 }
 	 )*
-	 
-	{
-	  for (Item i : listaExp) {
-        System.out.print(i.getValor() + "(" + i.getTipo() +") ");
-      }
-    }
-	
+		
 }
 
 void  termo(LinkedList<Item> listaExp):
@@ -150,12 +156,11 @@ void termo4(LinkedList<Item> listaExp):
 
 	Item item = new Item(); 
 	Token var, entrada, sinal;
-	String valor, tipo;
 
 }
 
 {
- <AP> expressao() <FP> 
+ <AP> expressao(listaExp) <FP> 
 |entrada=<NUM> {item.setValor(entrada.image); item.setTipo("numerico"); listaExp.add(item);} 
 |<SOMA>entrada=<NUM> {item.setValor(entrada.image); item.setTipo("numerico"); listaExp.add(item);}
 |sinal=<SUB>entrada=<NUM> {item.setValor(sinal.image+entrada.image); item.setTipo("numerico"); listaExp.add(item);}
@@ -184,7 +189,7 @@ void inicio():
 void programa() :
 {}
 {
-  (comando()  { System.out.println("\n");})* 
+  (comando())* 
   
 
 }
@@ -198,7 +203,7 @@ void comando():
 void atribuicao():
 {}
 {
-  	< VAR > < ATRIB > expressao() < PV >
+  	< VAR > < ATRIB > inicioGramatica() < PV >
 }
 
 void declaracao():
@@ -220,7 +225,7 @@ void declaracao():
   	    	return;
   	  }
   	}
-  	( <ATRIB> expressao() )? (<VIRGULA>  variavel=<VAR> ( <ATRIB> expressao() )? 
+  	( <ATRIB> inicioGramatica() )? (<VIRGULA>  variavel=<VAR> ( <ATRIB> inicioGramatica() )? 
   	
   	 {
 	  if(tab.verificaSimbolo(variavel.image) == false) { 
@@ -246,13 +251,13 @@ void declaracao():
 void se():
 {}
 {
-  	<SE> <AP> expressao() <FP> programa() <FIMSE>
+  	<SE> <AP> inicioGramatica() <FP> programa() <FIMSE>
 }
  
 void enquanto():
 {}
 {
-  	<ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
+  	<ENQUANTO> <AP> inicioGramatica() <FP> programa() <FIMENQUANTO>
 }
  
 void le():
@@ -264,6 +269,6 @@ void le():
 void exibe():
 {}
 {
-	<EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
+	<EXIBE> inicioGramatica() ( <VIRGULA> inicioGramatica() )* <PV>
 }
 	
