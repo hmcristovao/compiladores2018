@@ -35,4 +35,34 @@ public class Tabela
 	{
 		return this.tab.toString();
 	}
+	
+	public void declaracaoPrevia( Token t )
+    {
+     	if ( !this.isExiste( t.image ) )
+		{
+			System.out.println("erro: variável " + t.image + " não declarada na linha " + t.beginLine + "\n");
+		}
+    }
+	
+	public void alocarVariavel( Token t, char _c_tp )
+    {
+		Simbolo simb = null;
+		switch ( _c_tp )
+		{
+			case 'N':
+				simb = new Simbolo( t.image );
+				break;
+			case 'S':
+				simb = new Simbolo( t.image, Tipo.PALAVRA );
+				break;
+
+		}
+
+	  	if ( !this.incluir( simb ) )
+	  	{
+			System.out.println("erro: variável " + t.image + " repetida na linha " + t.beginLine + "\n");
+	  	}
+	 
+    } 
+	
 }
