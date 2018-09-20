@@ -7,12 +7,12 @@ public class Compilador implements CompiladorConstants {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
       try {
-         compilador = new Compilador(new FileInputStream("exemplo20.spc"));
-         Compilador.one_line();
-         System.out.println(tabela);
+         compilador = new Compilador(new FileInputStream("exemplo17.spc"));
+         Compilador.inicio();
          if(status==1) {
            System.out.println("An\u00e1lise l\u00e9xica,sint\u00e1tica, semantica sem erros!");
          }
+         System.out.println(tabela);
 
       }
       catch(FileNotFoundException e) {
@@ -26,12 +26,12 @@ public class Compilador implements CompiladorConstants {
       }
    }
 
-  static final public void one_line() throws ParseException {
-    inicio();
+  static final public void inicio() throws ParseException {
+    programa();
     jj_consume_token(0);
   }
 
-  static final public void inicio() throws ParseException {
+  static final public void programa() throws ParseException {
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -109,10 +109,13 @@ public class Compilador implements CompiladorConstants {
       throw new ParseException();
     }
     t = jj_consume_token(VAR);
-                simb = new Simbolo(t.image,tipo);
-                if(!(tabela.inclui(simb))) {
+                if((tabela.isExiste(t.image))) {
                   status=0;
-                  System.out.println("Erro: vari\u00e1vel "+t.image+" ja foi declarada na linha "+t.endLine);
+                  System.out.println("Erro: vari\u00e1vel "+t.image+" duplicada na linha "+t.endLine);
+                }
+                else {
+                        simb = new Simbolo(t.image,tipo);
+                        tabela.inclui(simb);
                 }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
@@ -135,10 +138,14 @@ public class Compilador implements CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       t = jj_consume_token(VAR);
-                simb = new Simbolo(t.image,tipo);
-                if(!(tabela.inclui(simb))) {
+                if((tabela.isExiste(t.image))) {
                   status=0;
-                  System.out.println("Erro: vari\u00e1vel "+t.image+" ja foi declarada na linha"+t.endLine);
+                  System.out.println("Erro: vari\u00e1vel "+t.image+" duplicada na linha "+t.endLine);
+                }
+                else {
+                        simb = new Simbolo(t.image,tipo);
+                        tabela.inclui(simb);
+
                 }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ATRIB:
@@ -158,7 +165,7 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(AP);
     expressao();
     jj_consume_token(FP);
-    inicio();
+    programa();
     jj_consume_token(FIMSE);
   }
 
@@ -167,7 +174,7 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(AP);
     expressao();
     jj_consume_token(FP);
-    inicio();
+    programa();
     jj_consume_token(FIMENQUANTO);
   }
 

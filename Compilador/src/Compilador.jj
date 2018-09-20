@@ -12,12 +12,12 @@ public class Compilador {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
       try {
-         compilador = new Compilador(new FileInputStream("exemplo20.spc"));
-         Compilador.one_line();
-         System.out.println(tabela);
+         compilador = new Compilador(new FileInputStream("exemplo17.spc"));
+         Compilador.inicio();
          if(status==1) {
            System.out.println("Análise léxica,sintática, semantica sem erros!");
          }
+         System.out.println(tabela);
          
       }
       catch(FileNotFoundException e) {
@@ -75,12 +75,12 @@ TOKEN : {
     < IGUAL: "=" > |
    	< CONCAT: "&" > 
 }
-void one_line() : {}
+void inicio() : {}
 {
-   inicio() <EOF>
+   programa() <EOF>
 }
 
-void inicio() : {}
+void programa() : {}
 {
    ( comando() )*
 }
@@ -105,18 +105,26 @@ void atribuicao() : {Simbolo s; Token t;}
 void declaracao() : {Simbolo simb; Token t; String tipo;} { 
 	(<NUMERO> {tipo= "numero"; } | <PALAVRA> { tipo= "palavra"; })
 	t = <VAR> {
-		simb = new Simbolo(t.image,tipo);
-		if(!(tabela.inclui(simb))) {
+		
+		if((tabela.isExiste(t.image))) {
 		  status=0;
 		  System.out.println("Erro: variável "+t.image+" duplicada na linha "+t.endLine);
+		}
+		else {
+			simb = new Simbolo(t.image,tipo);
+			tabela.inclui(simb);
 		}
 	  }
 	( <ATRIB> expressao() )?
 	(<VIRGULA> t = <VAR> {
-		simb = new Simbolo(t.image,tipo);
-		if(!(tabela.inclui(simb))) {
+		if((tabela.isExiste(t.image))) {
 		  status=0;
-		  System.out.println("Erro: variável "+t.image+" duplicada na linha"+t.endLine);
+		  System.out.println("Erro: variável "+t.image+" duplicada na linha "+t.endLine);
+		}
+		else {
+			simb = new Simbolo(t.image,tipo);
+			tabela.inclui(simb);
+			
 		}
 	  }
 	( <ATRIB> expressao() )? )* <PV> 
@@ -124,12 +132,12 @@ void declaracao() : {Simbolo simb; Token t; String tipo;} {
 
 void se() : {}
 {
-   <SE> <AP> expressao() <FP> inicio() <FIMSE>
+   <SE> <AP> expressao() <FP> programa() <FIMSE>
 }
 
 void enquanto() : {}
 {
-   <ENQUANTO> <AP> expressao() <FP> inicio() <FIMENQUANTO>
+   <ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
 }
 
 void le() : {Token t;}

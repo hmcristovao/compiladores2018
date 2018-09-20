@@ -3,16 +3,39 @@ import java.util.HashMap;
 public class Tabela {
 	 
 	private HashMap<String,Simbolo> tab;
+	private int marcador;
+	
+	
 	
     public Tabela() {
           this.tab = new HashMap<String,Simbolo>();
+          this.setMarcador(1);
     }
     
+	public  int getMarcador() {
+		return marcador;
+	}
+
+
+	public void setMarcador(int marcador) {
+		this.marcador = marcador;
+	}
+	
     public boolean inclui(Simbolo _simb) {
           if(this.tab.containsKey(_simb.getNome()))
                 return false;
           else {
+        	    _simb.setReferencia(marcador);
                 this.tab.put(_simb.getNome(),_simb);
+                
+                
+                if(_simb.getTipo().equals("numero")) {
+                	this.marcador +=2;
+                }
+                else {
+                	this.marcador++;
+                }
+                
                 return true;
           }
     }
