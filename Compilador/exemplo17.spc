@@ -1,4 +1,4 @@
-numero soma<-0, valor<-0, cont <-0, a<-0,teste<-0;
+numero soma<-0, valor<-0 , cont <-0, a<-0;
 
 enquanto (a=0)
 
