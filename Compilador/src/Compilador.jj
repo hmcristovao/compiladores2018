@@ -20,7 +20,7 @@ public class Compilador {
         System.out.println();
          compilador = new Compilador(new FileInputStream(arq));
          Compilador.inicio();
-         //System.out.println(tabela.imprime());
+         System.out.println(tabela.imprime());
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");

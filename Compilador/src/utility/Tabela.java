@@ -3,14 +3,20 @@ package utility;
 import java.util.HashMap;
 public class Tabela {
       private HashMap<String,Simbolo> tab;
-      public Tabela() {
+  		private static int index = 0;
+ 
+  		public Tabela() {
             this.tab = new HashMap<String,Simbolo>();
       }
       public boolean push(Simbolo novo) {
-            if(this.tab.containsKey(novo.getName()))
+            if(this.tab.containsKey(novo.getName())) {
+
                   return false;
-            else {
+            }else {
                   this.tab.put(novo.getName(),novo);
+                  int aux=index;
+                  Tabela.index += novo.getRef();
+                  novo.setRef(aux);
                   return true;
             }
       }
@@ -22,7 +28,5 @@ public class Tabela {
       }
       public String imprime() {
             return this.tab.toString();
-
-
       }
 }
