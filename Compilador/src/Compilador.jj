@@ -165,34 +165,91 @@ void inicio() : {}
 	//==========GRAM�TICA DE EXPRESS�ES==============
 	LinkedList<Item> expressao() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
 	{
-	      termo() ( < OU > termo()  )*
+	      item = termo() {
+				listaExp.add(item);
+	      }
+	      ( < OU > item = termo()
+	      	{
+				listaExp.add(item);
+				listaExp.add( new Item('o',"ou"));
+	        }
+	      )*
+	         { return listaExp; }
 	}
-	void termo() : {} 
+	/*LinkedList<Item> termo() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
 	{
-	      termo1() ( < IGUAL >  termo1())*
+	      item = termo1() {
+				listaExp.add(item);
+	      }
+	        ( < IGUAL > item = termo1()
+	        	{
+					listaExp.add(item);
+					listaExp.add( new Item('o',"="));
+	          	}
+	         )*
+	         { return listaExp; }
 	}
-	void termo1() : {} 
+	LinkedList<Item> termo1() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
 	{
-	      termo2() ( < CONCAT > termo2())*
+	      item = termo2() {
+				listaExp.add(item);
+	      }
+	        ( < CONCAT > item = termo() {
+				listaExp.add(item);
+				listaExp.add( new Item('o',"&"));
+	          	}
+	         )*
+	         { return listaExp; }
 	}
-	void termo2() : {} 
+LinkedList<Item> termo2() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
 	{
-	      termo3() ( (< SOMA > |  <  SUB >) termo3())*
+	      item = termo3() {
+				listaExp.add(item);
+	      }
+	        ( (< SOMA >)  item = termo3() {
+				listaExp.add(item);
+				listaExp.add( new Item('o',"+"));
+	          	}
+	       | (< SUB >)  item = termo3() {
+				listaExp.add(item);
+				listaExp.add( new Item('o',"-"));
+	          	}
+	       )*
+	         { return listaExp; }
 	}
-	void termo3() : {} 
+	LinkedList<Item> termo3() : {LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
 	{
-	      termo4() ( ( < MUL > |<  DIV >) termo4())*
+	      item = termo4() {
+				listaExp.add(item);
+	      }
+	        ( (< MUL >)  item = termo3() {
+				listaExp.add(item);
+				listaExp.add( new Item('o',"+"));
+	          	}
+	       | (< DIV >)  item = termo4() {
+				listaExp.add(item);
+				listaExp.add( new Item('o',"-"));
+	          	}
+	       )*
+	         { return listaExp; }
 	}
-	void termo4() : {Token t;} 
+	
+	void termo4() : {Token t; Item item = null;} 
 	{
 			< AP > expressao() < FP >
 		  |t = < VAR > { 
 		  		if (!tabela.isExiste(t.image)) {
-				System.out.println("Erro semântico \n Variável " +"'"+ t.image +"'" + " não foi declarada!");
-				erro = 1;
+					System.out.println("Erro semântico \n Variável " +"'"+ t.image +"'" + " não foi declarada!");
+					erro = 1;
      			}
+     			item = new Item('v',t.image);
+         		return item;
      		}
 		  | < STRING >
-		  |(< SOMA > | < SUB >)?  <NUM>
+		  |(< SOMA > | < SUB >)?  t =  <NUM> {
+        	 item = new Item('n',"" + t.image);
+         return item;
+      }
+	*/	  
 		   		
 	}
