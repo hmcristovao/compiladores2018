@@ -7,19 +7,19 @@ PARSER_BEGIN(Compilador)
 import java.io.*;
 import java.util.*;
 public class Compilador {  
-   public static HashMap<String, Simbolo> tab;
+   static Tabela tabela;
    
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
-      tab = new HashMap<String, Simbolo>();
+      tabela = new Tabela();
       
       try {
          compilador = new Compilador(new FileInputStream("exemplo01.spc"));
-         Compilador.inicio();
+         Compilador.programa();
          System.out.println("\n---------------------------\n");
          System.out.println("TABELA DE SIMBOLOS");
-         System.out.println(tab);
-      } 
+         System.out.println(tabela.tab);
+      }  
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
       }
@@ -83,7 +83,7 @@ TOKEN [IGNORE_CASE] : {
 	< CONCAT: "&" > 
  }
   
-void inicio() : { }
+void programa() : { }
 {
   ( comando() )*
 }
@@ -97,7 +97,7 @@ void atribuicao() : {
 	Token v;
 }
 {
-  v = <VAR> { Tabela.verificaDeclarada(tab, v); }<ATRIB> expressao() <PV>
+  v = <VAR> { tabela.verificaDeclarada(v); }<ATRIB> expressao() <PV>
 }
 
 void declaracao() : {
@@ -106,27 +106,27 @@ void declaracao() : {
 }
 {
   	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
-		{ Tabela.addVar(tab, t, v); }
+		{ tabela.addVar(t, v); }
 	( <ATRIB> expressao() )? (<VIRGULA> v = <VAR>
-		{ Tabela.addVar(tab, t, v); }
+		{ tabela.addVar(t, v); }
 	( <ATRIB> expressao() )? )* <PV>
 }
 
 void se() : { }
 {
-  <SE> <AP> expressao() <FP> inicio() <FIMSE>
+  <SE> <AP> expressao() <FP> programa() <FIMSE>
 }
 
 void enquanto() : { }
 {
-  <ENQUANTO> <AP> expressao() <FP> inicio() <FIMENQUANTO>
+  <ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
 }
 
 void le() : {
 	Token v;
 }
 {
-  <LEITURA> v = <VAR> { Tabela.verificaDeclarada(tab, v); } ( <VIRGULA> v = <VAR> { Tabela.verificaDeclarada(tab, v); } )* <PV>
+  <LEITURA> v = <VAR> { tabela.verificaDeclarada(v); } ( <VIRGULA> v = <VAR> { tabela.verificaDeclarada(v); } )* <PV>
 }
 
 void exibe() : { }
@@ -167,6 +167,6 @@ void termo4() : {
   |<NUM>
   |<SOMA><NUM>
   |<SUB><NUM>
-  | v = <VAR> { Tabela.verificaDeclarada(tab, v); }
+  | v = <VAR> { tabela.verificaDeclarada(v); }
   |<STRING>
 }
