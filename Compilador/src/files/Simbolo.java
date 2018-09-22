@@ -4,12 +4,9 @@ public class Simbolo {
 
 	private String nome;      // nome do identificador
 	
-	private String tipo;        // é uma enumeração que deve ser criada para 
-	                          // representar os tipos usados na linguagem
+	private String tipo;        // representa os tipos usados na linguagem
 
-	private int referencia;   // é uma referência usada na geração do código destino
-
-	
+	private int referencia;   //referência usada na geração do código destino
 		
 
 	public String getNome() {
@@ -41,12 +38,9 @@ public class Simbolo {
 	}
 	
 	
-
-	
 	public String toString() {
 
 	      return "Nome:"+this.getNome() + "\t" + "Tipo:"+this.getTipo()
-
 	             + "\t" + "Referência:"+this.getReferencia() + "\n";
 
 	 }

@@ -18,6 +18,7 @@ public class Compilador {
        	 
          compilador = new Compilador(new FileInputStream("exemplo20.spc"));
          Compilador.inicio();
+         System.out.println("");
          tab.imprimeTabela();
       }
       catch(FileNotFoundException e) {
@@ -80,13 +81,7 @@ void inicioGramatica():
 {LinkedList<Item> listaExp = new LinkedList<Item>();}
 {
 	expressao(listaExp)
-	{	
-	  for (Item i : listaExp) {
-        System.out.print(i.getValor() + "(" + i.getTipo() +") ");
-      }
-      
-      System.out.println("\n");
-    }
+	{System.out.println(listaExp);}
 }
 
 void expressao(LinkedList<Item> listaExp):
@@ -153,27 +148,45 @@ void termo3(LinkedList<Item> listaExp):
 
 void termo4(LinkedList<Item> listaExp):
 {
-
 	Item item = new Item(); 
 	Token var, entrada, sinal;
-
 }
-
 {
  <AP> expressao(listaExp) <FP> 
-|entrada=<NUM> {item.setValor(entrada.image); item.setTipo("numerico"); listaExp.add(item);} 
-|<SOMA>entrada=<NUM> {item.setValor(entrada.image); item.setTipo("numerico"); listaExp.add(item);}
-|sinal=<SUB>entrada=<NUM> {item.setValor(sinal.image+entrada.image); item.setTipo("numerico"); listaExp.add(item);}
+|entrada=<NUM>
+{
+  	item.setValor(entrada.image);
+  	item.setTipo("numerico");
+  	listaExp.add(item);
+} 
+|<SOMA>entrada=<NUM>
+{
+  	item.setValor(entrada.image);
+  	item.setTipo("numerico");
+  	listaExp.add(item);
+}
+|sinal=<SUB>entrada=<NUM>
+{
+  	item.setValor(sinal.image+entrada.image);
+  	item.setTipo("numerico");
+  	listaExp.add(item);
+}
 |var=<VAR>
 {
   	if(tab.verificaSimbolo(var.image) == false) {
   	  	System.out.println("Variavel nao Declarada");
   	  	return;
   	}
-  	item.setValor(var.image); item.setTipo((tab.pesquisaTabela(var.image)).getTipo()); 
+  	item.setValor(var.image);
+  	item.setTipo((tab.pesquisaTabela(var.image)).getTipo()); 
   	listaExp.add(item);
 }
-|entrada=<STRING> {item.setValor(entrada.image); item.setTipo("palavra"); listaExp.add(item);}
+|entrada=<STRING>
+{
+  	item.setValor(entrada.image);
+  	item.setTipo("palavra");
+  	listaExp.add(item);
+}
 
 }
  

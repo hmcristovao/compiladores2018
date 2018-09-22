@@ -19,6 +19,9 @@ public class Item {
 		this.valor = valor;
 	}
 	
-	
+	public String toString() {
+	      return this.getValor() + "(" + this.getTipo() +") ";
+
+	 }
 
 }
