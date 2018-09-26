@@ -11,6 +11,6 @@ enquanto (a=0)
    exibe "Digite: 0 - continuar ou 1 - terminar: ";
    le  a;
 
-fim-enquanto
+fimenquanto
 
 exibe "Media:", soma/cont;

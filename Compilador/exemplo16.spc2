@@ -9,4 +9,4 @@ enquanto (c=0)
     r<-a+b;
     exibe r;
 
-fim-enquanto
+fimenquanto

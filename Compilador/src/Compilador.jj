@@ -18,25 +18,25 @@ public class Compilador {
 		tabela.marcador = 1;
     	Compilador analisador = null;
       	try {
-	         analisador = new Compilador(new FileInputStream("exemplo.spc2"));
+	         analisador = new Compilador(new FileInputStream("exemplo17.spc2"));
 	         Compilador.inicio();
 	         if(erro == 1) 
-	         System.out.println("Erro semântico\n"); 
+	         System.out.println("Erro semantico\n"); 
 			 else {  
-				System.out.println("Análise léxica, sintática e semântica sem erros!");
+				System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
 	          	System.out.println("\nTabela de Simbolos:");
 	 		 	System.out.println(tabela);
 	 		 	System.out.println("\nMarcador:\n" + tabela.marcador);
 	       	}
        	 }
 	     catch(FileNotFoundException e) {
-	         System.out.println("Erro: arquivo não encontrado");
+	         System.out.println("Erro: arquivo nao encontrado");
 	     }
 	     catch(TokenMgrError e) {
-	        System.out.println("Erro léxico\n" + e.getMessage());
+	        System.out.println("Erro lexico\n" + e.getMessage());
 	     }
 	     catch(ParseException e) {
-	         System.out.println("Erro sintático\n" + e.getMessage());
+	         System.out.println("Erro sintatico\n" + e.getMessage());
 	     }
    }
 }
@@ -99,59 +99,57 @@ void inicio() : {}
 	{
 	      atribui() | declaracao() | se() | enquanto() | le() | exibe()  
 	}
-	void atribui() : {Token t;LinkedList<Item> listaExp;} 
+	void atribui() : {Token t;} 
 	{
 		t = < VAR > {
 			if (!tabela.isExiste(t.image)) {
-					System.out.println("Variável " + "'" + t.image + "'" + " não foi declarada!");
+					System.out.println("Variavel " + "'" + t.image + "'" + " nao foi declarada!");
 					erro = 1;
 			}
-		}  <RECEBE> listaExp = expressao(){
-            	System.out.println(listaExp);  // só exibe a expressão no formato posfixo
-      	}< PV >
+		}  <RECEBE> expressaoPrincipal() < PV >
 	}
 	void declaracao() : {Simbolo simb; Token t; char tp;}
 	{
 		(< NUMERO > {tp = 'n';} | < PALAVRA > { tp = 'p' ;}) t = < VAR > {
 			if (tabela.isExiste(t.image)) {
-				System.out.println("Variável " + "'" + t.image + "'" + " já declarada!");
+				System.out.println("Variavel " + "'" + t.image + "'" + " ja declarada!");
 				erro = 1;
       		}
 			else if(tp == 'n') {
-				  simb = new Simbolo(t.image, Tipo.numero);
+				  simb = new Simbolo(t.image, Tipo.numero, tabela.marcador);
 				  tabela.inclui(simb);
 				  tabela.marcador += 2;
 			}
       		else {
-				  simb = new Simbolo(Tipo.palavra, t.image);
+				  simb = new Simbolo(Tipo.palavra, t.image, tabela.marcador);
 				  tabela.inclui(simb);
 				  tabela.marcador += 1;
 		 	}
 	  }
-		(< RECEBE > expressao())? (< VIRGULA > t = < VAR > {
+		(< RECEBE > expressaoPrincipal())? (< VIRGULA > t = < VAR > {
 			if (tabela.isExiste(t.image)) {
-				System.out.println("Variável " +"'"+ t.image +"'" + " já declarada!");
+				System.out.println("Variavel " +"'"+ t.image +"'" + " ja declarada!");
 				erro = 1;
       		}
 			else if(tp == 'n') {
-				  simb = new Simbolo(t.image, Tipo.numero);
+				  simb = new Simbolo(t.image, Tipo.numero, tabela.marcador);
 				  tabela.inclui(simb);
 				  tabela.marcador += 2;
       		}
       		else {
-				  simb = new Simbolo(Tipo.palavra, t.image);
+				  simb = new Simbolo(Tipo.palavra, t.image, tabela.marcador);
 				  tabela.inclui(simb);
 				  tabela.marcador += 1;
       		}
-	   	} (< RECEBE > expressao() )? )* < PV >
+	   	} (< RECEBE > expressaoPrincipal() )? )* < PV >
 	}
 	void se() : {}
 	{
-	      < SE > < AP > expressao() < FP > programa() < FIMSE >
+	      < SE > < AP > expressaoPrincipal() < FP > programa() < FIMSE >
 	}
 	void enquanto() : {}
 	{
-	      < ENQUANTO > < AP > expressao() < FP > programa() < FIMENQUANTO > 
+	      < ENQUANTO > < AP > expressaoPrincipal() < FP > programa() < FIMENQUANTO > 
 	}
 	void le() : {}
 	{
@@ -159,101 +157,61 @@ void inicio() : {}
 	}
 	void exibe() : {}
 	{
-	      <EXIBE> expressao() ( < VIRGULA > expressao() )*   < PV > 
+	      <EXIBE> expressaoPrincipal() ( < VIRGULA > expressaoPrincipal() )*   < PV > 
 	}
 
 	//==========GRAM�TICA DE EXPRESS�ES==============
-	LinkedList<Item> expressaoPrincipal() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	void expressaoPrincipal() : {LinkedList<Item> listaExp = new LinkedList<Item>();}  
 	{
-	      termo(listaExp) {
-				listaExp.add(item);
-	      }
-	      ( (t = < OU >) termo(listaExp)
-	      	{
-				listaExp.add(item);
-				listaExp.add(new Item('o',t.image));
-	        }
-	      )*
-	       { System.out.println(listaExp); }
+	     expressao(listaExp)	{ System.out.println(listaExp); }
 	}
-	void expressao() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	void expressao(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	      termo(listaExp) {
-				listaExp.add(item);
-	      }
-	      ( (t = < OU >) termo(listaExp)
-	      	{
-				listaExp.add(item);
-				listaExp.add(new Item('o',t.image));
-	        }
-	      )*
-	       { System.out.println(listaExp); }
+	      termo(listaExp) ( (t = < OU >) termo(listaExp){ listaExp.add(new Item(Tipo.operacao,t.image)); } )*  
 	}
-	void termo() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	void termo(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	      termo1(listaExp) {
-				listaExp.add(item);
-	      }
-	        ( (t = < IGUAL >) termo1(listaExp)
+	      termo1(listaExp) ( (t = < IGUAL >) termo1(listaExp)
 	        	{
-					listaExp.add(item);
-					listaExp.add(new Item('o',t.image));
+					listaExp.add(new Item(Tipo.operacao,t.image));
 	          	}
 	         )*
 	         
 	}
-	void termo1() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null;}  
+	void termo1(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	     termo2(listaExp) {
-				listaExp.add(item);
-	      }
-	        ((t = < CONCAT >) termo2(listaExp) {
-				listaExp.add(item);
-				listaExp.add(new Item('o',t.image));
-	          	}
-	         )*
+	     termo2(listaExp) ((t = < CONCAT >) termo2(listaExp) { listaExp.add(new Item(Tipo.operacao,t.image));} )*
 	         
 	}
-    void termo2() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
+    void termo2(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	  		termo3(listaExp) {
-				listaExp.add(item);
-	      }
-	        ( (t = < SOMA > | t = < SUB > )termo3(listaExp) {
-				listaExp.add(item);
-				listaExp.add(new Item('o',t.image));
-	          	}
+	  		termo3(listaExp) ( (t = < SOMA > | t = < SUB > ) termo3(listaExp) {
+	  			listaExp.add(new Item(Tipo.operacao,t.image));
+	  		}
+	        )*
+	}
+	void termo3(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
+	{
+	      termo4(listaExp) ( (t = < MUL > | t = < DIV >) termo4(listaExp) {
+				listaExp.add(new Item(Tipo.operacao,t.image));}
 	       )*
 	}
-	void termo3() : {Token t; LinkedList<Item> listaExp = new LinkedList<Item>(); Item item = null; char a;}  
+	void termo4(LinkedList<Item> listaExp) : {Token t; Item item = null;} 
 	{
-	      termo4(listaExp) {
-				listaExp.add(item);
-	      }
-	        ( (t = < MUL > | t = < DIV >) termo4(listaExp) {
-				listaExp.add(item);
-				listaExp.add(new Item('o',t.image));
-	          	}
-	       )*
-	}
-	void termo4() : {Token t; Item item = null;} 
-	{
-			< AP > expressao() < FP >
+			< AP > expressao(listaExp) < FP >
+		 	
 		 	|t = < VAR > { 
 		  		if (!tabela.isExiste(t.image)) {
-					System.out.println("Erro semântico \n Variável " +"'"+ t.image +"'" + " não foi declarada!");
+					System.out.println("Erro semantico \n Variavel " +"'"+ t.image +"'" + " nao foi declarada!");
 					erro = 1;
      			}
-     			item = new Item('v',t.image);
-     			listaExp.add(item);
+     			listaExp.add(new Item(Tipo.variavel,t.image));
          	}
 		  	|t = < STRING > {
-				item = new Item('n',t.image);
-     			listaExp.add(item);
+     			listaExp.add(new Item(Tipo.palavra,t.image));
 		  	}
 		  	
 		  	|(< SOMA > | < SUB >)?  t =  <NUM> {
-        	 	item = new Item('n',"" + t.image);
-         		listaExp.add(item);
+         		listaExp.add(new Item(Tipo.numero,t.image));
       		}	
 	}

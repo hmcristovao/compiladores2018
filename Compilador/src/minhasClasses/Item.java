@@ -1,13 +1,13 @@
 package minhasClasses;
 
 public class Item {
-	   private char tipo; // pode ser 'n' (número), ,'v' (variável) ou 'o' (operador).
-	   private String valor; // contém o valor do item
-	   public Item(char _tipo, String _valor) {
+	   private Tipo tipo;
+	   private String valor; 
+	   public Item(Tipo _tipo, String _valor) {
 	      this.tipo = _tipo;
 	      this.valor = _valor;
 	   }
-	   public char getTipo() {
+	   public Tipo getTipo() {
 	      return this.tipo;
 	   }
 	   public String getvalor() {

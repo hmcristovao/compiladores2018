@@ -8,6 +8,6 @@ enquanto (a=5)
 
     se(i=10)
    	   a<-0;
-	fim-se
+	fimse
 
-fim-enquanto
+fimenquanto
