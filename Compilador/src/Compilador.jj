@@ -19,7 +19,7 @@ public class Compilador
 
       try
       {
-         compilador = new Compilador(new FileInputStream("exemplo16.spc"));
+         compilador = new Compilador(new FileInputStream("exemplo14.spc"));
          Compilador.inicio();
 		 System.out.println(tab);
          System.out.println("Execução finalizada com sucesso!\n");
@@ -150,7 +150,7 @@ void termo4( Lista listaExp ) : { Item item; Token t; Tipo tp = null ; String si
 	    t = < NUM > { tp = Tipo.NUMERO; }|
 		< SOMA > t = < NUM > { sinal = "+"; }|
 		< SUB > t = < NUM > { sinal = "-"; }|
-		t = < VAR > { tab.declaracaoPrevia(t); tp = Tipo.VARNUM; }|
+		t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); tp = Tipo.VARNUM; }|
 		t = < STRING > { tp = Tipo.VARSTR; }
 	)
 	{
@@ -171,14 +171,14 @@ void comando() : { }
 
 void atribuicao() : { Token t;}
 {
-	t = < VAR > { tab.declaracaoPrevia(t);} < ATRIB > pre_exp() < PV >
+	t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } < ATRIB > pre_exp() < PV >
 }
 
 void declaracao() : { Token t; char c_tp; }
 {
 	( < NUMERO > { c_tp = 'N'; } | < PALAVRA > { c_tp = 'S'; } )
-	t = < VAR > { tab.criarVariavel( t, c_tp ); }( < ATRIB > pre_exp() )?
-	( < VIRGULA > t =  < VAR > ( < ATRIB > pre_exp() )? { tab.criarVariavel( t, c_tp ); } )* < PV >
+	t = < VAR > { AcaoSemantica.criarVariavel( tab, t, c_tp ); }( < ATRIB > pre_exp() )?
+	( < VIRGULA > t =  < VAR > ( < ATRIB > pre_exp() )? { AcaoSemantica.criarVariavel( tab, t, c_tp ); } )* < PV >
 }
 
 void se() : {}
@@ -193,7 +193,7 @@ void enquanto() : {}
 
 void le() : { Token t;}
 {
-	< LEITURA > t = < VAR > { tab.declaracaoPrevia(t); } ( < VIRGULA > t = < VAR > { tab.declaracaoPrevia(t); } )* < PV >
+	< LEITURA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } ( < VIRGULA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } )* < PV >
 }
 
 void exibe() : {}
