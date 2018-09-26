@@ -182,7 +182,12 @@ String termo4(LinkedList<Item> listaExp) : {
 }
 {
   <AP> expressao() <FP> { return ""; }
-  |v = <NUM> { Item vItem = new Item(); vItem.setValor(v.image); listaExp.add(vItem); return v.image; }//jah colocar na lista imediatamente
+  |v = <NUM> {
+		Item vItem = new Item();
+		vItem.setValor(v.image);
+		listaExp.add(vItem);
+		return v.image;
+	} //jah colocar na lista imediatamente
   |v = <SOMA><NUM>{ return v.image; }
   |v = <SUB><NUM>{ return v.image; }
   |v = <VAR> { tabela.verificaDeclarada(v); return v.image; }
