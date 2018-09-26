@@ -1,4 +1,5 @@
-options {
+options
+{
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
 }
@@ -36,7 +37,7 @@ public class Compilador
 		System.out.println("Erro Sintático:\n" + e.getMessage());
       }
       
-   } 
+   }
 }
 PARSER_END(Compilador)
  
@@ -70,12 +71,14 @@ TOKEN : {
    		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
 }
 //-----------NUMEROS-----------
-TOKEN : {
+TOKEN :
+{
 	< #DIGIT: ["0"-"9"] > |  
     < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
 }
 //----------OPERADORES---------
-TOKEN : {
+TOKEN :
+{
  	< SOMA: "+" > |
 	< SUB: "-" > |
 	< MUL: "*" > |
@@ -91,39 +94,69 @@ void inicio() : { }
 	( comando() )* < EOF > 
 }
 
-void expressao() : { }
+void pre_exp() : { Lista listaExp = new Lista(); }
 {
-	termo() ( < OU > termo() )*
+	expressao( listaExp ){ System.out.println(listaExp);}
 }
 
-void termo() : { }
+
+void expressao( Lista listaExp ) : { Token t; Item item; }
 {
-	termo1()( < IGUAL > termo1() )?
+	( termo( listaExp ) ( t = < OU > termo( listaExp ) { item = new Item( t.image, Operador.OU ); listaExp.add(item); } )* )
 }
 
-void termo1() : { }
+void termo(  Lista listaExp ) : { Token t; Item item; }
 {
-	termo2()( < CONCAT > termo2() )*
+	termo1( listaExp )( t = < IGUAL > termo1( listaExp ) { item = new Item( t.image, Operador.IGUAL ); listaExp.add(item); } )?
 }
 
-void termo2() : { }
+void termo1( Lista listaExp ) : { Token t; Item item; }
 {
-	termo3()( ( < SOMA > | < SUB > ) termo3() )*
+	termo2( listaExp )
+	( t = < CONCAT > termo2( listaExp )
+	{
+	  item = new Item( t.image, Operador.CONCAT );
+	  listaExp.add(item);
+	}
+	)*
 }
 
-void termo3() : { }
+void termo2( Lista listaExp ) : { Token t; Item item; Operador op; }
 {
-	termo4()( ( < MUL > | < DIV > ) termo4() )*
+	termo3( listaExp )
+	( ( t = < SOMA > { op = Operador.ADD; } | t = < SUB > { op = Operador.SUB; } ) termo3( listaExp )
+	  {
+		item = new Item( t.image, op );
+		listaExp.add( item );
+	  }
+	)*
 }
 
-void termo4() : { Token t; }
+void termo3( Lista listaExp ) : { Item item; Token t; Operador op; }
 {
-	< AP > expressao() < FP > |
-	< NUM > |
-	< SOMA > < NUM > |
-	< SUB > < NUM > |
-	t = < VAR > { tab.declaracaoPrevia(t); } |
-	< STRING >
+	termo4( listaExp )
+	( ( t = < MUL > { op = Operador.MUL; } | t = < DIV > { op = Operador.DIV; } ) termo4( listaExp )
+	  {  
+		item = new Item( t.image, op );
+		listaExp.add(item);
+      }
+	)*
+}
+
+void termo4( Lista listaExp ) : { Item item; Token t; Tipo tp = null ; String sinal = "";}
+{
+	< AP > expressao( listaExp ) < FP >|
+    (
+	    t = < NUM > { tp = Tipo.NUMERO; }|
+		< SOMA > t = < NUM > { sinal = "+"; }|
+		< SUB > t = < NUM > { sinal = "-"; }|
+		t = < VAR > { tab.declaracaoPrevia(t); tp = Tipo.VARNUM; }|
+		t = < STRING > { tp = Tipo.VARSTR; }
+	)
+	{
+		item = new Item( sinal + t.image, tp );
+		listaExp.add( item );
+	}
 }
 
 void comando() : { }
@@ -138,32 +171,32 @@ void comando() : { }
 
 void atribuicao() : { Token t;}
 {
-	t = < VAR > { tab.declaracaoPrevia(t);} < ATRIB > expressao() < PV >
+	t = < VAR > { tab.declaracaoPrevia(t);} < ATRIB > pre_exp() < PV >
 }
 
-void declaracao() : {Token t; char c_tp; }
+void declaracao() : { Token t; char c_tp; }
 {
 	( < NUMERO > { c_tp = 'N'; } | < PALAVRA > { c_tp = 'S'; } )
-	t = < VAR > { tab.alocarVariavel( t, c_tp ); }( < ATRIB > expressao() )?
-	( < VIRGULA > t =  < VAR > ( < ATRIB > expressao() )? { tab.alocarVariavel( t, c_tp ); } )* < PV >
+	t = < VAR > { tab.criarVariavel( t, c_tp ); }( < ATRIB > pre_exp() )?
+	( < VIRGULA > t =  < VAR > ( < ATRIB > pre_exp() )? { tab.criarVariavel( t, c_tp ); } )* < PV >
 }
 
-void se() : { }
+void se() : {}
 {
-	< SE > < AP > expressao() < FP > ( comando() )* < FIMSE >
+	< SE > < AP > pre_exp() < FP > ( comando() )* < FIMSE >
 }
 
-void enquanto() : { }
-{
-	< ENQUANTO > < AP > expressao() < FP > ( comando() )* < FIMENQUANTO >
+void enquanto() : {}
+{ 
+	< ENQUANTO > < AP > pre_exp() < FP > ( comando() )* < FIMENQUANTO >
 }
 
-void le() : { Token t; }
+void le() : { Token t;}
 {
 	< LEITURA > t = < VAR > { tab.declaracaoPrevia(t); } ( < VIRGULA > t = < VAR > { tab.declaracaoPrevia(t); } )* < PV >
 }
 
-void exibe() : { }
+void exibe() : {}
 {
-	< EXIBE > expressao() ( < VIRGULA > expressao() )* < PV >
+	< EXIBE > pre_exp() ( < VIRGULA > pre_exp() )* < PV >
 }
