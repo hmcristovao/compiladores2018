@@ -1,5 +1,2 @@
-numero a <- 4;
-numero y;
+numero a <- 2;
 exibe a;
-le y;
-exibe y;

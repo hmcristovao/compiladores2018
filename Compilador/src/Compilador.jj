@@ -6,7 +6,7 @@ options {
 
 
 PARSER_BEGIN(Compilador)
-
+import java.util.LinkedList;
 import java.io.*;
 public class Compilador {
 	static Tabela tabela = new Tabela();
@@ -17,7 +17,7 @@ public class Compilador {
 	
       try {
 
-        analisador = new Compilador(new FileInputStream("exemplo01.spc")); //entrada do arquivo
+        analisador = new Compilador(new FileInputStream("exemplo17.spc")); //entrada do arquivo
         Compilador.inicio();
         System.out.println("Análise léxica, sintática e semântico sem erros!");
       }
@@ -76,55 +76,67 @@ TOKEN : {
 	< IGUAL: "=" > |
 	< CONCAT: "&" > 
  }
-
-void inicio() : {}
+void inicio() : { }
 {
-   ( comando() )* <EOF>
+	programa() <EOF>
+}
+void programa() : {}
+{
+   ( comando() )*
 }
 void comando() : {} 
 {
       atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
 }
 
-void expressao(): { } 
+void expressao(): {LinkedList<Item> listaExp = new LinkedList<Item>(); } 
+  {
+  	expressao2(listaExp){ System.out.println(listaExp + "\n"); }
+  }
+
+void expressao2(LinkedList<Item> listaExp) : {Item item = null; Token t; }
 {
-  termo() (<OU> termo())*
+  termo(listaExp)(t=< OU >termo(listaExp) {item = new Item( Tipo.operador, t.image ); listaExp.add(item); })*
 }
   	
 
-void termo() : { } //igualdade
+void termo (LinkedList<Item> listaExp) : {Item item = null; Token t; }//igualdade
 {
-  termo1() (<IGUAL> termo1())?
+  //termo1() (<IGUAL> termo1())?
+  termo1(listaExp)(t=< IGUAL >termo1(listaExp) { item = new Item( Tipo.operador, t.image ); listaExp.add(item);})?
 }
   
-void termo1() : { } //concatenacao
+void termo1(LinkedList<Item> listaExp) : {Item item = null; Token t; } //concatenacao
 {
-  termo2() (<CONCAT> termo2())*
+  //termo2() (<CONCAT> termo2())*
+  termo2(listaExp)(t=< CONCAT >termo2(listaExp) {item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
 }
   
-void termo2() : { } //soma e subtração
+void termo2(LinkedList<Item> listaExp) : {Item item = null; Token t; } //soma e subtração
 {
-  termo3() ((<SOMA>|<SUB>) termo3())*
+  termo3(listaExp)((t=< SOMA >|t=< SUB >)termo3(listaExp){item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
 }
 
-void termo3() : { } //multiplicacao e divisao
+void termo3(LinkedList<Item> listaExp) : {Item item = null; Token t; } //multiplicacao e divisao
 {
-  termo4() ((<MUL>|<DIV>) termo4())*
+  termo4(listaExp)((t=< MUL >|t=< DIV >)termo4(listaExp){item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
 }
 
-void termo4() : {Token t; } //expressao entre parenteces
+void termo4(LinkedList<Item> listaExp) : { Item item = null; Token t=null; char sinal=' '; Tipo tipo=null;} //expressao entre parenteces
 {
-  	<AP> expressao() <FP>
-  	|<NUM>
-   	|<SOMA><NUM>
-	|<SUB><NUM>
-	|t = <VAR> {
+  	(    < AP >expressao2(listaExp)< FP >
+  	| t=< NUM >{tipo=Tipo.numero;}
+  	| < SOMA >t=<NUM > {tipo=Tipo.numero;sinal='+';}
+	| < SUB >t=<NUM>{tipo=Tipo.numero;sinal='-';}
+	
+	| t=< VAR >{tipo=Tipo.variavel;} {
 		if(!tabela.isExiste(t.image)) { 
-			System.out.println("Erro semântico \n A variável "+t.image+ " não foi inicializada");
+			System.out.println("Erro semântico \n A variável "+t.image + " não foi inicializada");
 			System.exit(1);
 		}
 	 }
-	|<STRING>
+	| t=< STRING >{tipo=Tipo.string;}
+	){item = new Item( tipo , sinal + t.image ); listaExp.add(item);}
 }
 
 void atribuicao() : {Simbolo simb; Token t;} //atribuição
@@ -136,12 +148,12 @@ void atribuicao() : {Simbolo simb; Token t;} //atribuição
        <ATRIB> expressao() <PV>
 }
 
-void declaracao() : {Simbolo simb; Token t; }
+void declaracao() : {Simbolo simb; Token t; Token tipo; }
 {
-	(<NUMERO>|<PALAVRA>)
+	(tipo = <NUMERO>|tipo = <PALAVRA>)
 	t = <VAR>
 	(  <ATRIB>
-	{simb = new Simbolo(t.image);
+	{simb = new Simbolo(t.image,tipo.image);
 	 tabela.inclui(simb);
 	}
 	expressao() )? (<VIRGULA>
@@ -155,12 +167,12 @@ void declaracao() : {Simbolo simb; Token t; }
 
 void se() : { } //if
 {
-  	<SE> <AP> expressao() <FP> inicio() <FIMSE>
+  	<SE> <AP> expressao() <FP> programa() <FIMSE>
 }
 
 void enquanto() : { } //while
 {
-  	<ENQUANTO> <AP> expressao() <FP> inicio() <FIMENQUANTO>
+  	<ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
 }
 
 void le() : { Token t; Simbolo simb; } //read
