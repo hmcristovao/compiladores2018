@@ -1,3 +1,5 @@
+package semantico;
+import parser.*;
 
 public class AcaoSemantica 
 {
@@ -9,19 +11,10 @@ public class AcaoSemantica
 		}
     }
 	
-	public static void criarVariavel( Tabela _tab, Token t, char _c_tp )
+	public static void criarVariavel( Tabela _tab, Token t, Tipo _tp )
     {
-		Simbolo simb = null;
-		switch ( _c_tp )
-		{
-			case 'N':
-				simb = new Simbolo( t.image );
-				break;
-			case 'S':
-				simb = new Simbolo( t.image, Tipo.PALAVRA );
-				break;
-		}
-
+		Simbolo simb = new Simbolo( t.image, _tp );
+		
 	  	if ( !_tab.incluir( simb ) )
 	  	{
 			System.out.println("erro: variável " + t.image + " repetida na linha " + t.beginLine + "\n");

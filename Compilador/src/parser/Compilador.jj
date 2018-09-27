@@ -6,7 +6,12 @@ options
 
 PARSER_BEGIN(Compilador)
 
+package parser;
 import java.io.*;
+import semantico.*;
+import geradorCodigo.*;
+import apoio.*;
+
 public class Compilador
 {
    // Tabela de símbolos do compilador
@@ -19,7 +24,7 @@ public class Compilador
 
       try
       {
-         compilador = new Compilador(new FileInputStream("exemplo14.spc"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo13.spc2"));
          Compilador.inicio();
 		 System.out.println(tab);
          System.out.println("Execução finalizada com sucesso!\n");
@@ -89,74 +94,107 @@ TOKEN :
    	< CONCAT: "&" > 
 }
   
-void inicio() : { }
+Expressao preExp() : { Expressao exp = new Expressao(); }
 {
-	( comando() )* < EOF > 
-}
-
-void pre_exp() : { Lista listaExp = new Lista(); }
-{
-	expressao( listaExp ){ System.out.println(listaExp);}
+	expressao( exp ){ System.out.println(exp); return exp; }
 }
 
 
-void expressao( Lista listaExp ) : { Token t; Item item; }
+void expressao( Expressao exp ) :
 {
-	( termo( listaExp ) ( t = < OU > termo( listaExp ) { item = new Item( t.image, Operador.OU ); listaExp.add(item); } )* )
+  Token t;
+  Item item;
+}
+{
+	( termo( exp ) ( t = < OU > termo( exp ) { item = new Item( t.image, Operador.OU ); exp.add(item); } )* )
 }
 
-void termo(  Lista listaExp ) : { Token t; Item item; }
+void termo(  Expressao exp ) :
 {
-	termo1( listaExp )( t = < IGUAL > termo1( listaExp ) { item = new Item( t.image, Operador.IGUAL ); listaExp.add(item); } )?
+  Token t;
+  Item item;
+}
+{
+	termo1( exp )( t = < IGUAL > termo1( exp ) { item = new Item( t.image, Operador.IGUAL ); exp.add(item); } )?
 }
 
-void termo1( Lista listaExp ) : { Token t; Item item; }
+void termo1( Expressao exp ) :
 {
-	termo2( listaExp )
-	( t = < CONCAT > termo2( listaExp )
+  Token t;
+  Item item;
+}
+{
+	termo2( exp )
+	( t = < CONCAT > termo2( exp )
 	{
 	  item = new Item( t.image, Operador.CONCAT );
-	  listaExp.add(item);
+	  exp.add(item);
 	}
 	)*
 }
 
-void termo2( Lista listaExp ) : { Token t; Item item; Operador op; }
+void termo2( Expressao exp ) :
 {
-	termo3( listaExp )
-	( ( t = < SOMA > { op = Operador.ADD; } | t = < SUB > { op = Operador.SUB; } ) termo3( listaExp )
+  Token t;
+  Item item;
+  Operador op;
+}
+{
+	termo3( exp )
+	( ( t = < SOMA > { op = Operador.ADD; } | t = < SUB > { op = Operador.SUB; } ) termo3( exp )
 	  {
 		item = new Item( t.image, op );
-		listaExp.add( item );
+		exp.add( item );
 	  }
 	)*
 }
 
-void termo3( Lista listaExp ) : { Item item; Token t; Operador op; }
+void termo3( Expressao exp ) :
 {
-	termo4( listaExp )
-	( ( t = < MUL > { op = Operador.MUL; } | t = < DIV > { op = Operador.DIV; } ) termo4( listaExp )
+  Item item;
+  Token t;
+  Operador op;
+}
+{
+	termo4( exp )
+	( ( t = < MUL > { op = Operador.MUL; } | t = < DIV > { op = Operador.DIV; } ) termo4( exp )
 	  {  
 		item = new Item( t.image, op );
-		listaExp.add(item);
+		exp.add(item);
       }
 	)*
 }
 
-void termo4( Lista listaExp ) : { Item item; Token t; Tipo tp = null ; String sinal = "";}
+void termo4( Expressao exp ) :
 {
-	< AP > expressao( listaExp ) < FP >|
+  Item item;
+  Token t;
+  Tipo tp ;
+  String sinal = "";
+}
+{
+	< AP > expressao( exp ) < FP >|
     (
-	    t = < NUM > { tp = Tipo.NUMERO; }|
-		< SOMA > t = < NUM > { sinal = "+"; }|
-		< SUB > t = < NUM > { sinal = "-"; }|
+	    t = < NUM > { tp = Tipo.CTENUM; }|
+		< SOMA > t = < NUM > { sinal = "+"; tp = Tipo.CTENUM; }|
+		< SUB > t = < NUM > { sinal = "-"; tp = Tipo.CTENUM; }|
 		t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); tp = Tipo.VARNUM; }|
-		t = < STRING > { tp = Tipo.VARSTR; }
+		t = < STRING > { tp = Tipo.CTESTR; }
 	)
 	{
 		item = new Item( sinal + t.image, tp );
-		listaExp.add( item );
+		exp.add( item );
 	}
+}
+
+void inicio() : { }
+{
+	 programa() < EOF > 
+}
+
+void programa() : { }
+{
+	( comando() )*	
 }
 
 void comando() : { }
@@ -169,34 +207,38 @@ void comando() : { }
 	exibe()
 }
 
-void atribuicao() : { Token t;}
+void atribuicao() : { Token t; }
 {
-	t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } < ATRIB > pre_exp() < PV >
+	t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } < ATRIB > preExp() < PV >
 }
 
-void declaracao() : { Token t; char c_tp; }
+void declaracao() : { Token t; Tipo tp; }
 {
-	( < NUMERO > { c_tp = 'N'; } | < PALAVRA > { c_tp = 'S'; } )
-	t = < VAR > { AcaoSemantica.criarVariavel( tab, t, c_tp ); }( < ATRIB > pre_exp() )?
-	( < VIRGULA > t =  < VAR > ( < ATRIB > pre_exp() )? { AcaoSemantica.criarVariavel( tab, t, c_tp ); } )* < PV >
+	( < NUMERO > { tp = Tipo.VARNUM; } | < PALAVRA > { tp = Tipo.VARSTR; } )
+	t = < VAR > { AcaoSemantica.criarVariavel( tab, t, tp ); }
+	( < ATRIB > preExp() { tp = Tipo.CTENUM; } )?
+	( < VIRGULA > t =  < VAR > { AcaoSemantica.criarVariavel( tab, t, tp ); }
+	  ( < ATRIB > preExp() { tp = Tipo.CTENUM; } )?
+	)* < PV >
 }
 
 void se() : {}
 {
-	< SE > < AP > pre_exp() < FP > ( comando() )* < FIMSE >
+	< SE > < AP > preExp() < FP > programa() < FIMSE >
 }
 
 void enquanto() : {}
 { 
-	< ENQUANTO > < AP > pre_exp() < FP > ( comando() )* < FIMENQUANTO >
+	< ENQUANTO > < AP > preExp() < FP > programa() < FIMENQUANTO >
 }
 
 void le() : { Token t;}
 {
-	< LEITURA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } ( < VIRGULA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } )* < PV >
+	< LEITURA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); }
+	( < VIRGULA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } )* < PV >
 }
 
 void exibe() : {}
 {
-	< EXIBE > pre_exp() ( < VIRGULA > pre_exp() )* < PV >
+	< EXIBE > preExp() ( < VIRGULA > preExp() )* < PV >
 }

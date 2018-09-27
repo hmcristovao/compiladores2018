@@ -1,5 +1,7 @@
+package semantico;
 
 import java.util.HashMap;
+import parser.*;
 
 public class Tabela 
 {
@@ -40,37 +42,9 @@ public class Tabela
 				incremento = 0;
 		}
 		
-		this.marcador += incremento;
+		this.setMarcador( this.getMarcador() + incremento );
 	}
-	
-	public void declaracaoPrevia( Token t )
-	   {
-	     	if ( !this.isExiste( t.image ) )
-			{
-				System.out.println("erro: variável " + t.image + " não declarada na linha " + t.beginLine + "\n");
-			}
-	   }
 
-    public void criarVariavel( Token t, char _c_tp )
-    {
-		Simbolo simb = null;
-		switch ( _c_tp )
-		{
-			case 'N':
-				simb = new Simbolo( t.image );
-				break;
-			case 'S':
-				simb = new Simbolo( t.image, Tipo.PALAVRA );
-				break;
-		}
-
-	  	if ( !this.incluir( simb ) )
-	  	{
-			System.out.println("erro: variável " + t.image + " repetida na linha " + t.beginLine + "\n");
-	  	}
-	 
-    }  
-	   
 	public int consultarReferencia( String _chave )
 	{
 		return ((Simbolo)this.tab.get(_chave)).getReferencia();
@@ -95,4 +69,16 @@ public class Tabela
 	{
 		return this.tab.toString();
 	}
+
+	public HashMap<String, Simbolo> getTab() 
+	{
+		return this.tab;
+	}
+
+	public void setTab(HashMap<String, Simbolo> _tab) 
+	{
+		this.tab = _tab;
+	}
+	
+	
 }

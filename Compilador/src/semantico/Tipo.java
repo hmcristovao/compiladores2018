@@ -1,3 +1,5 @@
+package semantico;
+
 
 public enum Tipo 
 {

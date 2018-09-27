@@ -1,3 +1,6 @@
+package semantico;
+
+
 
 public enum Operador 
 {
