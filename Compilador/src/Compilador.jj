@@ -134,9 +134,12 @@ void exibe() : { }
   <EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
 }
 
-void expressao() : { LinkedList<Item> listaExp = new LinkedList<Item>(); }
+void expressao() : {
+	LinkedList<Item> listaExp = new LinkedList<Item>(); //cria uma nova linkedlist
+}
 {
-  termo(listaExp)(<OU> termo(listaExp))*
+  termo(listaExp)(<OU> termo(listaExp))*{
+	System.out.println(Arrays.toString(listaExp.toArray())); /*imprime a lista*/ }
 }
 
 void termo(LinkedList<Item> listaExp) : { }
@@ -144,52 +147,82 @@ void termo(LinkedList<Item> listaExp) : { }
   termo1(listaExp)(<IGUAL> termo1(listaExp))?
 }
 
-void termo1(LinkedList<Item> listaExp) : { }
+void termo1(LinkedList<Item> listaExp) : {
+	String posFixo;
+}
 {
-  termo2(listaExp)(<CONCAT> termo2(listaExp))*
+  posFixo = termo2(listaExp)(<CONCAT> posFixo = termo2(listaExp))* { System.out.println("Posfixo: "+posFixo); }
 }
 
 String termo2(LinkedList<Item> listaExp) : {
 	String a, b="";
 	Token sinal;
+	Item itemSinal;
 }
 {
   a = termo3(listaExp)((sinal = <SOMA>| sinal = <SUB>) b = termo3(listaExp) {
-//pegar o operador aqui e botar na lista
-    Item isinal = new Item();
-    isinal.setValor(sinal.image);    
-    listaExp.add(isinal);
-    
+	//pegar o operador aqui e botar na lista
+    itemSinal = new Item();
+    itemSinal.setValor(sinal.image);
+    itemSinal.setTipo(Tipo.OPERANDO);   
+    listaExp.add(itemSinal);
     a = a+b+sinal.image;
-    
-    System.out.println("posfixo "+a);
-    System.out.println(Arrays.toString(listaExp.toArray()));
-
     })* { return a; } 
 }
 
 String termo3(LinkedList<Item> listaExp) : {
 	String a, b="";
 	Token sinal;
+	Item itemSinal;
 }
 {
-  a = termo4(listaExp)((sinal = <MUL>|sinal = <DIV>) b = termo4(listaExp) { a = a+b+sinal.image; })* { return a; }
+  a = termo4(listaExp)((sinal = <MUL>|sinal = <DIV>) b = termo4(listaExp) {
+    itemSinal = new Item();
+    itemSinal.setValor(sinal.image);
+    itemSinal.setTipo(Tipo.OPERANDO);   
+    listaExp.add(itemSinal);
+	a = a+b+sinal.image;
+})* { return a; }
 }
 
 String termo4(LinkedList<Item> listaExp) : { 
-	Token v;
+	Token folha;
 	String a;
+	Item folhaItem = new Item();
 }
 {
   <AP> expressao() <FP> { return ""; }
-  |v = <NUM> {
-		Item vItem = new Item();
-		vItem.setValor(v.image);
-		listaExp.add(vItem);
-		return v.image;
+  |folha = <NUM> { //adiciona um numero sem sinal
+		folhaItem.setValor(folha.image);
+		folhaItem.setTipo(Tipo.NUMERO);
+		listaExp.add(folhaItem);
+		return folha.image;
 	} //jah colocar na lista imediatamente
-  |v = <SOMA><NUM>{ return v.image; }
-  |v = <SUB><NUM>{ return v.image; }
-  |v = <VAR> { tabela.verificaDeclarada(v); return v.image; }
-  |v = <STRING>{ return v.image; }
+  |folha = <SOMA><NUM>{ //adiciona um numero com sinal positivo
+		folhaItem.setValor(folha.image);
+		folhaItem.setTipo(Tipo.NUMERO);
+		listaExp.add(folhaItem);
+		return folha.image;
+	}
+  |folha = <SUB><NUM>{ //adiciona um numero com sinal negativo
+	folhaItem.setValor(folha.image);
+	folhaItem.setTipo(Tipo.NUMERO);
+	listaExp.add(folhaItem);
+	return folha.image;
+	}
+  |folha = <VAR> { //adiciona uma variavel
+    if(tabela.verificaDeclarada(folha)) { //caso a variavel tenha sido declarada
+		folhaItem = new Item();
+		folhaItem.setValor(folha.image);
+		folhaItem.setTipo(Tipo.VARIAVEL);
+		listaExp.add(folhaItem);
+    }
+    return folha.image;
+  }
+  |folha = <STRING>{ //adiciona uma string
+	folhaItem.setValor(folha.image);
+	folhaItem.setTipo(Tipo.STRING);
+	listaExp.add(folhaItem);
+	return folha.image;	
+ }
 }

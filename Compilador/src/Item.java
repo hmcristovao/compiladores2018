@@ -30,6 +30,8 @@ public void setValor(String valor) {
 	this.valor = valor;
 }
 
-        // criar aqui os métodos de interface para os campos
-
+// criar aqui os métodos de interface para os campos
+	public String toString() {
+    return "\n"+"Valor:"+this.getValor() + " - " + "Tipo:"+this.getTipo()+ " - " + "descricao:"+this.getDescricao();
+ }
 }

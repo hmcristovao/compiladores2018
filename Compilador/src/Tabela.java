@@ -24,10 +24,12 @@ public class Tabela {
   	  	}
 	}
 	
-	public void verificaDeclarada(Token v) {
+	boolean verificaDeclarada(Token v) {
 		if(tab.containsKey(v.image) == false) { //caso nao contenha a chave
 			System.out.println("Erro: variável "+v.image+" não declarada na linha "+v.endLine );
+			return false;
   	  	}
+		return true;
 	}
 	
 	public int incMarcador(String tipo) {
