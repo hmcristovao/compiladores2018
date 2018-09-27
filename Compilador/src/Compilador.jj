@@ -1,35 +1,34 @@
 options {
-  DEBUG_PARSER = false;
-  DEBUG_TOKEN_MANAGER = false;
+	DEBUG_PARSER = false;
+	DEBUG_TOKEN_MANAGER = false;
 }
 
 PARSER_BEGIN(Compilador)
 import java.io.*;
+import java.util.LinkedList;
 public class Compilador {
-  static Tabela tabela = new Tabela();
-  static int status =1;
-  
-   public static void main(String args[])  throws ParseException  {
-      Compilador compilador = null;
-      try {
-         compilador = new Compilador(new FileInputStream("exemplo17.spc"));
-         Compilador.inicio();
-         if(status==1) {
-           System.out.println("Análise léxica,sintática, semantica sem erros!");
-         }
-         System.out.println(tabela);
-         
-      }
-      catch(FileNotFoundException e) {
-         System.out.println("Erro: arquivo nao encontrado");
-      }
-      catch(TokenMgrError e) {
-         System.out.println("Erro lexico\n" + e.getMessage());
-      }
-      catch(ParseException e) {
-         System.out.println("Erro sintático\n" + e.getMessage());
-      }
-   }
+	static Tabela tabela = new Tabela();
+	static int status =1;
+	
+	 public static void main(String args[])  throws ParseException  {
+			Compilador compilador = null;
+			try {
+				 compilador = new Compilador(new FileInputStream("exemplo6.spc"));
+				 Compilador.inicio();
+				 if(status==1) {
+					 System.out.println("Anï¿½lise lï¿½xica,sintï¿½tica, semantica sem erros!");
+				 }         
+			}
+			catch(FileNotFoundException e) {
+				 System.out.println("Erro: arquivo nao encontrado");
+			}
+			catch(TokenMgrError e) {
+				 System.out.println("Erro lexico\n" + e.getMessage());
+			}
+			catch(ParseException e) {
+				 System.out.println("Erro sintï¿½tico\n" + e.getMessage());
+			}
+	 }
 }
 PARSER_END(Compilador)
  
@@ -37,69 +36,69 @@ SKIP : { " " | "\t" | "\r" | "\n" }
 
 //TOKENS DE COMANDOS 
 TOKEN [IGNORE_CASE] : {
-  		<EXIBE: "exibe" >  |
-  		<LEITURA: "le" > | 
+			<EXIBE: "exibe" >  |
+			<LEITURA: "le" > | 
 		<SE: "se" > |
-      	<FIMSE: "fimse" > |
-      	<ENQUANTO: "enquanto" > |
-      	<FIMENQUANTO: "fimenquanto" > 
+				<FIMSE: "fimse" > |
+				<ENQUANTO: "enquanto" > |
+				<FIMENQUANTO: "fimenquanto" > 
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
-  		<NUMERO: "numero" >  |
-  		<PALAVRA: "palavra" >  
+			<NUMERO: "numero" >  |
+			<PALAVRA: "palavra" >  
 }
 //----------CARACTERES----------
 TOKEN : {
 		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
-   		< AP: "(" > |
-    	< FP: ")" > |
+			< AP: "(" > |
+			< FP: ")" > |
 		< PV: ";" > |
 		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > |
-   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+			< STRING: "\"" (~["\""])* "\"" > |
+			< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
 }
 //-----------NUMEROS-----------
 TOKEN : {
 	< #DIGIT: ["0"-"9"] > |  
-    < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
+		< NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
 }
 //----------OPERADORES---------
 TOKEN : {
- 	< SOMA: "+" > |
+	< SOMA: "+" > |
 	< SUB: "-" > |
 	< MUL: "*" > |
-    < DIV: "/" > |
-    < OU: "OR" > |
-    < ATRIB: "<-"  > |
-    < IGUAL: "=" > |
-   	< CONCAT: "&" > 
+		< DIV: "/" > |
+		< OU: "OR" > |
+		< ATRIB: "<-"  > |
+		< IGUAL: "=" > |
+		< CONCAT: "&" > 
 }
 void inicio() : {}
 {
-   programa() <EOF>
+	 programa() <EOF>
 }
 
 void programa() : {}
 {
-   ( comando() )*
+	 ( comando() )*
 }
 
 void comando() : {}
 {
-   atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+	 atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
 }
 
 void atribuicao() : {Simbolo s; Token t;}
 {
-   t=<VAR>
-   {
-     if(!(tabela.isExiste(t.image))) {
-        status=0;
-        System.out.println("Erro semântico variável "+t.image+ " não foi inicializada na linha "+t.endLine);
-     }
-   }
-   <ATRIB> expressao() <PV>
+	 t=<VAR>
+	 {
+		 if(!(tabela.isExiste(t.image))) {
+				status=0;
+				System.out.println("Erro semï¿½ntico variï¿½vel "+t.image+ " nï¿½o foi inicializada na linha "+t.endLine);
+		 }
+	 }
+	 <ATRIB> expressao() <PV>
 }
 
 void declaracao() : {Simbolo simb; Token t; String tipo;} { 
@@ -107,101 +106,166 @@ void declaracao() : {Simbolo simb; Token t; String tipo;} {
 	t = <VAR> {
 		
 		if((tabela.isExiste(t.image))) {
-		  status=0;
-		  System.out.println("Erro: variável "+t.image+" duplicada na linha "+t.endLine);
+			status=0;
+			System.out.println("Erro: variï¿½vel "+t.image+" duplicada na linha "+t.endLine);
 		}
 		else {
 			simb = new Simbolo(t.image,tipo);
 			tabela.inclui(simb);
 		}
-	  }
+		}
 	( <ATRIB> expressao() )?
 	(<VIRGULA> t = <VAR> {
 		if((tabela.isExiste(t.image))) {
-		  status=0;
-		  System.out.println("Erro: variável "+t.image+" duplicada na linha "+t.endLine);
+			status=0;
+			System.out.println("Erro: variï¿½vel "+t.image+" duplicada na linha "+t.endLine);
 		}
 		else {
 			simb = new Simbolo(t.image,tipo);
 			tabela.inclui(simb);
 			
 		}
-	  }
+		}
 	( <ATRIB> expressao() )? )* <PV> 
 }
 
 void se() : {}
 {
-   <SE> <AP> expressao() <FP> programa() <FIMSE>
+	 <SE> <AP> expressao() <FP> programa() <FIMSE>
 }
 
 void enquanto() : {}
 {
-   <ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
+	 <ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
 }
 
 void le() : {Token t;}
 {
-   <LEITURA> t=<VAR>
-   {
-     	if(!tabela.isExiste(t.image)){
-     	  	 status=0;
-	         System.out.println("Erro semântico variável "+t.image+ " não foi inicializada na linha "+t.endLine);
+	 <LEITURA> t=<VAR>
+	 {
+			if(!tabela.isExiste(t.image)){
+					 status=0;
+					 System.out.println("Erro semï¿½ntico variï¿½vel "+t.image+ " nï¿½o foi inicializada na linha "+t.endLine);
 		} 
-   }
-   ( <VIRGULA> <VAR>
-   {
-     	if(!tabela.isExiste(t.image)){
-     	  status=0;
-	         System.out.println("Erro semântico variável "+t.image+ " não foi inicializada na linha "+t.endLine);
+	 }
+	 ( <VIRGULA> <VAR>
+	 {
+			if(!tabela.isExiste(t.image)){
+				status=0;
+					 System.out.println("Erro semï¿½ntico variï¿½vel "+t.image+ " nï¿½o foi inicializada na linha "+t.endLine);
 		} 
-   }
-    )* <PV>
+	 }
+		)* <PV>
 }
 
 void exibe() : {}
 {
-   <EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
+	 <EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
 }
 
-void expressao() : {}
+void expressao() : {LinkedList<Item> listaExp = new LinkedList<Item>();}
 {
-   termo()(<OU>termo())*
+	 expressaoAuxiliar(listaExp)
+	 {System.out.println(listaExp.toString());}
 }
 
-void termo() : {}
+void expressaoAuxiliar(LinkedList<Item> listaExp) : {Item item = new Item(); Token t;}
 {
-   termo1() (<IGUAL> termo1())?
+	 termo(listaExp)(t=<OU>termo(listaExp)
+	 {
+		 item.setTipo(Tipo.OPERADOR);
+		 item.setValor(t.image);
+		 listaExp.add(item);
+		 
+	 }
+
+	 )*
+
 }
 
-void termo1() : {}
+void termo(LinkedList<Item> listaExp) : {Item item = new Item(); Token t;}
 {
-   termo2() (<CONCAT> termo2())*
+	 termo1(listaExp) (t=<IGUAL> termo1(listaExp)
+	 {
+		 item.setTipo(Tipo.OPERADOR);
+		 item.setValor(t.image);
+		 listaExp.add(item);
+		 
+	 }
+	 )?
 }
 
-void termo2() : {}
+void termo1(LinkedList<Item> listaExp) : {Item item = new Item(); Token t;}
 {
-   termo3() ((<SOMA>|<SUB>) termo3())*
+	 termo2(listaExp) (t=<CONCAT> termo2(listaExp)
+	 {
+		 item.setTipo(Tipo.OPERADOR);
+		 item.setValor(t.image);
+		 listaExp.add(item);
+		 
+	 }
+	 )*
 }
 
-void termo3() : {}
+void termo2(LinkedList<Item> listaExp) : {Item item = new Item(); Token t;}
 {
-   termo4() ((<MUL>|<DIV>) termo4())*
+	 termo3(listaExp) ((t=<SOMA>|t=<SUB>) termo3(listaExp)
+	 {
+		 item.setTipo(Tipo.OPERADOR);
+		 item.setValor(t.image);
+		 listaExp.add(item); 
+	 }
+	 )*
 }
 
-void termo4() : {Token t;}
+void termo3(LinkedList<Item> listaExp) : {Item item = new Item(); Token t;}
 {
-   <AP> expressao() <FP>
-   |<NUM>
-   |<SOMA><NUM>
-   |<SUB><NUM>
-   |t=<VAR>
-   {
-		if(!tabela.isExiste(t.image)){
-		  status=0;
-	        System.out.println("Erro semântico variável "+t.image+ " não foi inicializada na linha "+t.endLine);
-		} 
+	 termo4(listaExp) ((t=<MUL>|t=<DIV>) termo4(listaExp)
+	 {
+		 item.setTipo(Tipo.OPERADOR);
+		 item.setValor(t.image);
+		 listaExp.add(item);
+		 
+	 }
+	 )*
+}
+
+void termo4(LinkedList<Item> listaExp) : {Token r; Item item = new Item(); Token t; Token s;}
+{
+	 <AP> expressaoAuxiliar(listaExp) <FP>
+	 |t=<NUM>
+	 {
+		 item.setTipo(Tipo.NUMERO);
+		 item.setValor(t.image);
+		 listaExp.add(item);
+	 }
+	 |s=<SOMA>t=<NUM>
+	 {
+		 item.setTipo(Tipo.NUMERO);
+		 item.setValor(s.image+t.image);
+		 listaExp.add(item);
+	 }
+	 |s=<SUB>t=<NUM>
+	 {
+		 item.setTipo(Tipo.NUMERO);
+		 item.setValor(s.image+t.image);
+		 listaExp.add(item);
+	 }
+	 |r=<VAR>
+	 {
+		if(!tabela.isExiste(r.image)){
+			status=0;
+					System.out.println("Erro semï¿½ntico variï¿½vel "+r.image+ " nï¿½o foi inicializada na linha "+r.endLine);
+		}
+			 item.setTipo(Tipo.VARIAVEL);
+			 item.setValor(r.image);
+			 listaExp.add(item);
 	}
-   |<STRING>
+	 |t=<STRING>
+		{
+		 item.setTipo(Tipo.PALAVRA);
+		 item.setValor(t.image);
+		 listaExp.add(item);
+	 }
 }
 
