@@ -4,7 +4,7 @@ options {
 }
 
 PARSER_BEGIN(Compilador)
-
+import java.util.LinkedList;
 import java.io.*;
 import java.util.Scanner;
 import utility.*;
@@ -148,39 +148,47 @@ void exibe() : { }
   < EXIBE > expressao() (< VIRGULA >expressao())* < PV >
 }
 
-void expressao() : { }
+void expressao() : {LinkedList<Item> listaExp = new LinkedList<Item>();}
 {
-  termo()(< OU >termo())*
+  	expressao2(listaExp){ System.out.println(listaExp + "\n"); }
 }
 
-void termo() : { }
+void expressao2(LinkedList<Item> listaExp) : {Item item = null; Token t; }
 {
-  termo1()(< IGUAL >termo1())?
+  termo(listaExp)(t=< OU >termo(listaExp) {item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item); })*
 }
 
-void termo1() : { }
+
+
+void termo(LinkedList<Item> listaExp) : {Item item = null; Token t; }
 {
-  termo2()(< CONCAT >termo2())*
+  termo1(listaExp)(t=< IGUAL >termo1(listaExp) { item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);})?
 }
 
-void termo2() : { }
+void termo1(LinkedList<Item> listaExp) : {Item item = null; Token t; }
 {
-  termo3()((< SOMA >|< SUB >)termo3())*
+  termo2(listaExp)(t=< CONCAT >termo2(listaExp) {item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);} )*
 }
 
-void termo3() : { }
+void termo2(LinkedList<Item> listaExp) : {Item item = null; Token t; }
 {
-  termo4()((< MUL >|< DIV >)termo4())*
+  termo3(listaExp)((t=< SOMA >|t=< SUB >)termo3(listaExp){item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);} )*
 }
 
-void termo4() : { }
+void termo3(LinkedList<Item> listaExp) : {Item item = null; Token t; }
 {
-  < AP >expressao()< FP >
-| < NUM >
-| < SOMA ><NUM >
-| < SUB ><NUM >
-| < VAR >
-| < STRING >
+  termo4(listaExp)((t=< MUL >|t=< DIV >)termo4(listaExp){item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);} )*
+}
+
+void termo4(LinkedList<Item> listaExp) : { Item item = null; Token t=null; char sinal=' '; Tipo tipo=null;}
+{
+ (    < AP >expressao2(listaExp)< FP >
+| t=< NUM >{tipo=Tipo.NUMERO;}
+| < SOMA >t=<NUM > {tipo=Tipo.NUMERO;sinal='+';}
+| < SUB >t=<NUM>{tipo=Tipo.NUMERO;sinal='-';}
+| t=< VAR >{tipo=Tipo.VARIAVEL;}
+| t=< STRING >{tipo=Tipo.STRING;}
+){item = new Item( tipo , sinal + t.image ); listaExp.add(item);}
 }
 
 
