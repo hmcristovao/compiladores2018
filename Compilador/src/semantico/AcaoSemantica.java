@@ -1,5 +1,6 @@
 package semantico;
 import parser.*;
+import tratamentoExcecao.*;
 
 public class AcaoSemantica 
 {
@@ -7,17 +8,16 @@ public class AcaoSemantica
     {
      	if ( !_tab.isExiste( _t.image ) )
 		{
-			System.out.println("erro: vari√°vel " + _t.image + " n√£o declarada na linha " + _t.beginLine + "\n");
+			throw new ErroSemantico("Vari·vel '" + _t.image + "' n„o declarada na linha " + _t.beginLine + "\n");
 		}
     }
 	
 	public static void criarVariavel( Tabela _tab, Token t, Tipo _tp )
     {
 		Simbolo simb = new Simbolo( t.image, _tp );
-		
 	  	if ( !_tab.incluir( simb ) )
 	  	{
-			System.out.println("erro: vari√°vel " + t.image + " repetida na linha " + t.beginLine + "\n");
+	  		throw new ErroSemantico("Vari·vel '" + t.image + "' repetida na linha " + t.beginLine + "\n");
 	  	}
 	 
     }  

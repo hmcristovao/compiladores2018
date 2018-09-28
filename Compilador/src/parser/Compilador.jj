@@ -11,7 +11,7 @@ import java.io.*;
 import semantico.*;
 import geradorCodigo.*;
 import apoio.*;
-
+import tratamentoExcecao.*;
 public class Compilador
 {
    // Tabela de símbolos do compilador
@@ -24,10 +24,10 @@ public class Compilador
 
       try
       {
-         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo13.spc2"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo06.spc2"));
          Compilador.inicio();
 		 System.out.println(tab);
-         System.out.println("Execução finalizada com sucesso!\n");
+         System.out.println("Execu��o finalizada com sucesso!\n");
       }
       catch(FileNotFoundException e)
       {
@@ -39,7 +39,11 @@ public class Compilador
       }
       catch(ParseException e)
       {
-		System.out.println("Erro Sintático:\n" + e.getMessage());
+		System.out.println("Erro Sintatico:\n" + e.getMessage());
+      }
+      catch(ErroSemantico e)
+      {
+		System.out.println("Erro Semantico:\n" + e.getMessage());
       }
       
    }
