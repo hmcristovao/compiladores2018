@@ -17,7 +17,7 @@ public class Compilador {
    public static void main(String args[])  throws ParseException
    {
       Compilador compilador = null;
-      
+       
       try {        
         compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
 		
