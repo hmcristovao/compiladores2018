@@ -8,7 +8,7 @@ package parser;
 import semantico.*;
 import java.io.*; 
 import java.util.LinkedList;
-
+ 
 public class Compilador {
   
 	static Tabela tabela = new Tabela();
