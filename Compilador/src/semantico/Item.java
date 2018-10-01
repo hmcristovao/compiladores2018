@@ -1,3 +1,4 @@
+package semantico;
 public class Item {
 	
    private char tipo; // pode ser 'n' (número), 'v' (variável) ou 'o' (operador).
