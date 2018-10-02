@@ -4,8 +4,11 @@ options {
 }
 
 PARSER_BEGIN(Compilador)
+
+package parser;
+
 import java.io.*;
-import files.*;
+import semantico.*;
 import java.util.LinkedList;
 public class Compilador {
 
@@ -16,7 +19,7 @@ public class Compilador {
             
       try {
        	 
-         compilador = new Compilador(new FileInputStream("exemplo20.spc"));
+         compilador = new Compilador(new FileInputStream("exemplo17.spc"));
          Compilador.inicio();
          System.out.println("");
          tab.imprimeTabela();
@@ -77,7 +80,7 @@ TOKEN : {
 
 //Gramatica de expressoes:
 
-void inicioGramatica():
+void iniciaExpressao():
 {LinkedList<Item> listaExp = new LinkedList<Item>();}
 {
 	expressao(listaExp)
@@ -216,7 +219,7 @@ void comando():
 void atribuicao():
 {}
 {
-  	< VAR > < ATRIB > inicioGramatica() < PV >
+  	< VAR > < ATRIB > iniciaExpressao() < PV >
 }
 
 void declaracao():
@@ -238,7 +241,7 @@ void declaracao():
   	    	return;
   	  }
   	}
-  	( <ATRIB> inicioGramatica() )? (<VIRGULA>  variavel=<VAR> ( <ATRIB> inicioGramatica() )? 
+  	( <ATRIB> iniciaExpressao() )? (<VIRGULA>  variavel=<VAR> ( <ATRIB> iniciaExpressao() )? 
   	
   	 {
 	  if(tab.verificaSimbolo(variavel.image) == false) { 
@@ -264,13 +267,13 @@ void declaracao():
 void se():
 {}
 {
-  	<SE> <AP> inicioGramatica() <FP> programa() <FIMSE>
+  	<SE> <AP> iniciaExpressao() <FP> programa() <FIMSE>
 }
  
 void enquanto():
 {}
 {
-  	<ENQUANTO> <AP> inicioGramatica() <FP> programa() <FIMENQUANTO>
+  	<ENQUANTO> <AP> iniciaExpressao() <FP> programa() <FIMENQUANTO>
 }
  
 void le():
@@ -282,6 +285,6 @@ void le():
 void exibe():
 {}
 {
-	<EXIBE> inicioGramatica() ( <VIRGULA> inicioGramatica() )* <PV>
+	<EXIBE> iniciaExpressao() ( <VIRGULA> iniciaExpressao() )* <PV>
 }
 	

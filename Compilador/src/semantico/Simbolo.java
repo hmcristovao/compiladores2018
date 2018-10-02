@@ -1,7 +1,7 @@
-package files;
+package semantico;
 
 public class Simbolo {
-
+	
 	private String nome;      // nome do identificador
 	
 	private String tipo;        // representa os tipos usados na linguagem
@@ -36,7 +36,7 @@ public class Simbolo {
 	public void setReferencia(int marcador) {
 		this.referencia = marcador;
 	}
-	
+
 	
 	public String toString() {
 
@@ -45,4 +45,5 @@ public class Simbolo {
 
 	 }
 	 
+
 }

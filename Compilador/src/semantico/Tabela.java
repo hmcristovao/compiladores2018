@@ -1,8 +1,11 @@
-package files;
+package semantico;
 
-import java.util.*;
+import java.util.HashMap;
+
+import semantico.Simbolo;
 
 public class Tabela {
+	
 	
 	static HashMap<String, Simbolo> tab = new HashMap<String, Simbolo>();
 	
@@ -43,5 +46,5 @@ public class Tabela {
 			marcador+=1;
 		}
 	}
-	
+
 }
