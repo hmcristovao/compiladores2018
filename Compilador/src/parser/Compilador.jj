@@ -1,34 +1,36 @@
 
 options {
-	
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
-
 }
 
 PARSER_BEGIN(Compilador)
+package parser;
 import java.io.*;
-import minhasClasses.*;
+import apoio.*;
+import geradorCodigo.*;
+import semantico.*;
+import exception.*;
+
 import java.util.LinkedList;
 
 public class Compilador {
+  	static boolean Erro = false,flagErro = false ;
 	static Tabela tabela = new Tabela();
-	public static int erro = 0;
-	public static void main(String args[])  throws ParseException  {
-		tabela.marcador = 1;
-    	Compilador analisador = null;
+	public static void main(String args[])  throws SemanticException  {
       	try {
-	         analisador = new Compilador(new FileInputStream("exemplo17.spc2"));
+	         Compilador analisador = new Compilador(new FileInputStream(Config.getNomeArquivoFonte()));
 	         Compilador.inicio();
-	         if(erro == 1) 
-	         System.out.println("Erro semantico\n"); 
-			 else {  
-				System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
-	          	System.out.println("\nTabela de Simbolos:");
+	         if(!Erro) {
+	           System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
+	           /*System.out.println("\nTabela de Simbolos:");
 	 		 	System.out.println(tabela);
-	 		 	System.out.println("\nMarcador:\n" + tabela.marcador);
-	       	}
-       	 }
+	 		 	System.out.println("\n_marcador:\n" + tabela._marcador);*/
+	         }
+	         else {
+				return;
+	         }
+		 }
 	     catch(FileNotFoundException e) {
 	         System.out.println("Erro: arquivo nao encontrado");
 	     }
@@ -101,47 +103,26 @@ void inicio() : {}
 	}
 	void atribui() : {Token t;} 
 	{
-		t = < VAR > {
-			if (!tabela.isExiste(t.image)) {
-					System.out.println("Variavel " + "'" + t.image + "'" + " nao foi declarada!");
-					erro = 1;
-			}
-		}  <RECEBE> expressaoPrincipal() < PV >
+		t = < VAR >
+		{
+		  flagErro = AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
+		  if(flagErro) Erro = true;
+		}
+		<RECEBE> expressaoPrincipal() < PV >
 	}
-	void declaracao() : {Simbolo simb; Token t; char tp;}
+	void declaracao() : {Token t; Tipo tipo;}
 	{
-		(< NUMERO > {tp = 'n';} | < PALAVRA > { tp = 'p' ;}) t = < VAR > {
-			if (tabela.isExiste(t.image)) {
-				System.out.println("Variavel " + "'" + t.image + "'" + " ja declarada!");
-				erro = 1;
-      		}
-			else if(tp == 'n') {
-				  simb = new Simbolo(t.image, Tipo.numero, tabela.marcador);
-				  tabela.inclui(simb);
-				  tabela.marcador += 2;
-			}
-      		else {
-				  simb = new Simbolo(Tipo.palavra, t.image, tabela.marcador);
-				  tabela.inclui(simb);
-				  tabela.marcador += 1;
-		 	}
-	  }
-		(< RECEBE > expressaoPrincipal())? (< VIRGULA > t = < VAR > {
-			if (tabela.isExiste(t.image)) {
-				System.out.println("Variavel " +"'"+ t.image +"'" + " ja declarada!");
-				erro = 1;
-      		}
-			else if(tp == 'n') {
-				  simb = new Simbolo(t.image, Tipo.numero, tabela.marcador);
-				  tabela.inclui(simb);
-				  tabela.marcador += 2;
-      		}
-      		else {
-				  simb = new Simbolo(Tipo.palavra, t.image, tabela.marcador);
-				  tabela.inclui(simb);
-				  tabela.marcador += 1;
-      		}
-	   	} (< RECEBE > expressaoPrincipal() )? )* < PV >
+		(< NUMERO > {tipo = Tipo.numero;} | < PALAVRA > {tipo = Tipo.palavra ;}) t = < VAR >
+		{
+		  flagErro = AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
+		  if(flagErro) Erro = true; 
+	 	}
+	 	(< RECEBE > expressaoPrincipal())? (< VIRGULA > t = < VAR >
+		{
+	      flagErro = AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
+	      if(flagErro) Erro = true;
+	   	}
+	   	(< RECEBE > expressaoPrincipal() )? )* < PV >
 	}
 	void se() : {}
 	{
@@ -163,55 +144,66 @@ void inicio() : {}
 	//==========GRAM�TICA DE EXPRESS�ES==============
 	void expressaoPrincipal() : {LinkedList<Item> listaExp = new LinkedList<Item>();}  
 	{
-	     expressao(listaExp)	{ System.out.println(listaExp); }
+	     expressao(listaExp)	{/* System.out.println(listaExp);*/ }
 	}
 	void expressao(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	      termo(listaExp) ( (t = < OU >) termo(listaExp){ listaExp.add(new Item(Tipo.operacao,t.image)); } )*  
+	      termo(listaExp) ( (t = < OU >) termo(listaExp)
+	      {
+	        listaExp.add(new Item(Tipo.operacao,t.image));
+	      }
+	      )*  
 	}
 	void termo(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
 	      termo1(listaExp) ( (t = < IGUAL >) termo1(listaExp)
-	        	{
-					listaExp.add(new Item(Tipo.operacao,t.image));
-	          	}
-	         )*
-	         
+	      {
+			listaExp.add(new Item(Tipo.operacao,t.image));
+	      }
+	      )*
+	        
 	}
 	void termo1(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	     termo2(listaExp) ((t = < CONCAT >) termo2(listaExp) { listaExp.add(new Item(Tipo.operacao,t.image));} )*
+	     termo2(listaExp) ((t = < CONCAT >) termo2(listaExp)
+	     {
+	       listaExp.add(new Item(Tipo.operacao,t.image));
+	     }
+	     )*
 	         
 	}
     void termo2(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	  		termo3(listaExp) ( (t = < SOMA > | t = < SUB > ) termo3(listaExp) {
+	  		termo3(listaExp) ( (t = < SOMA > | t = < SUB > ) termo3(listaExp)
+	  		{
 	  			listaExp.add(new Item(Tipo.operacao,t.image));
 	  		}
 	        )*
 	}
 	void termo3(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
 	{
-	      termo4(listaExp) ( (t = < MUL > | t = < DIV >) termo4(listaExp) {
-				listaExp.add(new Item(Tipo.operacao,t.image));}
-	       )*
+	      termo4(listaExp) ( (t = < MUL > | t = < DIV >) termo4(listaExp)
+	      {
+				listaExp.add(new Item(Tipo.operacao,t.image));
+		  }
+	      )*
 	}
 	void termo4(LinkedList<Item> listaExp) : {Token t; Item item = null;} 
 	{
 			< AP > expressao(listaExp) < FP >
-		 	
-		 	|t = < VAR > { 
-		  		if (!tabela.isExiste(t.image)) {
-					System.out.println("Erro semantico \n Variavel " +"'"+ t.image +"'" + " nao foi declarada!");
-					erro = 1;
-     			}
+		 	|t = < VAR >
+		 	{ 
+		  		flagErro = AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
+		  		if(flagErro) Erro = true;
      			listaExp.add(new Item(Tipo.variavel,t.image));
          	}
-		  	|t = < STRING > {
+		  	|t = < STRING >
+		  	{
      			listaExp.add(new Item(Tipo.palavra,t.image));
-		  	}
+		    } 
 		  	
-		  	|(< SOMA > | < SUB >)?  t =  <NUM> {
+		  	|(< SOMA > | < SUB >)?  t =  <NUM>
+		  	{
          		listaExp.add(new Item(Tipo.numero,t.image));
       		}	
 	}

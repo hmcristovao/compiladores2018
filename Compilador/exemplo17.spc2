@@ -1,5 +1,4 @@
 numero soma<-0, valor<-0, cont <-0, a<-0;
-
 enquanto (a=0)
 
    exibe "Digite um valor: ";
@@ -12,5 +11,6 @@ enquanto (a=0)
    le  a;
 
 fimenquanto
+
 
 exibe "Media:", soma/cont;

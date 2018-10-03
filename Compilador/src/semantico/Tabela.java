@@ -1,26 +1,27 @@
-package minhasClasses;
+package semantico;
 import java.util.HashMap;
 
 public class Tabela {
-      private HashMap<String,Simbolo> tab;
-      public int marcador;
+      private HashMap<String,Simbolo> _tab;
+      public int _marcador;
+      
       public Tabela() {
-            this.tab = new HashMap<String,Simbolo>();
+            this._tab = new HashMap<String,Simbolo>();
       }
       public boolean inclui(Simbolo _simb) {
-            if(this.tab.containsKey(_simb.getNome()))
+            if(this._tab.containsKey(_simb.getNome()))
                   return false;
             else {
-                  this.tab.put(_simb.getNome(),_simb);
+                  this._tab.put(_simb.getNome(),_simb);
                   return true;
             }
-      }
+      }    
       
       public int consultaReferencia(String _chave) {
-            return ((Simbolo)this.tab.get(_chave)).getReferencia();
+            return ((Simbolo)this._tab.get(_chave)).getReferencia();
       }
       public boolean isExiste(String _chave) {
-          if(this.tab.containsKey(_chave))   
+          if(this._tab.containsKey(_chave))   
         	  return true;
           else {
         	  return false;
@@ -28,6 +29,6 @@ public class Tabela {
       }
       
       public String toString() {
-            return this.tab.toString();
+            return this._tab.toString();
       }
 }
