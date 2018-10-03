@@ -6,13 +6,14 @@ options {
 PARSER_BEGIN(Compilador)
 package parser;
 import semantico.*;
+import apoio.*;
 import java.io.*; 
 import java.util.LinkedList;
- 
+import geradorCodigo.*;
+
 public class Compilador {
 
 	static Tabela tabela = new Tabela();
-	static LinkedList<Item> listaExp = new LinkedList<Item>();
 	
    public static void main(String args[])  throws ParseException
    {
@@ -27,12 +28,22 @@ public class Compilador {
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
       }
+      catch(ErroSemantico e) {
+         System.out.println("Erro semantico\n" + e.getMessage());
+      }
+      catch(ErroLexico e) {
+         System.out.println("Erro lexico\n" + e.getMessage());
+      }
+      catch(ErroSintatico e) {
+         System.out.println("Erro sintatico\n" + e.getMessage());
+      }
       catch(TokenMgrError e) {
          System.out.println("Erro lexico\n" + e.getMessage());
       }
       catch(ParseException e) {
          System.out.println("Erro sintático\n" + e.getMessage());
       }
+      
    }
 }
 
@@ -83,17 +94,19 @@ TOKEN : {
 
 //--------------------------------------------------------------------------------------------
 
-void expressao():{}
+void expressao():{Expressao e = new Expressao();}
+{
+	naosei()
+	{System.out.println(listaExp);}
+}
+
+void naosei():{LinkedList<Item> listaExp = new LinkedList<Item>();}
 {
 	termo()	(< OU > termo()
 	{
 		listaExp.add(new Item('o',"OR"));
 	}
-	)*
-	{
-		System.out.println(listaExp);
-		//tabela.toString();
-	}	
+	)*	
 }
 
 void termo():{}
@@ -182,7 +195,7 @@ void atribuicao(): {Token var; Item item = null;} {
 	{
   		AcoesSemanticas.inicializacao(tabela,var.image);
 	}
-	< ATRIB > < PV >
+	< ATRIB > expressao() < PV >
 }
 
 void declaracao(): {Simbolo simb = null; Token var, tipo;} {

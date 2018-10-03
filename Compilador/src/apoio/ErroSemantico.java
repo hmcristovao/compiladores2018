@@ -1,8 +1,6 @@
 package apoio;
 
-import java.text.ParseException;
-
-public class ErroSemantico extends ParseException {
+public class ErroSemantico extends Error {
 	public ErroSemantico(String msg) {
 		super(msg);
 	}  
