@@ -5,34 +5,30 @@ import apoio.*;
 import geradorCodigo.*;
 import semantico.*;
 import exception.*;
-
 import java.util.LinkedList;
 
 public class Compilador implements CompiladorConstants {
-        static boolean Erro = false,flagErro = false ;
         static Tabela tabela = new Tabela();
         public static void main(String args[])  throws SemanticException  {
         try {
                  Compilador analisador = new Compilador(new FileInputStream(Config.getNomeArquivoFonte()));
                  Compilador.inicio();
-                 if(!Erro) {
-                   System.out.println("\u005cnAnalise lexica, sintatica e semantica sem erros!");
+                 System.out.println("Analise lexica, sintatica e semantica sem erros!");
                    /*System.out.println("\nTabela de Simbolos:");
 	 		 	System.out.println(tabela);
 	 		 	System.out.println("\n_marcador:\n" + tabela._marcador);*/
                  }
-                 else {
-                                return;
-                 }
-                 }
-             catch(FileNotFoundException e) {
-                 System.out.println("Erro: arquivo nao encontrado");
-             }
              catch(TokenMgrError e) {
                 System.out.println("Erro lexico\u005cn" + e.getMessage());
              }
              catch(ParseException e) {
                  System.out.println("Erro sintatico\u005cn" + e.getMessage());
+             }
+              catch(SemanticException e) {
+                 System.out.println("Erro semantico\u005cn" + e.getMessage());
+             }
+             catch(FileNotFoundException e) {
+                 System.out.println("Erro: arquivo nao encontrado");
              }
    }
 
@@ -93,8 +89,7 @@ public class Compilador implements CompiladorConstants {
   static final public void atribui() throws ParseException {
                           Token t;
     t = jj_consume_token(VAR);
-                  flagErro = AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
-                  if(flagErro) Erro = true;
+                  AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
     jj_consume_token(RECEBE);
     expressaoPrincipal();
     jj_consume_token(PV);
@@ -105,11 +100,11 @@ public class Compilador implements CompiladorConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
       jj_consume_token(NUMERO);
-                             tipo = Tipo.numero;
+                             tipo = Tipo.variavelNumero;
       break;
     case PALAVRA:
       jj_consume_token(PALAVRA);
-                                                                 tipo = Tipo.palavra ;
+                                                                         tipo = Tipo.variavelPalavra ;
       break;
     default:
       jj_la1[2] = jj_gen;
@@ -117,8 +112,7 @@ public class Compilador implements CompiladorConstants {
       throw new ParseException();
     }
     t = jj_consume_token(VAR);
-                  flagErro = AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
-                  if(flagErro) Erro = true;
+                  AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RECEBE:
       jj_consume_token(RECEBE);
@@ -140,8 +134,7 @@ public class Compilador implements CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       t = jj_consume_token(VAR);
-              flagErro = AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
-              if(flagErro) Erro = true;
+              AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case RECEBE:
         jj_consume_token(RECEBE);
@@ -347,8 +340,7 @@ public class Compilador implements CompiladorConstants {
       break;
     case VAR:
       t = jj_consume_token(VAR);
-                                flagErro = AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
-                                if(flagErro) Erro = true;
+                                AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
                         listaExp.add(new Item(Tipo.variavel,t.image));
       break;
     case STRING:

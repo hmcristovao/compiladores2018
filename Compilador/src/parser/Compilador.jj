@@ -5,200 +5,13 @@ options {
 }
 
 PARSER_BEGIN(Compilador)
+
 package parser;
 import java.io.*;
 import apoio.*;
 import geradorCodigo.*;
 import semantico.*;
-<<<<<<< Upstream, based on origin/grupo01
 import exception.*;
-
-import java.util.LinkedList;
-
-public class Compilador {
-  	static boolean Erro = false,flagErro = false ;
-	static Tabela tabela = new Tabela();
-	public static void main(String args[])  throws SemanticException  {
-      	try {
-	         Compilador analisador = new Compilador(new FileInputStream(Config.getNomeArquivoFonte()));
-	         Compilador.inicio();
-	         if(!Erro) {
-	           System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
-	           /*System.out.println("\nTabela de Simbolos:");
-	 		 	System.out.println(tabela);
-	 		 	System.out.println("\n_marcador:\n" + tabela._marcador);*/
-	         }
-	         else {
-				return;
-	         }
-		 }
-	     catch(FileNotFoundException e) {
-	         System.out.println("Erro: arquivo nao encontrado");
-	     }
-	     catch(TokenMgrError e) {
-	        System.out.println("Erro lexico\n" + e.getMessage());
-	     }
-	     catch(ParseException e) {
-	         System.out.println("Erro sintatico\n" + e.getMessage());
-	     }
-   }
-}
-
-PARSER_END(Compilador)
-
-SKIP : { " " | "\t" | "\r" | "\n" }
-
-//TOKENS DE COMANDOS 
-TOKEN [IGNORE_CASE] : {
-  		<EXIBE: "exibe" >  |
-  		<LEITURA: "le" > | 
-		<SE: "se" > |
-      	<FIMSE: "fimse" > |
-      	<ENQUANTO: "enquanto" > |
-      	<FIMENQUANTO: "fimenquanto" > 
-}
-//TOKENS DE TIPOS 
-TOKEN [IGNORE_CASE] : {
-  		<NUMERO: "numero" >  |
-  		<PALAVRA: "palavra" >  
-}
-//----------CARACTERES----------
-TOKEN : {
-		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
-   		< AP: "(" > |
-    	< FP: ")" > |
-		< PV: ";" > |
-		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > |
-   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "-"])* > 
-}
-//-----------NUMEROS-----------
-TOKEN : {
-	< #DIGIT: ["0"-"9"] > |  
-    < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
-}
-//----------OPERADORES---------
-TOKEN : {
- 	< SOMA: "+" > |
-	< SUB: "-" > |
-	< MUL: "*" > |
-    < DIV: "/" > |
-    < POT: "^" > |
-    < OU: "OU" > |
-    < RECEBE: "<-"  > |
-    < IGUAL: "=" > |
-   	< CONCAT: "&" > 
-}
-
-void inicio() : {}	
-	{
-	      programa()  < EOF >
-	}  
-	void programa() : {}	
-	{
-	      (comando())*
-	}
-	void comando() : {} 
-	{
-	      atribui() | declaracao() | se() | enquanto() | le() | exibe()  
-	}
-	void atribui() : {Token t;} 
-	{
-		t = < VAR >
-		{
-		  flagErro = AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
-		  if(flagErro) Erro = true;
-		}
-		<RECEBE> expressaoPrincipal() < PV >
-	}
-	void declaracao() : {Token t; Tipo tipo;}
-	{
-		(< NUMERO > {tipo = Tipo.numero;} | < PALAVRA > {tipo = Tipo.palavra ;}) t = < VAR >
-		{
-		  flagErro = AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
-		  if(flagErro) Erro = true; 
-	 	}
-	 	(< RECEBE > expressaoPrincipal())? (< VIRGULA > t = < VAR >
-		{
-	      flagErro = AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
-	      if(flagErro) Erro = true;
-	   	}
-	   	(< RECEBE > expressaoPrincipal() )? )* < PV >
-	}
-	void se() : {}
-	{
-	      < SE > < AP > expressaoPrincipal() < FP > programa() < FIMSE >
-	}
-	void enquanto() : {}
-	{
-	      < ENQUANTO > < AP > expressaoPrincipal() < FP > programa() < FIMENQUANTO > 
-	}
-	void le() : {}
-	{
-	      <LEITURA> <VAR> ( < VIRGULA > < VAR > )* < PV > 
-	}
-	void exibe() : {}
-	{
-	      <EXIBE> expressaoPrincipal() ( < VIRGULA > expressaoPrincipal() )*   < PV > 
-	}
-
-	//==========GRAM�TICA DE EXPRESS�ES==============
-	void expressaoPrincipal() : {LinkedList<Item> listaExp = new LinkedList<Item>();}  
-	{
-	     expressao(listaExp)	{/* System.out.println(listaExp);*/ }
-	}
-	void expressao(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	      termo(listaExp) ( (t = < OU >) termo(listaExp)
-	      {
-	        listaExp.add(new Item(Tipo.operacao,t.image));
-	      }
-	      )*  
-	}
-	void termo(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	      termo1(listaExp) ( (t = < IGUAL >) termo1(listaExp)
-	      {
-			listaExp.add(new Item(Tipo.operacao,t.image));
-	      }
-	      )*
-	        
-	}
-	void termo1(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	     termo2(listaExp) ((t = < CONCAT >) termo2(listaExp)
-	     {
-	       listaExp.add(new Item(Tipo.operacao,t.image));
-	     }
-	     )*
-	         
-	}
-    void termo2(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	  		termo3(listaExp) ( (t = < SOMA > | t = < SUB > ) termo3(listaExp)
-	  		{
-	  			listaExp.add(new Item(Tipo.operacao,t.image));
-	  		}
-	        )*
-	}
-	void termo3(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	      termo4(listaExp) ( (t = < MUL > | t = < DIV >) termo4(listaExp)
-	      {
-				listaExp.add(new Item(Tipo.operacao,t.image));
-		  }
-	      )*
-	}
-	void termo4(LinkedList<Item> listaExp) : {Token t; Item item = null;} 
-	{
-			< AP > expressao(listaExp) < FP >
-		 	|t = < VAR >
-		 	{ 
-		  		flagErro = AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
-		  		if(flagErro) Erro = true;
-=======
-import excecao.*;
-
 import java.util.LinkedList;
 
 public class Compilador {
@@ -375,7 +188,6 @@ void inicio() : {}
 		 	|t = < VAR >
 		 	{ 
 		  		AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
->>>>>>> 3bd74c1 Correções e padronização do código (finalização) - Atividade 04/10:
      			listaExp.add(new Item(Tipo.variavel,t.image));
          	}
 		  	|t = < STRING >

@@ -1,6 +1,6 @@
 package exception;
 
-public class SemanticException extends Exception{
+public class SemanticException extends RuntimeException{
     /**
 	 * 
 	 */
