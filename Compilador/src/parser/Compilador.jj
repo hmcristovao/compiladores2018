@@ -10,14 +10,14 @@ import java.io.*;
 import java.util.LinkedList;
  
 public class Compilador {
-  
+
 	static Tabela tabela = new Tabela();
 	static LinkedList<Item> listaExp = new LinkedList<Item>();
 	
    public static void main(String args[])  throws ParseException
    {
       Compilador compilador = null;
-       
+      
       try {        
         compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
 		
@@ -91,7 +91,8 @@ void expressao():{}
 	}
 	)*
 	{
-		//System.out.println(listaExp);
+		System.out.println(listaExp);
+		//tabela.toString();
 	}	
 }
 
@@ -151,12 +152,12 @@ void termo4(): {Token s, a;}{
 	
 	| s = < VAR >
 	{
-	  listaExp.add(new Item('o', s.image)); // ?????
+	  listaExp.add(new Item('v', s.image)); // ?????
 	}
 	 
 	| s = < STRING >
 	{
-	  listaExp.add(new Item('o', s.image)); // ?????
+	  listaExp.add(new Item('v', s.image)); // ?????
 	}
 }
 
@@ -179,38 +180,24 @@ void comando(): { } {
 void atribuicao(): {Token var; Item item = null;} { 
 	var = < VAR >
 	{
-		if(!tabela.isExiste(var.image))
-			System.out.println("Erro semântico A variável "+ var.image + " não foi inicializada");
+  		AcoesSemanticas.inicializacao(tabela,var.image);
 	}
 	< ATRIB > < PV >
 }
 
-void declaracao(): {Simbolo simb; Token var, tipo;} {
+void declaracao(): {Simbolo simb = null; Token var, tipo;} {
   	
 	(tipo=< NUMERO > | tipo=< PALAVRA >)
-	var=< VAR > {
-		if(tabela.isExiste(var.image)) { 
-			System.out.println("Erro semântico \n A variável " + var.image + " já foi declarada");
-		}else { 
-			simb = new Simbolo(var.image, tipo.image);
-			simb.setReferencia(tabela, tipo.image);
-			tabela.inclui(simb);
-		}		
-	} (< ATRIB > expressao())?
-	(< VIRGULA > var = < VAR >(< ATRIB > expressao())? {
-
-	  	if(tabela.isExiste(var.image)) { 
-			System.out.println("Erro semântico \n A variável "+ var.image + " já foi declarada");
-		}else {
-			simb = new Simbolo(var.image, tipo.image);
-			simb.setReferencia(tabela, tipo.image);
-			tabela.inclui(simb);
-		}
+	var=< VAR >
+	{
+		tabela.vtnc(tabela, var.image, simb, tipo.image);
+	}
+	(< ATRIB > expressao())?
+	(< VIRGULA > var = < VAR >(< ATRIB > expressao())?
+	{
+		tabela.vtnc(tabela, var.image, simb, tipo.image);
 	}
 	)*
-	{
-	  //System.out.println(tabela);
-	}
 	< PV >
 	
 }

@@ -47,6 +47,8 @@ public class Compilador implements CompiladorConstants {
       termo();
                 listaExp.add(new Item('o',"OR"));
     }
+                System.out.println(listaExp);
+                //tabela.toString();
 
   }
 
@@ -170,12 +172,12 @@ public class Compilador implements CompiladorConstants {
       break;
     case VAR:
       s = jj_consume_token(VAR);
-          listaExp.add(new Item('o', s.image)); // ?????
+          listaExp.add(new Item('v', s.image)); // ?????
 
       break;
     case STRING:
       s = jj_consume_token(STRING);
-          listaExp.add(new Item('o', s.image)); // ?????
+          listaExp.add(new Item('v', s.image)); // ?????
 
       break;
     default:
@@ -243,14 +245,13 @@ public class Compilador implements CompiladorConstants {
   static final public void atribuicao() throws ParseException {
                     Token var; Item item = null;
     var = jj_consume_token(VAR);
-                if(!tabela.isExiste(var.image))
-                        System.out.println("Erro sem\u00e2ntico A vari\u00e1vel "+ var.image + " n\u00e3o foi inicializada");
+                AcoesSemanticas.inicializacao(tabela,var.image);
     jj_consume_token(ATRIB);
     jj_consume_token(PV);
   }
 
   static final public void declaracao() throws ParseException {
-                    Simbolo simb; Token var, tipo;
+                    Simbolo simb = null; Token var, tipo;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
       tipo = jj_consume_token(NUMERO);
@@ -264,13 +265,7 @@ public class Compilador implements CompiladorConstants {
       throw new ParseException();
     }
     var = jj_consume_token(VAR);
-                if(tabela.isExiste(var.image)) {
-                        System.out.println("Erro sem\u00e2ntico \u005cn A vari\u00e1vel " + var.image + " j\u00e1 foi declarada");
-                }else {
-                        simb = new Simbolo(var.image, tipo.image);
-                        simb.setReferencia(tabela, tipo.image);
-                        tabela.inclui(simb);
-                }
+                tabela.vtnc(tabela, var.image, simb, tipo.image);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
       jj_consume_token(ATRIB);
@@ -301,15 +296,8 @@ public class Compilador implements CompiladorConstants {
         jj_la1[13] = jj_gen;
         ;
       }
-                if(tabela.isExiste(var.image)) {
-                        System.out.println("Erro sem\u00e2ntico \u005cn A vari\u00e1vel "+ var.image + " j\u00e1 foi declarada");
-                }else {
-                        simb = new Simbolo(var.image, tipo.image);
-                        simb.setReferencia(tabela, tipo.image);
-                        tabela.inclui(simb);
-                }
+                tabela.vtnc(tabela, var.image, simb, tipo.image);
     }
-
     jj_consume_token(PV);
   }
 

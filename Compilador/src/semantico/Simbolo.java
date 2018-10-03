@@ -1,7 +1,5 @@
 package semantico;
 
-import java.util.HashMap;
-
 public class Simbolo {
 	
 	private String nome;
