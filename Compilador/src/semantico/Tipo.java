@@ -1,4 +1,4 @@
-package utility;
+package semantico;
 
 public enum Tipo {
 	   PALAVRA,

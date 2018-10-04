@@ -4,23 +4,36 @@ options {
 }
 
 PARSER_BEGIN(Compilador)
+package parser;
+
 import java.util.LinkedList;
-import java.io.*;
 import java.util.Scanner;
-import utility.*;
+import java.io.*;
+import semantico.*;
+import geradorCodigo.*;
+import apoio.*;
+
 public class Compilador {
   
+  	static boolean error=false;
 	static Tabela tabela = new Tabela();
+	static AcoesSemanticas as=new AcoesSemanticas();
+
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
       Scanner ler=new Scanner(System.in);
       try {
-        System.out.print("Insira o nome do arquivo a ser analisado: ");
-        String arq=ler.nextLine();
-        System.out.println();
-         compilador = new Compilador(new FileInputStream(arq));
+        //System.out.print("Insira o nome do arquivo a ser analisado: ");
+        //String arq=ler.nextLine();
+        //System.out.println();
+         compilador = new Compilador(new FileInputStream(Config.arqfonte));
          Compilador.inicio();
-         System.out.println(tabela.imprime());
+         System.out.println("\n"+tabela.imprime());
+         
+	      if(!error)
+	      	System.out.println("\nSem erros sintáticos");
+	      else
+	      	System.out.println("\nForam encontrados erros sintáticos, mas foram ignorados");
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -28,7 +41,6 @@ public class Compilador {
       catch(TokenMgrError e) {
          System.out.println("Erro lexico\n" + e.getMessage());
       }
-      System.out.println("Sem erros sintáticos");
    }
 }
 
@@ -86,7 +98,7 @@ void inicio() : { }
 	catch (ParseException e) {
 	    System.out.println("\n"+e.toString()+"\nErro sintático encontrado, continuando análise após próximo \";\"\n");
 	    Token t;
-	    
+	    error=true;
 	    do {
 	      t = getNextToken();
 	    } while (t.kind != PV);
@@ -103,8 +115,8 @@ void comando(): { }
 void atribuicao() : { Token t; }
 {
 	t=< VAR > {
-		if(!tabela.existe(t.image)) System.out.println("Erro semântico: variável "+t.image+" não declarada na linha "+t.beginLine);
-	} < ATRIB > expressao() < PV >
+		as.verificaDeclaracao(t.image,t.beginLine,tabela);
+		} < ATRIB > expressao() < PV >
 }
 
 void declaracao() : { Simbolo simb; Token t; int f=0;}
@@ -112,19 +124,12 @@ void declaracao() : { Simbolo simb; Token t; int f=0;}
   (    < NUMERO > { f=2; }| < PALAVRA > { f=1; })
     t=< VAR >
     {
-      	Simbolo novo;
-		if(f==1) { novo=new Simbolo(t.image,f);}
-		else { novo=new Simbolo(t.image,f);}
-		boolean ver=tabela.push(novo);
-		if(ver==false) System.out.println("Erro semântico: variável "+t.image+" repetida na linha "+t.beginLine);
-    }(< ATRIB >expressao())?
+		as.declaraVariavel(t.image,t.beginLine,f,tabela);
+      }(< ATRIB >expressao())?
 	(	  < VIRGULA >t=< VAR >
 	  {
-		if(f==1) { novo=new Simbolo(t.image,f);}
-		else { novo=new Simbolo(t.image,f);}
-		ver=tabela.push(novo);
-		if(ver==false) System.out.println("Erro semântico: variável "+t.image+" repetida na linha "+t.beginLine);
-    }
+		as.declaraVariavel(t.image,t.beginLine,f,tabela);
+		}
     (< ATRIB > expressao())?)*< PV >
 }
 
@@ -148,47 +153,45 @@ void exibe() : { }
   < EXIBE > expressao() (< VIRGULA >expressao())* < PV >
 }
 
-void expressao() : {LinkedList<Item> listaExp = new LinkedList<Item>();}
+void expressao() : {Expressao pilha = new Expressao();}
 {
-  	expressao2(listaExp){ System.out.println(listaExp + "\n"); }
+  	expressao2(pilha){pilha.imprime(); }
 }
 
-void expressao2(LinkedList<Item> listaExp) : {Item item = null; Token t; }
+void expressao2(Expressao pilha) : {Item item = null; Token t; }
 {
-  termo(listaExp)(t=< OU >termo(listaExp) {item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item); })*
+  termo(pilha)(t=< OU >termo(pilha) {pilha.add(Tipo.OPERADOR, t.image);})*
 }
 
-
-
-void termo(LinkedList<Item> listaExp) : {Item item = null; Token t; }
+void termo(Expressao pilha) : {Token t; }
 {
-  termo1(listaExp)(t=< IGUAL >termo1(listaExp) { item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);})?
+  termo1(pilha)(t=< IGUAL >termo1(pilha) {pilha.add(Tipo.OPERADOR, t.image);})?
 }
 
-void termo1(LinkedList<Item> listaExp) : {Item item = null; Token t; }
+void termo1(Expressao pilha) : {Token t; }
 {
-  termo2(listaExp)(t=< CONCAT >termo2(listaExp) {item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);} )*
+  termo2(pilha)(t=< CONCAT >termo2(pilha) {pilha.add(Tipo.OPERADOR, t.image);} )*
 }
 
-void termo2(LinkedList<Item> listaExp) : {Item item = null; Token t; }
+void termo2(Expressao pilha) : {Token t; }
 {
-  termo3(listaExp)((t=< SOMA >|t=< SUB >)termo3(listaExp){item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);} )*
+  termo3(pilha)((t=< SOMA >|t=< SUB >)termo3(pilha){pilha.add(Tipo.OPERADOR, t.image);} )*
 }
 
-void termo3(LinkedList<Item> listaExp) : {Item item = null; Token t; }
+void termo3(Expressao pilha) : {Token t; }
 {
-  termo4(listaExp)((t=< MUL >|t=< DIV >)termo4(listaExp){item = new Item( Tipo.OPERADOR, t.image ); listaExp.add(item);} )*
+  termo4(pilha)((t=< MUL >|t=< DIV >)termo4(pilha){pilha.add(Tipo.OPERADOR, t.image);} )*
 }
 
-void termo4(LinkedList<Item> listaExp) : { Item item = null; Token t=null; char sinal=' '; Tipo tipo=null;}
+void termo4(Expressao pilha) : {Token t=null; char sinal=' '; Tipo tipo=null;}
 {
- (    < AP >expressao2(listaExp)< FP >
-| t=< NUM >{tipo=Tipo.NUMERO;}
+   < AP >expressao2(pilha)< FP >
+| (t=< NUM >{tipo=Tipo.NUMERO;}
 | < SOMA >t=<NUM > {tipo=Tipo.NUMERO;sinal='+';}
 | < SUB >t=<NUM>{tipo=Tipo.NUMERO;sinal='-';}
 | t=< VAR >{tipo=Tipo.VARIAVEL;}
 | t=< STRING >{tipo=Tipo.STRING;}
-){item = new Item( tipo , sinal + t.image ); listaExp.add(item);}
+){pilha.add(tipo, sinal + t.image);}
 }
 
 

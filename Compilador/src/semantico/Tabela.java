@@ -1,4 +1,4 @@
-package utility;
+package semantico;
 
 import java.util.HashMap;
 public class Tabela {
@@ -8,10 +8,10 @@ public class Tabela {
   		public Tabela() {
             this.tab = new HashMap<String,Simbolo>();
       }
-      public boolean push(Simbolo novo) {
+      public boolean push(String nome, int ref) {
+    	  Simbolo novo = new Simbolo(nome,ref);
             if(this.tab.containsKey(novo.getName())) {
-
-                  return false;
+            	return false;
             }else {
                   this.tab.put(novo.getName(),novo);
                   int aux=index;

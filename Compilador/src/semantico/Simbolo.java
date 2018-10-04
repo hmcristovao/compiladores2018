@@ -1,4 +1,4 @@
-package utility;
+package semantico;
 
 public class Simbolo {
     private String name, type;
