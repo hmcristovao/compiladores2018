@@ -6,7 +6,11 @@ options
 
 // ----- inicio: analisador lexico
 PARSER_BEGIN(Compilador)
+package parser;
+
 import java.io.*;
+import apoio.*;
+import semantico.*;
 import minhasClasses.*;
 import java.util.LinkedList;
 
@@ -16,7 +20,7 @@ public class Compilador {
 	public static void main(String args []) throws ParseException {
 		Compilador compilador = null;
 		try {
-			compilador = new Compilador(new FileInputStream("exemplo06.spc2"));
+			compilador = new Compilador(new FileInputStream("exemplo17.spc2"));
 			Compilador.inicio();
 			// System.out.println(tabela.toString());
 		}
@@ -78,29 +82,21 @@ TOKEN :
 //-----------NUMEROS-----------
 TOKEN :
 {
-  < #DIGIT : [ "0"-"9" ] >
-| 
-  < NUM : (< DIGIT >)* (".")? (< DIGIT >)+ >
+	< #DIGIT : [ "0"-"9" ] >
+	| < NUM : (< DIGIT >)* (".")? (< DIGIT >)+ >
 }
 
 //----------OPERADORES---------
 TOKEN :
 {
-  < SOMA : "+" >
-| 
-  < SUB : "-" >
-| 
-  < MUL : "*" >
-| 
-  < DIV : "/" >
-| 
-  < OU : "OR" >
-| 
-  < ATRIB : "<-" >
-| 
-  < IGUAL : "=" >
-| 
-  < CONCAT : "&" >
+	< SOMA : "+" >
+	| < SUB : "-" >
+	| < MUL : "*" >
+	| < DIV : "/" >
+	| < OU : "OR" >
+	| < ATRIB : "<-" >
+	| < IGUAL : "=" >
+	| < CONCAT : "&" >
 }
 
 /*
