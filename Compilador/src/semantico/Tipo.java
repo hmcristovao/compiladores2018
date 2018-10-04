@@ -1,3 +1,4 @@
+package semantico;
 
 public enum Tipo {
 	operador(5),variavel(4),string(3),numero(2),palavra(1);

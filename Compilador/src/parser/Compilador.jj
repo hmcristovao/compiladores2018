@@ -1,0 +1,195 @@
+
+options {
+   DEBUG_PARSER = false;
+   DEBUG_TOKEN_MANAGER = false;
+}
+
+
+PARSER_BEGIN(Compilador)
+package parser;
+import semantico.*;
+import java.util.LinkedList;
+import java.io.*;
+import apoio.*;
+public class Compilador {
+	static Tabela tabela = new Tabela();
+	
+	public static void main(String args[])  throws ParseException  {
+
+	   Compilador analisador = null;
+	
+      try {
+
+        analisador = new Compilador(new FileInputStream(config.arquivo)); //entrada do arquivo
+        Compilador.inicio();
+        System.out.println("Análise léxica, sintática e semântico sem erros!");
+      }
+      catch(FileNotFoundException e) {
+         System.out.println("Erro: arquivo não encontrado");
+      }
+      catch(TokenMgrError e) {
+         System.out.println("Erro léxico\n" + e.getMessage());
+      }
+      catch(ParseException e) {
+         System.out.println("Erro sintático\n" + e.getMessage());
+      }
+   }
+}
+
+PARSER_END(Compilador)
+
+SKIP : { " " | "\t" | "\r" | "\n" } 
+
+TOKEN [IGNORE_CASE] : {
+         <EXIBE: "exibe" > |
+         <LEITURA: "le" > | 
+         <SE: "se" > |
+         <FIMSE: "fim-se" > |
+         <ENQUANTO: "enquanto" >   |
+         <FIMENQUANTO: "fim-enquanto" >
+}
+
+TOKEN [IGNORE_CASE] : {
+	<NUMERO: "numero" >  |
+	<PALAVRA: "palavra" >  
+ }
+
+TOKEN : {
+	< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+	< AP: "(" > |
+	< FP: ")" > |
+	< PV: ";" > |
+	< VIRGULA: "," > |
+	        < STRING: "\"" (~["\""])* "\"" > |
+	< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+ }
+
+ TOKEN : {
+	< #DIGIT: ["0"-"9"] > |  
+	< NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
+ }
+
+TOKEN : {
+	< SOMA: "+" > |
+	< SUB: "-" > |
+	< MUL: "*" > |
+	< DIV: "/" > |
+	< OU: "OR" > |
+	< ATRIB: "<-"  > |
+	< IGUAL: "=" > |
+	< CONCAT: "&" > 
+ }
+void inicio() : { }
+{
+	programa() <EOF>
+}
+void programa() : {}
+{
+   ( comando() )*
+}
+void comando() : {} 
+{
+      atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+}
+
+void expressao(): {LinkedList<Item> listaExp = new LinkedList<Item>(); } 
+  {
+  	expressao2(listaExp){ System.out.println(listaExp + "\n"); }
+  }
+
+void expressao2(LinkedList<Item> listaExp) : {Item item = null; Token t; }
+{
+  termo(listaExp)(t=< OU >termo(listaExp) {item = new Item( Tipo.operador, t.image ); listaExp.add(item); })*
+}
+  	
+
+void termo (LinkedList<Item> listaExp) : {Item item = null; Token t; }//igualdade
+{
+  //termo1() (<IGUAL> termo1())?
+  termo1(listaExp)(t=< IGUAL >termo1(listaExp) { item = new Item( Tipo.operador, t.image ); listaExp.add(item);})?
+}
+  
+void termo1(LinkedList<Item> listaExp) : {Item item = null; Token t; } //concatenacao
+{
+  //termo2() (<CONCAT> termo2())*
+  termo2(listaExp)(t=< CONCAT >termo2(listaExp) {item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
+}
+  
+void termo2(LinkedList<Item> listaExp) : {Item item = null; Token t; } //soma e subtração
+{
+  termo3(listaExp)((t=< SOMA >|t=< SUB >)termo3(listaExp){item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
+}
+
+void termo3(LinkedList<Item> listaExp) : {Item item = null; Token t; } //multiplicacao e divisao
+{
+  termo4(listaExp)((t=< MUL >|t=< DIV >)termo4(listaExp){item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
+}
+
+void termo4(LinkedList<Item> listaExp) : { Item item = null; Token t=null; char sinal=' '; Tipo tipo=null;} //expressao entre parenteces
+{
+  	(    < AP >expressao2(listaExp)< FP >
+  	| t=< NUM >{tipo=Tipo.numero;}
+  	| < SOMA >t=<NUM > {tipo=Tipo.numero;sinal='+';}
+	| < SUB >t=<NUM>{tipo=Tipo.numero;sinal='-';}
+	
+	| t=< VAR >{tipo=Tipo.variavel;} {
+		if(!tabela.isExiste(t.image)) { 
+			System.out.println("Erro semântico \n A variável "+t.image + " não foi inicializada");
+			System.exit(1);
+		}
+	 }
+	| t=< STRING >{tipo=Tipo.string;}
+	){item = new Item( tipo , sinal + t.image ); listaExp.add(item);}
+}
+
+void atribuicao() : {Simbolo simb; Token t;} //atribuição
+{
+      t = <VAR> {
+        simb = new Simbolo(t.image);
+        tabela.inclui(simb);
+        }
+       <ATRIB> expressao() <PV>
+}
+
+void declaracao() : {Simbolo simb; Token t; Token tipo; }
+{
+	(tipo = <NUMERO>|tipo = <PALAVRA>)
+	t = <VAR>
+	(  <ATRIB>
+	{simb = new Simbolo(t.image,tipo.image);
+	 tabela.inclui(simb);
+	}
+	expressao() )? (<VIRGULA>
+	t = <VAR>
+	( <ATRIB>
+	{simb = new Simbolo(t.image);
+	 tabela.inclui(simb);
+	}
+	expressao() )? )* <PV>
+}
+
+void se() : { } //if
+{
+  	<SE> <AP> expressao() <FP> programa() <FIMSE>
+}
+
+void enquanto() : { } //while
+{
+  	<ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
+}
+
+void le() : { Token t; Simbolo simb; } //read
+{
+  	<LEITURA> t = <VAR> {
+  	  if(!tabela.isExiste(t.image)) { 
+			simb = new Simbolo(t.image);
+	 		tabela.inclui(simb);
+		}
+  	   }
+  	( <VIRGULA> <VAR> )* <PV>
+}
+
+void exibe() : { } //print
+{
+  	<EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
+}
