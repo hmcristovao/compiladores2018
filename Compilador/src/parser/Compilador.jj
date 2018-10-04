@@ -4,93 +4,75 @@ options
   DEBUG_TOKEN_MANAGER = false;
 }
 
-// ----- início: analisador lexico
+// ----- inicio: analisador lexico
 PARSER_BEGIN(Compilador)
 import java.io.*;
 import minhasClasses.*;
 import java.util.LinkedList;
 
-public class Compilador
-{
-  static Tabela tabela = new Tabela();
+public class Compilador {
+	static Tabela tabela = new Tabela();
 
-  public static void main(String args []) throws ParseException
-  {
-    Compilador compilador = null;
-    try
-    {
-      compilador = new Compilador(new FileInputStream("exemplo15.spc2"));
-      Compilador.inicio();
-     // System.out.println(tabela.toString());
-    }
-    catch (FileNotFoundException e)
-    {
-      System.out.println("Erro: arquivo nao encontrado");
-    }
-    catch (TokenMgrError e)
-    {
-      System.out.println("Erro lexico\n" + e.getMessage());
-    }
-    catch (ParseException e)
-    {
-      System.out.println("Erro sintatico\n" + e.getMessage());
-    }
-  }
+	public static void main(String args []) throws ParseException {
+		Compilador compilador = null;
+		try {
+			compilador = new Compilador(new FileInputStream("exemplo06.spc2"));
+			Compilador.inicio();
+			// System.out.println(tabela.toString());
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("Erro: arquivo nao encontrado");
+		}
+		catch (TokenMgrError e) {
+	      System.out.println("Erro lexico\n" + e.getMessage());
+	    }
+	    catch (ParseException e) {
+	      System.out.println("Erro sintatico\n" + e.getMessage());
+	    }
+  	}
 }
 
 PARSER_END(Compilador)
 
-// ----- fim: analisador léxico
+// ----- fim: analisador lexico
 SKIP :
 {
-  " "
-| "\t"
-| "\r"
-| "\n"
+	  " "
+	| "\t"
+	| "\r"
+	| "\n"
 }
 
 //TOKENS DE COMANDOS 
 TOKEN [ IGNORE_CASE ] :
 {
-  < EXIBE : "exibe" >
-| 
-  < LEITURA : "le" >
-| 
-  < SE : "se" >
-| 
-  < FIMSE : "fim-se" >
-| 
-  < ENQUANTO : "enquanto" >
-| 
-  < FIMENQUANTO : "fim-enquanto" >
+	  < EXIBE : "exibe" >
+	| < LEITURA : "le" >
+	| < SE : "se" >
+	| < FIMSE : "fim-se" >
+	| < ENQUANTO : "enquanto" >
+	| < FIMENQUANTO : "fim-enquanto" >
 }
 
 //TOKENS DE TIPOS 
 TOKEN [ IGNORE_CASE ] :
 {
-  < NUMERO : "numero" >
-| 
-  < PALAVRA : "palavra" >
+	< NUMERO : "numero" >
+	| < PALAVRA : "palavra" >
 }
 
 //----------CARACTERES----------
 TOKEN :
 {
-  < #CHAR :
-    [ "a"-"z" ]
-  | [ "A"-"Z" ] >
-| 
-  < AP : "(" >
-| 
-  < FP : ")" >
-| 
-  < PV : ";" >
-| 
-  < VIRGULA : "," >
-| 
-  < STRING : "\"" (~[ "\"" ])* "\"" >
-| 
-  < VAR : (< CHAR >)+ ([ "a"-"z", "A"-"Z", "0"-"9", "_" ])* >
+	< #CHAR :
+	[ "a"-"z" ]
+	| [ "A"-"Z" ] >
+	| < AP : "(" >
+	| < FP : ")" >
+	| < PV : ";" >
+	| < VIRGULA : "," >
+	| < STRING : "\"" (~[ "\"" ])* "\"" >
+	| < VAR : (< CHAR >)+ ([ "a"-"z", "A"-"Z", "0"-"9", "_" ])* >
 }
 
 //-----------NUMEROS-----------
