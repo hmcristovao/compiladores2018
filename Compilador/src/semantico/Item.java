@@ -2,14 +2,19 @@ package semantico;
 
 public class Item {
 	
-	private String tipo;
+	private Enum<?> tipo;
 	private String valor;
 	
-	
-	public String getTipo() {
+	public Item(Enum<?> tipo, String valor) {
+		this.tipo = tipo;
+		this.valor = valor;
+		
+	}
+		
+	public Enum<?> getTipo() {
 		return tipo;
 	}
-	public void setTipo(String tipo) {
+	public void setTipo(Enum<?> tipo) {
 		this.tipo = tipo;
 	}
 	public String getValor() {

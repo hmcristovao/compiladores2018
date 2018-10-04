@@ -3,39 +3,53 @@ package parser;
 
 import java.io.*;
 import semantico.*;
+import geradorCodigo.*;
+import apoio.*;
+import tratamentoErro.*;
 import java.util.LinkedList;
+
 public class Compilador implements CompiladorConstants {
 
-   public static Tabela tab = new Tabela();
+  public static Tabela tab = new Tabela();
 
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
 
       try {
 
-         compilador = new Compilador(new FileInputStream("exemplo17.spc"));
+         compilador = new Compilador(new FileInputStream("exemplo20.spc"));
          Compilador.inicio();
          System.out.println("");
-         tab.imprimeTabela();
+         Tabela.imprimeTabela();
       }
-      catch(FileNotFoundException e) {
-         System.out.println("Erro: arquivo nao encontrado");
+      catch(FileNotFoundException e)
+      {
+         System.err.println("Erro: arquivo nao encontrado");
       }
-      catch(TokenMgrError e) {
-         System.out.println("Erro lexico\u005cn" + e.getMessage());
+      catch(TokenMgrError e)
+      {
+         System.err.println("Erro lexico: " + e.getMessage());
+      }
+      catch(ParseException e)
+      {
+                System.err.println("Erro Sintatico: " + e.getMessage());
+      }
+      catch(ErroSemantico e)
+      {
+                System.err.println("Erro Semantico: " + e.getMessage());
       }
    }
 
 //Gramatica de expressoes:
   static final public void iniciaExpressao() throws ParseException {
- LinkedList<Item> listaExp = new LinkedList<Item>();
-    expressao(listaExp);
-         System.out.println(listaExp);
+ Expressao exp = new Expressao();
+    expressao(exp);
+         exp.imprimeExpressao();
   }
 
-  static final public void expressao(LinkedList<Item> listaExp) throws ParseException {
- Item item = new Item(); Token t;
-    termo(listaExp);
+  static final public void expressao(Expressao exp) throws ParseException {
+ Token t ;TipoOperador operador = null;
+    termo(exp);
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -47,23 +61,19 @@ public class Compilador implements CompiladorConstants {
         break label_1;
       }
       t = jj_consume_token(OU);
-      termo(listaExp);
-                item.setTipo("operador");
-                item.setValor(t.image);
-                listaExp.add(item);
+      termo(exp);
+                exp.addListaExpPosFixa(operador.OU, t.image);
     }
   }
 
-  static final public void termo(LinkedList<Item> listaExp) throws ParseException {
- Item item = new Item(); Token t;
-    termo1(listaExp);
+  static final public void termo(Expressao exp) throws ParseException {
+ Token t; TipoOperador operador = null;
+    termo1(exp);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IGUAL:
       t = jj_consume_token(IGUAL);
-      termo1(listaExp);
-                item.setTipo("operador");
-                item.setValor(t.image);
-                listaExp.add(item);
+      termo1(exp);
+                exp.addListaExpPosFixa(operador.IGUAL, t.image);
       break;
     default:
       jj_la1[1] = jj_gen;
@@ -71,9 +81,9 @@ public class Compilador implements CompiladorConstants {
     }
   }
 
-  static final public void termo1(LinkedList<Item> listaExp) throws ParseException {
- Item item = new Item(); Token t;
-    termo2(listaExp);
+  static final public void termo1(Expressao exp) throws ParseException {
+ Token t; TipoOperador operador = null;
+    termo2(exp);
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -85,16 +95,14 @@ public class Compilador implements CompiladorConstants {
         break label_2;
       }
       t = jj_consume_token(CONCAT);
-      termo2(listaExp);
-                item.setTipo("operador");
-                item.setValor(t.image);
-                listaExp.add(item);
+      termo2(exp);
+                exp.addListaExpPosFixa(operador.CONCAT, t.image);
     }
   }
 
-  static final public void termo2(LinkedList<Item> listaExp) throws ParseException {
- Item item = new Item(); Token t;
-    termo3(listaExp);
+  static final public void termo2(Expressao exp) throws ParseException {
+ Token t; TipoOperador operador;
+    termo3(exp);
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -109,25 +117,25 @@ public class Compilador implements CompiladorConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case SOMA:
         t = jj_consume_token(SOMA);
+                                  operador = TipoOperador.SOMA;
         break;
       case SUB:
         t = jj_consume_token(SUB);
+                                                                              operador = TipoOperador.SUB;
         break;
       default:
         jj_la1[4] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-      termo3(listaExp);
-                item.setTipo("operador");
-                item.setValor(t.image);
-                listaExp.add(item);
+      termo3(exp);
+                exp.addListaExpPosFixa(operador, t.image);
     }
   }
 
-  static final public void termo3(LinkedList<Item> listaExp) throws ParseException {
- Item item = new Item(); Token t;
-    termo4(listaExp);
+  static final public void termo3(Expressao exp) throws ParseException {
+ Token t; TipoOperador operador;
+    termo4(exp);
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -142,66 +150,53 @@ public class Compilador implements CompiladorConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MUL:
         t = jj_consume_token(MUL);
+                            operador = TipoOperador.MUL;
         break;
       case DIV:
         t = jj_consume_token(DIV);
+                                                                       operador = TipoOperador.DIV;
         break;
       default:
         jj_la1[6] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-      termo4(listaExp);
-                item.setTipo("operador");
-                item.setValor(t.image);
-                listaExp.add(item);
+      termo4(exp);
+        exp.addListaExpPosFixa(operador, t.image);
     }
   }
 
-  static final public void termo4(LinkedList<Item> listaExp) throws ParseException {
-        Item item = new Item();
+  static final public void termo4(Expressao exp) throws ParseException {
         Token var, entrada, sinal;
+        TipoDado tipo = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AP:
       jj_consume_token(AP);
-      expressao(listaExp);
+      expressao(exp);
       jj_consume_token(FP);
       break;
     case NUM:
       entrada = jj_consume_token(NUM);
-        item.setValor(entrada.image);
-        item.setTipo("numerico");
-        listaExp.add(item);
+        exp.addListaExpPosFixa(tipo.NUMERO, entrada.image);
       break;
     case SOMA:
       jj_consume_token(SOMA);
       entrada = jj_consume_token(NUM);
-        item.setValor(entrada.image);
-        item.setTipo("numerico");
-        listaExp.add(item);
+        exp.addListaExpPosFixa(tipo.NUMERO, entrada.image);
       break;
     case SUB:
       sinal = jj_consume_token(SUB);
       entrada = jj_consume_token(NUM);
-        item.setValor(sinal.image+entrada.image);
-        item.setTipo("numerico");
-        listaExp.add(item);
+        exp.addListaExpPosFixa(tipo.NUMERO, (sinal.image+entrada.image));
       break;
     case VAR:
       var = jj_consume_token(VAR);
-        if(tab.verificaSimbolo(var.image) == false) {
-                System.out.println("Variavel nao Declarada");
-                {if (true) return;}
-        }
-        item.setValor(var.image);
-        item.setTipo((tab.pesquisaTabela(var.image)).getTipo());
-        listaExp.add(item);
+        AcoesSemanticas.verificaVariavelDeclarada(tab, var.image);
+        exp.addListaExpPosFixa(tab.tipoVariavel(var.image), var.image);
       break;
     case STRING:
       entrada = jj_consume_token(STRING);
-        item.setValor(entrada.image);
-        item.setTipo("palavra");
-        listaExp.add(item);
+        exp.addListaExpPosFixa(tipo.PALAVRA, entrada.image);
       break;
     default:
       jj_la1[7] = jj_gen;
@@ -273,7 +268,6 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void declaracao() throws ParseException {
-        Simbolo simbolo;
         Token tipo, variavel;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
@@ -288,17 +282,7 @@ public class Compilador implements CompiladorConstants {
       throw new ParseException();
     }
     variavel = jj_consume_token(VAR);
-                if(tab.verificaSimbolo(variavel.image) == false) {
-                  simbolo = new Simbolo();
-                  simbolo.setTipo(tipo.image);
-                  simbolo.setNome(variavel.image);
-                  simbolo.setReferencia(tab.getMarcador());
-                  tab.incrementaMarcador(tipo.image);
-                  tab.insereSimbolo(simbolo);
-          }else {
-                System.out.println("Variavel "+ variavel.image + " Duplicada");
-                {if (true) return;}
-          }
+                Tabela.insereNaTabela(tab, variavel.image, tipo.image);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
       jj_consume_token(ATRIB);
@@ -329,17 +313,7 @@ public class Compilador implements CompiladorConstants {
         jj_la1[13] = jj_gen;
         ;
       }
-          if(tab.verificaSimbolo(variavel.image) == false) {
-                  simbolo = new Simbolo();
-                  simbolo.setTipo(tipo.image);
-                  simbolo.setNome(variavel.image);
-                  simbolo.setReferencia(tab.getMarcador());
-                  tab.incrementaMarcador(tipo.image);
-                  tab.insereSimbolo(simbolo);
-          }else {
-                System.out.println("Variavel "+ variavel.image + " Duplicada");
-                {if (true) return;}
-          }
+                Tabela.insereNaTabela(tab, variavel.image, tipo.image);
     }
     jj_consume_token(PV);
   }

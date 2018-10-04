@@ -2,6 +2,9 @@
 package parser;
 import java.io.*;
 import semantico.*;
+import geradorCodigo.*;
+import apoio.*;
+import tratamentoErro.*;
 import java.util.LinkedList;
 
 /** Token Manager. */

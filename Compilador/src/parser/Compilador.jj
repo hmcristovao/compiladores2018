@@ -9,26 +9,40 @@ package parser;
 
 import java.io.*;
 import semantico.*;
+import geradorCodigo.*;
+import apoio.*;
+import tratamentoErro.*;
 import java.util.LinkedList;
+
 public class Compilador {
 
-   public static Tabela tab = new Tabela();
-  
+  public static Tabela tab = new Tabela();
+
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
             
       try {
        	 
-         compilador = new Compilador(new FileInputStream("exemplo17.spc"));
+         compilador = new Compilador(new FileInputStream("exemplo20.spc"));
          Compilador.inicio();
          System.out.println("");
-         tab.imprimeTabela();
+         Tabela.imprimeTabela();
       }
-      catch(FileNotFoundException e) {
-         System.out.println("Erro: arquivo nao encontrado");
+      catch(FileNotFoundException e)
+      {
+         System.err.println("Erro: arquivo nao encontrado");
       }
-      catch(TokenMgrError e) {
-         System.out.println("Erro lexico\n" + e.getMessage());
+      catch(TokenMgrError e)
+      {
+         System.err.println("Erro lexico: " + e.getMessage());
+      }
+      catch(ParseException e)
+      {
+		System.err.println("Erro Sintatico: " + e.getMessage());
+      }
+      catch(ErroSemantico e)
+      {
+		System.err.println("Erro Semantico: " + e.getMessage());
       }
    }
 }
@@ -81,114 +95,89 @@ TOKEN : {
 //Gramatica de expressoes:
 
 void iniciaExpressao():
-{LinkedList<Item> listaExp = new LinkedList<Item>();}
+{Expressao exp = new Expressao();}
 {
-	expressao(listaExp)
-	{System.out.println(listaExp);}
+	expressao(exp)
+	{exp.imprimeExpressao();} 
 }
 
-void expressao(LinkedList<Item> listaExp):
-{Item item = new Item(); Token t;
-}
+void expressao(Expressao exp):
+{Token t ;TipoOperador operador = null;}
 {
-	 termo(listaExp)(t=< OU > termo(listaExp)
+	 termo(exp)(t=< OU > termo(exp)
 	  {
-	 	item.setTipo("operador");
-	 	item.setValor(t.image);
-	 	listaExp.add(item);
-	 	
+	 	exp.addListaExpPosFixa(operador.OU, t.image);	 	
 	 }
 	 )*
 		
 }
 
-void  termo(LinkedList<Item> listaExp):
-{Item item = new Item(); Token t;}
+void  termo(Expressao exp):
+{Token t; TipoOperador operador = null;}
 {
-  	termo1(listaExp) (t=< IGUAL > termo1(listaExp)
+  	termo1(exp) (t=< IGUAL > termo1(exp)
   	{
-  		item.setTipo("operador");
-	 	item.setValor(t.image);
-	 	listaExp.add(item);
+	 	exp.addListaExpPosFixa(operador.IGUAL, t.image);
   	}
   	)?
 }
 
-void termo1(LinkedList<Item> listaExp):
-{Item item = new Item(); Token t;}
+void termo1(Expressao exp):
+{Token t; TipoOperador operador = null;}
 {
-  	termo2(listaExp) (t=< CONCAT > termo2(listaExp)
+  	termo2(exp) (t=< CONCAT > termo2(exp)
   	{
-  		item.setTipo("operador");
-	 	item.setValor(t.image);
-	 	listaExp.add(item);
+  		exp.addListaExpPosFixa(operador.CONCAT, t.image);
   	}
   	)*
 } 
-void termo2(LinkedList<Item> listaExp):
-{Item item = new Item(); Token t;}
+void termo2(Expressao exp):
+{Token t; TipoOperador operador;}
 {
-  	termo3(listaExp) ((t=< SOMA >|t=< SUB >) termo3(listaExp)
+  	termo3(exp) ((t=< SOMA > {operador = TipoOperador.SOMA;} | t=< SUB > {operador = TipoOperador.SUB;}) termo3(exp)
   	{
-  		item.setTipo("operador");
-	 	item.setValor(t.image);
-	 	listaExp.add(item);
+  		exp.addListaExpPosFixa(operador, t.image);
   	}
   	)*
 }
 
-void termo3(LinkedList<Item> listaExp):
-{Item item = new Item(); Token t;}
+void termo3(Expressao exp):
+{Token t; TipoOperador operador;}
 {
-   termo4(listaExp) ((t=< MUL >|t=< DIV >) termo4(listaExp)
+   termo4(exp) ((t=< MUL > {operador = TipoOperador.MUL;} | t=< DIV > {operador = TipoOperador.DIV;}) termo4(exp)
    {
-  		item.setTipo("operador");
-	 	item.setValor(t.image);
-	 	listaExp.add(item);
-  	}
+     	exp.addListaExpPosFixa(operador, t.image);
+   }
   	)*
 }
 
-void termo4(LinkedList<Item> listaExp):
+void termo4(Expressao exp):
 {
-	Item item = new Item(); 
 	Token var, entrada, sinal;
+	TipoDado tipo = null;
 }
 {
- <AP> expressao(listaExp) <FP> 
+ <AP> expressao(exp) <FP> 
 |entrada=<NUM>
 {
-  	item.setValor(entrada.image);
-  	item.setTipo("numerico");
-  	listaExp.add(item);
+  	exp.addListaExpPosFixa(tipo.NUMERO, entrada.image);
 } 
 |<SOMA>entrada=<NUM>
 {
-  	item.setValor(entrada.image);
-  	item.setTipo("numerico");
-  	listaExp.add(item);
+  	exp.addListaExpPosFixa(tipo.NUMERO, entrada.image);
 }
 |sinal=<SUB>entrada=<NUM>
 {
-  	item.setValor(sinal.image+entrada.image);
-  	item.setTipo("numerico");
-  	listaExp.add(item);
+  	exp.addListaExpPosFixa(tipo.NUMERO, (sinal.image+entrada.image));
 }
 |var=<VAR>
 {
-  	if(tab.verificaSimbolo(var.image) == false) {
-  	  	System.out.println("Variavel nao Declarada");
-  	  	return;
-  	}
-  	item.setValor(var.image);
-  	item.setTipo((tab.pesquisaTabela(var.image)).getTipo()); 
-  	listaExp.add(item);
+  	AcoesSemanticas.verificaVariavelDeclarada(tab, var.image);
+  	exp.addListaExpPosFixa(tab.tipoVariavel(var.image), var.image);
 }
 |entrada=<STRING>
 {
-  	item.setValor(entrada.image);
-  	item.setTipo("palavra");
-  	listaExp.add(item);
+  	exp.addListaExpPosFixa(tipo.PALAVRA, entrada.image);
 }
 
 }
@@ -223,39 +212,18 @@ void atribuicao():
 }
 
 void declaracao():
-{ 	Simbolo simbolo;
+{ 	
  	Token tipo, variavel;
 }
 {
   	(tipo=<NUMERO>|tipo=<PALAVRA>) variavel=<VAR> 
   	{
-  		if(tab.verificaSimbolo(variavel.image) == false) { 
-	  	  simbolo = new Simbolo();
-	  	  simbolo.setTipo(tipo.image);
-	  	  simbolo.setNome(variavel.image);
-	  	  simbolo.setReferencia(tab.getMarcador());
-	  	  tab.incrementaMarcador(tipo.image);
-	  	  tab.insereSimbolo(simbolo);
-  	  }else {
-  	    	System.out.println("Variavel "+ variavel.image + " Duplicada");
-  	    	return;
-  	  }
+  		Tabela.insereNaTabela(tab, variavel.image, tipo.image);
   	}
   	( <ATRIB> iniciaExpressao() )? (<VIRGULA>  variavel=<VAR> ( <ATRIB> iniciaExpressao() )? 
   	
-  	 {
-	  if(tab.verificaSimbolo(variavel.image) == false) { 
-	  	  simbolo = new Simbolo();
-	  	  simbolo.setTipo(tipo.image);
-	  	  simbolo.setNome(variavel.image);
-	  	  simbolo.setReferencia(tab.getMarcador());
-	  	  tab.incrementaMarcador(tipo.image);
-	  	  tab.insereSimbolo(simbolo);
-  	  }else {
-  	    	System.out.println("Variavel "+ variavel.image + " Duplicada");
-  	    	return;
-  	  }
-
+  	{
+	  	Tabela.insereNaTabela(tab, variavel.image, tipo.image);
   	}
   	
   	

@@ -1,6 +1,7 @@
 package semantico;
 
 import java.util.HashMap;
+import tratamentoErro.*;
 
 import semantico.Simbolo;
 
@@ -32,8 +33,22 @@ public class Tabela {
 		return tab.get(chave);
 	}
 	
-	public void imprimeTabela(){
+	public static void imprimeTabela(){
 		System.out.println(tab);
+	}
+	
+	public static TipoDado tipoVariavel(String chave) {
+		TipoDado tipo = null;
+		
+		if(chave.equals("numero")) {
+			tipo = tipo.NUMERO;
+			
+		}
+		if(chave.equals("palavra")) {
+			tipo = tipo.PALAVRA;
+		}
+		
+		return tipo;
 	}
 	
 	public static void incrementaMarcador(String tipo) {
@@ -46,5 +61,20 @@ public class Tabela {
 			marcador+=1;
 		}
 	}
+	
+	
+	public static void insereNaTabela(Tabela tab,String variavel, String tipo) {
+		 Simbolo simbolo = new Simbolo();
+		 
+		 if(tab.verificaSimbolo(variavel) == false) { 
+		  	  simbolo.setTipo(tipo);
+		  	  simbolo.setNome(variavel);
+		  	  simbolo.setReferencia(tab.getMarcador());
+		  	  tab.incrementaMarcador(tipo);
+		  	  tab.insereSimbolo(simbolo);
+	  	  }else {
+	  		throw new ErroSemantico("Variavel "+ variavel + " Duplicada");
+	  	  }
+	 }
 
 }
