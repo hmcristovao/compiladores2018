@@ -1,4 +1,4 @@
-package utility;
+package semantico;
 
 public class Item {
 	   private Tipo tipo; 
