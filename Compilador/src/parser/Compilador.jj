@@ -1,0 +1,243 @@
+options {
+  DEBUG_PARSER = false;
+  DEBUG_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(Compilador)
+package parser;
+import java.io.*;
+import java.util.*;
+import semantico.*;
+import geradorCodigo.*;
+import apoio.*;
+
+public class Compilador {  
+   public static Tabela tabela;
+   
+   public static void main(String args[])  throws ParseException  {
+      Compilador compilador = null;
+      tabela = new Tabela();
+      
+      try {
+         compilador = new Compilador(new FileInputStream("exemplo01.spc"));
+         Compilador.programa();
+         System.out.println("\n---------------------------\n");
+         System.out.println("TABELA DE SIMBOLOS");
+         System.out.println(tabela.tab);
+      }  
+      catch(FileNotFoundException e) {
+         System.out.println("Erro: arquivo nao encontrado");
+      }
+      catch(TokenMgrError e) { //Erro léxico
+      	System.out.println("Erro lexico\n" + e.getMessage());
+      }
+      catch(ParseException e) { //Erro Sintatico
+        System.out.println("Erro Sintático\n" + e.getMessage());
+      }
+      catch(ErroSemantico e) { //Erro Semântico
+        System.out.println("Erro Semântico\n" + e.getMessage());
+      }
+   }
+}
+PARSER_END(Compilador)
+ 
+SKIP : { " " | "\t" | "\r" | "\n" }
+
+
+//TOKENS DE COMANDOS
+
+TOKEN [IGNORE_CASE] : {
+         <EXIBE: "exibe" > |
+         <LEITURA: "le" > | 
+         <SE: "se" > |
+         <FIMSE: "fim-se" > |
+         <ENQUANTO: "enquanto" >   |
+         <FIMENQUANTO: "fim-enquanto" >
+}
+
+//TOKENS DE TIPOS
+
+ TOKEN [IGNORE_CASE] : {
+	<NUMERO: "numero" >  |
+	<PALAVRA: "palavra" >  
+ }
+
+//CARACTERES
+
+ TOKEN : {
+	< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+	< AP: "(" > |
+	< FP: ")" > |
+	< PV: ";" > |
+	< VIRGULA: "," > |
+    < STRING: "\"" (~["\""])* "\"" > |
+	< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+ }
+
+//NÚMEROS
+
+ TOKEN : {
+	< #DIGIT: ["0"-"9"] > |  
+	< NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
+ }
+
+//OPERADORES
+
+ TOKEN : {
+	< SOMA: "+" > |
+	< SUB: "-" > |
+	< MUL: "*" > |
+	< DIV: "/" > |
+	< OU: "|" > |//VER COM HENRIQUE PQ NOSSO OR NAO FUNCIONA
+	< ATRIB: "<-"  > |
+	< IGUAL: "=" > |
+	< CONCAT: "&" > 
+ }
+  
+void programa() : { }
+{
+  ( comando() )*
+}
+
+void comando() : { }
+{
+  
+  atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+}
+
+void atribuicao() : {
+	Token v;
+}
+{
+  v = <VAR> { tabela.verificaDeclarada(v); }<ATRIB> expressaoMestre() <PV>
+}
+
+void declaracao() : {
+	Simbolo simb;
+	Token t, v; //t - recebe o tipo, v - recebe o nome da variavel
+}
+{
+  	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
+		{ tabela.addVar(t, v); }
+	( <ATRIB> expressaoMestre() )? (<VIRGULA> v = <VAR>
+		{ tabela.addVar(t, v); }
+	( <ATRIB> expressaoMestre() )? )* <PV>
+}
+
+void se() : { }
+{
+  <SE> <AP> expressaoMestre() <FP> programa() <FIMSE>
+}
+
+void enquanto() : { }
+{
+  <ENQUANTO> <AP> expressaoMestre() <FP> programa() <FIMENQUANTO>
+}
+
+void le() : {
+	Token v;
+}
+{
+  <LEITURA> v = <VAR> { tabela.verificaDeclarada(v); } ( <VIRGULA> v = <VAR> { tabela.verificaDeclarada(v); } )* <PV>
+}
+
+void exibe() : { }
+{
+  <EXIBE> expressaoMestre() ( <VIRGULA> expressaoMestre() )* <PV>
+}
+
+void expressaoMestre() : {
+	Expressao exp = new Expressao(); //cria uma nova linkedlist
+}
+
+{ 
+  	expressao(exp) {
+    	System.out.println(Arrays.toString(exp.listaExpPosfixa.toArray())); /*imprime a lista*/
+	}
+}
+
+void expressao(Expressao exp) : {
+	Token sinal;
+}
+
+{
+  termo(exp)(sinal = <OU> termo(exp){
+	exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+  })*
+}
+
+void termo(Expressao exp) : {
+	Token sinal;
+}
+{
+  termo1(exp)(sinal = <IGUAL> termo1(exp) {
+    exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+  })?
+}
+
+
+
+void termo1(Expressao exp) : {
+  Token sinal;  
+}
+{
+  termo2(exp)(sinal = <CONCAT>termo2(exp){
+    exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+   })*
+ 
+}
+
+String termo2(Expressao exp) : {
+	String a, b="";
+	Token sinal;
+	
+}
+{
+  a = termo3(exp)((sinal = <SOMA>| sinal = <SUB>) b = termo3(exp) {
+	//pegar o operador aqui e botar na lista
+    exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+    a = a+b+sinal.image;
+    })* { return a; } 
+}
+
+String termo3(Expressao exp) : {
+	String a, b="";
+	Token sinal;
+	
+}
+{
+  a = termo4(exp)((sinal = <MUL>|sinal = <DIV>) b = termo4(exp) {
+   exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+	a = a+b+sinal.image;
+})* { return a; }
+}
+
+String termo4(Expressao exp) : { 
+	Token folha;
+	String a;
+}
+{
+  <AP> expressao(exp) <FP> { return ""; }
+  |folha = <NUM> { //adiciona um numero sem sinal
+  		exp.addItemPosFixa(folha, Tipo.NUMERO);
+		return folha.image;
+	} //jah colocar na lista imediatamente
+  |folha = <SOMA><NUM>{ //adiciona um numero com sinal positivo
+  		exp.addItemPosFixa(folha, Tipo.NUMERO);
+		return folha.image;
+	}
+  |folha = <SUB><NUM>{ //adiciona um numero com sinal negativo
+  	exp.addItemPosFixa(folha, Tipo.NUMERO);
+	return folha.image;
+	}
+  |folha = <VAR> { //adiciona uma variavel
+    if(tabela.verificaDeclarada(folha)) { //caso a variavel tenha sido declarada
+		exp.addItemPosFixa(folha, Tipo.VARIAVEL);
+    }
+    return folha.image;
+  }
+  |folha = <STRING>{ //adiciona uma string
+  	exp.addItemPosFixa(folha, Tipo.STRING);
+	return folha.image;	
+ }
+}
