@@ -1,8 +1,8 @@
-package tratamentoExcecao;
+package tratamentoErro;
 
 public class ErroLexico extends RuntimeException {
 	public ErroLexico() 
 	{
-		super("Erro Léxico");
+		super("Erro Lexico");
 	}
 }

@@ -1,6 +1,6 @@
 package semantico;
 import parser.*;
-import tratamentoExcecao.*;
+import tratamentoErro.*;
 
 public class AcaoSemantica 
 {
@@ -8,7 +8,7 @@ public class AcaoSemantica
     {
      	if ( !_tab.isExiste( _t.image ) )
 		{
-			throw new ErroSemantico("Variável '" + _t.image + "' não declarada na linha " + _t.beginLine + "\n");
+			throw new ErroSemantico("Variavel'" + _t.image + "' nao declarada na linha " + _t.beginLine + "\n");
 		}
     }
 	
@@ -17,7 +17,7 @@ public class AcaoSemantica
 		Simbolo simb = new Simbolo( t.image, _tp );
 	  	if ( !_tab.incluir( simb ) )
 	  	{
-	  		throw new ErroSemantico("Variável '" + t.image + "' repetida na linha " + t.beginLine + "\n");
+	  		throw new ErroSemantico("Variavel'" + t.image + "' repetida na linha " + t.beginLine + "\n");
 	  	}
 	 
     }  

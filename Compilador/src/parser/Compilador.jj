@@ -11,39 +11,38 @@ import java.io.*;
 import semantico.*;
 import geradorCodigo.*;
 import apoio.*;
-import tratamentoExcecao.*;
+import tratamentoErro.*;
 public class Compilador
 {
-   // Tabela de sÃ­mbolos do compilador
-   static public Tabela tab;
+   static public Tabela tabela_simbolos;
     
    public static void main(String args[])  throws ParseException
    {
       Compilador compilador = null;
-	  tab = new Tabela();
+	  tabela_simbolos = new Tabela();
 
       try
       {
-         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo06.spc2"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo16.spc2"));
          Compilador.inicio();
-		 System.out.println(tab);
-         System.out.println("Execução finalizada com sucesso!\n");
+         System.out.println(tabela_simbolos);
+         System.out.println("\nExecucao finalizada com sucesso !\n");
       }
       catch(FileNotFoundException e)
       {
-         System.out.println("Erro: arquivo nao encontrado\n");
+         System.err.println("Erro: Arquivo informado nao foi encontrado. \n");
       }
       catch(TokenMgrError e)
       {
-         System.out.println("Erro lexico:\n" + e.getMessage());
+         System.err.println("Erro lexico: " + e.getMessage());
       }
       catch(ParseException e)
       {
-		System.out.println("Erro Sintatico:\n" + e.getMessage());
+		System.err.println("Erro Sintatico: " + e.getMessage());
       }
       catch(ErroSemantico e)
       {
-		System.out.println("Erro Semantico:\n" + e.getMessage());
+		System.err.println("Erro Semantico: " + e.getMessage());
       }
       
    }
@@ -182,7 +181,7 @@ void termo4( Expressao exp ) :
 	    t = < NUM > { tp = Tipo.CTENUM; }|
 		< SOMA > t = < NUM > { sinal = "+"; tp = Tipo.CTENUM; }|
 		< SUB > t = < NUM > { sinal = "-"; tp = Tipo.CTENUM; }|
-		t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); tp = Tipo.VARNUM; }|
+		t = < VAR > { AcaoSemantica.declaracaoPrevia( tabela_simbolos, t ); tp = Tipo.VARNUM; }|
 		t = < STRING > { tp = Tipo.CTESTR; }
 	)
 	{
@@ -213,15 +212,15 @@ void comando() : { }
 
 void atribuicao() : { Token t; }
 {
-	t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } < ATRIB > preExp() < PV >
+	t = < VAR > { AcaoSemantica.declaracaoPrevia( tabela_simbolos, t ); } < ATRIB > preExp() < PV >
 }
 
 void declaracao() : { Token t; Tipo tp; }
 {
 	( < NUMERO > { tp = Tipo.VARNUM; } | < PALAVRA > { tp = Tipo.VARSTR; } )
-	t = < VAR > { AcaoSemantica.criarVariavel( tab, t, tp ); }
+	t = < VAR > { AcaoSemantica.criarVariavel( tabela_simbolos, t, tp ); }
 	( < ATRIB > preExp() { tp = Tipo.CTENUM; } )?
-	( < VIRGULA > t =  < VAR > { AcaoSemantica.criarVariavel( tab, t, tp ); }
+	( < VIRGULA > t =  < VAR > { AcaoSemantica.criarVariavel( tabela_simbolos, t, tp ); }
 	  ( < ATRIB > preExp() { tp = Tipo.CTENUM; } )?
 	)* < PV >
 }
@@ -238,8 +237,8 @@ void enquanto() : {}
 
 void le() : { Token t;}
 {
-	< LEITURA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); }
-	( < VIRGULA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tab, t ); } )* < PV >
+	< LEITURA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tabela_simbolos, t ); }
+	( < VIRGULA > t = < VAR > { AcaoSemantica.declaracaoPrevia( tabela_simbolos, t ); } )* < PV >
 }
 
 void exibe() : {}

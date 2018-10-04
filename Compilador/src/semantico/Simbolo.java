@@ -53,7 +53,7 @@ public class Simbolo
 	
 	public String toString()
 	{
-		return "{ NOME: " + this.getNome() + " / " + "REFERÊNCIA: " + this.getReferencia() + "}\n";
+		return "{ NOME: " + this.getNome() + " / " + "REFERENCIA: " + this.getReferencia() + "}\n";
 	}
 	
 	

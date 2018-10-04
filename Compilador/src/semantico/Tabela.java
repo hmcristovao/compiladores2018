@@ -5,22 +5,22 @@ import parser.*;
 
 public class Tabela 
 {
-	private HashMap<String, Simbolo> tab;
+	private HashMap<String, Simbolo> tabela_simbolos;
 	private int marcador;
 	
 	public Tabela()
 	{
-		this.tab = new HashMap<String,Simbolo>();
+		this.tabela_simbolos = new HashMap<String,Simbolo>();
 		this.marcador = 1;
 	}
 	
 	public boolean incluir( Simbolo _simb )
 	{
-		if ( this.tab.containsKey(_simb.getNome()) )
+		if ( this.tabela_simbolos.containsKey(_simb.getNome()) )
 			return false;
 		else
 		{
-			this.tab.put(_simb.getNome(), _simb );
+			this.tabela_simbolos.put(_simb.getNome(), _simb );
 			_simb.setReferencia( this.getMarcador() );
 			this.atualizarMarcador( _simb.getTipo() );
 			return true;
@@ -47,12 +47,12 @@ public class Tabela
 
 	public int consultarReferencia( String _chave )
 	{
-		return ((Simbolo)this.tab.get(_chave)).getReferencia();
+		return ((Simbolo)this.tabela_simbolos.get(_chave)).getReferencia();
 	}
 	
 	public boolean isExiste( String _chave )
 	{
-		return this.tab.containsKey(_chave);
+		return this.tabela_simbolos.containsKey(_chave);
 	}
 	
 	public int getMarcador() 
@@ -67,17 +67,17 @@ public class Tabela
 
 	public String toString()
 	{
-		return this.tab.toString();
+		return this.tabela_simbolos.toString();
 	}
 
-	public HashMap<String, Simbolo> getTab() 
+	public HashMap<String, Simbolo> getTabela() 
 	{
-		return this.tab;
+		return this.tabela_simbolos;
 	}
 
-	public void setTab(HashMap<String, Simbolo> _tab) 
+	public void setTab(HashMap<String, Simbolo> _tabela_simbolos) 
 	{
-		this.tab = _tab;
+		this.tabela_simbolos = _tabela_simbolos;
 	}
 	
 	

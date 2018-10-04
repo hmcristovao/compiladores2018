@@ -12,11 +12,9 @@ public class Expressao
 //	Tipos de dados presentes na listaressão
 	private Tipo tipo;
 	private LinkedList<Item> lista;
-	
 	public Expressao()
 	{
 		this.lista = new LinkedList<Item>();
-//		this.linha = 0;
 	}
 	
 	
