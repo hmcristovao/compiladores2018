@@ -18,17 +18,6 @@ public class Tabela {
             }
       }
       
-      public void vtnc(Tabela tabela, String var, Simbolo simb, String tipo) {
-  	  	if(!tabela.isExiste(var)) { 
-    	  	AcoesSemanticas.declaracao(tabela,var);
-  		}else{
-
-	  		simb = new Simbolo(var, tipo);
-	  		simb.setReferencia(tabela, tipo);
-	  		tabela.inclui(simb);
-  		}
-      }
-      
       public int consultaReferencia(String _chave) {
             return ((Simbolo)this.tab.get(_chave)).getReferencia();
       }

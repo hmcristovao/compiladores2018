@@ -9,10 +9,14 @@ public class AcoesSemanticas {
 			throw new ErroSemantico("Erro semântico \n A variável " + var + " não foi inicializada");
 	}
 	
-	public static void declaracao(Tabela tab, String var) {
+	public static void declaracao(Tabela tabela, String var, Simbolo simb, String tipo) {
 		
-		if(tab.isExiste(var))
+		if(tabela.isExiste(var))
 			throw new ErroSemantico("Erro semântico \n A variável " + var + " já foi declarada");
-		
+		else {
+	  		simb = new Simbolo(var, tipo);
+	  		simb.setReferencia(tabela, tipo);
+	  		tabela.inclui(simb);
+		}
 	}
 }

@@ -10,7 +10,7 @@ public class Compilador implements CompiladorConstants {
 
         static Tabela tabela = new Tabela();
 
-   public static void main(String args[])  throws ParseException
+   public static void main(String args[])  throws ErroSemantico
    {
       Compilador compilador = null;
 
@@ -26,12 +26,6 @@ public class Compilador implements CompiladorConstants {
       catch(ErroSemantico e) {
          System.out.println("Erro semantico\u005cn" + e.getMessage());
       }
-      catch(ErroLexico e) {
-         System.out.println("Erro lexico\u005cn" + e.getMessage());
-      }
-      catch(ErroSintatico e) {
-         System.out.println("Erro sintatico\u005cn" + e.getMessage());
-      }
       catch(TokenMgrError e) {
          System.out.println("Erro lexico\u005cn" + e.getMessage());
       }
@@ -44,13 +38,13 @@ public class Compilador implements CompiladorConstants {
 //--------------------------------------------------------------------------------------------
   static final public void expressao() throws ParseException {
                   Expressao e = new Expressao();
-    naosei();
-         System.out.println(listaExp);
+    iniciaExp(e);
+                System.out.println(e.listaExpPosfixa);
   }
 
-  static final public void naosei() throws ParseException {
-               LinkedList<Item> listaExp = new LinkedList<Item>();
-    termo();
+  static final public void iniciaExp(Expressao e) throws ParseException {
+                             Token s; Item item = null;
+    termo(e);
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -61,19 +55,20 @@ public class Compilador implements CompiladorConstants {
         jj_la1[0] = jj_gen;
         break label_1;
       }
-      jj_consume_token(OU);
-      termo();
-                listaExp.add(new Item('o',"OR"));
+      s = jj_consume_token(OU);
+      termo(e);
+                e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
     }
   }
 
-  static final public void termo() throws ParseException {
-    termo1();
+  static final public void termo(Expressao e) throws ParseException {
+                         Token s; Item item = null;
+    termo1(e);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IGUAL:
-      jj_consume_token(IGUAL);
-      termo1();
-                listaExp.add(new Item('o',"="));
+      s = jj_consume_token(IGUAL);
+      termo1(e);
+                e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
       break;
     default:
       jj_la1[1] = jj_gen;
@@ -81,8 +76,9 @@ public class Compilador implements CompiladorConstants {
     }
   }
 
-  static final public void termo1() throws ParseException {
-    termo2();
+  static final public void termo1(Expressao e) throws ParseException {
+                          Token s; Item item = null;
+    termo2(e);
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -93,15 +89,15 @@ public class Compilador implements CompiladorConstants {
         jj_la1[2] = jj_gen;
         break label_2;
       }
-      jj_consume_token(CONCAT);
-      termo2();
-                listaExp.add(new Item('o',"&"));
+      s = jj_consume_token(CONCAT);
+      termo2(e);
+                e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
     }
   }
 
-  static final public void termo2() throws ParseException {
-                Token s;
-    termo3();
+  static final public void termo2(Expressao e) throws ParseException {
+                           Token s; Item item = null;
+    termo3(e);
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -125,14 +121,14 @@ public class Compilador implements CompiladorConstants {
         jj_consume_token(-1);
         throw new ParseException();
       }
-      termo3();
-          listaExp.add(new Item('o', s.image));
+      termo3(e);
+          e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
     }
   }
 
-  static final public void termo3() throws ParseException {
-                Token s;
-    termo4();
+  static final public void termo3(Expressao e) throws ParseException {
+                           Token s; Item item = null;
+    termo4(e);
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -156,13 +152,13 @@ public class Compilador implements CompiladorConstants {
         jj_consume_token(-1);
         throw new ParseException();
       }
-      termo4();
-          listaExp.add(new Item('o', s.image));
+      termo4(e);
+          e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
     }
   }
 
-  static final public void termo4() throws ParseException {
-                Token s, a;
+  static final public void termo4(Expressao e) throws ParseException {
+                           Token s,a; Item item = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AP:
       jj_consume_token(AP);
@@ -171,29 +167,27 @@ public class Compilador implements CompiladorConstants {
       break;
     case NUM:
       a = jj_consume_token(NUM);
-          listaExp.add(new Item('n', a.image));
+          e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
       break;
     case SOMA:
       s = jj_consume_token(SOMA);
       a = jj_consume_token(NUM);
-          listaExp.add(new Item('n', a.image));
-          listaExp.add(new Item('o', s.image));
+          e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+          e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
       break;
     case SUB:
       s = jj_consume_token(SUB);
       a = jj_consume_token(NUM);
-          listaExp.add(new Item('n', a.image));
-          listaExp.add(new Item('o', s.image));
+          e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+          e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
       break;
     case VAR:
       s = jj_consume_token(VAR);
-          listaExp.add(new Item('v', s.image)); // ?????
-
+          e.listaExpPosfixa.add(new Item(Tipo.variavel, s.image));
       break;
     case STRING:
       s = jj_consume_token(STRING);
-          listaExp.add(new Item('v', s.image)); // ?????
-
+          e.listaExpPosfixa.add(new Item(Tipo.palavra, s.image));
       break;
     default:
       jj_la1[7] = jj_gen;
@@ -281,7 +275,7 @@ public class Compilador implements CompiladorConstants {
       throw new ParseException();
     }
     var = jj_consume_token(VAR);
-                tabela.vtnc(tabela, var.image, simb, tipo.image);
+                AcoesSemanticas.declaracao(tabela, var.image, simb, tipo.image);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
       jj_consume_token(ATRIB);
@@ -312,7 +306,7 @@ public class Compilador implements CompiladorConstants {
         jj_la1[13] = jj_gen;
         ;
       }
-                tabela.vtnc(tabela, var.image, simb, tipo.image);
+                AcoesSemanticas.declaracao(tabela, var.image, simb, tipo.image);
     }
     jj_consume_token(PV);
   }

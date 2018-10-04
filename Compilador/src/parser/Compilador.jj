@@ -15,7 +15,7 @@ public class Compilador {
 
 	static Tabela tabela = new Tabela();
 	
-   public static void main(String args[])  throws ParseException
+   public static void main(String args[])  throws ErroSemantico
    {
       Compilador compilador = null;
       
@@ -30,12 +30,6 @@ public class Compilador {
       }
       catch(ErroSemantico e) {
          System.out.println("Erro semantico\n" + e.getMessage());
-      }
-      catch(ErroLexico e) {
-         System.out.println("Erro lexico\n" + e.getMessage());
-      }
-      catch(ErroSintatico e) {
-         System.out.println("Erro sintatico\n" + e.getMessage());
       }
       catch(TokenMgrError e) {
          System.out.println("Erro lexico\n" + e.getMessage());
@@ -96,81 +90,83 @@ TOKEN : {
 
 void expressao():{Expressao e = new Expressao();}
 {
-	naosei()
-	{System.out.println(listaExp);}
+	iniciaExp(e)
+	{
+		System.out.println(e.listaExpPosfixa);
+	}
 }
 
-void naosei():{LinkedList<Item> listaExp = new LinkedList<Item>();}
+void iniciaExp(Expressao e):{Token s; Item item = null;}
 {
-	termo()	(< OU > termo()
+	termo(e)	(s = < OU > termo(e)
 	{
-		listaExp.add(new Item('o',"OR"));
+		e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
 	}
 	)*	
 }
 
-void termo():{}
+void termo(Expressao e):{Token s; Item item = null;}
 {
-	termo1() (< IGUAL > termo1()
+	termo1(e) (s = < IGUAL > termo1(e)
 	{
-	  	listaExp.add(new Item('o',"="));
+	  	e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
 	}
 	)?
 }
 
-void termo1():{}
+void termo1(Expressao e):{Token s; Item item = null;}
 {
-	termo2() (< CONCAT > termo2()
+	termo2(e) (s = < CONCAT > termo2(e)
 	{
-		listaExp.add(new Item('o',"&"));
+		e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
 	}
 	)*
 }
 
-void termo2(): {Token s;}
+void termo2(Expressao e): {Token s; Item item = null;}
 {
-	termo3() ((s = < SOMA > | s = < SUB >) termo3()	  
+	termo3(e) ((s = < SOMA > | s = < SUB >) termo3(e)	  
 	{
-	  listaExp.add(new Item('o', s.image));
+	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
 	}	
 	)*
 }
 
-void termo3(): {Token s;} {
-	termo4() ((s = < MUL > | s = < DIV >) termo4()
+void termo3(Expressao e): {Token s; Item item = null;} {
+	termo4(e) ((s = < MUL > | s = < DIV >) termo4(e)
 	{
-	  listaExp.add(new Item('o', s.image));
+	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
 	}	
 	)*
 }
 
-void termo4(): {Token s, a;}{
+void termo4(Expressao e): {Token s,a; Item item = null;}{
 	< AP > expressao() <FP >
 	| a = < NUM >
 	{
-	  listaExp.add(new Item('n', a.image));
+	  e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
 	}
 	
 	| s = < SOMA >	a = <NUM >
 	{
-	  listaExp.add(new Item('n', a.image));
-	  listaExp.add(new Item('o', s.image));
+	  e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
 	}
 	
 	| s = < SUB >	a = <NUM >
 	{
-	  listaExp.add(new Item('n', a.image));
-	  listaExp.add(new Item('o', s.image));
+	  e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
 	}
 	
 	| s = < VAR >
 	{
-	  listaExp.add(new Item('v', s.image)); // ?????
+	  e.listaExpPosfixa.add(new Item(Tipo.variavel, s.image));
 	}
 	 
 	| s = < STRING >
 	{
-	  listaExp.add(new Item('v', s.image)); // ?????
+	  e.listaExpPosfixa.add(new Item(Tipo.palavra, s.image));
 	}
 }
 
@@ -203,12 +199,12 @@ void declaracao(): {Simbolo simb = null; Token var, tipo;} {
 	(tipo=< NUMERO > | tipo=< PALAVRA >)
 	var=< VAR >
 	{
-		tabela.vtnc(tabela, var.image, simb, tipo.image);
+	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo.image);
 	}
 	(< ATRIB > expressao())?
 	(< VIRGULA > var = < VAR >(< ATRIB > expressao())?
 	{
-		tabela.vtnc(tabela, var.image, simb, tipo.image);
+	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo.image);
 	}
 	)*
 	< PV >
