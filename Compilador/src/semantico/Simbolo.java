@@ -1,29 +1,34 @@
 package semantico;
 
-public class Simbolo {
-    private String name, type;
-    private int ref;
+import parser.Token;
 
-    public Simbolo(String nome, int ref) {
-          this.name = nome;
-          if(ref==1) this.type="P";
-          else this.type="N";
+public class Simbolo {
+    private String nome;
+    private int ref;
+    Token token;
+    TipoDado tipo;
+
+    public Simbolo(Token t, TipoDado tipo, int ref) {
+          this.token=t;
+          this.tipo=tipo;
           this.ref = ref;
+          this.nome=t.image;
     }
-    public String getName() {
-          return this.name;
+    
+    public String getLexema() {
+          return nome;
     }
-    public int getRef() {
+    
+    public int getReferencia() {
           return this.ref;
     }
-    public void setRef(int ref) {
-        this.ref=ref;
+    
+    public TipoDado getTipo() {
+        return this.tipo;
     }
-    public String getType() {
-        return this.type;
-    }
+    
     public String toString() {
-          return "Nome: "+this.getName() + " | " + "Índice: "+this.getRef() + " | Tipo: "+this.type+ "\n";
+          return "Nome: "+this.getLexema() + " | " + "Índice: "+this.getReferencia() + " | Tipo: "+this.tipo+ "\n";
     }
     
 }

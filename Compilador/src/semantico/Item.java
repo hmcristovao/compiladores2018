@@ -1,19 +1,16 @@
 package semantico;
 
-public class Item {
-	   private Tipo tipo; 
-	   private String valor;
-	   public Item(Tipo _tipo, String _valor) {
-	      this.tipo = _tipo;
-	      this.valor = _valor;
+import parser.Token;
+
+public abstract class Item {
+	   private Token token;
+	   
+	   public Item(Token t) {
+	      this.token=t;
 	   }
-	   public Tipo getTipo() {
-	      return this.tipo;
+	   
+	   public String getLexema() {
+	      return this.token.image;
 	   }
-	   public String getvalor() {
-	      return this.valor;
-	   }
-	   public String toString() {
-	      return this.tipo + ": " + this.valor;
-	   }
+	   public abstract String toString();
 	}

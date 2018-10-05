@@ -1,16 +1,18 @@
 package semantico;
+import apoio.*;
+import parser.Token;
 
 public class AcoesSemanticas {
 	
-	public static void declaraVariavel(String nome, int linha, int ref, Tabela tabela) {
-		
-		boolean ver=tabela.push(nome,ref);
-		if(ver==false) System.out.println("Erro semântico: declaração da variável "+nome+" repetida na linha "+linha+"\n");
+	public static void declaraVariavel(Token t, TipoDado tipo, Tabela tabela) {
+		boolean ver=tabela.incluiSimbolo(new Simbolo(t,tipo,Tabela.getRef(tipo)));
+		if(ver==false) System.out.println("Erro semântico: declaração da variável "+t.image+" repetida na linha "+t.beginLine+"\n");
 
 	}
 	
-	public static void verificaDeclaracao(String nome, int linha, Tabela tabela) {
-		if(!tabela.existe(nome)) System.out.println("Erro semântico: variável "+nome+" não declarada na linha "+linha+"\n");
+	public static void verificaDeclaracao(Token t, Tabela tabela) {
+		if(!tabela.verificaExistenciaSimbolo(t.image)) 
+			throw new ErroSemantico("\nErro semântico: variável \""+t.image+"\" não declarada na linha "+t.beginLine+"\n");
 	}
 	
 }

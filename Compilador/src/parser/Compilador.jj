@@ -6,7 +6,6 @@ options {
 PARSER_BEGIN(Compilador)
 package parser;
 
-import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.*;
 import semantico.*;
@@ -15,31 +14,26 @@ import apoio.*;
 
 public class Compilador {
   
-  	static boolean error=false;
-	static Tabela tabela = new Tabela();
-	static AcoesSemanticas as=new AcoesSemanticas();
+  	public static boolean error=false;
+	public static Tabela tabela = new Tabela();
 
    public static void main(String args[])  throws ParseException  {
-      Compilador compilador = null;
-      Scanner ler=new Scanner(System.in);
+      Compilador compilador;
       try {
-        //System.out.print("Insira o nome do arquivo a ser analisado: ");
-        //String arq=ler.nextLine();
-        //System.out.println();
          compilador = new Compilador(new FileInputStream(Config.arqfonte));
          Compilador.inicio();
-         System.out.println("\n"+tabela.imprime());
+         System.out.println("\n"+tabela.toString());
          
 	      if(!error)
 	      	System.out.println("\nSem erros sintáticos");
 	      else
-	      	System.out.println("\nForam encontrados erros sintáticos, mas foram ignorados");
+	      	System.out.println("\nForam encontrados erros sintáticos, mas foram ignorados para melhor análise");
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
       }
       catch(TokenMgrError e) {
-         System.out.println("Erro lexico\n" + e.getMessage());
+         System.out.println("\nErro lexico: \n" + e.getMessage());
       }
    }
 }
@@ -92,16 +86,22 @@ TOKEN : {
 void inicio() : { }
 {
    
-	 try {
-	   (comando())*
-	 }
-	catch (ParseException e) {
-	    System.out.println("\n"+e.toString()+"\nErro sintático encontrado, continuando análise após próximo \";\"\n");
-	    Token t;
-	    error=true;
+	try {
+		(comando())* 
+	}catch (ParseException e) {
+		System.out.println("\n"+e.toString()+"\nErro sintático encontrado, continuando análise após próximo \";\"\n");
+		Token t;
+		error=true;
+		do {
+		  t = getNextToken();
+		} while (t.kind != PV);
+		inicio();
+	}catch(ErroSemantico e){
+  	  	System.out.println(e.getMessage());
+		Token t;
 	    do {
-	      t = getNextToken();
-	    } while (t.kind != PV);
+			t = getNextToken();
+	    }while (t.kind != PV);
 	    inicio();
   	}
   }
@@ -115,20 +115,20 @@ void comando(): { }
 void atribuicao() : { Token t; }
 {
 	t=< VAR > {
-		as.verificaDeclaracao(t.image,t.beginLine,tabela);
+		AcoesSemanticas.verificaDeclaracao(t,tabela);
 		} < ATRIB > expressao() < PV >
 }
 
-void declaracao() : { Simbolo simb; Token t; int f=0;}
+void declaracao() : {Token t; TipoDado tipo;}
 {
-  (    < NUMERO > { f=2; }| < PALAVRA > { f=1; })
+  (    < NUMERO > { tipo=TipoDado.NUMERO; }| < PALAVRA > { tipo=TipoDado.PALAVRA; })
     t=< VAR >
     {
-		as.declaraVariavel(t.image,t.beginLine,f,tabela);
+		AcoesSemanticas.declaraVariavel(t,tipo,tabela);
       }(< ATRIB >expressao())?
 	(	  < VIRGULA >t=< VAR >
 	  {
-		as.declaraVariavel(t.image,t.beginLine,f,tabela);
+		AcoesSemanticas.declaraVariavel(t,tipo,tabela);
 		}
     (< ATRIB > expressao())?)*< PV >
 }
@@ -158,41 +158,46 @@ void expressao() : {Expressao pilha = new Expressao();}
   	expressao2(pilha){pilha.imprime(); }
 }
 
-void expressao2(Expressao pilha) : {Item item = null; Token t; }
+void expressao2(Expressao pilha) : { Token t; }
 {
-  termo(pilha)(t=< OU >termo(pilha) {pilha.add(Tipo.OPERADOR, t.image);})*
+  termo(pilha)(t=< OU >termo(pilha) {pilha.addItemPoxfixo(new Operador(t,TipoOperador.OR));})*
 }
 
 void termo(Expressao pilha) : {Token t; }
 {
-  termo1(pilha)(t=< IGUAL >termo1(pilha) {pilha.add(Tipo.OPERADOR, t.image);})?
+  termo1(pilha)(t=< IGUAL >termo1(pilha) {pilha.addItemPoxfixo(new Operador(t,TipoOperador.IGUAL));})?
 }
 
 void termo1(Expressao pilha) : {Token t; }
 {
-  termo2(pilha)(t=< CONCAT >termo2(pilha) {pilha.add(Tipo.OPERADOR, t.image);} )*
+  termo2(pilha)(t=< CONCAT >termo2(pilha) {pilha.addItemPoxfixo(new Operador(t,TipoOperador.CONCAT));} )*
 }
 
-void termo2(Expressao pilha) : {Token t; }
+void termo2(Expressao pilha) : {Token t; TipoOperador tipoO;}
 {
-  termo3(pilha)((t=< SOMA >|t=< SUB >)termo3(pilha){pilha.add(Tipo.OPERADOR, t.image);} )*
+  termo3(pilha)((t=< SOMA >{ tipoO=TipoOperador.ADD; }|t=< SUB >{ tipoO=TipoOperador.SUB; })termo3(pilha){pilha.addItemPoxfixo(new Operador(t,tipoO));} )*
 }
 
-void termo3(Expressao pilha) : {Token t; }
+void termo3(Expressao pilha) : {Token t;TipoOperador tipoO; }
 {
-  termo4(pilha)((t=< MUL >|t=< DIV >)termo4(pilha){pilha.add(Tipo.OPERADOR, t.image);} )*
+  termo4(pilha)((t=< MUL >{ tipoO=TipoOperador.MUL; }|t=< DIV >{ tipoO=TipoOperador.DIV; })termo4(pilha){pilha.addItemPoxfixo(new Operador(t,tipoO));} )*
 }
 
-void termo4(Expressao pilha) : {Token t=null; char sinal=' '; Tipo tipo=null;}
+void termo4(Expressao pilha) : {Token t;Token t1; Operador op;}
 {
-   < AP >expressao2(pilha)< FP >
-| (t=< NUM >{tipo=Tipo.NUMERO;}
-| < SOMA >t=<NUM > {tipo=Tipo.NUMERO;sinal='+';}
-| < SUB >t=<NUM>{tipo=Tipo.NUMERO;sinal='-';}
-| t=< VAR >{tipo=Tipo.VARIAVEL;}
-| t=< STRING >{tipo=Tipo.STRING;}
-){pilha.add(tipo, sinal + t.image);}
+   < AP > expressao2(pilha) < FP >
+| (t = < NUM > { pilha.addItemPoxfixo(new Operando(t,TipoDado.NUMERO,TipoElemento.CTE)); }
+| t1=< SOMA > t = < NUM > { pilha.addItemPoxfixo(new Operando(t,TipoDado.NUMERO,TipoElemento.CTE)); }
+| t1=< SUB > t = < NUM > { pilha.addItemPoxfixo(new Operando(t,TipoDado.NUMERO,TipoElemento.CTE)); }
+| t = < VAR > { AcoesSemanticas.verificaDeclaracao(t,tabela);pilha.addItemPoxfixo(new Operando(t,tabela.consultaTipo(t.image),TipoElemento.VAR)); }
+| t = < STRING > { pilha.addItemPoxfixo(new Operando(t,TipoDado.PALAVRA,TipoElemento.CTE)); }
+)
 }
+
+/*
+Duvidas:
+Como Resolver o problema de expressões do tipo +2+-3 e etc;
+*/
 
 
 

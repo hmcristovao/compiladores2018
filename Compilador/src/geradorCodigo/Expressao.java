@@ -1,5 +1,6 @@
 package geradorCodigo;
 import java.util.LinkedList;
+
 import semantico.*;
 
 public class Expressao {
@@ -12,8 +13,7 @@ public class Expressao {
 		
 	}
 	
-	public void add(Tipo _tipo, String _valor) {
-		Item novo= new Item(_tipo, _valor);
+	public void addItemPoxfixo(Item novo) {
 		expressaoInfixa.add(novo);
 	}
 	
