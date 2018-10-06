@@ -2,7 +2,7 @@ options {
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
 }
- 
+
 PARSER_BEGIN(Compilador)
 package parser;
 import semantico.*;
