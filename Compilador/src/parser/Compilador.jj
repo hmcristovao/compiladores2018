@@ -23,7 +23,7 @@ public class Compilador {
             
       try {
        	 
-         compilador = new Compilador(new FileInputStream("exemplo20.spc"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo18.spc2"));
          Compilador.inicio();
          System.out.println("");
          Tabela.imprimeTabela();
@@ -151,6 +151,7 @@ void termo3(Expressao exp):
   	)*
 }
 
+
 void termo4(Expressao exp):
 {
 	Token var, entrada, sinal;
@@ -172,7 +173,7 @@ void termo4(Expressao exp):
 }
 |var=<VAR>
 {
-  	AcoesSemanticas.verificaVariavelDeclarada(tab, var.image);
+  	Tabela.verificaVariavelDeclarada(var.image);
   	exp.addListaExpPosFixa(tab.tipoVariavel(var.image), var.image);
 }
 |entrada=<STRING>
@@ -206,24 +207,24 @@ void comando():
 }
 
 void atribuicao():
-{}
+{Token t;}
 {
-  	< VAR > < ATRIB > iniciaExpressao() < PV >
+  	t=< VAR > {Tabela.verificaVariavelDeclarada(t.image);} < ATRIB > iniciaExpressao() < PV >
 }
 
 void declaracao():
 { 	
- 	Token tipo, variavel;
+ 	Token variavel;
+ 	TipoDado tipo = null;
 }
 {
-  	(tipo=<NUMERO>|tipo=<PALAVRA>) variavel=<VAR> 
+  	(<NUMERO> {tipo = TipoDado.NUMERO;} |<PALAVRA> {tipo = TipoDado.PALAVRA;}) variavel=<VAR> 
   	{
-  		Tabela.insereNaTabela(tab, variavel.image, tipo.image);
+  		Tabela.insereNaTabela(variavel, tipo);
   	}
   	( <ATRIB> iniciaExpressao() )? (<VIRGULA>  variavel=<VAR> ( <ATRIB> iniciaExpressao() )? 
-  	
   	{
-	  	Tabela.insereNaTabela(tab, variavel.image, tipo.image);
+	  	Tabela.insereNaTabela(variavel, tipo);
   	}
   	
   	

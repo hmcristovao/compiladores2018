@@ -17,7 +17,7 @@ public class Compilador implements CompiladorConstants {
 
       try {
 
-         compilador = new Compilador(new FileInputStream("exemplo20.spc"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo18.spc2"));
          Compilador.inicio();
          System.out.println("");
          Tabela.imprimeTabela();
@@ -191,7 +191,7 @@ public class Compilador implements CompiladorConstants {
       break;
     case VAR:
       var = jj_consume_token(VAR);
-        AcoesSemanticas.verificaVariavelDeclarada(tab, var.image);
+        Tabela.verificaVariavelDeclarada(var.image);
         exp.addListaExpPosFixa(tab.tipoVariavel(var.image), var.image);
       break;
     case STRING:
@@ -261,20 +261,25 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void atribuicao() throws ParseException {
-    jj_consume_token(VAR);
+ Token t;
+    t = jj_consume_token(VAR);
+                   Tabela.verificaVariavelDeclarada(t.image);
     jj_consume_token(ATRIB);
     iniciaExpressao();
     jj_consume_token(PV);
   }
 
   static final public void declaracao() throws ParseException {
-        Token tipo, variavel;
+        Token variavel;
+        TipoDado tipo = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
-      tipo = jj_consume_token(NUMERO);
+      jj_consume_token(NUMERO);
+                   tipo = TipoDado.NUMERO;
       break;
     case PALAVRA:
-      tipo = jj_consume_token(PALAVRA);
+      jj_consume_token(PALAVRA);
+                                                        tipo = TipoDado.PALAVRA;
       break;
     default:
       jj_la1[10] = jj_gen;
@@ -282,7 +287,7 @@ public class Compilador implements CompiladorConstants {
       throw new ParseException();
     }
     variavel = jj_consume_token(VAR);
-                Tabela.insereNaTabela(tab, variavel.image, tipo.image);
+                Tabela.insereNaTabela(variavel, tipo);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
       jj_consume_token(ATRIB);
@@ -313,7 +318,7 @@ public class Compilador implements CompiladorConstants {
         jj_la1[13] = jj_gen;
         ;
       }
-                Tabela.insereNaTabela(tab, variavel.image, tipo.image);
+                Tabela.insereNaTabela(variavel, tipo);
     }
     jj_consume_token(PV);
   }

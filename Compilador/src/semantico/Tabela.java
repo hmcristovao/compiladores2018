@@ -1,6 +1,8 @@
 package semantico;
 
 import java.util.HashMap;
+
+import parser.Token;
 import tratamentoErro.*;
 
 import semantico.Simbolo;
@@ -17,11 +19,11 @@ public class Tabela {
 		return marcador;
 	}
 
-	public void insereSimbolo(Simbolo simbolo) {
+	public static void insereSimbolo(Simbolo simbolo) {
 		tab.put(simbolo.getNome(), simbolo);
 	}
 
-	public boolean verificaSimbolo(String chave) {
+	public static boolean verificaSimbolo(String chave) {
 		return tab.containsKey(chave);
 	}
 
@@ -41,17 +43,17 @@ public class Tabela {
 		TipoDado tipo = null;
 		
 		if(chave.equals("numero")) {
-			tipo = tipo.NUMERO;
+			tipo = TipoDado.NUMERO;
 			
 		}
 		if(chave.equals("palavra")) {
-			tipo = tipo.PALAVRA;
+			tipo = TipoDado.PALAVRA;
 		}
 		
 		return tipo;
 	}
 	
-	public static void incrementaMarcador(String tipo) {
+	public static void incrementaMarcador(TipoDado tipo) {
 		
 		if(tipo.equals("numero")) {
 			
@@ -63,18 +65,26 @@ public class Tabela {
 	}
 	
 	
-	public static void insereNaTabela(Tabela tab,String variavel, String tipo) {
+	public static void insereNaTabela(Token variavel, TipoDado tipo) {
 		 Simbolo simbolo = new Simbolo();
 		 
-		 if(tab.verificaSimbolo(variavel) == false) { 
+		 if(tab.containsKey(variavel.image) == false) {
+			  simbolo.setToken(variavel);
 		  	  simbolo.setTipo(tipo);
-		  	  simbolo.setNome(variavel);
-		  	  simbolo.setReferencia(tab.getMarcador());
-		  	  tab.incrementaMarcador(tipo);
-		  	  tab.insereSimbolo(simbolo);
+		  	  simbolo.setNome(variavel.image);
+		  	  simbolo.setReferencia(getMarcador());
+		  	  incrementaMarcador(tipo);
+		  	  insereSimbolo(simbolo);
 	  	  }else {
 	  		throw new ErroSemantico("Variavel "+ variavel + " Duplicada");
 	  	  }
+	 }
+	
+	public static void verificaVariavelDeclarada(String variavel) {
+		 if(tab.containsKey(variavel) == false) {
+		  	  	throw new ErroSemantico ("Variavel "+ variavel + " nao declarada");
+		 }
+		 
 	 }
 
 }

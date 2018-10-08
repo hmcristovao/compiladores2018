@@ -9,6 +9,8 @@ public enum TipoOperador
 	DIV,
 	OU,
 	IGUAL,
-	CONCAT;
+	CONCAT,
+	AP,
+	FP;
 	
 }
