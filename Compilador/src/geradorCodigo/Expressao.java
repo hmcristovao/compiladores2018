@@ -14,10 +14,10 @@ public class Expressao {
 	}
 	
 	public void addItemPoxfixo(Item novo) {
-		expressaoInfixa.add(novo);
+		expressaoPosfixa.add(novo);
 	}
 	
 	public void imprime() {
-		System.out.println(this.expressaoInfixa);
+		System.out.println(this.expressaoPosfixa);
 	}
 }

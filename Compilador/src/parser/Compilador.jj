@@ -6,7 +6,6 @@ options {
 PARSER_BEGIN(Compilador)
 package parser;
 
-import java.util.Scanner;
 import java.io.*;
 import semantico.*;
 import geradorCodigo.*;
@@ -182,8 +181,7 @@ void termo3(Expressao pilha) : {Token t;TipoOperador tipoO; }
 {
   termo4(pilha)((t=< MUL >{ tipoO=TipoOperador.MUL; }|t=< DIV >{ tipoO=TipoOperador.DIV; })termo4(pilha){pilha.addItemPoxfixo(new Operador(t,tipoO));} )*
 }
-
-void termo4(Expressao pilha) : {Token t;Token t1; Operador op;}
+void termo4(Expressao pilha) : {Token t;Token t1;}
 {
    < AP > expressao2(pilha) < FP >
 | (t = < NUM > { pilha.addItemPoxfixo(new Operando(t,TipoDado.NUMERO,TipoElemento.CTE)); }
