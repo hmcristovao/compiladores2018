@@ -6,18 +6,48 @@ import parser.Token;
 import semantico.*;
 
 public class Expressao {
-	public LinkedList<Item> listaExpInfixa;
-	public LinkedList<Item> listaExpPosfixa;
+	public LinkedList<Item> expressaoInfixa;
+	public LinkedList<Item> expressaoPosfixa;
 	public Expressao(){
-		listaExpInfixa = new LinkedList<Item>();
-		listaExpPosfixa = new LinkedList<Item>();
+		this.expressaoInfixa = new LinkedList<Item>();
+		this.expressaoPosfixa = new LinkedList<Item>();
 		
 	}
-	public void addItemPosFixa(Token v, Tipo t) {
-		Item novoItem = new Item();
-		novoItem.setValor(v.image);
-		novoItem.setTipo(t);
-		this.listaExpPosfixa.add(novoItem);
+		
+	public LinkedList<Item> getExpressaoInfixa(){
+		return this.expressaoInfixa;
+	}
+	public LinkedList<Item> getExpressaoPosfixa(){
+		return this.expressaoPosfixa;
+	}
+	
+	public void addItemInfixo(Item _item){
+
+	}
+
+	
+	public void addItemPosfixo(Item _item){
+		if(Tabela.tab.containsKey(_item.token.image)) {//caso entre aqui, eh uma variavel
+			Simbolo simb = Tabela.tab.get(_item.token.image);
+			Operando operando = (Operando)_item;
+			operando.setTipoDado(simb.getTipo());
+		}
+		else{
+			this.expressaoPosfixa.add(_item);
+		}
+
+	}
+	
+	public String geraCodigoDestino(){
+		return null;
 		
 	}
+	
+	public String toString() {
+		return null;
+	}
+	
+	
+	
+	
 }

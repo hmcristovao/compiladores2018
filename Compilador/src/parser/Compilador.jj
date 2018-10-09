@@ -109,7 +109,7 @@ void atribuicao() : {
 	Token v;
 }
 {
-  v = <VAR> { tabela.verificaDeclarada(v); }<ATRIB> expressaoMestre() <PV>
+  v = <VAR> { tabela.verificaExistenciaSimbolo(v); }<ATRIB> expressaoMestre() <PV>
 }
 
 void declaracao() : {
@@ -118,9 +118,15 @@ void declaracao() : {
 }
 {
   	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
-		{ tabela.addVar(t, v); }
-	( <ATRIB> expressaoMestre() )? (<VIRGULA> v = <VAR>
-		{ tabela.addVar(t, v); }
+	{
+	  if (t.image.equals("NUMERO")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
+	  else { tabela.incluiSimbolo(v, TipoDado.STR); }
+	 }
+	( <ATRIB> expressaoMestre() )? (<VIRGULA> v = <VAR>	
+		{
+		  if (t.image.equals("NUMERO")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
+	  	else { tabela.incluiSimbolo(v, TipoDado.STR); }
+	  	}
 	( <ATRIB> expressaoMestre() )? )* <PV>
 }
 
@@ -138,7 +144,7 @@ void le() : {
 	Token v;
 }
 {
-  <LEITURA> v = <VAR> { tabela.verificaDeclarada(v); } ( <VIRGULA> v = <VAR> { tabela.verificaDeclarada(v); } )* <PV>
+  <LEITURA> v = <VAR> { tabela.verificaExistenciaSimbolo(v); } ( <VIRGULA> v = <VAR> { tabela.verificaExistenciaSimbolo(v); } )* <PV>
 }
 
 void exibe() : { }
@@ -152,37 +158,42 @@ void expressaoMestre() : {
 
 { 
   	expressao(exp) {
-    	System.out.println(Arrays.toString(exp.listaExpPosfixa.toArray())); /*imprime a lista*/
+    	System.out.println(Arrays.toString(exp.expressaoPosfixa.toArray())); /*imprime a lista*/
 	}
 }
 
 void expressao(Expressao exp) : {
 	Token sinal;
+	Operador op;
 }
 
 {
-  termo(exp)(sinal = <OU> termo(exp){
-	exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+  termo(exp)(sinal = <OU> termo(exp){ //adiciona operador
+	op = new Operador(sinal, TipoOperador.OU);
+	exp.addItemPosfixo(op);
   })*
 }
 
 void termo(Expressao exp) : {
 	Token sinal;
+	Operador op;
 }
 {
   termo1(exp)(sinal = <IGUAL> termo1(exp) {
-    exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+    op = new Operador(sinal, TipoOperador.IGUAL);
+	exp.addItemPosfixo(op);
+    
   })?
 }
 
-
-
 void termo1(Expressao exp) : {
-  Token sinal;  
+  Token sinal;
+  Operador op;
 }
 {
   termo2(exp)(sinal = <CONCAT>termo2(exp){
-    exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+   	op = new Operador(sinal, TipoOperador.CONCAT);
+	exp.addItemPosfixo(op);
    })*
  
 }
@@ -190,12 +201,13 @@ void termo1(Expressao exp) : {
 String termo2(Expressao exp) : {
 	String a, b="";
 	Token sinal;
+	Operador op;
 	
 }
 {
-  a = termo3(exp)((sinal = <SOMA>| sinal = <SUB>) b = termo3(exp) {
+  a = termo3(exp)((sinal = <SOMA> { op = new Operador(sinal, TipoOperador.ADD); }| sinal = <SUB>{ op = new Operador(sinal, TipoOperador.SUB); }) b = termo3(exp) {
 	//pegar o operador aqui e botar na lista
-    exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+    exp.addItemPosfixo(op);
     a = a+b+sinal.image;
     })* { return a; } 
 }
@@ -203,11 +215,12 @@ String termo2(Expressao exp) : {
 String termo3(Expressao exp) : {
 	String a, b="";
 	Token sinal;
+	Operador op;
 	
 }
 {
-  a = termo4(exp)((sinal = <MUL>|sinal = <DIV>) b = termo4(exp) {
-   exp.addItemPosFixa(sinal, Tipo.OPERANDO);
+  a = termo4(exp)((sinal = <MUL>{ op = new Operador(sinal, TipoOperador.MUL); }|sinal = <DIV>{ op = new Operador(sinal, TipoOperador.DIV); }) b = termo4(exp) {
+   exp.addItemPosfixo(op);
 	a = a+b+sinal.image;
 })* { return a; }
 }
@@ -215,29 +228,35 @@ String termo3(Expressao exp) : {
 String termo4(Expressao exp) : { 
 	Token folha;
 	String a;
+	Operando operando;
 }
 {
   <AP> expressao(exp) <FP> { return ""; }
   |folha = <NUM> { //adiciona um numero sem sinal
-  		exp.addItemPosFixa(folha, Tipo.NUMERO);
+  		operando = new Operando(folha, TipoDado.NUM);
+  		exp.addItemPosfixo(operando);
 		return folha.image;
 	} //jah colocar na lista imediatamente
   |folha = <SOMA><NUM>{ //adiciona um numero com sinal positivo
-  		exp.addItemPosFixa(folha, Tipo.NUMERO);
+		operando = new Operando(folha, TipoDado.NUM);
+  		exp.addItemPosfixo(operando);
 		return folha.image;
 	}
   |folha = <SUB><NUM>{ //adiciona um numero com sinal negativo
-  	exp.addItemPosFixa(folha, Tipo.NUMERO);
-	return folha.image;
+  		operando = new Operando(folha, TipoDado.NUM);
+  		exp.addItemPosfixo(operando);
+		return folha.image;
 	}
   |folha = <VAR> { //adiciona uma variavel
-    if(tabela.verificaDeclarada(folha)) { //caso a variavel tenha sido declarada
-		exp.addItemPosFixa(folha, Tipo.VARIAVEL);
+    if(tabela.verificaExistenciaSimbolo(folha)) { //caso a variavel tenha sido declarada
+		operando = new Operando(folha, null);
+  		exp.addItemPosfixo(operando);
     }
     return folha.image;
   }
   |folha = <STRING>{ //adiciona uma string
-  	exp.addItemPosFixa(folha, Tipo.STRING);
+  		operando = new Operando(folha, TipoDado.STR);
+  		exp.addItemPosfixo(operando);
 	return folha.image;	
  }
 }
