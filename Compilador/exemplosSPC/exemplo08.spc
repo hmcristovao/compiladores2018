@@ -1,3 +1,4 @@
+le l,m;
 numero y <- 2;
 numero x <- 1;
 numero z <- 5;

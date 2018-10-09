@@ -1,20 +1,22 @@
 package comandos;
 import semantico.*;
+import parser.*;
 
-public class ComandoEntrada {
-	Simbolo var;
+public class ComandoEntrada extends ComandoAltoNivel{
+	Simbolo simbolo;
 	
-	public ComandoEntrada(Simbolo simbolo){
-		
+	public ComandoEntrada(Simbolo simbolo, Token token){
+		super(token);  		
+		this.simbolo = simbolo;
 	}
 	
 	/*
 	ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		
-	}
+	}	
 	*/
-	
-	String toString() {
-		//return ?
+	public String toString() {
+		return this.simbolo + "";
 	}
+	
 }

@@ -9,7 +9,7 @@ public class AcoesSemanticas {
 			throw new ErroSemantico("Erro semântico \n A variável " + var + " não foi inicializada");
 	}
 	
-	public static void declaracao(Tabela tabela, String var, Simbolo simb, String tipo) {
+	public static void declaracao(Tabela tabela, String var, Simbolo simb, Tipo tipo) {
 		
 		if(tabela.isExiste(var))
 			throw new ErroSemantico("Erro semântico \n A variável " + var + " já foi declarada");

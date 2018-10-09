@@ -1,10 +1,10 @@
 package comandos;
 import parser.*;
 
-public class ComandAltoNivel {
-	Token token;
+public abstract class ComandoAltoNivel {
+	public Token token;
 	
-	public ComandAltoNivel(Token token) {
+	public ComandoAltoNivel(Token token) {
 		this.token = token;
 	}
 	
@@ -17,9 +17,7 @@ public class ComandAltoNivel {
 		
 	}
     
-	
-	abstract String toString() {
-		//retorno?
-	}
 	*/
+	public abstract String toString();
+	
 }

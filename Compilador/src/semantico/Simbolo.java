@@ -3,10 +3,10 @@ package semantico;
 public class Simbolo {
 	
 	private String nome;
-	private String tipo;
+	private Tipo tipo;
 	private int referencia;
 	
-	public Simbolo(String nome, String tipo) {
+	public Simbolo(String nome, Tipo tipo) {
 		this.nome = nome;
 		this.tipo = tipo;	
 	}
@@ -24,7 +24,7 @@ public class Simbolo {
 		this.nome = nome;
 	}
 
-	public String getTipo() {
+	public Tipo getTipo() {
 		return tipo;
 	}
 	
@@ -32,7 +32,7 @@ public class Simbolo {
 		return referencia;
 	}
 	
-	public void setReferencia(Tabela tab, String tipo) {
+	public void setReferencia(Tabela tab, Tipo tipo) {
 		
 		this.referencia = tab.marcador;
 		

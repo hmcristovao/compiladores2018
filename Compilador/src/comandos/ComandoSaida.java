@@ -1,7 +1,7 @@
 package comandos;
 import geradorCodigo.*;
 
-public class ComandoSaida {
+public class ComandoSaida extends ComandoAltoNivel{
 	Expressao exp;
 	
 	public ComandoSaida(Expressao exp) {
