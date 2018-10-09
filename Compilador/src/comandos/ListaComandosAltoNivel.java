@@ -2,8 +2,8 @@ package comandos;
 import java.util.LinkedList;
 
 public class ListaComandosAltoNivel {
-	public LinkedList<ComandoAltoNivel> listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();
 	
+	public LinkedList<ComandoAltoNivel> listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();
 	public ListaComandosAltoNivel() {
 		
 	}

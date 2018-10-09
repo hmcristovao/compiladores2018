@@ -15,14 +15,13 @@ import comandos.*;
 public class Compilador {
 
 	static Tabela tabela = new Tabela();
-	static ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
 	
    public static void main(String args[])  throws ErroSemantico
    {
       Compilador compilador = null;
       
       try {        
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo16.spc"));
 		
         Compilador.one_line();
          
@@ -94,7 +93,7 @@ Expressao expressao():{Expressao e = new Expressao();}
 {
 	iniciaExp(e)
 	{
-	  //System.out.println(e.listaExpPosfixa);
+	 	//System.out.println(e.listaExpPosfixa);
 	
 	  return e;
 	}
@@ -106,7 +105,7 @@ void iniciaExp(Expressao e):{Token s; Item item = null;}
 	{
 		e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
 	}
-	)*	
+	)*
 }
 
 void termo(Expressao e):{Token s; Item item = null;}
@@ -182,17 +181,21 @@ void one_line() : {}
    inicio() <EOF>
 }
 
-void inicio(): { } {
-	(comando())*
+void inicio(): {ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel(); } {
+	(comando(listaComandosAltoNivel))*< EOF>
 }
 
-void comando(): { } {
-  atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+void comando(ListaComandosAltoNivel listaComandosAltoNivel): { ComandoAltoNivel c;} {
+  	atribuicao(listaComandosAltoNivel)
+  | declaracao(listaComandosAltoNivel)
+  | se(listaComandosAltoNivel)
+  | enquanto(listaComandosAltoNivel)
+  | le(listaComandosAltoNivel)
+  | exibe(listaComandosAltoNivel)
 }
 
-void atribuicao(): {Expressao e;
+void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e;
 					Token var,cmd;
-					Item item = null;
 					Simbolo simb = null;
 					ComandoAtribuicao cmdA = null;}{
 					   
@@ -201,6 +204,7 @@ void atribuicao(): {Expressao e;
 	
   		AcoesSemanticas.inicializacao(tabela, var.image);
 		simb = new Simbolo(var.image,Tipo.variavel);
+  		
 	}
 	cmd = < ATRIB > e = expressao()
 	{
@@ -211,15 +215,31 @@ void atribuicao(): {Expressao e;
 	
 }
 
-void declaracao(): {Simbolo simb = null; Token var; Tipo tipo;} {
+void declaracao(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e;
+					Simbolo simb = null;
+					Token var,cmd;
+					Tipo tipo;
+					ComandoAtribuicao cmdA = null;} {
   	
 	(< NUMERO >{ tipo = Tipo.numero; } | < PALAVRA >{ tipo = Tipo.palavra; })
 	var=< VAR >
 	{
 	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
+
 	}
-	(< ATRIB > expressao())?
-	(< VIRGULA > var = < VAR >(< ATRIB > expressao())?
+	(cmd = < ATRIB > e = expressao()
+	{	  
+		simb = new Simbolo(var.image,Tipo.variavel);
+		cmdA = new ComandoAtribuicao(simb,e,cmd);
+	  	listaComandosAltoNivel.addComando(cmdA);
+	}
+	)?
+	(< VIRGULA > var = < VAR >(cmd = < ATRIB > e = expressao()
+	{
+		simb = new Simbolo(var.image,Tipo.variavel);
+		cmdA = new ComandoAtribuicao(simb,e,cmd);
+	  	listaComandosAltoNivel.addComando(cmdA);
+	})?
 	{
 	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
 	}
@@ -228,17 +248,23 @@ void declaracao(): {Simbolo simb = null; Token var; Tipo tipo;} {
 	
 }
 
-void se(): { } {
+void se(ListaComandosAltoNivel listaComandosAltoNivel): { } {
 	< SE > <AP > expressao() < FP > inicio() < FIMSE >
 }
 
-void enquanto(): { } {
-  //lembrar que aqui nos vamos ter varios comandos, ai
-  //vamos precisar de uma lista de comandoAltoNivel
-	< ENQUANTO > <AP > expressao() < FP > inicio() < FIMENQUANTO >
+void enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
+	{	Expressao e;
+		Token var,cmd;
+		ComandoEnquanto cmdE = null;} {
+
+	cmd = < ENQUANTO > < AP > e = expressao() < FP > inicio()
+	{
+		cmdE = new ComandoEnquanto(e,listaComandosAltoNivel,cmd);
+		listaComandosAltoNivel.addComando(cmdE);
+	}< FIMENQUANTO >
 }
 
-void le(): {Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;} {
+void le(ListaComandosAltoNivel listaComandosAltoNivel): {Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;} {
 	cmd = < LEITURA > r = < VAR >
 	{
 	  simb = new Simbolo(r.image, Tipo.variavel);
@@ -255,6 +281,16 @@ void le(): {Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;} {
 	
 }
 
-void exibe(): { } {
-	< EXIBE > expressao() (< VIRGULA > expressao())*< PV >
+void exibe(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e; ComandoSaida cmdS = null;Token cmd; } {
+	cmd = < EXIBE > e = expressao()
+	{
+	  cmdS = new ComandoSaida(e,cmd);
+	  listaComandosAltoNivel.addComando(cmdS);
+	}
+	(< VIRGULA > e = expressao()
+	{
+	   cmdS = new ComandoSaida(e,cmd);
+	  listaComandosAltoNivel.addComando(cmdS);
+	}
+	)*< PV >
 }

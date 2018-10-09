@@ -14,7 +14,7 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 	}
 	
 	public String toString() {
-		return this.variavel + "" + this.expressao.listaExpPosfixa;
+		return this.token +"/"+this.variavel.getNome() + "/" + this.expressao.listaExpPosfixa;
 	}
 	
 }

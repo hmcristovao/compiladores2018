@@ -10,14 +10,13 @@ import comandos.*;
 public class Compilador implements CompiladorConstants {
 
         static Tabela tabela = new Tabela();
-        static ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
 
    public static void main(String args[])  throws ErroSemantico
    {
       Compilador compilador = null;
 
       try {
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo16.spc"));
 
         Compilador.one_line();
 
@@ -41,7 +40,7 @@ public class Compilador implements CompiladorConstants {
   static final public Expressao expressao() throws ParseException {
                        Expressao e = new Expressao();
     iniciaExp(e);
-          //System.out.println(e.listaExpPosfixa);
+                //System.out.println(e.listaExpPosfixa);
 
           {if (true) return e;}
     throw new Error("Missing return statement in function");
@@ -208,6 +207,7 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void inicio() throws ParseException {
+                ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -224,30 +224,32 @@ public class Compilador implements CompiladorConstants {
         jj_la1[8] = jj_gen;
         break label_5;
       }
-      comando();
+      comando(listaComandosAltoNivel);
     }
+    jj_consume_token(0);
   }
 
-  static final public void comando() throws ParseException {
+  static final public void comando(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+                                                               ComandoAltoNivel c;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VAR:
-      atribuicao();
+      atribuicao(listaComandosAltoNivel);
       break;
     case NUMERO:
     case PALAVRA:
-      declaracao();
+      declaracao(listaComandosAltoNivel);
       break;
     case SE:
-      se();
+      se(listaComandosAltoNivel);
       break;
     case ENQUANTO:
-      enquanto();
+      enquanto(listaComandosAltoNivel);
       break;
     case LEITURA:
-      le();
+      le(listaComandosAltoNivel);
       break;
     case EXIBE:
-      exibe();
+      exibe(listaComandosAltoNivel);
       break;
     default:
       jj_la1[9] = jj_gen;
@@ -256,10 +258,9 @@ public class Compilador implements CompiladorConstants {
     }
   }
 
-  static final public void atribuicao() throws ParseException {
-                    Expressao e;
+  static final public void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+                                                                 Expressao e;
                                         Token var,cmd;
-                                        Item item = null;
                                         Simbolo simb = null;
                                         ComandoAtribuicao cmdA = null;
     var = jj_consume_token(VAR);
@@ -272,8 +273,12 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(PV);
   }
 
-  static final public void declaracao() throws ParseException {
-                    Simbolo simb = null; Token var; Tipo tipo;
+  static final public void declaracao(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+                                                                 Expressao e;
+                                        Simbolo simb = null;
+                                        Token var,cmd;
+                                        Tipo tipo;
+                                        ComandoAtribuicao cmdA = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
       jj_consume_token(NUMERO);
@@ -292,8 +297,11 @@ public class Compilador implements CompiladorConstants {
                 AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
-      jj_consume_token(ATRIB);
-      expressao();
+      cmd = jj_consume_token(ATRIB);
+      e = expressao();
+                simb = new Simbolo(var.image,Tipo.variavel);
+                cmdA = new ComandoAtribuicao(simb,e,cmd);
+                listaComandosAltoNivel.addComando(cmdA);
       break;
     default:
       jj_la1[11] = jj_gen;
@@ -313,8 +321,11 @@ public class Compilador implements CompiladorConstants {
       var = jj_consume_token(VAR);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ATRIB:
-        jj_consume_token(ATRIB);
-        expressao();
+        cmd = jj_consume_token(ATRIB);
+        e = expressao();
+                simb = new Simbolo(var.image,Tipo.variavel);
+                cmdA = new ComandoAtribuicao(simb,e,cmd);
+                listaComandosAltoNivel.addComando(cmdA);
         break;
       default:
         jj_la1[13] = jj_gen;
@@ -325,7 +336,7 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(PV);
   }
 
-  static final public void se() throws ParseException {
+  static final public void se(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
     jj_consume_token(SE);
     jj_consume_token(AP);
     expressao();
@@ -334,17 +345,22 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(FIMSE);
   }
 
-  static final public void enquanto() throws ParseException {
-    jj_consume_token(ENQUANTO);
+  static final public void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+                Expressao e;
+                Token var,cmd;
+                ComandoEnquanto cmdE = null;
+    cmd = jj_consume_token(ENQUANTO);
     jj_consume_token(AP);
-    expressao();
+    e = expressao();
     jj_consume_token(FP);
     inicio();
+                cmdE = new ComandoEnquanto(e,listaComandosAltoNivel,cmd);
+                listaComandosAltoNivel.addComando(cmdE);
     jj_consume_token(FIMENQUANTO);
   }
 
-  static final public void le() throws ParseException {
-            Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;
+  static final public void le(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+                                                         Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;
     cmd = jj_consume_token(LEITURA);
     r = jj_consume_token(VAR);
           simb = new Simbolo(r.image, Tipo.variavel);
@@ -369,9 +385,12 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(PV);
   }
 
-  static final public void exibe() throws ParseException {
-    jj_consume_token(EXIBE);
-    expressao();
+  static final public void exibe(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+                                                            Expressao e; ComandoSaida cmdS = null;Token cmd;
+    cmd = jj_consume_token(EXIBE);
+    e = expressao();
+          cmdS = new ComandoSaida(e,cmd);
+          listaComandosAltoNivel.addComando(cmdS);
     label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -383,7 +402,9 @@ public class Compilador implements CompiladorConstants {
         break label_8;
       }
       jj_consume_token(VIRGULA);
-      expressao();
+      e = expressao();
+           cmdS = new ComandoSaida(e,cmd);
+          listaComandosAltoNivel.addComando(cmdS);
     }
     jj_consume_token(PV);
   }

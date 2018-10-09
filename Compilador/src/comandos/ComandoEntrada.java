@@ -16,7 +16,7 @@ public class ComandoEntrada extends ComandoAltoNivel{
 	}	
 	*/
 	public String toString() {
-		return this.simbolo + "";
+		return this.token + "/" + this.simbolo.getNome();
 	}
 	
 }
