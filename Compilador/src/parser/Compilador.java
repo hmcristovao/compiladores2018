@@ -263,8 +263,6 @@ public class Compilador implements CompiladorConstants {
                                         Simbolo simb = null;
                                         ComandoAtribuicao cmdA = null;
     var = jj_consume_token(VAR);
-          System.out.println("hey");
-
                 AcoesSemanticas.inicializacao(tabela, var.image);
                 simb = new Simbolo(var.image,Tipo.variavel);
     cmd = jj_consume_token(ATRIB);
