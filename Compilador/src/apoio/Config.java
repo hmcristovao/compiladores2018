@@ -1,9 +1,8 @@
 package apoio;
 
-public class Config {
-	static private String nomeArquivoFonte = "exemplo17.spc2";
+public interface Config {
+	static String nomeArquivoFonte = "exemplo17";
+	static String extensaoFonte = ".spc2";
+	static String extensaoPrimeiraPassagem = "";
 
-	static public String getNomeArquivoFonte() {
-		return nomeArquivoFonte;
-	}
 }

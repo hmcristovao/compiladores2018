@@ -7,11 +7,11 @@ import semantico.*;
 import exception.*;
 import java.util.LinkedList;
 
-public class Compilador implements CompiladorConstants {
+public class Compilador implements Config, CompiladorConstants {
         static Tabela tabela = new Tabela();
         public static void main(String args[])  throws SemanticException  {
         try {
-                 Compilador analisador = new Compilador(new FileInputStream(Config.getNomeArquivoFonte()));
+                 Compilador analisador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
                  Compilador.inicio();
                  System.out.println("Analise lexica, sintatica e semantica sem erros!");
                    /*System.out.println("\nTabela de Simbolos:");

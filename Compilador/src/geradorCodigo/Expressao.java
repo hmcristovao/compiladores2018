@@ -2,7 +2,9 @@ package geradorCodigo;
 
 import java.util.LinkedList;
 
+import semantico.Item;
+
 public class Expressao {
-	LinkedList listaExpInfixa = new LinkedList<Object>();
-	LinkedList listaExpPosFixa = new LinkedList<Object>();	
+	LinkedList<Item> listaExpInfixa = new LinkedList<Item>();
+	LinkedList<Item> listaExpPosFixa = new LinkedList<Item>();	
 }

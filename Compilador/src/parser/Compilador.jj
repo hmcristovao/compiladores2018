@@ -14,11 +14,11 @@ import semantico.*;
 import exception.*;
 import java.util.LinkedList;
 
-public class Compilador {
+public class Compilador implements Config {
 	static Tabela tabela = new Tabela();
 	public static void main(String args[])  throws SemanticException  {
       	try {
-	         Compilador analisador = new Compilador(new FileInputStream(Config.getNomeArquivoFonte()));
+	         Compilador analisador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
 	         Compilador.inicio();
 	         System.out.println("Analise lexica, sintatica e semantica sem erros!");
 	           /*System.out.println("\nTabela de Simbolos:");
@@ -31,7 +31,7 @@ public class Compilador {
 	     catch(ParseException e) {
 	         System.out.println("Erro sintatico\n" + e.getMessage());
 	     }
-	      catch(ErroSemantico e) {
+	      catch(SemanticException e) {
 	         System.out.println("Erro semantico\n" + e.getMessage());
 	     }
 	     catch(FileNotFoundException e) {
