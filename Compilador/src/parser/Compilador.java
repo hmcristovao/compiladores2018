@@ -16,7 +16,7 @@ public class Compilador implements CompiladorConstants {
       Compilador compilador = null;
 
       try {
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo16.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
 
         Compilador.one_line();
 
