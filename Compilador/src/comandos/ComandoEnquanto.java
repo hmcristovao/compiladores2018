@@ -13,7 +13,7 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	}
 	
 	public String toString() {
-		return this.token + "/" + this.expressao.listaExpPosfixa + "/";
+		return this.token + "/" + this.expressao.listaExpPosfixa + "/" + this.listaComandosAltoNivelTrue.listaComandosAltoNivel;
 	}	
 	
 }

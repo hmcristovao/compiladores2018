@@ -16,7 +16,7 @@ public class Compilador implements CompiladorConstants {
       Compilador compilador = null;
 
       try {
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo16.spc"));
 
         Compilador.one_line();
 
@@ -258,8 +258,8 @@ public class Compilador implements CompiladorConstants {
         break label_5;
       }
       comando(listaComandosAltoNivel);
-                                          {if (true) return listaComandosAltoNivel;}
     }
+                                            {if (true) return listaComandosAltoNivel;}
     jj_consume_token(0);
     throw new Error("Missing return statement in function");
   }
@@ -364,11 +364,14 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void se(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-    jj_consume_token(SE);
+ Expressao e; Token var,cmd; ComandoCondicional cmdC = null; ListaComandosAltoNivel lista = null;
+    cmd = jj_consume_token(SE);
     jj_consume_token(AP);
-    expressao();
+    e = expressao();
     jj_consume_token(FP);
-    inicio();
+    lista = inicio();
+                cmdC = new ComandoCondicional(e,lista,cmd);
+                listaComandosAltoNivel.addComando(cmdC);
     jj_consume_token(FIMSE);
   }
 
@@ -379,7 +382,7 @@ public class Compilador implements CompiladorConstants {
     e = expressao();
     jj_consume_token(FP);
     lista = inicio();
-                cmdE = new ComandoEnquanto(e,listaComandosAltoNivel,cmd);
+                cmdE = new ComandoEnquanto(e,lista,cmd);
                 listaComandosAltoNivel.addComando(cmdE);
     jj_consume_token(FIMENQUANTO);
   }

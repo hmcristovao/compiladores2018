@@ -21,7 +21,7 @@ public class Compilador {
       Compilador compilador = null;
       
       try {        
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo16.spc"));
 		
         Compilador.one_line();
         
@@ -224,7 +224,7 @@ void one_line() : {}
 
 ListaComandosAltoNivel inicio():
 {ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel(); } {
-	(comando(listaComandosAltoNivel) {return listaComandosAltoNivel; })*< EOF>
+	(comando(listaComandosAltoNivel) )*{return listaComandosAltoNivel; }< EOF>
 }
 
 void comando(ListaComandosAltoNivel listaComandosAltoNivel): {} {
@@ -285,8 +285,13 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 	
 }
 
-void se(ListaComandosAltoNivel listaComandosAltoNivel): { } {
-	< SE > <AP > expressao() < FP > inicio() < FIMSE >
+void se(ListaComandosAltoNivel listaComandosAltoNivel):
+{Expressao e; Token var,cmd; ComandoCondicional cmdC = null; ListaComandosAltoNivel lista = null;} {
+	cmd = < SE > <AP > e = expressao() < FP > lista = inicio()
+	{
+		cmdC = new ComandoCondicional(e,lista,cmd);
+		listaComandosAltoNivel.addComando(cmdC);
+	} < FIMSE >
 }
 
 void enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
@@ -294,7 +299,7 @@ void enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
 
 	cmd = < ENQUANTO > < AP > e = expressao() < FP > lista = inicio()
 	{
-		cmdE = new ComandoEnquanto(e,listaComandosAltoNivel,cmd);
+		cmdE = new ComandoEnquanto(e,lista,cmd);
 		listaComandosAltoNivel.addComando(cmdE);
 	}< FIMENQUANTO >
 }
