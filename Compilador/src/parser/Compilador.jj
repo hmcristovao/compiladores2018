@@ -21,7 +21,7 @@ public class Compilador {
 	public static void main(String args []) throws ParseException {
 		Compilador compilador = null;
 		try {
-			compilador = new Compilador(new FileInputStream("exemplo17.spc2"));
+			compilador = new Compilador(new FileInputStream("exemplo17.spc"));
 			Compilador.inicio();
 			// System.out.println(tabela.toString());
 		}
@@ -114,6 +114,7 @@ JAVACODE void programa()
    while(t.kind != EOF);
 }
 */
+
 void inicio() :
 {}
 {

@@ -5,7 +5,8 @@ public class Simbolo {
 	private String nome;      // nome da variavel
     private int referencia;   // referencia usada na geracao do codigo destino
     private static int marcador = 1; // armazena a ultima referencia incluida na tabela
-
+    //private Token token;
+    
     public Simbolo(String _nome) {
     	this.nome = _nome;
     	this.referencia = Simbolo.marcador;
