@@ -1,15 +1,17 @@
 package primeiraPassagem;
 import semantico.*;
 import geradorCodigo.*;
+import parser.Token;
 public class ComandoAtribuicao extends ComandoAltoNivel{
-	Simbolo variavel;
-	Expressao expressao;
+	private Simbolo variavel;
+	private Expressao expressao;
 	
-	public ComandoAtribuicao(Simbolo _variavel, Expressao _expressao) {
+	public ComandoAtribuicao(Simbolo _variavel, Expressao _expressao, Token _token) {
+		super(_token);
 		this.variavel=_variavel;
 		this.expressao=_expressao;
 	}
 	public String toString() {
-		return null;
+		return this.variavel.toString() + super.getLexema() + this.expressao.toString();
 	}
 }

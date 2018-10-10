@@ -1,14 +1,16 @@
 package primeiraPassagem;
 import geradorCodigo.*;
+import parser.Token;
 public class ComandoSaida extends ComandoAltoNivel{
 
-	Expressao expressao;
+	private Expressao expressao;
 	
-	public ComandoSaida(Expressao _expressao) {
+	public ComandoSaida(Expressao _expressao, Token _token) {
+		super(_token);
 		this.expressao=_expressao;
 	}
 	
 	public String toString() {
-		return null;
+		return this.expressao.toString();
 	}
 }

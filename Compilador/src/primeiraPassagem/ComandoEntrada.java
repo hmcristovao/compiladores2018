@@ -1,14 +1,16 @@
 package primeiraPassagem;
+import parser.Token;
 import semantico.*;
 
 public class ComandoEntrada extends ComandoAltoNivel{
-	Simbolo variavel;
+	private Simbolo variavel;
 	
-	public ComandoEntrada(Simbolo _variavel) {
+	public ComandoEntrada(Simbolo _variavel, Token _token) {
+		super(_token);
 		this.variavel=_variavel;
 	}
 	
 	public String toString() {
-		return null;
+		return this.variavel.toString();
 	}
 }
