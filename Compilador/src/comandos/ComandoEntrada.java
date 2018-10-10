@@ -10,11 +10,6 @@ public class ComandoEntrada extends ComandoAltoNivel{
 		this.simbolo = simbolo;
 	}
 	
-	/*
-	ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		
-	}	
-	*/
 	public String toString() {
 		return this.token + "/" + this.simbolo.getNome();
 	}

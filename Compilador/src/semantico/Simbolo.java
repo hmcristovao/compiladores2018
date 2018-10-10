@@ -1,12 +1,14 @@
 package semantico;
+import parser.*;
 
 public class Simbolo {
 	
 	private String nome;
-	private Tipo tipo;
+	Token token;
+	private TipoDado tipo;
 	private int referencia;
 	
-	public Simbolo(String nome, Tipo tipo) {
+	public Simbolo(String nome, TipoDado tipo) {
 		this.nome = nome;
 		this.tipo = tipo;	
 	}
@@ -24,7 +26,7 @@ public class Simbolo {
 		this.nome = nome;
 	}
 
-	public Tipo getTipo() {
+	public TipoDado getTipo() {
 		return tipo;
 	}
 	
@@ -32,7 +34,7 @@ public class Simbolo {
 		return referencia;
 	}
 	
-	public void setReferencia(Tabela tab, Tipo tipo) {
+	public void setReferencia(Tabela tab, TipoDado tipo) {
 		
 		this.referencia = tab.marcador;
 		

@@ -24,7 +24,7 @@ public class Compilador {
         compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
 		
         Compilador.one_line();
-         
+        
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -103,7 +103,10 @@ void iniciaExp(Expressao e):{Token s; Item item = null;}
 {
 	termo(e)	(s = < OU > termo(e)
 	{
-		e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
+		//e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
+		
+	  item = new Operador(TipoOperador.OR,s);	  
+	  e.listaExpPosfixa.add(item);
 	}
 	)*
 }
@@ -112,7 +115,10 @@ void termo(Expressao e):{Token s; Item item = null;}
 {
 	termo1(e) (s = < IGUAL > termo1(e)
 	{
-	  	e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
+	  	//e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
+	  item = new Operador(TipoOperador.COMP,s);	  
+	  e.listaExpPosfixa.add(item);
+	
 	}
 	)?
 }
@@ -121,24 +127,38 @@ void termo1(Expressao e):{Token s; Item item = null;}
 {
 	termo2(e) (s = < CONCAT > termo2(e)
 	{
-		e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
+		//e.listaExpPosfixa.add(new Item(Tipo.operacao,s.image));
+		item = new Operador(TipoOperador.CONCAT,s);	  
+	  	e.listaExpPosfixa.add(item);
+	
 	}
 	)*
 }
 
-void termo2(Expressao e): {Token s; Item item = null;}
+void termo2(Expressao e): {Token s; Item item = null; TipoOperador tipo = null;}
 {
-	termo3(e) ((s = < SOMA > | s = < SUB >) termo3(e)	  
+	termo3(e)
+	((s = < SOMA > {tipo = TipoOperador.ADD; }
+	| s = < SUB >{tipo = TipoOperador.SUB; }) termo3(e)	  
 	{
-	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+	  
+	  item = new Operador(tipo,s);	  
+	  e.listaExpPosfixa.add(item);
+	  
 	}	
 	)*
 }
 
-void termo3(Expressao e): {Token s; Item item = null;} {
-	termo4(e) ((s = < MUL > | s = < DIV >) termo4(e)
+void termo3(Expressao e): {Token s; Item item = null; TipoOperador tipo = null;} {
+	termo4(e)
+	((s = < MUL > {tipo = TipoOperador.MUL; }
+	| s = < DIV >{tipo = TipoOperador.DIV; }) termo4(e)
 	{
-	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+
+	  item = new Operador(tipo,s);	  
+	  e.listaExpPosfixa.add(item);
 	}	
 	)*
 }
@@ -147,29 +167,49 @@ void termo4(Expressao e): {Token s,a; Item item = null;}{
 	< AP > expressao() <FP >
 	| a = < NUM >
 	{
-	  e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+	  item = new Operando(TipoDado.NUM,TipoElemento.CTE,a);
+	  e.listaExpPosfixa.add(item);
+
 	}
 	
 	| s = < SOMA >	a = <NUM >
 	{
-	  e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
-	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+	  item = new Operando(TipoDado.NUM,TipoElemento.CTE,a);
+	  e.listaExpPosfixa.add(item);
+	  
+	  item = new Operador(TipoOperador.ADD,s);	  
+	  e.listaExpPosfixa.add(item);
+
 	}
 	
 	| s = < SUB >	a = <NUM >
 	{
-	  e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
-	  e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.numero, a.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.operacao, s.image));
+	  item = new Operando(TipoDado.NUM,TipoElemento.CTE,a);
+	  e.listaExpPosfixa.add(item);
+	  
+	  item = new Operador(TipoOperador.SUB,s);
+	  e.listaExpPosfixa.add(item);
+
 	}
 	
 	| s = < VAR >
 	{
-	  e.listaExpPosfixa.add(new Item(Tipo.variavel, s.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.variavel, s.image));
+	  item = new Operando(TipoDado.STR,TipoElemento.VAR,s);
+	  e.listaExpPosfixa.add(item);
+
 	}
 	 
 	| s = < STRING >
 	{
-	  e.listaExpPosfixa.add(new Item(Tipo.palavra, s.image));
+	  //e.listaExpPosfixa.add(new Item(Tipo.palavra, s.image));
+	  item = new Operando(TipoDado.STR,TipoElemento.VAR,s);
+	  e.listaExpPosfixa.add(item);
 	}
 }
 
@@ -179,13 +219,15 @@ void termo4(Expressao e): {Token s,a; Item item = null;}{
 void one_line() : {}
 {
    inicio() <EOF>
+   
 }
 
-void inicio(): {ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel(); } {
-	(comando(listaComandosAltoNivel))*< EOF>
+ListaComandosAltoNivel inicio():
+{ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel(); } {
+	(comando(listaComandosAltoNivel) {return listaComandosAltoNivel; })*< EOF>
 }
 
-void comando(ListaComandosAltoNivel listaComandosAltoNivel): { ComandoAltoNivel c;} {
+void comando(ListaComandosAltoNivel listaComandosAltoNivel): {} {
   	atribuicao(listaComandosAltoNivel)
   | declaracao(listaComandosAltoNivel)
   | se(listaComandosAltoNivel)
@@ -194,16 +236,14 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel): { ComandoAltoNivel 
   | exibe(listaComandosAltoNivel)
 }
 
-void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e;
-					Token var,cmd;
-					Simbolo simb = null;
-					ComandoAtribuicao cmdA = null;}{
+void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
+{Expressao e; Token var,cmd; Simbolo simb = null; ComandoAtribuicao cmdA = null;}{
 					   
 	var = < VAR >
 	{
 	
   		AcoesSemanticas.inicializacao(tabela, var.image);
-		simb = new Simbolo(var.image,Tipo.variavel);
+		simb = new Simbolo(var.image,TipoDado.STR);
   		
 	}
 	cmd = < ATRIB > e = expressao()
@@ -215,13 +255,10 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e;
 	
 }
 
-void declaracao(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e;
-					Simbolo simb = null;
-					Token var,cmd;
-					Tipo tipo;
-					ComandoAtribuicao cmdA = null;} {
+void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
+{Expressao e; Simbolo simb = null; Token var,cmd; TipoDado tipo; ComandoAtribuicao cmdA = null;} {
   	
-	(< NUMERO >{ tipo = Tipo.numero; } | < PALAVRA >{ tipo = Tipo.palavra; })
+	(< NUMERO >{ tipo = TipoDado.NUM; } | < PALAVRA >{ tipo = TipoDado.STR; })
 	var=< VAR >
 	{
 	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
@@ -229,14 +266,14 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e;
 	}
 	(cmd = < ATRIB > e = expressao()
 	{	  
-		simb = new Simbolo(var.image,Tipo.variavel);
+		simb = new Simbolo(var.image,tipo);
 		cmdA = new ComandoAtribuicao(simb,e,cmd);
 	  	listaComandosAltoNivel.addComando(cmdA);
 	}
 	)?
 	(< VIRGULA > var = < VAR >(cmd = < ATRIB > e = expressao()
 	{
-		simb = new Simbolo(var.image,Tipo.variavel);
+		simb = new Simbolo(var.image,tipo);
 		cmdA = new ComandoAtribuicao(simb,e,cmd);
 	  	listaComandosAltoNivel.addComando(cmdA);
 	})?
@@ -253,27 +290,26 @@ void se(ListaComandosAltoNivel listaComandosAltoNivel): { } {
 }
 
 void enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
-	{	Expressao e;
-		Token var,cmd;
-		ComandoEnquanto cmdE = null;} {
+{Expressao e; Token var,cmd; ComandoEnquanto cmdE = null;ListaComandosAltoNivel lista = null;} {
 
-	cmd = < ENQUANTO > < AP > e = expressao() < FP > inicio()
+	cmd = < ENQUANTO > < AP > e = expressao() < FP > lista = inicio()
 	{
 		cmdE = new ComandoEnquanto(e,listaComandosAltoNivel,cmd);
 		listaComandosAltoNivel.addComando(cmdE);
 	}< FIMENQUANTO >
 }
 
-void le(ListaComandosAltoNivel listaComandosAltoNivel): {Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;} {
+void le(ListaComandosAltoNivel listaComandosAltoNivel):
+{Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;} {
 	cmd = < LEITURA > r = < VAR >
 	{
-	  simb = new Simbolo(r.image, Tipo.variavel);
+	  simb = new Simbolo(r.image, TipoDado.STR);
 	  cmdE = new ComandoEntrada(simb ,cmd);
 	  listaComandosAltoNivel.addComando(cmdE);
 	}
 	(< VIRGULA > r = <VAR >
 	{
-	  simb = new Simbolo(r.image, Tipo.variavel);
+	  simb = new Simbolo(r.image, TipoDado.STR);
 	  cmdE = new ComandoEntrada(simb ,cmd);
 	  listaComandosAltoNivel.addComando(cmdE);
 	}
@@ -281,7 +317,8 @@ void le(ListaComandosAltoNivel listaComandosAltoNivel): {Simbolo simb = null; To
 	
 }
 
-void exibe(ListaComandosAltoNivel listaComandosAltoNivel): {Expressao e; ComandoSaida cmdS = null;Token cmd; } {
+void exibe(ListaComandosAltoNivel listaComandosAltoNivel):
+{Expressao e; ComandoSaida cmdS = null;Token cmd; } {
 	cmd = < EXIBE > e = expressao()
 	{
 	  cmdS = new ComandoSaida(e,cmd);

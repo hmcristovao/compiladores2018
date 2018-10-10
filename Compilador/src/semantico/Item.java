@@ -1,6 +1,16 @@
 package semantico;
-public class Item {
+import parser.*;
+public abstract class Item {
+
+	Token token;
 	
+	public Item(Token token) {
+		this.token = token;
+	}
+	
+	public abstract String toString();
+	
+/*	
    private Tipo tipo; 
    private String valor; 
    
@@ -20,4 +30,5 @@ public class Item {
    public String toString() {
       return this.tipo + "-" + this.valor;
    }
+*/
 }
