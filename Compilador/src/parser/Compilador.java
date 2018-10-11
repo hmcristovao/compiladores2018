@@ -11,7 +11,7 @@ public class Compilador implements Config, CompiladorConstants {
         static Tabela tabela = new Tabela();
         public static void main(String args[])  throws SemanticException  {
         try {
-                 Compilador analisador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
+                 Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
                  Compilador.inicio();
                  System.out.println("Analise lexica, sintatica e semantica sem erros!");
                    /*System.out.println("\nTabela de Simbolos:");
@@ -32,13 +32,205 @@ public class Compilador implements Config, CompiladorConstants {
              }
    }
 
+//=========================================Gramática de Expressões==========================================
+  static final public Expressao expressaoPrincipal() throws ParseException {
+                                          Expressao _expressao = new Expressao();
+    expressao(_expressao);
+                                         System.out.println(_expressao); {if (true) return _expressao;}
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public void expressao(Expressao _expressao) throws ParseException {
+                                                Token token;
+    termo(_expressao);
+    label_1:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case OU:
+        ;
+        break;
+      default:
+        jj_la1[0] = jj_gen;
+        break label_1;
+      }
+      token = jj_consume_token(OU);
+      termo(_expressao);
+                _expressao.addItemPosfixo(new Operador(token, TipoOperador.OU));
+          //      listaExp.add(new Item(TipoOperador.OU,t.image));
+
+    }
+  }
+
+  static final public void termo(Expressao _expressao) throws ParseException {
+                                            Token token;
+    termo1(_expressao);
+    label_2:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case IGUAL:
+        ;
+        break;
+      default:
+        jj_la1[1] = jj_gen;
+        break label_2;
+      }
+      token = jj_consume_token(IGUAL);
+      termo1(_expressao);
+                _expressao.addItemPosfixo(new Operador(token, TipoOperador.IGUAL));
+                        //listaExp.add(new Item(TipoOperador.IGUAL,t.image));
+
+    }
+  }
+
+  static final public void termo1(Expressao _expressao) throws ParseException {
+                                             Token token;
+    termo2(_expressao);
+    label_3:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case CONCAT:
+        ;
+        break;
+      default:
+        jj_la1[2] = jj_gen;
+        break label_3;
+      }
+      token = jj_consume_token(CONCAT);
+      termo2(_expressao);
+               _expressao.addItemPosfixo(new Operador(token, TipoOperador.CONCAT));
+              // listaExp.add(new Item(TipoOperador.CONCAT,t.image));
+
+    }
+  }
+
+  static final public void termo2(Expressao _expressao) throws ParseException {
+                                         Token token; TipoOperador tipo;
+    termo3(_expressao);
+    label_4:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SOMA:
+      case SUB:
+        ;
+        break;
+      default:
+        jj_la1[3] = jj_gen;
+        break label_4;
+      }
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SOMA:
+        token = jj_consume_token(SOMA);
+                                                                 tipo = TipoOperador.ADD;
+        break;
+      case SUB:
+        token = jj_consume_token(SUB);
+                                                                                                                tipo = TipoOperador.SUB;
+        break;
+      default:
+        jj_la1[4] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      termo3(_expressao);
+                          _expressao.addItemPosfixo(new Operador(token, tipo));
+                                //listaExp.add(new Item(tipo,t.image));
+
+    }
+  }
+
+  static final public void termo3(Expressao _expressao) throws ParseException {
+                                             Token token; TipoOperador tipo;
+    termo4(_expressao);
+    label_5:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case MUL:
+      case DIV:
+        ;
+        break;
+      default:
+        jj_la1[5] = jj_gen;
+        break label_5;
+      }
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case MUL:
+        token = jj_consume_token(MUL);
+                                                      tipo = TipoOperador.MUL;
+        break;
+      case DIV:
+        token = jj_consume_token(DIV);
+                                                                                                    tipo = TipoOperador.DIV;
+        break;
+      default:
+        jj_la1[6] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      termo4(_expressao);
+                _expressao.addItemPosfixo(new Operador(token, TipoOperador.OU));
+                                //listaExp.add(new Item(tipo,t.image));
+
+    }
+  }
+
+  static final public void termo4(Expressao _expressao) throws ParseException {
+                                             Token token; Item item;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case AP:
+      jj_consume_token(AP);
+      expressao(_expressao);
+      jj_consume_token(FP);
+      break;
+    case VAR:
+      token = jj_consume_token(VAR);
+                                AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
+                        _expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.VAR));
+      break;
+    case STRING:
+      token = jj_consume_token(STRING);
+                        _expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.CTE));
+      break;
+    case NUM:
+    case SOMA:
+    case SUB:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SOMA:
+      case SUB:
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case SOMA:
+          jj_consume_token(SOMA);
+          break;
+        case SUB:
+          jj_consume_token(SUB);
+          break;
+        default:
+          jj_la1[7] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+        break;
+      default:
+        jj_la1[8] = jj_gen;
+        ;
+      }
+      token = jj_consume_token(NUM);
+
+      break;
+    default:
+      jj_la1[9] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
   static final public void inicio() throws ParseException {
     programa();
     jj_consume_token(0);
   }
 
-  static final public void programa() throws ParseException {
-    label_1:
+  static final public listaComandoAltoNivel programa() throws ParseException {
+                                            listaComandoAltoNivel listaComandoAltoNivel = new listaComandoAltoNivel();
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case EXIBE:
@@ -51,17 +243,19 @@ public class Compilador implements Config, CompiladorConstants {
         ;
         break;
       default:
-        jj_la1[0] = jj_gen;
-        break label_1;
+        jj_la1[10] = jj_gen;
+        break label_6;
       }
-      comando();
+      comando(listaComandoAltoNivel);
+                                               {if (true) return listaComandoAltoNivel;}
     }
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void comando() throws ParseException {
+  static final public void comando(listaComandoAltoNivel _listaComandoAltoNivel) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VAR:
-      atribui();
+      atribui(_listaComandoAltoNivel);
       break;
     case NUMERO:
     case PALAVRA:
@@ -80,68 +274,71 @@ public class Compilador implements Config, CompiladorConstants {
       exibe();
       break;
     default:
-      jj_la1[1] = jj_gen;
+      jj_la1[11] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
-  static final public void atribui() throws ParseException {
-                          Token t;
-    t = jj_consume_token(VAR);
-                  AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
-    jj_consume_token(RECEBE);
-    expressaoPrincipal();
+  static final public void atribui(listaComandoAltoNivel _listaComandoAltoNivel) throws ParseException {
+                                                                      Token token, igual; Expressao expressao; ComandoAtribuicao comando; Simbolo simbolo;
+    token = jj_consume_token(VAR);
+                  AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
+                  simbolo = new Simbolo(var.image,TipoDado.STR);
+    igual = jj_consume_token(RECEBE);
+    expressao = expressaoPrincipal();
+                        comando = new ComandoAtribuicao(simbolo,token,expressao);
+                        _listaComandoAltoNivel.addComando(comando);
     jj_consume_token(PV);
   }
 
   static final public void declaracao() throws ParseException {
-                             Token t; Tipo tipo;
+                             Token token; TipoDado tipo;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
       jj_consume_token(NUMERO);
-                             tipo = Tipo.variavelNumero;
+                             tipo = TipoDado.NUM;
       break;
     case PALAVRA:
       jj_consume_token(PALAVRA);
-                                                                         tipo = Tipo.variavelPalavra ;
+                                                                  tipo = TipoDado.STR ;
       break;
     default:
-      jj_la1[2] = jj_gen;
+      jj_la1[12] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
-    t = jj_consume_token(VAR);
-                  AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
+    token = jj_consume_token(VAR);
+                  AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RECEBE:
       jj_consume_token(RECEBE);
       expressaoPrincipal();
       break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[13] = jj_gen;
       ;
     }
-    label_2:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VIRGULA:
         ;
         break;
       default:
-        jj_la1[4] = jj_gen;
-        break label_2;
+        jj_la1[14] = jj_gen;
+        break label_7;
       }
       jj_consume_token(VIRGULA);
-      t = jj_consume_token(VAR);
-              AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
+      token = jj_consume_token(VAR);
+              AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case RECEBE:
         jj_consume_token(RECEBE);
         expressaoPrincipal();
         break;
       default:
-        jj_la1[5] = jj_gen;
+        jj_la1[15] = jj_gen;
         ;
       }
     }
@@ -169,15 +366,15 @@ public class Compilador implements Config, CompiladorConstants {
   static final public void le() throws ParseException {
     jj_consume_token(LEITURA);
     jj_consume_token(VAR);
-    label_3:
+    label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VIRGULA:
         ;
         break;
       default:
-        jj_la1[6] = jj_gen;
-        break label_3;
+        jj_la1[16] = jj_gen;
+        break label_8;
       }
       jj_consume_token(VIRGULA);
       jj_consume_token(VAR);
@@ -188,196 +385,20 @@ public class Compilador implements Config, CompiladorConstants {
   static final public void exibe() throws ParseException {
     jj_consume_token(EXIBE);
     expressaoPrincipal();
-    label_4:
+    label_9:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VIRGULA:
         ;
         break;
       default:
-        jj_la1[7] = jj_gen;
-        break label_4;
+        jj_la1[17] = jj_gen;
+        break label_9;
       }
       jj_consume_token(VIRGULA);
       expressaoPrincipal();
     }
     jj_consume_token(PV);
-  }
-
-        //==========GRAMï¿½TICA DE EXPRESSï¿½ES==============
-  static final public void expressaoPrincipal() throws ParseException {
-                                     LinkedList<Item> listaExp = new LinkedList<Item>();
-    expressao(listaExp);
-
-  }
-
-  static final public void expressao(LinkedList<Item> listaExp) throws ParseException {
-                                                     Token t; Item item = null;
-    termo(listaExp);
-    label_5:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case OU:
-        ;
-        break;
-      default:
-        jj_la1[8] = jj_gen;
-        break label_5;
-      }
-      t = jj_consume_token(OU);
-      termo(listaExp);
-                listaExp.add(new Item(Tipo.operacao,t.image));
-    }
-  }
-
-  static final public void termo(LinkedList<Item> listaExp) throws ParseException {
-                                                 Token t; Item item = null;
-    termo1(listaExp);
-    label_6:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case IGUAL:
-        ;
-        break;
-      default:
-        jj_la1[9] = jj_gen;
-        break label_6;
-      }
-      t = jj_consume_token(IGUAL);
-      termo1(listaExp);
-                        listaExp.add(new Item(Tipo.operacao,t.image));
-    }
-  }
-
-  static final public void termo1(LinkedList<Item> listaExp) throws ParseException {
-                                                  Token t; Item item = null;
-    termo2(listaExp);
-    label_7:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case CONCAT:
-        ;
-        break;
-      default:
-        jj_la1[10] = jj_gen;
-        break label_7;
-      }
-      t = jj_consume_token(CONCAT);
-      termo2(listaExp);
-               listaExp.add(new Item(Tipo.operacao,t.image));
-    }
-  }
-
-  static final public void termo2(LinkedList<Item> listaExp) throws ParseException {
-                                              Token t; Item item = null;
-    termo3(listaExp);
-    label_8:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case SOMA:
-      case SUB:
-        ;
-        break;
-      default:
-        jj_la1[11] = jj_gen;
-        break label_8;
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case SOMA:
-        t = jj_consume_token(SOMA);
-        break;
-      case SUB:
-        t = jj_consume_token(SUB);
-        break;
-      default:
-        jj_la1[12] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      termo3(listaExp);
-                                listaExp.add(new Item(Tipo.operacao,t.image));
-    }
-  }
-
-  static final public void termo3(LinkedList<Item> listaExp) throws ParseException {
-                                                  Token t; Item item = null;
-    termo4(listaExp);
-    label_9:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MUL:
-      case DIV:
-        ;
-        break;
-      default:
-        jj_la1[13] = jj_gen;
-        break label_9;
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case MUL:
-        t = jj_consume_token(MUL);
-        break;
-      case DIV:
-        t = jj_consume_token(DIV);
-        break;
-      default:
-        jj_la1[14] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      termo4(listaExp);
-                                listaExp.add(new Item(Tipo.operacao,t.image));
-    }
-  }
-
-  static final public void termo4(LinkedList<Item> listaExp) throws ParseException {
-                                                  Token t; Item item = null;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case AP:
-      jj_consume_token(AP);
-      expressao(listaExp);
-      jj_consume_token(FP);
-      break;
-    case VAR:
-      t = jj_consume_token(VAR);
-                                AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
-                        listaExp.add(new Item(Tipo.variavel,t.image));
-      break;
-    case STRING:
-      t = jj_consume_token(STRING);
-                        listaExp.add(new Item(Tipo.palavra,t.image));
-      break;
-    case NUM:
-    case SOMA:
-    case SUB:
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case SOMA:
-      case SUB:
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case SOMA:
-          jj_consume_token(SOMA);
-          break;
-        case SUB:
-          jj_consume_token(SUB);
-          break;
-        default:
-          jj_la1[15] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        break;
-      default:
-        jj_la1[16] = jj_gen;
-        ;
-      }
-      t = jj_consume_token(NUM);
-                        listaExp.add(new Item(Tipo.numero,t.image));
-      break;
-    default:
-      jj_la1[17] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
   }
 
   static private boolean jj_initialized_once = false;
@@ -396,7 +417,7 @@ public class Compilador implements Config, CompiladorConstants {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x81ae0,0x81ae0,0x1800,0x10000000,0x20000,0x10000000,0x20000,0x20000,0x8000000,0x20000000,0x40000000,0xc00000,0xc00000,0x3000000,0x3000000,0xc00000,0xc00000,0xec4000,};
+      jj_la1_0 = new int[] {0x8000000,0x20000000,0x40000000,0xc00000,0xc00000,0x3000000,0x3000000,0xc00000,0xc00000,0xec4000,0x81ae0,0x81ae0,0x1800,0x10000000,0x20000,0x10000000,0x20000,0x20000,};
    }
 
   /** Constructor with InputStream. */

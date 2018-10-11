@@ -4,8 +4,8 @@ import parser.Token;
 
 public class ComandoEnquanto extends ComandoAltoNivel {
 
-	public ComandoEnquanto(Token token) {
-		super(token);
+	public ComandoEnquanto(Token _token) {
+		super(_token);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -14,10 +14,4 @@ public class ComandoEnquanto extends ComandoAltoNivel {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

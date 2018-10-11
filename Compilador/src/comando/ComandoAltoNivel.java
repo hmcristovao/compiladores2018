@@ -3,11 +3,10 @@ package comando;
 import parser.Token;
 
 public abstract class ComandoAltoNivel {
-
 	Token token;
 	
-	public ComandoAltoNivel(Token token) {
-		this.token = token;
+	public ComandoAltoNivel(Token _token) {
+		this.token = _token;
 	}
 	
 	public String getLexema() {
@@ -15,4 +14,6 @@ public abstract class ComandoAltoNivel {
 	}
 	
 	public abstract String toString();
-	}
+
+	//public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();
+}

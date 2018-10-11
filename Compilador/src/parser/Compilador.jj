@@ -1,4 +1,3 @@
-
 options {
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
@@ -18,7 +17,7 @@ public class Compilador implements Config {
 	static Tabela tabela = new Tabela();
 	public static void main(String args[])  throws SemanticException  {
       	try {
-	         Compilador analisador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
+	         Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
 	         Compilador.inicio();
 	         System.out.println("Analise lexica, sintatica e semantica sem erros!");
 	           /*System.out.println("\nTabela de Simbolos:");
@@ -44,6 +43,7 @@ PARSER_END(Compilador)
 
 SKIP : { " " | "\t" | "\r" | "\n" }
 
+//============================================TOKENS==============================================
 //TOKENS DE COMANDOS 
 TOKEN [IGNORE_CASE] : {
   		<EXIBE: "exibe" >  |
@@ -86,35 +86,114 @@ TOKEN : {
    	< CONCAT: "&" > 
 }
 
+//=========================================Gramática de Expressões==========================================
+	Expressao expressaoPrincipal() : {Expressao _expressao = new Expressao();}  
+	{
+	     expressao(_expressao)	{System.out.println(_expressao); return _expressao; }
+	}
+	void expressao(Expressao _expressao) : {Token token;}  
+	{
+	      termo(_expressao) ( (token = < OU >) termo(_expressao)
+	      {
+	        
+	        _expressao.addItemPosfixo(new Operador(token, TipoOperador.OU));
+	  //      listaExp.add(new Item(TipoOperador.OU,t.image));
+	      }
+	      )*  
+	}
+	void termo(Expressao _expressao) : {Token token;}  
+	{
+	      termo1(_expressao) ( (token = < IGUAL >) termo1(_expressao)
+	      {
+	        _expressao.addItemPosfixo(new Operador(token, TipoOperador.IGUAL));
+			//listaExp.add(new Item(TipoOperador.IGUAL,t.image));
+	      }
+	      )*
+	        
+	}
+	void termo1(Expressao _expressao) : {Token token;}  
+	{
+	     termo2(_expressao) ((token = < CONCAT >) termo2(_expressao)
+	     {
+	       _expressao.addItemPosfixo(new Operador(token, TipoOperador.CONCAT));
+	      // listaExp.add(new Item(TipoOperador.CONCAT,t.image));
+	     }
+	     )*
+	         
+	}
+    void termo2(Expressao _expressao) : {Token token; TipoOperador tipo;}  
+	{
+	  		termo3(_expressao) ( (token = < SOMA > { tipo = TipoOperador.ADD; } | token = < SUB > { tipo = TipoOperador.SUB; } ) termo3(_expressao)
+	  		{
+	  		  _expressao.addItemPosfixo(new Operador(token, tipo));
+	  			//listaExp.add(new Item(tipo,t.image));
+	  		}
+	        )*
+	}
+	void termo3(Expressao _expressao) : {Token token; TipoOperador tipo;}  
+	{
+	      termo4(_expressao) ( (token = < MUL > { tipo = TipoOperador.MUL; }| token = < DIV > { tipo = TipoOperador.DIV; }) termo4(_expressao)
+	      {
+	        _expressao.addItemPosfixo(new Operador(token, TipoOperador.OU));
+				//listaExp.add(new Item(tipo,t.image));
+		  }
+	      )*
+	}
+	void termo4(Expressao _expressao) : {Token token; Item item;} 
+	{
+			< AP > expressao(_expressao) < FP >
+		 	|token = < VAR >
+		 	{ 
+		  		AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
+     			_expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.VAR));
+         	}
+		  	|token = < STRING >
+		  	{
+     			_expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.CTE));     			
+		    } 
+		  	
+		  	|(< SOMA > | < SUB >)?  token = <NUM>
+		  	{
+         		//listaExp.add(new Item(TipoDado.NUM,t.image));
+      		}	
+	}
+
+
 void inicio() : {}	
 	{
 	      programa()  < EOF >
 	}  
-	void programa() : {}	
+	listaComandoAltoNivel programa() : {listaComandoAltoNivel listaComandoAltoNivel = new listaComandoAltoNivel();}	
 	{
-	      (comando())*
+	      (comando(listaComandoAltoNivel) {return listaComandoAltoNivel;} )*
 	}
-	void comando() : {} 
+	void comando(listaComandoAltoNivel _listaComandoAltoNivel) : {} 
 	{
-	      atribui() | declaracao() | se() | enquanto() | le() | exibe()  
+	      atribui(_listaComandoAltoNivel) | declaracao() | se() | enquanto() | le() | exibe()  
 	}
-	void atribui() : {Token t;} 
+	void atribui(listaComandoAltoNivel _listaComandoAltoNivel) : {Token token, igual; Expressao expressao; ComandoAtribuicao comando; Simbolo simbolo;} 
 	{
-		t = < VAR >
+		token = < VAR >
 		{
-		  AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
+		  AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
+		  simbolo = new Simbolo(var.image,TipoDado.STR);
 		}
-		<RECEBE> expressaoPrincipal() < PV >
+		igual = <RECEBE> expressao = expressaoPrincipal()
+		{
+			comando = new ComandoAtribuicao(simbolo,token,expressao);
+			_listaComandoAltoNivel.addComando(comando);
+		}
+		< PV >
 	}
-	void declaracao() : {Token t; Tipo tipo;}
+	void declaracao() : {Token token; TipoDado tipo;}
 	{
-		(< NUMERO > {tipo = Tipo.variavelNumero;} | < PALAVRA > {tipo = Tipo.variavelPalavra ;}) t = < VAR >
+		(< NUMERO > {tipo = TipoDado.NUM;} | < PALAVRA > {tipo = TipoDado.STR ;}) token = < VAR >
 		{
-		  AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
+		  AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
 	 	}
-	 	(< RECEBE > expressaoPrincipal())? (< VIRGULA > t = < VAR >
+	 	(< RECEBE > expressaoPrincipal())? (< VIRGULA > token = < VAR >
 		{
-	      AcoesSemanticas.tratamentoDeclaracao(tabela, t.image, tipo);
+	      AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
 	   	}
 	   	(< RECEBE > expressaoPrincipal() )? )* < PV >
 	}
@@ -135,68 +214,4 @@ void inicio() : {}
 	      <EXIBE> expressaoPrincipal() ( < VIRGULA > expressaoPrincipal() )*   < PV > 
 	}
 
-	//==========GRAMï¿½TICA DE EXPRESSï¿½ES==============
-	void expressaoPrincipal() : {LinkedList<Item> listaExp = new LinkedList<Item>();}  
-	{
-	     expressao(listaExp)	{/* System.out.println(listaExp);*/ }
-	}
-	void expressao(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	      termo(listaExp) ( (t = < OU >) termo(listaExp)
-	      {
-	        listaExp.add(new Item(Tipo.operacao,t.image));
-	      }
-	      )*  
-	}
-	void termo(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	      termo1(listaExp) ( (t = < IGUAL >) termo1(listaExp)
-	      {
-			listaExp.add(new Item(Tipo.operacao,t.image));
-	      }
-	      )*
-	        
-	}
-	void termo1(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	     termo2(listaExp) ((t = < CONCAT >) termo2(listaExp)
-	     {
-	       listaExp.add(new Item(Tipo.operacao,t.image));
-	     }
-	     )*
-	         
-	}
-    void termo2(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	  		termo3(listaExp) ( (t = < SOMA > | t = < SUB > ) termo3(listaExp)
-	  		{
-	  			listaExp.add(new Item(Tipo.operacao,t.image));
-	  		}
-	        )*
-	}
-	void termo3(LinkedList<Item> listaExp) : {Token t; Item item = null;}  
-	{
-	      termo4(listaExp) ( (t = < MUL > | t = < DIV >) termo4(listaExp)
-	      {
-				listaExp.add(new Item(Tipo.operacao,t.image));
-		  }
-	      )*
-	}
-	void termo4(LinkedList<Item> listaExp) : {Token t; Item item = null;} 
-	{
-			< AP > expressao(listaExp) < FP >
-		 	|t = < VAR >
-		 	{ 
-		  		AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,t.image);
-     			listaExp.add(new Item(Tipo.variavel,t.image));
-         	}
-		  	|t = < STRING >
-		  	{
-     			listaExp.add(new Item(Tipo.palavra,t.image));
-		    } 
-		  	
-		  	|(< SOMA > | < SUB >)?  t =  <NUM>
-		  	{
-         		listaExp.add(new Item(Tipo.numero,t.image));
-      		}	
-	}
+	

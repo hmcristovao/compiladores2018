@@ -1,11 +1,12 @@
-package comando;
+package semantico;
 
 import parser.Token;
 
-public abstract class ComandoCondicional extends ComandoAltoNivel {
-
-	public ComandoCondicional(Token _token) {
-		super(_token);
+public class Operador extends Item {
+	TipoOperador tipoOperador;
+	
+	public Operador(Token _token, TipoOperador _operador) {
+		super(_token,_operador);
 		// TODO Auto-generated constructor stub
 	}
 

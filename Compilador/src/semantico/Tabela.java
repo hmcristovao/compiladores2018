@@ -2,26 +2,28 @@ package semantico;
 import java.util.HashMap;
 
 public class Tabela {
-      private HashMap<String,Simbolo> _tab;
- private int _marcador;
+      private HashMap<String,Simbolo> tabela;
+      private int marcador;
       
       public Tabela() {
-            this._tab = new HashMap<String,Simbolo>();
+            this.tabela = new HashMap<String,Simbolo>();
       }
-      public boolean inclui(Simbolo _simb) {
-            if(this._tab.containsKey(_simb.getNome()))
-                  return false;
+      
+      public boolean inclui(Simbolo _simbolo) {
+    	  	if(this.tabela.containsKey(_simbolo.getLexema()))
+                return false;
             else {
-                  this._tab.put(_simb.getNome(),_simb);
-                  return true;
+            	this.tabela.put(_simbolo.getLexema(),_simbolo);
+                return true;
             }
       }    
       
       public int consultaReferencia(String _chave) {
-            return ((Simbolo)this._tab.get(_chave)).getReferencia();
+            return ((Simbolo)this.tabela.get(_chave)).getReferencia();
       }
+      
       public boolean isExiste(String _chave) {
-          if(this._tab.containsKey(_chave))   
+          if(this.tabela.containsKey(_chave))   
         	  return true;
           else {
         	  return false;
@@ -29,13 +31,15 @@ public class Tabela {
       }
       
       public int get_marcador() {
-		return _marcador;
-	}
-	public void set_marcador(int _marcador) {
-		this._marcador = _marcador;
-	}
-	public String toString() {
-            return this._tab.toString();
+		return marcador;
+      }
+      
+      public void set_marcador(int _marcador) {
+		this.marcador = _marcador;
+      }
+      
+      public String toString() {
+            return this.tabela.toString();
       }
 }
      
