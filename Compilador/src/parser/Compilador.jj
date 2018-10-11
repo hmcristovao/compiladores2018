@@ -34,9 +34,9 @@ public class Compilador {
 	    catch (ParseException e) {
 	      System.out.println("Erro sintatico\n" + e.getMessage());
 	    }
-	    //catch (ParseException e) {
-	      //System.out.println("Erro semantico\n" + e.getMessage());
-	    //}
+	    catch (ParseException e) {
+	      System.out.println("Erro semantico\n" + e.getMessage());
+	    }
   	}
 }
 

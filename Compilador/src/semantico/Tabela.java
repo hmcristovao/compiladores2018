@@ -22,7 +22,7 @@ public class Tabela {
       }
       
       public Simbolo consultaSimbolo(String _chave) {
-    	  return (Simbolo);
+    	  return (Simbolo); //terminar aqui
       }
       
       public int consultaReferencia(String _chave) {

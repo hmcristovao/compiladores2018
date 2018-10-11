@@ -10,6 +10,7 @@ import java.util.AbstractList.*;
 public class ListaComandosAltoNivel {
 	static Tabela tabela = new Tabela();
 	LinkedList<ComandoAltoNivel> listaComandoAltoNivel = new LinkedList<ComandoAltoNivel>();
+	//fazer funcionar
 	
 	public ListaComandosAltoNivel() {
 		
