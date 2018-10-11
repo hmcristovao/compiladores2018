@@ -17,7 +17,13 @@ public class Expressao {
 		expressaoPosfixa.add(novo);
 	}
 	
+	public String toString() {
+		return this.expressaoPosfixa.toString();
+	}
+	
+	
 	public void imprime() {
 		System.out.println(this.expressaoPosfixa);
 	}
+	
 }

@@ -6,7 +6,7 @@ enquanto (c=0)
 
     le a, b, c;
 
-    r<-a+b;
-    exibe r;
+    a<-a+b;
+    exibe a;
 
 fim-enquanto

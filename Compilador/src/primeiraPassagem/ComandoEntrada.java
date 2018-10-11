@@ -11,6 +11,6 @@ public class ComandoEntrada extends ComandoAltoNivel{
 	}
 	
 	public String toString() {
-		return this.variavel.toString();
+		return super.getLexema() + this.variavel.getLexema();
 	}
 }

@@ -11,6 +11,6 @@ public class ComandoSaida extends ComandoAltoNivel{
 	}
 	
 	public String toString() {
-		return this.expressao.toString();
+		return super.getLexema() + this.expressao.toString();
 	}
 }
