@@ -12,6 +12,6 @@ public class ComandoAtribuicao extends ComandoAltoNivel{
 		this.expressao=_expressao;
 	}
 	public String toString() {
-		return this.variavel.toString() + super.getLexema() + this.expressao.toString();
+		return this.variavel.getLexema() + super.getLexema() + this.expressao.toString();
 	}
 }

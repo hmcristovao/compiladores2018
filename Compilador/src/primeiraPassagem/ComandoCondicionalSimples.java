@@ -8,6 +8,6 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 	}
 	
 	public String toString() {
-		return super.expressao.toString() + super.listaComandoAltoNivelTrue.toString();
+		return super.getLexema() + super.expressao.toString() + super.listaComandoAltoNivelTrue.toString();
 	}
 }

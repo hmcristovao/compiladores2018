@@ -12,6 +12,6 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	}
 	
 	public String toString() {
-		return this.expressao.toString() + this.listaComandoAltoNivelTrue.toString();
+		return super.getLexema() + this.expressao.toString() + this.listaComandoAltoNivelTrue.toString();
 	}
 }

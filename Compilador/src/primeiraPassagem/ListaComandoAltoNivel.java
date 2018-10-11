@@ -18,7 +18,7 @@ public class ListaComandoAltoNivel {
 	}
 	
 	public String toString(){
-		return null;
+		return this.getListaComandoAltoNivel().toString();
 	}
 	public void imprime() {
 		System.out.println(this.listaComandosAltoNivel);

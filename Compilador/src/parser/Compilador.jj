@@ -23,21 +23,35 @@ public class Compilador {
       try {
          compilador = new Compilador(new FileInputStream(Config.arqfonte));
          listaMain = Compilador.inicio();
-         System.out.println("\n"+tabela.toString());
-         if (listaMain!=null)
-         	listaMain.imprime();
-         
-	      if(!error)
-	      	System.out.println("\nSem erros sintáticos");
+  	      if(!error)
+	      	System.out.println("\nSem erros sintáticos\n");
 	      else
-	      	System.out.println("\nForam encontrados erros sintáticos, mas foram ignorados para melhor análise");
+	      	System.out.println("\nForam encontrados erros sintáticos, mas foram ignorados para melhor análise\n");
+		 System.out.println("\n"+tabela.toString());
+         if (listaMain!=null)
+         	System.out.println("\n"+listaMain.toString());
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
       }
       catch(TokenMgrError e) {
          System.out.println("\nErro lexico: \n" + e.getMessage());
-      }
+      }catch (ParseException e) {
+		System.out.println("\n"+e.toString()+"\nErro sintático encontrado, continuando análise após próximo \";\"\n");
+		Token t;
+		error=true;
+		do {
+		  t = getNextToken();
+		} while (t.kind != PV);
+		programa();
+	}catch(ErroSemantico e){
+  	  	System.out.println(e.getMessage());
+		Token t;
+	    do {
+			t = getNextToken();
+	    }while (t.kind != PV);
+	    programa();
+  	}
    }
 }
 
@@ -96,39 +110,21 @@ ListaComandoAltoNivel programa():{
 	ListaComandoAltoNivel listaComandoAltoNivel = new ListaComandoAltoNivel();
 }
 {
-   
-	try {
-		( _comando = comando(listaComandoAltoNivel){
+   		( _comando = comando(listaComandoAltoNivel){
 		  if(_comando !=null) { 
 		  	listaComandoAltoNivel.addComando( _comando );
 			}
 		  })* { return listaComandoAltoNivel; }
 		 
-	}catch (ParseException e) {
-		System.out.println("\n"+e.toString()+"\nErro sintático encontrado, continuando análise após próximo \";\"\n");
-		Token t;
-		error=true;
-		do {
-		  t = getNextToken();
-		} while (t.kind != PV);
-		inicio();
-	}catch(ErroSemantico e){
-  	  	System.out.println(e.getMessage());
-		Token t;
-	    do {
-			t = getNextToken();
-	    }while (t.kind != PV);
-	    inicio();
-  	}
   }
 
 ComandoAltoNivel comando(ListaComandoAltoNivel listaComandoAltoNivel):{
 	ComandoAltoNivel _comando = null;
 }
 {
-  		(  		  declaracao()
+  		(  		  declaracao(listaComandoAltoNivel)
   		|_comando = atribuicao()
-  		|se()
+  		|_comando = se()
   		|_comando = enquanto()
   		|_comando = le(listaComandoAltoNivel)
   		|_comando = exibe(listaComandoAltoNivel)
@@ -146,23 +142,31 @@ ComandoAtribuicao atribuicao():{
 	exp = expressao() < PV > { return new ComandoAtribuicao(tabela.consultaSimbolo(var.image),exp,t); }
 }
 
-void declaracao() : {Token t; TipoDado tipo;}
+void declaracao(ListaComandoAltoNivel listaComandoAltoNivel):{
+  Token var,t=null;
+  TipoDado tipo;
+  Expressao exp=null,exp1=null;
+}
 {
   (    < NUMERO > { tipo=TipoDado.NUMERO; }| < PALAVRA > { tipo=TipoDado.PALAVRA; })
-    t=< VAR >
+    var=< VAR >
     {
-		AcoesSemanticas.declaraVariavel(t,tipo,tabela);
-      }(< ATRIB >expressao())?
-	(	  < VIRGULA >t=< VAR >
+		AcoesSemanticas.declaraVariavel(var,tipo,tabela);
+      }(t = < ATRIB > exp = expressao() { listaComandoAltoNivel.addComando(new ComandoAtribuicao(tabela.consultaSimbolo(var.image),exp,t)); } )?
+	(	  < VIRGULA >var=< VAR >
 	  {
-		AcoesSemanticas.declaraVariavel(t,tipo,tabela);
+		AcoesSemanticas.declaraVariavel(var,tipo,tabela);
 		}
-    (< ATRIB > expressao())?)*< PV >
+    (t = < ATRIB > exp = expressao() { listaComandoAltoNivel.addComando(new ComandoAtribuicao(tabela.consultaSimbolo(var.image),exp,t)); } )?)*< PV >
 }
 
-void se() : { }
+ComandoCondicional se() : {
+	Token t;
+	Expressao exp;
+	ListaComandoAltoNivel listaTrue;
+}
 {
-  < SE >< AP > expressao() < FP > inicio() < FIMSE >
+  t = < SE >< AP > exp = expressao() < FP > listaTrue = inicio() < FIMSE >{ return new ComandoCondicionalSimples(exp,listaTrue,t);}
 }
 
 ComandoEnquanto enquanto():{
@@ -171,7 +175,7 @@ ComandoEnquanto enquanto():{
 	ListaComandoAltoNivel lista;
 }
 {
-  t = < ENQUANTO > < AP > exp = expressao() < FP > lista = programa() < FIMENQUANTO > { lista.imprime(); return new ComandoEnquanto(exp,lista,t);}
+  t = < ENQUANTO > < AP > exp = expressao() < FP > lista = programa() < FIMENQUANTO > { return new ComandoEnquanto(exp,lista,t);}
 }
 
 ComandoEntrada le(ListaComandoAltoNivel listaComandoAltoNivel) : { Token t; Token var;Token var1;}
@@ -179,14 +183,14 @@ ComandoEntrada le(ListaComandoAltoNivel listaComandoAltoNivel) : { Token t; Toke
 	t = < LEITURA > var1 = < VAR > (< VIRGULA > var = < VAR >{ listaComandoAltoNivel.addComando( new ComandoEntrada(tabela.consultaSimbolo(var.image),t) ); })* < PV >{ return new ComandoEntrada(tabela.consultaSimbolo(var1.image),t); }
 }
 
-ComandoSaida exibe(ListaComandoAltoNivel listaComandoAltoNivel) : {Token t; Expressao exp; }
+ComandoSaida exibe(ListaComandoAltoNivel listaComandoAltoNivel) : {Token t; Expressao exp; Expressao exp1; }
 {
-   t= < EXIBE > exp = expressao() (< VIRGULA >exp = expressao() { listaComandoAltoNivel.addComando( new ComandoSaida(exp,t) ); })* < PV >{ return new ComandoSaida(exp,t); }
+   t= < EXIBE > exp1 = expressao() (< VIRGULA >exp = expressao() { listaComandoAltoNivel.addComando( new ComandoSaida(exp,t) ); })* < PV >{ return new ComandoSaida(exp1,t); }
 }
 
 Expressao expressao() : {Expressao pilha = new Expressao();}
 {
-  	expressao2(pilha){pilha.imprime(); return pilha; }
+  	expressao2(pilha){return pilha; }
 }
 
 void expressao2(Expressao pilha) : { Token t; }

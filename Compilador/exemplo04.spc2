@@ -1,3 +1,2 @@
-numero a<-2,b,c,d;
-le a,b,c,d;
-exibe a,a,a;
+numero a<-2;
+exibe a;
