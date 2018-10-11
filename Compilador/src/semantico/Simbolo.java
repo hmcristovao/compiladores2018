@@ -11,6 +11,22 @@ public class Simbolo {
 	private int referencia;   //referência usada na geração do código destino
 	
 	private Token token;
+	
+	
+	public Simbolo(Token token, TipoDado tipo) {
+		this.token = token;
+		this.tipo = tipo;
+		this.nome = token.image;
+		
+	}
+	
+	public Simbolo(Token token, TipoDado tipo, int referencia) {
+		this.token = token;
+		this.tipo = tipo;
+		this.referencia = referencia;
+		this.nome = token.image;
+		
+	}
 
 	public Token getToken() {
 		return token;
@@ -53,7 +69,7 @@ public class Simbolo {
 
 	      return "Nome:"+this.getNome() + "\t" + "Tipo:"+this.getTipo()
 	             + "\t" + "Referência:"+this.getReferencia() + "\n";
-
+	      
 	 }
 	 
 

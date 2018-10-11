@@ -12,21 +12,23 @@ import semantico.*;
 import geradorCodigo.*;
 import apoio.*;
 import tratamentoErro.*;
+import comandoAltoNivel.*;
 import java.util.LinkedList;
 
 public class Compilador {
 
-  public static Tabela tab = new Tabela();
-
+  public static Tabela tabela = new Tabela();
+  
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
             
       try {
        	 
-         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo18.spc2"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo16.spc2"));
          Compilador.inicio();
          System.out.println("");
          Tabela.imprimeTabela();
+
       }
       catch(FileNotFoundException e)
       {
@@ -94,11 +96,14 @@ TOKEN : {
 
 //Gramatica de expressoes:
 
-void iniciaExpressao():
+Expressao iniciaExpressao():
 {Expressao exp = new Expressao();}
 {
 	expressao(exp)
-	{exp.imprimeExpressao();} 
+	{	//exp.imprimeExpressao();
+		return exp;
+	}
+	
 }
 
 void expressao(Expressao exp):
@@ -155,30 +160,30 @@ void termo3(Expressao exp):
 void termo4(Expressao exp):
 {
 	Token var, entrada, sinal;
-	TipoDado tipo = null;
+	TipoElemento tipo = null;
 }
 {
  <AP> expressao(exp) <FP> 
 |entrada=<NUM>
 {
-  	exp.addListaExpPosFixa(tipo.NUMERO, entrada.image);
+  	exp.addListaExpPosFixa(TipoElemento.CTE, entrada.image);
 } 
 |<SOMA>entrada=<NUM>
 {
-  	exp.addListaExpPosFixa(tipo.NUMERO, entrada.image);
+  	exp.addListaExpPosFixa(TipoElemento.CTE, entrada.image);
 }
 |sinal=<SUB>entrada=<NUM>
 {
-  	exp.addListaExpPosFixa(tipo.NUMERO, (sinal.image+entrada.image));
+  	exp.addListaExpPosFixa(TipoElemento.CTE, (sinal.image+entrada.image));
 }
 |var=<VAR>
 {
   	Tabela.verificaVariavelDeclarada(var.image);
-  	exp.addListaExpPosFixa(tab.tipoVariavel(var.image), var.image);
+  	exp.addListaExpPosFixa(TipoElemento.VAR, var.image);
 }
 |entrada=<STRING>
 {
-  	exp.addListaExpPosFixa(tipo.PALAVRA, entrada.image);
+  	exp.addListaExpPosFixa(TipoElemento.CTE, entrada.image);
 }
 
 }
@@ -187,44 +192,82 @@ void termo4(Expressao exp):
 //GRAMATICA COMPLETA
 
 void inicio():
-{}
+{ListaComandosAltoNivel listaComandosAltoNivel = null;}
 {
-	programa() <EOF>
+	listaComandosAltoNivel = programa()
+	{
+	  ListaComandosAltoNivel.imprimeListaComandosAltoNivel();
+	}
+	<EOF>
 }
 
-void programa() :
-{}
+ListaComandosAltoNivel programa() :
+{ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();}
 {
-  (comando())* 
+  (comando(listaComandosAltoNivel))*
+  {return listaComandosAltoNivel;} 
   
 
 }
 
-void comando():
+void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 {}
 {
-    atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+    atribuicao(listaComandosAltoNivel)
+    | declaracao(listaComandosAltoNivel)
+    | se(listaComandosAltoNivel)
+    | enquanto(listaComandosAltoNivel)
+    | le(listaComandosAltoNivel)
+    | exibe(listaComandosAltoNivel)
 }
 
-void atribuicao():
-{Token t;}
+void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
 {
-  	t=< VAR > {Tabela.verificaVariavelDeclarada(t.image);} < ATRIB > iniciaExpressao() < PV >
+  Token t;
+  ComandoAtribuicao comando = null;
+  Simbolo simbolo = null;
+  Expressao expressao = null;
+}
+{
+  	t=< VAR >
+  	{
+  	  	Tabela.verificaVariavelDeclarada(t.image);
+  	}
+  	< ATRIB > expressao = iniciaExpressao()
+  	{
+  	  	simbolo = new Simbolo(t, TipoDado.PALAVRA);
+  	  	comando = new ComandoAtribuicao(simbolo, expressao);
+  	  	listaComandosAltoNivel.addComando(comando);
+  	}
+  	< PV >
+  	
 }
 
-void declaracao():
+void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 { 	
  	Token variavel;
  	TipoDado tipo = null;
+ 	ComandoAtribuicao comando = null;
+    Simbolo simbolo = null;
+    Expressao expressao = null;
 }
 {
   	(<NUMERO> {tipo = TipoDado.NUMERO;} |<PALAVRA> {tipo = TipoDado.PALAVRA;}) variavel=<VAR> 
   	{
   		Tabela.insereNaTabela(variavel, tipo);
   	}
-  	( <ATRIB> iniciaExpressao() )? (<VIRGULA>  variavel=<VAR> ( <ATRIB> iniciaExpressao() )? 
+  	( <ATRIB> expressao=iniciaExpressao()
+  	{
+  	    simbolo = new Simbolo(variavel, TipoDado.PALAVRA);
+  	  	comando = new ComandoAtribuicao(simbolo, expressao);
+  	  	listaComandosAltoNivel.addComando(comando);
+  	}
+  	)? (<VIRGULA>  variavel=<VAR> ( <ATRIB> expressao=iniciaExpressao() )? 
   	{
 	  	Tabela.insereNaTabela(variavel, tipo);
+	  	simbolo = new Simbolo(variavel, TipoDado.PALAVRA);
+  	  	comando = new ComandoAtribuicao(simbolo, expressao);
+  	  	listaComandosAltoNivel.addComando(comando);
   	}
   	
   	
@@ -233,27 +276,78 @@ void declaracao():
   	
 }
 
-void se():
-{}
+void se(ListaComandosAltoNivel listaComandosAltoNivel):
 {
-  	<SE> <AP> iniciaExpressao() <FP> programa() <FIMSE>
+  	Token t;
+  	ListaComandosAltoNivel listaComandosAltoNivelTrue = null;
+	Expressao expressao = null;
+	ComandoCondicionalSimples comando = null;
+}
+{
+  	<SE> <AP> expressao=iniciaExpressao() <FP> listaComandosAltoNivelTrue=programa()
+  	{
+  	  	comando = new ComandoCondicionalSimples(expressao, listaComandosAltoNivelTrue);
+  	  	listaComandosAltoNivel.addComando(comando);
+  	}
+  	<FIMSE>
 }
  
-void enquanto():
-{}
+void enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
 {
-  	<ENQUANTO> <AP> iniciaExpressao() <FP> programa() <FIMENQUANTO>
+  	Token t;
+  	ListaComandosAltoNivel listaComandosAltoNivelTrue = null;
+	Expressao expressao = null;
+	ComandoEnquanto comando = null;
+}
+{
+  	<ENQUANTO> <AP> expressao=iniciaExpressao() <FP> listaComandosAltoNivelTrue=programa()
+  	{
+  	  	comando = new ComandoEnquanto(expressao, listaComandosAltoNivelTrue);
+  	  	listaComandosAltoNivel.addComando(comando);
+  	}
+  	<FIMENQUANTO>
 }
  
-void le():
-{}
+void le(ListaComandosAltoNivel listaComandosAltoNivel):
+{ Token t;
+  Simbolo simbolo = null;
+  ComandoEntrada comando = null;
+}
 {
-  	<LEITURA> <VAR> ( <VIRGULA> <VAR> )* <PV>
+  	<LEITURA> t=<VAR>
+  	{
+ 	  	simbolo = new Simbolo(t, TipoDado.PALAVRA);
+    	comando = new ComandoEntrada(simbolo);
+ 		listaComandosAltoNivel.addComando(comando); 	  
+  	}
+  	( <VIRGULA> t=<VAR>
+ 	{
+ 	  	simbolo = new Simbolo(t, TipoDado.PALAVRA);
+    	comando = new ComandoEntrada(simbolo);
+ 		listaComandosAltoNivel.addComando(comando); 	  
+  	}
+  	)* <PV>
 }
  
-void exibe():
-{}
+void exibe(ListaComandosAltoNivel listaComandosAltoNivel):
 {
-	<EXIBE> iniciaExpressao() ( <VIRGULA> iniciaExpressao() )* <PV>
+  Token t;
+  Expressao expressao = null;
+  ComandoSaida comando = null;
+}
+{
+	t =<EXIBE> expressao = iniciaExpressao()
+	{
+	  	comando = new ComandoSaida(expressao);
+	  	listaComandosAltoNivel.addComando(comando);
+	  	
+	}
+	( <VIRGULA> iniciaExpressao()
+	{
+	  	comando = new ComandoSaida(expressao);
+	  	listaComandosAltoNivel.addComando(comando);
+	  	
+	}
+	)* <PV>
 }
 	

@@ -11,9 +11,12 @@ public class Expressao {
 	public Expressao() {
 		listaExpInfixa = new LinkedList<Item>();
 		listaExpPosFixa = new LinkedList<Item>();
-		
 	}
 	
+	public LinkedList<Item> getListaExpPosFixa() {
+		return listaExpPosFixa;
+	}
+
 	public void addListaExpPosFixa(Enum<?> tipo, String variavel) {
 		Item item = new Item(tipo, variavel);
 		this.listaExpPosFixa.add(item);

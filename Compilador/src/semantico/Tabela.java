@@ -55,23 +55,23 @@ public class Tabela {
 	
 	public static void incrementaMarcador(TipoDado tipo) {
 		
-		if(tipo.equals("numero")) {
+		if(tipo == TipoDado.NUMERO) {
 			
 			marcador+=2;
 		}
-		if(tipo.equals("palavra")) {
+		if(tipo == TipoDado.PALAVRA) {
 			marcador+=1;
 		}
 	}
 	
 	
 	public static void insereNaTabela(Token variavel, TipoDado tipo) {
-		 Simbolo simbolo = new Simbolo();
 		 
 		 if(tab.containsKey(variavel.image) == false) {
+			  Simbolo simbolo = new Simbolo(variavel, tipo, getMarcador());
 			  simbolo.setToken(variavel);
 		  	  simbolo.setTipo(tipo);
-		  	  simbolo.setNome(variavel.image);
+		  	  
 		  	  simbolo.setReferencia(getMarcador());
 		  	  incrementaMarcador(tipo);
 		  	  insereSimbolo(simbolo);

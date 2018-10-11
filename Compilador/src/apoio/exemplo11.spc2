@@ -3,3 +3,5 @@ numero b<-3.5;
 numero c<-a+b;
 
 exibe c;
+c<-b+c;
+exibe b;

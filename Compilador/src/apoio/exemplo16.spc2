@@ -4,9 +4,9 @@ numero c<-0;
 
 enquanto (c=0)
 
-    le a, b, c;
+    le a, b;
 
-    r<-a+b;
-    exibe r;
+    c<-a+b;
+    exibe c;
 
 fim-enquanto

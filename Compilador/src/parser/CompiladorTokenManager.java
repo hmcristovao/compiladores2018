@@ -5,6 +5,7 @@ import semantico.*;
 import geradorCodigo.*;
 import apoio.*;
 import tratamentoErro.*;
+import comandoAltoNivel.*;
 import java.util.LinkedList;
 
 /** Token Manager. */
