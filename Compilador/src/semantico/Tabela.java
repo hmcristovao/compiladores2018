@@ -5,26 +5,26 @@ import apoio.ErroSemantico;
 import parser.Token;
 
 public class Tabela {
-	static Simbolo simb;
+	Simbolo simb;
 	private int marcador; // armazena a última referência
 	
 	public static HashMap<String, Simbolo> tab;
 	
 	public Tabela(){
-		this.tab = new HashMap<String, Simbolo>();
+		tab = new HashMap<String, Simbolo>();
 		this.marcador = 1;
 	}
 	
 	   // incluída na tabela
 	public void incluiSimbolo(Token v, TipoDado tipo) throws ErroSemantico {
-		if(this.tab.containsKey(v.image) == false) { //caso nao contenha a chave
-  	  		this.simb = new Simbolo(v, tipo, incMarcador(tipo) );
+		if(tab.containsKey(v.image) == false) { //caso nao contenha a chave
+  	  		simb = new Simbolo(v, tipo, incMarcador(tipo) );
 	  		//simb.setNome(v.image); //salva o nome 
 	  		//simb.setReferencia(incMarcador(t.image)); //calcula a referencia do próximo e seta a minha referencia
 			//if(t.image.equals(Tipo.NUMERO.getNome())) { simb.setTipo(Tipo.NUMERO); /*salva o tipo da variavel*/ }
 			//if(t.image.equals(Tipo.PALAVRA.getNome())) { simb.setTipo(Tipo.PALAVRA); /*salva o tipo da variavel*/ }
-	  		this.tab.put(v.image, simb); //salva o simbolo na tabela hashing
-	  		System.out.println(this.tab);
+	  		tab.put(v.image, simb); //salva o simbolo na tabela hashing
+	  		System.out.println(tab);
 	  		System.out.println("-----------------");
   	  	}else { //erro, chave ja adicionada
 			//System.out.println("Erro: variável "+v.image+" declarada novamente na linha "+v.endLine );
@@ -33,7 +33,7 @@ public class Tabela {
 	}
 	
 	public boolean verificaExistenciaSimbolo(Token v) throws ErroSemantico {
-		if(this.tab.containsKey(v.image) == false) { //caso nao contenha a chave
+		if(tab.containsKey(v.image) == false) { //caso nao contenha a chave
 			//System.out.println("Erro: variável "+v.image+" não declarada na linha "+v.endLine );
 			throw new ErroSemantico("Variável "+v.image+" não declarada na linha "+v.endLine);
 			//return false;
@@ -42,7 +42,7 @@ public class Tabela {
 	}
 	
 	public Simbolo consultaSimbolo(String nome) {
-		if(this.tab.containsKey(nome)) { //caso exista simbolo		
+		if(tab.containsKey(nome)) { //caso exista simbolo		
 			return tab.get(nome);
   	  	}
 		return null;
@@ -50,11 +50,11 @@ public class Tabela {
 	
 	public int incMarcador(TipoDado tipo) {
 	   if(tipo == TipoDado.STR) {
-		   marcador = marcador+1;
-		   return marcador-1;
+		   this.marcador = this.marcador+1;
+		   return this.marcador-1;
 	   }else if(tipo == TipoDado.NUM) {
-		   marcador = marcador+2;
-		   return marcador-2;
+		   this.marcador = this.marcador+2;
+		   return this.marcador-2;
 	   }else {
 		   return 0; //necessario? 
 	   }
@@ -75,7 +75,7 @@ public class Tabela {
 	}
 	
 	public int getMarcador() {
-		return marcador;
+		return this.marcador;
 	}
 	
 	public void setMarcador(int marcador) {

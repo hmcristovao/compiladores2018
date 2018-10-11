@@ -44,7 +44,7 @@ public class Expressao {
 	}
 	
 	public String toString() {
-		return null;
+		return "expressaoPosFixa: "+Arrays.toString(this.expressaoPosfixa.toArray());
 	}
 	
 	

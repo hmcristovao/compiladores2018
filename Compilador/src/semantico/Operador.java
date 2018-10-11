@@ -16,7 +16,7 @@ public class Operador extends Item{
 	}
 	
 	public String toString() {
-		return null;
+		return this.token.image;
 	}
 
 }

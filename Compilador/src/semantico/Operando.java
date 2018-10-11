@@ -20,7 +20,7 @@ public class Operando extends Item {
 		this.tipoDado = tipoDado;	
 	}
 	 public String toString() {
-		 return null;
+		 return this.token.image;
 	 }
 
 	public void setTipoDado(TipoDado tipoDado) {

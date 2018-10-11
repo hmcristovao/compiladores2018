@@ -157,8 +157,8 @@ void expressaoMestre() : {
 }
 
 { 
-  	expressao(exp) {
-    	System.out.println(Arrays.toString(exp.expressaoPosfixa.toArray())); /*imprime a lista*/
+  	expressao(exp) {  	  	
+    	System.out.println(exp.expressaoPosfixa); /*imprime a lista*/
 	}
 }
 
