@@ -22,6 +22,7 @@ public class Simbolo {
 	   this.token = token;
 	   this.tipo = tipo;
 	   this.referencia = referencia;
+	   this.nome = token.image;
    }
    
    public String toString() {
