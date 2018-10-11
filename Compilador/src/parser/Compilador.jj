@@ -233,29 +233,29 @@ String termo4(Expressao exp) : {
 {
   <AP> expressao(exp) <FP> { return ""; }
   |folha = <NUM> { //adiciona um numero sem sinal
-  		operando = new Operando(folha, TipoDado.NUM);
+  		operando = new Operando(folha, TipoDado.NUM, TipoElemento.CTE);
   		exp.addItemPosfixo(operando);
 		return folha.image;
 	} //jah colocar na lista imediatamente
   |folha = <SOMA><NUM>{ //adiciona um numero com sinal positivo
-		operando = new Operando(folha, TipoDado.NUM);
+		operando = new Operando(folha, TipoDado.NUM, TipoElemento.CTE);
   		exp.addItemPosfixo(operando);
 		return folha.image;
 	}
   |folha = <SUB><NUM>{ //adiciona um numero com sinal negativo
-  		operando = new Operando(folha, TipoDado.NUM);
+  		operando = new Operando(folha, TipoDado.NUM, TipoElemento.CTE);
   		exp.addItemPosfixo(operando);
 		return folha.image;
 	}
   |folha = <VAR> { //adiciona uma variavel
     if(tabela.verificaExistenciaSimbolo(folha)) { //caso a variavel tenha sido declarada
-		operando = new Operando(folha, null);
+		operando = new Operando(folha, null, TipoElemento.CTE);
   		exp.addItemPosfixo(operando);
     }
     return folha.image;
   }
   |folha = <STRING>{ //adiciona uma string
-  		operando = new Operando(folha, TipoDado.STR);
+  		operando = new Operando(folha, TipoDado.STR, TipoElemento.CTE);
   		exp.addItemPosfixo(operando);
 	return folha.image;	
  }

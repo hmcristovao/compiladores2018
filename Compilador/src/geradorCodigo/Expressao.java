@@ -27,10 +27,12 @@ public class Expressao {
 
 	
 	public void addItemPosfixo(Item _item){
-		if(Tabela.tab.containsKey(_item.token.image)) {//caso entre aqui, eh uma variavel
+		if(Tabela.tab.containsKey(_item.token.image)) { //caso entre aqui, eh uma variavel
 			Simbolo simb = Tabela.tab.get(_item.token.image);
 			Operando operando = (Operando)_item;
 			operando.setTipoDado(simb.getTipo());
+			operando.setTipoElemento(TipoElemento.VAR); //
+			this.expressaoPosfixa.add(operando);
 		}
 		else{
 			this.expressaoPosfixa.add(_item);

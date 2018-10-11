@@ -23,9 +23,7 @@ public class Tabela {
 	  		//simb.setReferencia(incMarcador(t.image)); //calcula a referencia do próximo e seta a minha referencia
 			//if(t.image.equals(Tipo.NUMERO.getNome())) { simb.setTipo(Tipo.NUMERO); /*salva o tipo da variavel*/ }
 			//if(t.image.equals(Tipo.PALAVRA.getNome())) { simb.setTipo(Tipo.PALAVRA); /*salva o tipo da variavel*/ }
-	  		tab.put(v.image, simb); //salva o simbolo na tabela hashing
-	  		System.out.println(tab);
-	  		System.out.println("-----------------");
+	  		tab.put(v.image, simb); //salva o simbolo na tabela hashing	  		
   	  	}else { //erro, chave ja adicionada
 			//System.out.println("Erro: variável "+v.image+" declarada novamente na linha "+v.endLine );
 			throw new ErroSemantico("Variável "+v.image+" declarada novamente na linha "+v.endLine );

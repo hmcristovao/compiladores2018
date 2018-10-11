@@ -15,12 +15,13 @@ public class Operando extends Item {
 		return tipoElemento;
 	}
 	
-	public Operando(Token t, TipoDado tipoDado){
+	public Operando(Token t, TipoDado tipoDado, TipoElemento tipoElemento){
 		super(t);
-		this.tipoDado = tipoDado;	
+		this.tipoDado = tipoDado;
+		this.tipoElemento = tipoElemento;
 	}
 	 public String toString() {
-		 return this.token.image;
+		 return "Operando: "+this.token.image+" TipoDado: "+this.tipoDado+" TipoElemento: "+this.tipoElemento+"\n";
 	 }
 
 	public void setTipoDado(TipoDado tipoDado) {

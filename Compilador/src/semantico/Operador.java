@@ -16,7 +16,7 @@ public class Operador extends Item{
 	}
 	
 	public String toString() {
-		return this.token.image;
+		return "Operador: "+this.token.image+" TipoOperador: "+this.tipoOperador+"\n";
 	}
 
 }
