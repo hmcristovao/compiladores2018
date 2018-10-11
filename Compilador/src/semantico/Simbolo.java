@@ -22,8 +22,9 @@ public class Simbolo {
           }    
     }
     
-    public Simbolo(String _nome, TipoDado _tipo) {
-        this.nome = _nome;
+    public Simbolo(Token _token, TipoDado _tipo) {
+    	this.token = _token;
+    	this.nome = _token.image;
         this.tipo = _tipo;
         if(_tipo == TipoDado.NUM) {
       	  Simbolo.set_marcador(Simbolo.get_marcador() + 2);

@@ -11,6 +11,7 @@ import apoio.*;
 import geradorCodigo.*;
 import semantico.*;
 import exception.*;
+import comando.*;
 import java.util.LinkedList;
 
 public class Compilador implements Config {
@@ -95,9 +96,7 @@ TOKEN : {
 	{
 	      termo(_expressao) ( (token = < OU >) termo(_expressao)
 	      {
-	        
 	        _expressao.addItemPosfixo(new Operador(token, TipoOperador.OU));
-	  //      listaExp.add(new Item(TipoOperador.OU,t.image));
 	      }
 	      )*  
 	}
@@ -106,7 +105,6 @@ TOKEN : {
 	      termo1(_expressao) ( (token = < IGUAL >) termo1(_expressao)
 	      {
 	        _expressao.addItemPosfixo(new Operador(token, TipoOperador.IGUAL));
-			//listaExp.add(new Item(TipoOperador.IGUAL,t.image));
 	      }
 	      )*
 	        
@@ -116,17 +114,16 @@ TOKEN : {
 	     termo2(_expressao) ((token = < CONCAT >) termo2(_expressao)
 	     {
 	       _expressao.addItemPosfixo(new Operador(token, TipoOperador.CONCAT));
-	      // listaExp.add(new Item(TipoOperador.CONCAT,t.image));
 	     }
 	     )*
 	         
 	}
     void termo2(Expressao _expressao) : {Token token; TipoOperador tipo;}  
 	{
-	  		termo3(_expressao) ( (token = < SOMA > { tipo = TipoOperador.ADD; } | token = < SUB > { tipo = TipoOperador.SUB; } ) termo3(_expressao)
+	  		termo3(_expressao) ( (token = < SOMA > { tipo = TipoOperador.ADD; }
+	  		| token = < SUB > { tipo = TipoOperador.SUB; } ) termo3(_expressao)
 	  		{
 	  		  _expressao.addItemPosfixo(new Operador(token, tipo));
-	  			//listaExp.add(new Item(tipo,t.image));
 	  		}
 	        )*
 	}
@@ -135,67 +132,82 @@ TOKEN : {
 	      termo4(_expressao) ( (token = < MUL > { tipo = TipoOperador.MUL; }| token = < DIV > { tipo = TipoOperador.DIV; }) termo4(_expressao)
 	      {
 	        _expressao.addItemPosfixo(new Operador(token, TipoOperador.OU));
-				//listaExp.add(new Item(tipo,t.image));
 		  }
 	      )*
 	}
-	void termo4(Expressao _expressao) : {Token token; Item item;} 
+	void termo4(Expressao _expressao) : {Token token; Item item = null;} 
 	{
 			< AP > expressao(_expressao) < FP >
 		 	|token = < VAR >
-		 	{ 
+		 	{
 		  		AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
      			_expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.VAR));
+     			System.out.println(token.image);
          	}
 		  	|token = < STRING >
 		  	{
-     			_expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.CTE));     			
+     			_expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.CTE));		
 		    } 
 		  	
 		  	|(< SOMA > | < SUB >)?  token = <NUM>
 		  	{
-         		//listaExp.add(new Item(TipoDado.NUM,t.image));
+		  	  _expressao.addItemPosfixo(new Operando(token, TipoDado.NUM, TipoElemento.CTE));
       		}	
 	}
 
 
-void inicio() : {}	
+void inicio() : {ListaComandoAltoNivel listaComandoAltoNivel = null;}	
 	{
-	      programa()  < EOF >
+	      listaComandoAltoNivel = programa() 
+	      {
+	//  		ListaComandoAltoNivel.toString();
+		  }
+		  < EOF >
 	}  
-	listaComandoAltoNivel programa() : {listaComandoAltoNivel listaComandoAltoNivel = new listaComandoAltoNivel();}	
+	ListaComandoAltoNivel programa(ListaComandoAltoNivel _listaComandoAltoNivel) : {}	
 	{
-	      (comando(listaComandoAltoNivel) {return listaComandoAltoNivel;} )*
+	      (comando(listaComandoAltoNivel) )* { return listaComandoAltoNivel; }
 	}
-	void comando(listaComandoAltoNivel _listaComandoAltoNivel) : {} 
+	void comando(ListaComandoAltoNivel _listaComandoAltoNivel) : {} 
 	{
-	      atribui(_listaComandoAltoNivel) | declaracao() | se() | enquanto() | le() | exibe()  
+	      atribui(_listaComandoAltoNivel) | declaracao(_listaComandoAltoNivel) | se() | enquanto() | le() | exibe()  
 	}
-	void atribui(listaComandoAltoNivel _listaComandoAltoNivel) : {Token token, igual; Expressao expressao; ComandoAtribuicao comando; Simbolo simbolo;} 
+	void atribui(ListaComandoAltoNivel _listaComandoAltoNivel) :
+	{Token token, tokenOperador; Expressao expressao; ComandoAtribuicao comando; Simbolo simbolo;} 
 	{
 		token = < VAR >
 		{
 		  AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
-		  simbolo = new Simbolo(var.image,TipoDado.STR);
 		}
-		igual = <RECEBE> expressao = expressaoPrincipal()
+		tokenOperador = <RECEBE> expressao = expressaoPrincipal()
 		{
-			comando = new ComandoAtribuicao(simbolo,token,expressao);
-			_listaComandoAltoNivel.addComando(comando);
+		    simbolo = new Simbolo(token,TipoDado.STR);
+			comando = new ComandoAtribuicao(tokenOperador,simbolo,expressao);
+			_listaComandoAltoNivel.addComando(comando);	
 		}
 		< PV >
 	}
-	void declaracao() : {Token token; TipoDado tipo;}
+	void declaracao(ListaComandoAltoNivel _listaComandoAltoNivel) :
+	{Token token,tokenOperador = null; TipoDado tipo; Expressao expressao = null; ComandoAtribuicao comando; Simbolo simbolo;}
 	{
 		(< NUMERO > {tipo = TipoDado.NUM;} | < PALAVRA > {tipo = TipoDado.STR ;}) token = < VAR >
 		{
 		  AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
 	 	}
-	 	(< RECEBE > expressaoPrincipal())? (< VIRGULA > token = < VAR >
+	 	(tokenOperador = < RECEBE > expressao = expressaoPrincipal())?
+	 	{
+				simbolo = new Simbolo(token,TipoDado.STR);
+				comando = new ComandoAtribuicao(tokenOperador,simbolo,expressao);
+				_listaComandoAltoNivel.addComando(comando);	
+	 	}
+	 	(< VIRGULA > token = < VAR > (tokenOperador = < RECEBE > expressao = expressaoPrincipal())? 
 		{
-	      AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
+			     AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
+			     simbolo = new Simbolo(token,TipoDado.STR);
+				  comando = new ComandoAtribuicao(tokenOperador,simbolo,expressao);
+				  _listaComandoAltoNivel.addComando(comando);	
 	   	}
-	   	(< RECEBE > expressaoPrincipal() )? )* < PV >
+	    )* < PV >
 	}
 	void se() : {}
 	{

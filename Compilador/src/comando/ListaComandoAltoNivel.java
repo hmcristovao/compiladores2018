@@ -12,7 +12,7 @@ public class ListaComandoAltoNivel {
 		return this.listaComandoAltoNivel;
 	}
 	
-	void addComando(ComandoAltoNivel _comando) {
+	public void addComando(ComandoAltoNivel _comando) {
 		this.listaComandoAltoNivel.add(_comando);
 	}
 	

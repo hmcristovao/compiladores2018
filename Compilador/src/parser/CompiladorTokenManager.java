@@ -5,6 +5,7 @@ import apoio.*;
 import geradorCodigo.*;
 import semantico.*;
 import exception.*;
+import comando.*;
 import java.util.LinkedList;
 
 /** Token Manager. */
