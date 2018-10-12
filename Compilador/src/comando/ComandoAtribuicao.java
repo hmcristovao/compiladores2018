@@ -19,7 +19,7 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return this.token +"/"+this.variavel.getLexema() + "/" + this.expressao.getListaExpPosfixa();
+		return "Comando atribuição\n" +"Variavel " + this.variavel.getLexema() + " recebe " + this.expressao.getListaExpPosfixa();
 	}
 
 	//public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();

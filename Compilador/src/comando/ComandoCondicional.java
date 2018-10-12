@@ -1,11 +1,17 @@
 package comando;
 
+import geradorCodigo.Expressao;
 import parser.Token;
 
 public abstract class ComandoCondicional extends ComandoAltoNivel {
+	
+	Expressao expressao;
+	ListaComandosAltoNivel listaComandosAltoNivelTrue;
 
-	public ComandoCondicional(Token _token) {
+	public ComandoCondicional(Token _token, Expressao _expressao, ListaComandosAltoNivel _listaComandosAltoNivel) {
 		super(_token);
+		this.expressao = _expressao;
+		this.listaComandosAltoNivelTrue = _listaComandosAltoNivel;
 		// TODO Auto-generated constructor stub
 	}
 

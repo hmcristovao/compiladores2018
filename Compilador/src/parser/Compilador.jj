@@ -18,12 +18,13 @@ public class Compilador implements Config {
 	static Tabela tabela = new Tabela();
 	public static void main(String args[])  throws SemanticException  {
       	try {
+      	  	 System.out.println("Lista de Comandos:\n");
 	         Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
 	         Compilador.inicio();
-	         System.out.println("Analise lexica, sintatica e semantica sem erros!");
-	           /*System.out.println("\nTabela de Simbolos:");
-	 		 	System.out.println(tabela);
-	 		 	System.out.println("\n_marcador:\n" + tabela._marcador);*/
+	         System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
+	         /*System.out.println("\nTabela de Simbolos:");
+	 		 System.out.println(tabela);
+	 		 System.out.println("\nMarcador:\n" + tabela.get_marcador());*/
 		 }
 	     catch(TokenMgrError e) {
 	        System.out.println("Erro lexico\n" + e.getMessage());
@@ -90,7 +91,7 @@ TOKEN : {
 //=========================================Gramática de Expressões==========================================
 	Expressao expressaoPrincipal() : {Expressao _expressao = new Expressao();}  
 	{
-	     expressao(_expressao)	{System.out.println(_expressao); return _expressao; }
+	     expressao(_expressao)	{/*System.out.println(_expressao);*/ return _expressao; }
 	}
 	void expressao(Expressao _expressao) : {Token token;}  
 	{
@@ -142,7 +143,6 @@ TOKEN : {
 		 	{
 		  		AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
      			_expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.VAR));
-     			System.out.println(token.image);
          	}
 		  	|token = < STRING >
 		  	{
@@ -154,76 +154,109 @@ TOKEN : {
 		  	  _expressao.addItemPosfixo(new Operando(token, TipoDado.NUM, TipoElemento.CTE));
       		}	
 	}
-
-
-void inicio() : {ListaComandoAltoNivel listaComandoAltoNivel = null;}	
+	
+//=========================================Gramática Completa==============================================
+void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }	
 	{
-	      listaComandoAltoNivel = programa() 
-	      {
-	//  		ListaComandoAltoNivel.toString();
-		  }
-		  < EOF >
-	}  
-	ListaComandoAltoNivel programa(ListaComandoAltoNivel _listaComandoAltoNivel) : {}	
+	      listaComandoAltoNivel = programa()   < EOF >   
+	}
+	ListaComandosAltoNivel programa() : {ListaComandosAltoNivel listaComandoAltoNivel = new ListaComandosAltoNivel();}	
 	{
 	      (comando(listaComandoAltoNivel) )* { return listaComandoAltoNivel; }
 	}
-	void comando(ListaComandoAltoNivel _listaComandoAltoNivel) : {} 
+	void comando(ListaComandosAltoNivel _listaComandoAltoNivel) : {} 
 	{
-	      atribui(_listaComandoAltoNivel) | declaracao(_listaComandoAltoNivel) | se() | enquanto() | le() | exibe()  
+		atribui(_listaComandoAltoNivel)
+		| le(_listaComandoAltoNivel)
+		| exibe(_listaComandoAltoNivel) 
+	    | declaracao()
+	    | enquanto(_listaComandoAltoNivel)
+	    | se(_listaComandoAltoNivel)
 	}
-	void atribui(ListaComandoAltoNivel _listaComandoAltoNivel) :
-	{Token token, tokenOperador; Expressao expressao; ComandoAtribuicao comando; Simbolo simbolo;} 
+	void atribui(ListaComandosAltoNivel _listaComandoAltoNivel) :
+	{Token token; Expressao expressao; ComandoAtribuicao comandoAtribuicao; Simbolo simbolo;} 
 	{
 		token = < VAR >
 		{
 		  AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
 		}
-		tokenOperador = <RECEBE> expressao = expressaoPrincipal()
+		<RECEBE> expressao = expressaoPrincipal()
 		{
 		    simbolo = new Simbolo(token,TipoDado.STR);
-			comando = new ComandoAtribuicao(tokenOperador,simbolo,expressao);
-			_listaComandoAltoNivel.addComando(comando);	
+			comandoAtribuicao = new ComandoAtribuicao(token,simbolo,expressao);
+			_listaComandoAltoNivel.addComando(comandoAtribuicao);
+			System.out.println(comandoAtribuicao.toString());
 		}
 		< PV >
 	}
-	void declaracao(ListaComandoAltoNivel _listaComandoAltoNivel) :
-	{Token token,tokenOperador = null; TipoDado tipo; Expressao expressao = null; ComandoAtribuicao comando; Simbolo simbolo;}
+	void le(ListaComandosAltoNivel _listaComandoAltoNivel) :
+	{Token token; ComandoEntrada comandoEntrada; Simbolo simbolo;}
+	{
+	      <LEITURA> token = <VAR> 
+	      {
+				simbolo = new Simbolo(token,TipoDado.STR);
+				comandoEntrada = new ComandoEntrada(token,simbolo);
+				_listaComandoAltoNivel.addComando(comandoEntrada);
+				System.out.println(comandoEntrada.toString());
+	      }
+	      ( < VIRGULA > token = < VAR >
+	      {
+	        	simbolo = new Simbolo(token,TipoDado.STR);
+				comandoEntrada = new ComandoEntrada(token,simbolo);
+				_listaComandoAltoNivel.addComando(comandoEntrada);
+				System.out.println(comandoEntrada.toString());
+	      }
+	      )* < PV >
+	}
+	void exibe(ListaComandosAltoNivel _listaComandoAltoNivel) :
+	{Token token; Expressao expressao; ComandoSaida comandoSaida;}
+	{
+	      token = <EXIBE> expressao = expressaoPrincipal()
+	      {
+	        	comandoSaida = new ComandoSaida(token,expressao);
+	        	_listaComandoAltoNivel.addComando(comandoSaida);
+	        	System.out.println(comandoSaida.toString());
+	      }
+	      ( < VIRGULA > expressao = expressaoPrincipal()
+	      {
+				comandoSaida = new ComandoSaida(token,expressao);
+	        	_listaComandoAltoNivel.addComando(comandoSaida);
+	        	System.out.println(comandoSaida.toString());
+	      }
+	      )* < PV > 
+	}
+	void declaracao() :
+	{Token token; TipoDado tipo;}
 	{
 		(< NUMERO > {tipo = TipoDado.NUM;} | < PALAVRA > {tipo = TipoDado.STR ;}) token = < VAR >
 		{
-		  AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
+		  		AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
 	 	}
-	 	(tokenOperador = < RECEBE > expressao = expressaoPrincipal())?
-	 	{
-				simbolo = new Simbolo(token,TipoDado.STR);
-				comando = new ComandoAtribuicao(tokenOperador,simbolo,expressao);
-				_listaComandoAltoNivel.addComando(comando);	
-	 	}
-	 	(< VIRGULA > token = < VAR > (tokenOperador = < RECEBE > expressao = expressaoPrincipal())? 
+	 	( < RECEBE > expressaoPrincipal())? (< VIRGULA > token = < VAR > (< RECEBE > expressaoPrincipal())? 
 		{
 			     AcoesSemanticas.tratamentoDeclaracao(tabela, token, tipo);
-			     simbolo = new Simbolo(token,TipoDado.STR);
-				  comando = new ComandoAtribuicao(tokenOperador,simbolo,expressao);
-				  _listaComandoAltoNivel.addComando(comando);	
 	   	}
 	    )* < PV >
 	}
-	void se() : {}
+	void enquanto(ListaComandosAltoNivel _listaComandoAltoNivel) :
+	{Token token; Expressao expressao; ComandoEnquanto comandoEnquanto; ListaComandosAltoNivel listaComandoAltoNivel = null;}
 	{
-	      < SE > < AP > expressaoPrincipal() < FP > programa() < FIMSE >
+	      token = < ENQUANTO > < AP > expressao = expressaoPrincipal() < FP > listaComandoAltoNivel = programa()
+	      {
+				comandoEnquanto = new ComandoEnquanto(token, expressao, listaComandoAltoNivel);
+				_listaComandoAltoNivel.addComando(comandoEnquanto);
+				System.out.println(comandoEnquanto.toString());
+	      }
+	      < FIMENQUANTO > 
 	}
-	void enquanto() : {}
+	void se(ListaComandosAltoNivel _listaComandoAltoNivel) :
+	{Token token; Expressao expressao; ComandoCondicional comandoCondicional; ListaComandosAltoNivel listaComandoAltoNivel = null;}
 	{
-	      < ENQUANTO > < AP > expressaoPrincipal() < FP > programa() < FIMENQUANTO > 
+	      token = < SE > < AP > expressao = expressaoPrincipal() < FP > listaComandoAltoNivel = programa()
+	      {
+	        	comandoCondicional = new ComandoCondicionalSimples(token, expressao, listaComandoAltoNivel);
+	        	_listaComandoAltoNivel.addComando(comandoCondicional);
+	        	System.out.println(comandoCondicional.toString());
+	      }
+	      < FIMSE >
 	}
-	void le() : {}
-	{
-	      <LEITURA> <VAR> ( < VIRGULA > < VAR > )* < PV > 
-	}
-	void exibe() : {}
-	{
-	      <EXIBE> expressaoPrincipal() ( < VIRGULA > expressaoPrincipal() )*   < PV > 
-	}
-
-	

@@ -2,13 +2,13 @@ package comando;
 
 import java.util.LinkedList;
 
-public class ListaComandoAltoNivel {
+public class ListaComandosAltoNivel {
 	LinkedList<ComandoAltoNivel> listaComandoAltoNivel;
 	
-	public ListaComandoAltoNivel(){
+	public ListaComandosAltoNivel(){
 		this.listaComandoAltoNivel = new LinkedList<ComandoAltoNivel>();
 	}
-	LinkedList<ComandoAltoNivel> getListaComandosAltoNivel(){
+	public LinkedList<ComandoAltoNivel> getListaComandosAltoNivel(){
 		return this.listaComandoAltoNivel;
 	}
 	

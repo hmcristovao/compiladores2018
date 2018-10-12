@@ -1,2 +1,12 @@
-numero a <- 0, b <- 0;
-le a;
+numero a <- 0, b <- 0, tartaruga <- 10;
+a <- a + b;
+le b,a;
+exibe a,b;
+enquanto (a = b)
+	a <- 0;
+	b <- 2;
+fimenquanto
+se (b = tartaruga)
+	b <- a + b;
+	tartaruga <- b - b;
+fimse

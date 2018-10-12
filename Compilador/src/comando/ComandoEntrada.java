@@ -1,17 +1,22 @@
 package comando;
 
 import parser.Token;
+import semantico.Simbolo;
 
 public class ComandoEntrada extends ComandoAltoNivel {
 
-	public ComandoEntrada(Token _token) {
+	Simbolo variavel;
+	
+	public ComandoEntrada(Token _token,Simbolo _simbolo) {
 		super(_token);
+		this.variavel = _simbolo;
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Comando leitura\n" +"Variavel " + this.variavel.getLexema()
+		;
 	}
 
 }
