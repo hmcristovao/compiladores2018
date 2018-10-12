@@ -8,13 +8,9 @@ public class Tabela {
             this.tab = new HashMap<String,Simbolo>();
       }
   
-      public boolean incluiSimbolo(Simbolo _simb) {
-            if(this.tab.containsKey(_simb.getNome()))
-                  return false;
-            else {
+      public void incluiSimbolo(Simbolo _simb) {
+            if(!this.tab.containsKey(_simb.getNome()))
                   this.tab.put(_simb.getNome(),_simb);
-                  return true;
-            }
       }
       
       public boolean verificaExistenciaSimbolo(String _chave) {
@@ -22,7 +18,7 @@ public class Tabela {
       }
       
       public Simbolo consultaSimbolo(String _chave) {
-    	  return (Simbolo); //terminar aqui
+    	  return (tab.get(_chave)); //terminar aqui
       }
       
       public int consultaReferencia(String _chave) {
