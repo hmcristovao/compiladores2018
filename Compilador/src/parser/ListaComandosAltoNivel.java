@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.AbstractList.*;
 
 
-public class ListaComandosAltoNivel {
+public class ListaComandosAltoNivel extends ComandoAltoNivel {
 	static Tabela tabela = new Tabela();
 	LinkedList<ComandoAltoNivel> listaComandoAltoNivel = new LinkedList<ComandoAltoNivel>();
 	//fazer funcionar
@@ -16,12 +16,21 @@ public class ListaComandosAltoNivel {
 		
 	}
 	
-	public void addComando(ComandoAltoNivel) {
+	public void addComando(ComandoAltoNivel comando) {
 		
+	}
+
+	@Override
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
-	public static void main(String[] args) throws ParseException {
-		
-	}
 
 }
