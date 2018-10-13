@@ -1,7 +1,9 @@
 package semantico;
 
-public class Item {
-	private Tipo tipo; 
+import parser.Token;
+
+public abstract class Item {
+	/*private Tipo tipo; 
 	   private String valor;
 	   public Item(Tipo _tipo, String _valor) {
 	      this.tipo = _tipo;
@@ -15,5 +17,17 @@ public class Item {
 	   }
 	   public String toString() {
 	      return this.tipo + ": " + this.valor;
-	   }
+	   }*/
+	private Token token;
+	
+	public Item(Token t){
+		this.token = t;
 	}
+	
+	public String getLexema(){
+		return this.token.image;
+	}
+	
+	public abstract String toString();
+	
+}

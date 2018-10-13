@@ -1,5 +1,9 @@
 package apoio;
 
-public class config {
-	static public String arquivo = "exemplo17.spc2";
+public interface Config {
+	public String nomeArquivo = "Compilador/exemplo01";
+	public String extensaoFonte = ".spc";
+	public String extensaoPrimPassagem = "";
+	public String extensaoSegPassagem = "";	
+	
 }

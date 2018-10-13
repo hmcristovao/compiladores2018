@@ -10,17 +10,20 @@ package parser;
 import semantico.*;
 import java.util.LinkedList;
 import java.io.*;
+import comando.*;
 import apoio.*;
+import geradorCodigo.*;
 public class Compilador {
 	static Tabela tabela = new Tabela();
 	
 	public static void main(String args[])  throws ParseException  {
 
-	   Compilador analisador = null;
+	   //Compilador analisador = null;
 	
       try {
 
-        analisador = new Compilador(new FileInputStream(config.arquivo)); //entrada do arquivo
+        Compilador analisador = new Compilador(new FileInputStream(Config.nomeArquivo+Config.extensaoFonte));
+        //System.out.println("entrou");
         Compilador.inicio();
         System.out.println("Análise léxica, sintática e semântico sem erros!");
       }
@@ -60,7 +63,7 @@ TOKEN : {
 	< FP: ")" > |
 	< PV: ";" > |
 	< VIRGULA: "," > |
-	        < STRING: "\"" (~["\""])* "\"" > |
+	< STRING: "\"" (~["\""])* "\"" > |
 	< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
  }
 
@@ -79,117 +82,229 @@ TOKEN : {
 	< IGUAL: "=" > |
 	< CONCAT: "&" > 
  }
-void inicio() : { }
+void inicio() : {ListaComandosAltoNivel listaComandosAltoNivel = null; }
 {
-	programa() <EOF>
+	listaComandosAltoNivel = programa() <EOF> 
 }
-void programa() : {}
+ListaComandosAltoNivel programa() : {ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();}
 {
-   ( comando() )*
+   (
+     comando(listaComandosAltoNivel)
+   )*
+   {
+		return listaComandosAltoNivel;
+   }
 }
-void comando() : {} 
+void comando(ListaComandosAltoNivel listaComandosAltoNivel) : {listaComandosAltoNivel = null;} 
 {
-      atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+        atribuicao(listaComandosAltoNivel)
+      | declaracao()
+      | se(listaComandosAltoNivel)
+      | enquanto(listaComandosAltoNivel)
+      | le(listaComandosAltoNivel)
+      | exibe(listaComandosAltoNivel)
 }
 
-void expressao(): {LinkedList<Item> listaExp = new LinkedList<Item>(); } 
+//			EXPRESSOES
+Expressao expressao(): {Expressao expressao_lista = new Expressao(); } 
   {
-  	expressao2(listaExp){ System.out.println(listaExp + "\n"); }
+  	expressao2(expressao_lista){return expressao_lista; }
   }
 
-void expressao2(LinkedList<Item> listaExp) : {Item item = null; Token t; }
+void expressao2(Expressao expressao_lista) : { Token t; }
 {
-  termo(listaExp)(t=< OU >termo(listaExp) {item = new Item( Tipo.operador, t.image ); listaExp.add(item); })*
+  termo(expressao_lista)(t=< OU >termo(expressao_lista)
+   {
+     expressao_lista.addItemPosfixo(new Operador(t, TipoOperador.OR));
+   }
+   )*
 }
   	
 
-void termo (LinkedList<Item> listaExp) : {Item item = null; Token t; }//igualdade
+void termo (Expressao expressao_lista) : {Token t; }//igualdade
 {
   //termo1() (<IGUAL> termo1())?
-  termo1(listaExp)(t=< IGUAL >termo1(listaExp) { item = new Item( Tipo.operador, t.image ); listaExp.add(item);})?
+  termo1(expressao_lista)
+  (
+    t=< IGUAL >termo1(expressao_lista)
+   		{
+     		expressao_lista.addItemPosfixo(new Operador(t, TipoOperador.IGUAL));
+   		}
+   )?
 }
   
-void termo1(LinkedList<Item> listaExp) : {Item item = null; Token t; } //concatenacao
+void termo1(Expressao expressao_lista) : {Token t; } //concatenacao
 {
   //termo2() (<CONCAT> termo2())*
-  termo2(listaExp)(t=< CONCAT >termo2(listaExp) {item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
+  termo2(expressao_lista)
+  (
+    t=< CONCAT >termo2(expressao_lista)
+    	{
+    	  expressao_lista.addItemPosfixo(new Operador(t, TipoOperador.CONCAT));
+    	}
+  )*
 }
   
-void termo2(LinkedList<Item> listaExp) : {Item item = null; Token t; } //soma e subtração
+void termo2(Expressao expressao_lista) : {Token t; TipoOperador tipo; } //soma e subtração
 {
-  termo3(listaExp)((t=< SOMA >|t=< SUB >)termo3(listaExp){item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
+  termo3(expressao_lista)
+  (
+    (
+      t=< SOMA > { tipo = TipoOperador.ADD; }
+      |
+      t=< SUB > { tipo = TipoOperador.SUB; }
+    )
+    termo3(expressao_lista)
+    	{
+    	  expressao_lista.addItemPosfixo(new Operador(t, tipo));
+    	}
+  )*
 }
 
-void termo3(LinkedList<Item> listaExp) : {Item item = null; Token t; } //multiplicacao e divisao
-{
-  termo4(listaExp)((t=< MUL >|t=< DIV >)termo4(listaExp){item = new Item( Tipo.operador, t.image ); listaExp.add(item);} )*
+void termo3(Expressao expressao_lista) : {Token t; TipoOperador tipo;} //multiplicacao e divisao
+{ 
+  termo4(expressao_lista)
+  (
+    (
+      t=< MUL > { tipo = TipoOperador.MUL; }
+      |
+      t=< DIV > { tipo = TipoOperador.DIV; }
+    )
+    termo4(expressao_lista)
+    	{
+    	  expressao_lista.addItemPosfixo(new Operador(t, tipo));
+    	}
+  )*
 }
 
-void termo4(LinkedList<Item> listaExp) : { Item item = null; Token t=null; char sinal=' '; Tipo tipo=null;} //expressao entre parenteces
+void termo4(Expressao expressao_lista) : { Token t;} //expressao entre parenteces
 {
-  	(    < AP >expressao2(listaExp)< FP >
-  	| t=< NUM >{tipo=Tipo.numero;}
-  	| < SOMA >t=<NUM > {tipo=Tipo.numero;sinal='+';}
-	| < SUB >t=<NUM>{tipo=Tipo.numero;sinal='-';}
+  	
+  	(
+  	  	< AP >expressao2(expressao_lista)< FP >
+  		| t=< NUM >
+  			{
+  			  //System.out.println("aqui veio Satanas");
+  			  Operando operador = new Operando(t, TipoDado.NUMERO, TipoElemento.CTE);
+  			  //System.out.println("matarei o golias");
+  			  expressao_lista.addItemPosfixo(operador);
+  			  //System.out.println("ate aqui JUDAS");
+  			  //expressao_lista.imprime();
+  			}
+  		| < SOMA >t=<NUM >
+  			{
+  			  expressao_lista.addItemPosfixo(new Operando(t, TipoDado.NUMERO, TipoElemento.CTE));
+  			}
+		| < SUB >t=<NUM>
+			{
+			  expressao_lista.addItemPosfixo(new Operando(t, TipoDado.NUMERO, TipoElemento.CTE));
+			}
 	
-	| t=< VAR >{tipo=Tipo.variavel;} {
-		if(!tabela.isExiste(t.image)) { 
-			System.out.println("Erro semântico \n A variável "+t.image + " não foi inicializada");
-			System.exit(1);
-		}
-	 }
-	| t=< STRING >{tipo=Tipo.string;}
-	){item = new Item( tipo , sinal + t.image ); listaExp.add(item);}
+		| t=< VAR >
+			{
+				AcoesSemantica.variavelNaoDeclarada(t, tabela);
+				expressao_lista.addItemPosfixo(new Operando(t, tabela.consultaTipo(t.image), TipoElemento.VAR));
+	 		}
+		| t=< STRING >
+			{
+			  expressao_lista.addItemPosfixo(new Operando(t, TipoDado.PALAVRA, TipoElemento.CTE));
+			}
+	)
 }
 
-void atribuicao() : {Simbolo simb; Token t;} //atribuição
+//			COMANDOS
+void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel) :
+	{Simbolo simb; Token t; Expressao expressao; ComandoAtribuicao comandoAtribuicao;}
 {
-      t = <VAR> {
-        simb = new Simbolo(t.image);
-        tabela.inclui(simb);
-        }
-       <ATRIB> expressao() <PV>
-}
-
-void declaracao() : {Simbolo simb; Token t; Token tipo; }
-{
-	(tipo = <NUMERO>|tipo = <PALAVRA>)
 	t = <VAR>
-	(  <ATRIB>
-	{simb = new Simbolo(t.image,tipo.image);
-	 tabela.inclui(simb);
-	}
-	expressao() )? (<VIRGULA>
-	t = <VAR>
-	( <ATRIB>
-	{simb = new Simbolo(t.image);
-	 tabela.inclui(simb);
-	}
-	expressao() )? )* <PV>
+	{
+        AcoesSemantica.variavelNaoDeclarada(t,tabela);
+    }
+    <ATRIB> /*{System.out.println("chegou2"); }*/ expressao = expressao() 
+    {
+		simb = new Simbolo(t, TipoDado.PALAVRA);
+		comandoAtribuicao = new ComandoAtribuicao(t,tabela.consultaSimbolo(t.image),expressao);
+		//System.out.println(comandoAtribuicao+"\n"); //Criação do comando OK
+		//System.out.println(listaComandosAltoNivel+"\n");
+  	   	//listaComandosAltoNivel.addComando(comandoAtribuicao);
+		System.out.println(comandoAtribuicao.toString());
+    }
+    <PV>
 }
 
-void se() : { } //if
+void declaracao() : {Token t; TipoDado tipo; }
 {
-  	<SE> <AP> expressao() <FP> programa() <FIMSE>
+	(
+	  <NUMERO> { tipo = TipoDado.NUMERO; }
+	  |
+	  <PALAVRA> { tipo = TipoDado.PALAVRA; }
+	)
+	t = <VAR> {AcoesSemantica.trataDeclaracao(tabela,t,tipo);}
+	(  <ATRIB> expressao() )?
+	(<VIRGULA>
+		t = <VAR> 
+		( <ATRIB> expressao() )? {AcoesSemantica.trataDeclaracao(tabela,t,tipo); }
+	)* <PV>
 }
 
-void enquanto() : { } //while
+void se(ListaComandosAltoNivel listaComandosAltoNivel) :
+{Token t; Expressao expressao; ComandoCondicionalSimples comandoCondicional;} //if
 {
-  	<ENQUANTO> <AP> expressao() <FP> programa() <FIMENQUANTO>
+  	t = <SE> <AP> expressao = expressao() <FP> listaComandosAltoNivel = programa()
+  	 {
+  	   comandoCondicional = new ComandoCondicionalSimples(t, expressao,listaComandosAltoNivel);
+  	   //listaComandosAltoNivel.addComando(comandoCondicional);
+  	   System.out.println(comandoCondicional.toString());
+  	 }
+  	<FIMSE>
 }
 
-void le() : { Token t; Simbolo simb; } //read
+void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) :
+ {Token t; Expressao expressao; ComandoEnquanto comandoEnquanto; } //while
 {
-  	<LEITURA> t = <VAR> {
-  	  if(!tabela.isExiste(t.image)) { 
-			simb = new Simbolo(t.image);
-	 		tabela.inclui(simb);
-		}
+  	t = <ENQUANTO> <AP> expressao = expressao() <FP> listaComandosAltoNivel = programa()
+	 {
+  	   comandoEnquanto = new ComandoEnquanto(t, expressao,listaComandosAltoNivel);
+  	   //listaComandosAltoNivel.addComando(comandoEnquanto);
+  	   System.out.println(comandoEnquanto.toString());
+  	 }
+  	<FIMENQUANTO>
+}
+
+void le(ListaComandosAltoNivel listaComandosAltoNivel) : { Token t; Token variavel; Simbolo simb; ComandoEntrada comandoEntrada; } //read
+{
+  	t = <LEITURA> variavel = <VAR>
+  	   {
+  	  	AcoesSemantica.variavelNaoDeclarada(variavel,tabela);
+  	  	simb = new Simbolo(t, TipoDado.PALAVRA);
+		comandoEntrada = new ComandoEntrada(t,simb);
+		//listaComandosAltoNivel.addComando(comandoEntrada);
+		System.out.println(comandoEntrada.toString());
   	   }
-  	( <VIRGULA> <VAR> )* <PV>
+  	( <VIRGULA> <VAR>
+		{
+		  AcoesSemantica.variavelNaoDeclarada(variavel,tabela);
+  	  	  simb = new Simbolo(t, TipoDado.PALAVRA);
+		  comandoEntrada = new ComandoEntrada(t,simb);
+		  //listaComandosAltoNivel.addComando(comandoEntrada);
+		  System.out.println(comandoEntrada.toString());
+		}
+  	 )* <PV>
 }
 
-void exibe() : { } //print
+void exibe(ListaComandosAltoNivel listaComandosAltoNivel) : {Token t; Expressao expressao; ComandoSaida comandoSaida; } //print
 {
-  	<EXIBE> expressao() ( <VIRGULA> expressao() )* <PV>
+  	t = <EXIBE> expressao = expressao()
+  	 {
+  	   comandoSaida = new ComandoSaida(t,expressao);
+	   //listaComandosAltoNivel.addComando(comandoSaida);
+	   System.out.println(comandoSaida.toString());
+  	 }
+  	 ( <VIRGULA> expressao = expressao()
+		{
+		  comandoSaida = new ComandoSaida(t,expressao);
+	   	  //listaComandosAltoNivel.addComando(comandoSaida);
+	      System.out.println(comandoSaida.toString());
+		}
+  	 )* <PV>
 }
