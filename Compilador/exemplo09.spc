@@ -1,2 +1,0 @@
-numero a;
-le a;
