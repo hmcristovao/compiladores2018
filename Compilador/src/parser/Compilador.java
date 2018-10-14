@@ -280,9 +280,7 @@ public class Compilador implements Config, CompiladorConstants {
                   AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
     jj_consume_token(RECEBE);
     expressao = expressaoPrincipal();
-                    simbolo = new Simbolo(token,TipoDado.STR);
-                        comandoAtribuicao = new ComandoAtribuicao(token,simbolo,expressao);
-                        _listaComandoAltoNivel.addComando(comandoAtribuicao);
+                        _listaComandoAltoNivel.addComando(comandoAtribuicao = new ComandoAtribuicao(token,simbolo = new Simbolo(token,TipoDado.STR),expressao));
                         System.out.println(comandoAtribuicao.toString());
     jj_consume_token(PV);
   }
@@ -291,9 +289,7 @@ public class Compilador implements Config, CompiladorConstants {
          Token token; ComandoEntrada comandoEntrada; Simbolo simbolo;
     jj_consume_token(LEITURA);
     token = jj_consume_token(VAR);
-                                simbolo = new Simbolo(token,TipoDado.STR);
-                                comandoEntrada = new ComandoEntrada(token,simbolo);
-                                _listaComandoAltoNivel.addComando(comandoEntrada);
+                                _listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
                                 System.out.println(comandoEntrada.toString());
     label_7:
     while (true) {
@@ -307,9 +303,7 @@ public class Compilador implements Config, CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       token = jj_consume_token(VAR);
-                        simbolo = new Simbolo(token,TipoDado.STR);
-                                comandoEntrada = new ComandoEntrada(token,simbolo);
-                                _listaComandoAltoNivel.addComando(comandoEntrada);
+                                _listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
                                 System.out.println(comandoEntrada.toString());
     }
     jj_consume_token(PV);
@@ -319,8 +313,7 @@ public class Compilador implements Config, CompiladorConstants {
          Token token; Expressao expressao; ComandoSaida comandoSaida;
     token = jj_consume_token(EXIBE);
     expressao = expressaoPrincipal();
-                        comandoSaida = new ComandoSaida(token,expressao);
-                        _listaComandoAltoNivel.addComando(comandoSaida);
+                        _listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
                         System.out.println(comandoSaida.toString());
     label_8:
     while (true) {
@@ -334,8 +327,7 @@ public class Compilador implements Config, CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       expressao = expressaoPrincipal();
-                                comandoSaida = new ComandoSaida(token,expressao);
-                        _listaComandoAltoNivel.addComando(comandoSaida);
+                        _listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
                         System.out.println(comandoSaida.toString());
     }
     jj_consume_token(PV);
@@ -401,8 +393,8 @@ public class Compilador implements Config, CompiladorConstants {
     expressao = expressaoPrincipal();
     jj_consume_token(FP);
     listaComandoAltoNivel = programa();
-                                comandoEnquanto = new ComandoEnquanto(token, expressao, listaComandoAltoNivel);
-                                _listaComandoAltoNivel.addComando(comandoEnquanto);
+               ;
+                                _listaComandoAltoNivel.addComando(comandoEnquanto = new ComandoEnquanto(token, expressao, listaComandoAltoNivel));
                                 System.out.println(comandoEnquanto.toString());
     jj_consume_token(FIMENQUANTO);
   }
@@ -414,8 +406,7 @@ public class Compilador implements Config, CompiladorConstants {
     expressao = expressaoPrincipal();
     jj_consume_token(FP);
     listaComandoAltoNivel = programa();
-                        comandoCondicional = new ComandoCondicionalSimples(token, expressao, listaComandoAltoNivel);
-                        _listaComandoAltoNivel.addComando(comandoCondicional);
+                        _listaComandoAltoNivel.addComando(comandoCondicional = new ComandoCondicionalSimples(token, expressao, listaComandoAltoNivel));
                         System.out.println(comandoCondicional.toString());
     jj_consume_token(FIMSE);
   }

@@ -3,6 +3,7 @@ package comando;
 import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.Simbolo;
+import semantico.TipoDado;
 
 public class ComandoAtribuicao extends ComandoAltoNivel {
 
@@ -14,6 +15,12 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		this.variavel = _simbolo;
 		this.expressao = _expressao;
 		// TODO Auto-generated constructor stub
+	}
+	
+	public void adicionaComando(Token _token, Expressao _expressao) {
+		Simbolo simbolo = new Simbolo(_token,TipoDado.STR);
+		
+		
 	}
 
 	@Override

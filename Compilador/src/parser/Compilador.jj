@@ -182,9 +182,7 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 		}
 		<RECEBE> expressao = expressaoPrincipal()
 		{
-		    simbolo = new Simbolo(token,TipoDado.STR);
-			comandoAtribuicao = new ComandoAtribuicao(token,simbolo,expressao);
-			_listaComandoAltoNivel.addComando(comandoAtribuicao);
+			_listaComandoAltoNivel.addComando(comandoAtribuicao = new ComandoAtribuicao(token,simbolo = new Simbolo(token,TipoDado.STR),expressao));
 			System.out.println(comandoAtribuicao.toString());
 		}
 		< PV >
@@ -194,16 +192,12 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 	{
 	      <LEITURA> token = <VAR> 
 	      {
-				simbolo = new Simbolo(token,TipoDado.STR);
-				comandoEntrada = new ComandoEntrada(token,simbolo);
-				_listaComandoAltoNivel.addComando(comandoEntrada);
+				_listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
 				System.out.println(comandoEntrada.toString());
 	      }
 	      ( < VIRGULA > token = < VAR >
 	      {
-	        	simbolo = new Simbolo(token,TipoDado.STR);
-				comandoEntrada = new ComandoEntrada(token,simbolo);
-				_listaComandoAltoNivel.addComando(comandoEntrada);
+				_listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
 				System.out.println(comandoEntrada.toString());
 	      }
 	      )* < PV >
@@ -213,14 +207,12 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 	{
 	      token = <EXIBE> expressao = expressaoPrincipal()
 	      {
-	        	comandoSaida = new ComandoSaida(token,expressao);
-	        	_listaComandoAltoNivel.addComando(comandoSaida);
+	        	_listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
 	        	System.out.println(comandoSaida.toString());
 	      }
 	      ( < VIRGULA > expressao = expressaoPrincipal()
 	      {
-				comandoSaida = new ComandoSaida(token,expressao);
-	        	_listaComandoAltoNivel.addComando(comandoSaida);
+	        	_listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
 	        	System.out.println(comandoSaida.toString());
 	      }
 	      )* < PV > 
@@ -242,9 +234,8 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 	{Token token; Expressao expressao; ComandoEnquanto comandoEnquanto; ListaComandosAltoNivel listaComandoAltoNivel = null;}
 	{
 	      token = < ENQUANTO > < AP > expressao = expressaoPrincipal() < FP > listaComandoAltoNivel = programa()
-	      {
-				comandoEnquanto = new ComandoEnquanto(token, expressao, listaComandoAltoNivel);
-				_listaComandoAltoNivel.addComando(comandoEnquanto);
+	      {;
+				_listaComandoAltoNivel.addComando(comandoEnquanto = new ComandoEnquanto(token, expressao, listaComandoAltoNivel));
 				System.out.println(comandoEnquanto.toString());
 	      }
 	      < FIMENQUANTO > 
@@ -254,8 +245,7 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 	{
 	      token = < SE > < AP > expressao = expressaoPrincipal() < FP > listaComandoAltoNivel = programa()
 	      {
-	        	comandoCondicional = new ComandoCondicionalSimples(token, expressao, listaComandoAltoNivel);
-	        	_listaComandoAltoNivel.addComando(comandoCondicional);
+	        	_listaComandoAltoNivel.addComando(comandoCondicional = new ComandoCondicionalSimples(token, expressao, listaComandoAltoNivel));
 	        	System.out.println(comandoCondicional.toString());
 	      }
 	      < FIMSE >
