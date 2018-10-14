@@ -47,6 +47,6 @@ public class Expressao
 	@Override
 	public String toString()
 	{
-		return null;
+		return ""+this.expressaoPosfixa;
 	}
 }

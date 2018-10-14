@@ -1,3 +1,13 @@
+<<<<<<< HEAD:exemplo13.spc
 se (2=2)
    exibe  "Igual!!";
 fim-se 
+||||||| merged common ancestors
+se (2=2)
+   exibe  "Igual!!";
+fim-se
+=======
+se (2=2)
+   exibe  "Igual!!";
+fim-se 
+>>>>>>> master:src/apoio/exemplo13.spc2

@@ -23,9 +23,15 @@ public class ListaComandosAltoNivel
 		return this.ListaComandosAltoNivel;
 	}
 
+	@Override
 	public String toString()
 	{
-		return null;
+		LinkedList<ComandoAltoNivel> lista = this.ListaComandosAltoNivel;
+		for(ComandoAltoNivel comando : lista)
+		{
+			System.out.println(comando.toString());
+		}
+		return "";
 	}	
 
 }

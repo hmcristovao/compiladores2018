@@ -4,11 +4,23 @@ JAVACC_OPTIONS=
 JJDOC_OPTIONS=
 JJTREE_OPTIONS=
 JJ_NATURE=true
+<<<<<<< HEAD
+JTB_OPTIONS=
+KEEP_DEL_FILES_IN_HISTORY=false
+MARK_GEN_FILES_AS_DERIVED=false
+RUNTIME_JJJAR=/home/henrique/.eclipse/org.eclipse.platform_4.8.0_1473617060_linux_gtk_x86_64/plugins/sf.eclipse.javacc_1.5.33/jars/javacc-5.0.jar
+RUNTIME_JTBJAR=/home/henrique/.eclipse/org.eclipse.platform_4.8.0_1473617060_linux_gtk_x86_64/plugins/sf.eclipse.javacc_1.5.33/jars/jtb-1.4.11.jar
+RUNTIME_JVMOPTIONS=
+||||||| merged common ancestors
+RUNTIME_JJJAR=/home/elly/.p2/pool/plugins/sf.eclipse.javacc_1.5.33/jars/javacc-5.0.jar
+RUNTIME_JTBJAR=/home/elly/.p2/pool/plugins/sf.eclipse.javacc_1.5.33/jars/jtb-1.4.11.jar
+=======
 JTB_OPTIONS=
 KEEP_DEL_FILES_IN_HISTORY=false
 MARK_GEN_FILES_AS_DERIVED=true
 RUNTIME_JJJAR=C\:\\Users\\Henrique\\.p2\\pool\\plugins\\sf.eclipse.javacc_1.5.33\\jars\\javacc-5.0.jar
 RUNTIME_JTBJAR=C\:\\Users\\Henrique\\.p2\\pool\\plugins\\sf.eclipse.javacc_1.5.33\\jars\\jtb-1.4.11.jar
 RUNTIME_JVMOPTIONS=
+>>>>>>> master
 SUPPRESS_WARNINGS=false
 eclipse.preferences.version=1

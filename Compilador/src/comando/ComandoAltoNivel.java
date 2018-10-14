@@ -10,9 +10,10 @@ public abstract class ComandoAltoNivel
 	{
 		this.token = _token;
 	}
+	
 	public String getLexema()
 	{
-		return null;
+		return token.image;
 	}
 
 /*	public abstract ListaComandosPrimitivos
