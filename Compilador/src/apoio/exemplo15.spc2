@@ -1,0 +1,5 @@
+numero i<-0;
+
+se (i=10)
+    exibe i, " ";
+fim-se
