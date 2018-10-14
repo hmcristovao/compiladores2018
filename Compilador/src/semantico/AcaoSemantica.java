@@ -2,25 +2,32 @@ package semantico;
 import parser.*;
 import tratamentoErro.*;
 
-public class AcaoSemantica 
+
+
+public class AcaoSemantica
 {
-	public static void declaracaoPrevia( Tabela _tab, Token _t )
-    {
-     	if ( !_tab.isExiste( _t.image ) )
+
+	public static void declaracaoPrevia(Tabela _tabela, Token _token)
+	{
+		if(!_tabela.verificaExistenciaSimbolo(_token.image))
 		{
-			throw new ErroSemantico("Variavel'" + _t.image + "' nao declarada na linha " + _t.beginLine + "\n");
+			throw new ErroSemantico("Variavel '"+_token.image+"' nao declara na linha "+_token.beginLine+"\n");
 		}
-    }
-	
-	public static void criarVariavel( Tabela _tab, Token t, Tipo _tp )
+	}
+
+	public static void criarVariavel(Tabela _tabela, Token _token, TipoDado _tipo)
     {
-		Simbolo simb = new Simbolo( t.image, _tp );
-	  	if ( !_tab.incluir( simb ) )
+
+	  	if ( _tabela.verificaExistenciaSimbolo( _token.image ) )
 	  	{
-	  		throw new ErroSemantico("Variavel'" + t.image + "' repetida na linha " + t.beginLine + "\n");
+	  		throw new ErroSemantico("Variavel '" + _token.image + "' repetida na linha " + _token.beginLine + "\n");
+	  	}
+	  	else
+	  	{
+	  		// Criar Simbolo sem passar a referencia na tabela ao construtor
+			Simbolo simbolo = new Simbolo( _token, _tipo );
+	  		_tabela.incluiSimbolo(simbolo);
 	  	}
 	 
-    }  
-
-	
+    }
 }

@@ -1,84 +1,95 @@
 package semantico;
 
-import java.util.HashMap;
 import parser.*;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
-public class Tabela 
+public class Tabela
 {
-	private HashMap<String, Simbolo> tabela_simbolos;
-	private int marcador;
-	
+
+	private HashMap<String,Simbolo> tabela;
+	private int proximaReferencia;
+
 	public Tabela()
 	{
-		this.tabela_simbolos = new HashMap<String,Simbolo>();
-		this.marcador = 1;
-	}
-	
-	public boolean incluir( Simbolo _simb )
+		this.tabela = new HashMap<String,Simbolo>();
+		//TODO : verificar se ao iniciar uma tabela a referencia inicia como zero ou 1
+		this.proximaReferencia = 1;
+	}	
+
+	public void incluiSimbolo(Simbolo _simbolo)
 	{
-		if ( this.tabela_simbolos.containsKey(_simb.getNome()) )
-			return false;
-		else
+		_simbolo.setReferencia(this.proximaReferencia);
+		this.tabela.put(_simbolo.getLexema(), _simbolo);
+		this.incrementaReferencia(_simbolo.getTipoDado());
+		//System.out.println(_simbolo.getLexema()+_simbolo.getReferencia()+_simbolo.getTipoDado());
+	}
+
+	public HashMap<String, Simbolo> getTabela()
+	{
+		return this.tabela;
+	}
+	public void showTabela()
+	{
+		HashMap<String, Simbolo> tab = this.getTabela();
+		for(Simbolo i : tab.values() )
 		{
-			this.tabela_simbolos.put(_simb.getNome(), _simb );
-			_simb.setReferencia( this.getMarcador() );
-			this.atualizarMarcador( _simb.getTipo() );
-			return true;
+			System.out.println("Lexema :"+i.getLexema()+" Tipo Dado: "+i.getTipoDado()+" Referencia: "+i.getReferencia());
 		}
 	}
 	
-	public void atualizarMarcador( Tipo _tipo )
+	public void incrementaReferencia(TipoDado _tipo)
 	{
 		int incremento;
-		switch ( _tipo )
+		switch (_tipo)
 		{
-			case NUMERO:
+			case NUM:
 				incremento = 2;
 				break;
-			case PALAVRA:
+			case STR:
 				incremento = 1;
 				break;
 			default:
 				incremento = 0;
 		}
 		
-		this.setMarcador( this.getMarcador() + incremento );
+		this.setProximaReferencia(this.getProximaReferencia() + incremento);		
 	}
 
-	public int consultarReferencia( String _chave )
+	public void setProximaReferencia(int _referencia)
 	{
-		return ((Simbolo)this.tabela_simbolos.get(_chave)).getReferencia();
-	}
-	
-	public boolean isExiste( String _chave )
-	{
-		return this.tabela_simbolos.containsKey(_chave);
-	}
-	
-	public int getMarcador() 
-	{
-		return this.marcador;
+		this.proximaReferencia = _referencia;
 	}
 
-	public void setMarcador(int _marcador) 
+	public boolean verificaExistenciaSimbolo(String _lexema)
 	{
-		this.marcador = _marcador;
+		return this.tabela.containsKey( _lexema );
 	}
 
+	public Simbolo consultaSimbolo(String _chave)
+	{
+		return ((Simbolo)this.tabela.get(_chave));
+	}
+
+	public int consultaReferencia(String _chave)
+	{
+		return ((Simbolo)this.tabela.get(_chave)).getReferencia();
+	}
+
+	public TipoDado consultaTipo(String _chave)
+	{
+		return ((Simbolo)this.tabela.get(_chave)).getTipoDado();		
+	}
+
+	public int getProximaReferencia()
+	{
+		return this.proximaReferencia;
+	}
+
+	@Override
 	public String toString()
 	{
-		return this.tabela_simbolos.toString();
+		return this.tabela.toString();
+		
 	}
-
-	public HashMap<String, Simbolo> getTabela() 
-	{
-		return this.tabela_simbolos;
-	}
-
-	public void setTab(HashMap<String, Simbolo> _tabela_simbolos) 
-	{
-		this.tabela_simbolos = _tabela_simbolos;
-	}
-	
-	
 }

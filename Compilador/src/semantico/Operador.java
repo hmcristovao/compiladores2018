@@ -1,14 +1,25 @@
 package semantico;
 
+import parser.*;
 
-
-public enum Operador 
+public class Operador extends Item
 {
-	ADD, 
-	SUB, 
-	MUL, 
-	DIV,
-	OU,
-	IGUAL,
-	CONCAT;
+	private TipoOperador tipoOperador;
+
+	public Operador(Token _token, TipoOperador operador)
+	{
+		super(_token);
+		this.tipoOperador = operador;
+	}
+	public TipoOperador getTipoOperador()
+	{
+		return tipoOperador;
+
+	}
+
+	@Override
+	public String toString()
+	{
+		return "(" + this.getLexema() + ";" +  this.getTipoOperador() + ")";	
+	}
 }

@@ -1,60 +1,57 @@
 package semantico;
-public class Simbolo 
+
+import parser.Token;
+
+public class Simbolo
 {
-	// Identificador da variável
-	private String nome;	
-	// Tipos usados na linguagem
-	private Tipo tipo;
-	// Referência utilizada na geração de código destino	
+	private String nome = null;
+	private Token token;
+	private TipoDado tipo;
 	private int referencia;
-	
-	public Simbolo( String _nome )
+
+	public Simbolo(Token _token, TipoDado _tipo, int _referencia)
 	{
-		this.nome = _nome;
-		this.tipo = Tipo.NUMERO;
-	}
-	
-	public Simbolo( String _nome, Tipo _tipo )
-	{
-		this.nome = _nome;
+		this.nome = _token.image;
+		this.token = _token;
 		this.tipo = _tipo;
+		this.referencia = _referencia;
+		
 	}
-	
-	// Getters and Setters and ToString()
-	public String getNome() 
+
+	public Token getToken()
+	{
+		return this.token;
+	}
+	public Simbolo(Token _token, TipoDado _tipo)
+	{
+		this.nome = _token.image;
+		this.token = _token;
+		this.tipo = _tipo;		
+	}	
+
+	public String getLexema()
 	{
 		return this.nome;
 	}
 
-	public int getReferencia() 
-	{
-		return this.referencia;
-	}
-
-	public void setNome(String _nome) 
-	{
-		this.nome = _nome;
-	}
-
-	public void setReferencia( int _referencia ) 
-	{
-		this.referencia = _referencia ;
-	}
-
-	public Tipo getTipo() 
+	public TipoDado getTipoDado()
 	{
 		return this.tipo;
 	}
 
-	public void setTipo(Tipo _tipo) 
+	public int getReferencia()
 	{
-		this.tipo = _tipo;
+		return this.referencia;
+	}
+
+	public void setReferencia(int _referencia)
+	{
+		this.referencia = _referencia;
 	}
 	
+	@Override
 	public String toString()
 	{
-		return "{ NOME: " + this.getNome() + " / " + "REFERENCIA: " + this.getReferencia() + "}\n";
+		return "Lexema :"+this.getLexema()+" Tipo Dado: "+this.getTipoDado()+" Referencia: "+this.getReferencia();
 	}
-	
-	
 }

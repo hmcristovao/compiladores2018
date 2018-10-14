@@ -1,45 +1,20 @@
 package semantico;
 
-public class Item 
+import parser.Token;
+
+public abstract class Item
 {
-	private Enum<?> tipo;
-	private String descricao;
-	
-	public Item( String _descricao )
+	// Adicionar tipo e fazer o construtor disso aqui
+	private Token token;
+
+	public Item(Token _token)
 	{
-		this.tipo = null;
-		this.descricao = _descricao;
+		this.token = _token;
 	}
-	
-	public Item( String _descricao, Enum<?> _tipo )
-	{
-		this.tipo = _tipo;
-		this.descricao = _descricao;
+	public String getLexema() {
+		return this.token.image;
 	}
-	
-	public Enum<?> getTipo() 
-	{
-		return this.tipo;
-	}
-	
-	public void setTipo(Tipo _tipo) 
-	{
-		this.tipo = _tipo;
-	}
-	
-	public String getDescricao() 
-	{
-		return descricao;
-	}
-	
-	public void setDescricao(String _descricao) 
-	{
-		this.descricao = _descricao;
-	}
-	
+
 	@Override
-	public String toString() 
-	{
-		return "(" + this.getDescricao() + ";" +  this.getTipo() + ")";
-	}
+	public abstract String toString();
 }

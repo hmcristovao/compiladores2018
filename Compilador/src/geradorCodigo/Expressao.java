@@ -1,87 +1,52 @@
 package geradorCodigo;
-import java.util.LinkedList;
 
+import java.util.LinkedList;
 import semantico.*;
 
-public class Expressao 
+public class Expressao
 {
-//	Expressão no modo infixo
-	private String expInfixo;
-//	Linha na qual a listaressão foi descrita
-	private long linha;
-//	Tipos de dados presentes na listaressão
-	private Tipo tipo;
-	private LinkedList<Item> lista;
+	private LinkedList<Item> expressaoInfixa;
+	private LinkedList<Item> expressaoPosfixa;
+
 	public Expressao()
 	{
-		this.lista = new LinkedList<Item>();
-	}
-	
-	
-	public Expressao( String _expInfixo, long _linha, Tipo _tipo )
-	{
-		this.expInfixo = _expInfixo;
-		this.linha = _linha;
-		this.tipo = _tipo;
-	}
-	
-	public Expressao( String _expInfixo, Tipo _tipo )
-	{
-		this.expInfixo = _expInfixo;
-		this.linha = 0;
-		this.tipo = _tipo;
+		this.expressaoPosfixa = new LinkedList<Item>();
+		this.expressaoInfixa = new LinkedList<Item>();
 	}
 
-	public String getExp_original() 
+	public LinkedList<Item> getExpressaoInfixa()
 	{
-		return this.expInfixo;
+		return this.expressaoInfixa;
 	}
 
-	public void setExp_original(String _expInfixo) 
+	public LinkedList<Item> getExpressaoPosfixa()
 	{
-		this.expInfixo = _expInfixo;
+		return this.expressaoPosfixa;
 	}
 
-	public long getLinha() 
+	public void addItemInfixo(Item _item)
 	{
-		return this.linha;
+		this.getExpressaoInfixa().add(_item);
 	}
 
-	public void setLinha(long _linha) 
+	public void addItemPosfixo(Item _item)
 	{
-		this.linha = _linha;
+		this.getExpressaoPosfixa().add(_item);
 	}
 
-	public Tipo getTipo() 
+/*	public Tipo getTipo()
 	{
-		return this.tipo;
+		return null;
+	}*/
+
+	public String geraCodigoDestino()
+	{
+		return null;
 	}
 
-	public void setTipo(Tipo _tipo) 
-	{
-		this.tipo = _tipo;
-	}
-
-	public LinkedList<Item> getLista() 
-	{
-		return this.lista;
-	}
-
-	public void setLista(LinkedList<Item> _lista) 
-	{
-		this.lista = _lista;
-	}
-	
-	public void add( Item _item )
-	{
-		this.getLista().add(_item);
-	}
-	
 	@Override
-	public String toString() 
+	public String toString()
 	{
-		return this.lista.toString();
+		return null;
 	}
-	
-	
 }
