@@ -1,5 +1,6 @@
 package comandoAltoNivel;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import parser.Token;
 
 public abstract class ComandoAltoNivel {
@@ -10,10 +11,8 @@ public abstract class ComandoAltoNivel {
 		return null;
 	}
 	
+	abstract ListaComandosPrimitivos geraListaComandosPrimitivos();	
 	
-	 @Override
-	 public String toString() {
-	     return null;
-	 }
+	abstract public String toString();
 
 }

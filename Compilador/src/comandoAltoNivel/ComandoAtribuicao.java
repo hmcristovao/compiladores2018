@@ -1,5 +1,6 @@
 package comandoAltoNivel;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import geradorCodigo.Expressao;
 import semantico.*;
 
@@ -14,7 +15,13 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 	}
 	
 	public String toString() {
-		return "atribuicao " + this.simbolo.getNome() + this.expressao.getListaExpPosFixa() + "\n";
+		return "Atribuicao " + this.simbolo.getNome() + this.expressao.getListaExpPosFixa() + "\n";
+	}
+
+	@Override
+	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

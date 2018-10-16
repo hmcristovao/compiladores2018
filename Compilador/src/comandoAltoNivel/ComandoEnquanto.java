@@ -1,5 +1,6 @@
 package comandoAltoNivel;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import geradorCodigo.Expressao;
 
 public class ComandoEnquanto extends ComandoAltoNivel{
@@ -14,6 +15,12 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	
 	public String toString() {
 		return "Enquanto " + this.expressao.getListaExpPosFixa() +"\n";
+	}
+
+	@Override
+	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

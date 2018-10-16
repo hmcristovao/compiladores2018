@@ -1,5 +1,6 @@
 package comandoAltoNivel;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import geradorCodigo.Expressao;
 
 public class ComandoCondicionalSimples extends ComandoCondicional{
@@ -10,5 +11,11 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 
 	public String toString() {
 		return "Condicional Simples " + this.expressao.getListaExpPosFixa() +"\n";
+	}
+
+	@Override
+	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

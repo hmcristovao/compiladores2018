@@ -1,5 +1,6 @@
 package comandoAltoNivel;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import semantico.Simbolo;
 
 public class ComandoEntrada extends ComandoAltoNivel {
@@ -12,6 +13,12 @@ public class ComandoEntrada extends ComandoAltoNivel {
 	
 	public String toString() {
 		return  "Le " + this.simbolo.getNome() + "\n";
+	}
+
+	@Override
+	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 
