@@ -1,4 +1,4 @@
-package comando;
+package comando.altoNivel;
 
 import parser.Token;
 
@@ -15,5 +15,5 @@ public abstract class ComandoAltoNivel {
 	
 	public abstract String toString();
 
-	//public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();
+	//public abstract ListaComandosAltoNivel geraListaComandosAltoNivel();
 }

@@ -20,7 +20,7 @@ public class Compilador implements Config {
       	try {
       	  	 System.out.println("Lista de Comandos:\n");
 	         Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
-	         Compilador.inicio();
+	         compilador.inicio();
 	         System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
 	         /*System.out.println("\nTabela de Simbolos:");
 	 		 System.out.println(tabela);

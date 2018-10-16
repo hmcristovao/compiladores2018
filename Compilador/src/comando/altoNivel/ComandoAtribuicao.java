@@ -1,4 +1,4 @@
-package comando;
+package comando.altoNivel;
 
 import geradorCodigo.Expressao;
 import parser.Token;
@@ -29,5 +29,5 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		return "Comando atribuição\n" +"Variavel " + this.variavel.getLexema() + " recebe " + this.expressao.getListaExpPosfixa();
 	}
 
-	//public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();
+	//public abstract ListaComandosAltoNivel geraListaComandosAltoNivel();
 }

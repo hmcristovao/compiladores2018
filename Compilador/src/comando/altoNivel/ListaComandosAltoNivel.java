@@ -1,4 +1,4 @@
-package comando;
+package comando.altoNivel;
 
 import java.util.LinkedList;
 

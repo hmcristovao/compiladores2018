@@ -1,14 +1,14 @@
-package comando;
+package comando.altoNivel;
 
 import geradorCodigo.Expressao;
 import parser.Token;
 
-public abstract class ComandoCondicional extends ComandoAltoNivel {
-	
+public class ComandoEnquanto extends ComandoAltoNivel {
+
 	Expressao expressao;
 	ListaComandosAltoNivel listaComandosAltoNivelTrue;
-
-	public ComandoCondicional(Token _token, Expressao _expressao, ListaComandosAltoNivel _listaComandosAltoNivel) {
+	
+	public ComandoEnquanto(Token _token, Expressao _expressao, ListaComandosAltoNivel _listaComandosAltoNivel) {
 		super(_token);
 		this.expressao = _expressao;
 		this.listaComandosAltoNivelTrue = _listaComandosAltoNivel;
@@ -18,7 +18,6 @@ public abstract class ComandoCondicional extends ComandoAltoNivel {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Comando Enquanto\n" +"Enquanto expressao " + this.expressao.toString() +" Lista de Comandos: "+  listaComandosAltoNivelTrue;
 	}
-
 }

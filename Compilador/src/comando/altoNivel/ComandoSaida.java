@@ -1,4 +1,4 @@
-package comando;
+package comando.altoNivel;
 
 import geradorCodigo.Expressao;
 import parser.Token;

@@ -6,6 +6,14 @@ import geradorCodigo.*;
 import semantico.*;
 import exception.*;
 import comando.*;
+import comando.altoNivel.ComandoAtribuicao;
+import comando.altoNivel.ComandoCondicional;
+import comando.altoNivel.ComandoCondicionalSimples;
+import comando.altoNivel.ComandoEnquanto;
+import comando.altoNivel.ComandoEntrada;
+import comando.altoNivel.ComandoSaida;
+import comando.altoNivel.ListaComandosAltoNivel;
+
 import java.util.LinkedList;
 
 public class Compilador implements Config, CompiladorConstants {

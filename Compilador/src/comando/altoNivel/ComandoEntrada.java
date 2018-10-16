@@ -1,4 +1,4 @@
-package comando;
+package comando.altoNivel;
 
 import parser.Token;
 import semantico.Simbolo;
