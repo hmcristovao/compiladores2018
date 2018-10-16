@@ -23,14 +23,16 @@ public class ComandoEnquanto extends ComandoAltoNivel
 	@Override
 	public String toString()
 	{
-		return this.getLexema()+" "+this.getExpressao()+" "+this.getListaComandosAltoNivelTrue();
+		return "< " + this.getLexema() + ", " + this.getExpressao() + ", " + this.getListaComandosAltoNivelTrue() + ">";
 	}
 
-	public Expressao getExpressao() {
-		return expressao;
+	public Expressao getExpressao() 
+	{
+		return this.expressao;
 	}
 
-	public ListaComandosAltoNivel getListaComandosAltoNivelTrue() {
-		return listaComandosAltoNivelTrue;
+	public ListaComandosAltoNivel getListaComandosAltoNivelTrue() 
+	{
+		return this.listaComandosAltoNivelTrue;
 	}
 }
