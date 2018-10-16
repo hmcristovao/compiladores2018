@@ -1,5 +1,6 @@
 package comandos;
 import parser.*;
+import primitivo.*;
 
 public abstract class ComandoAltoNivel {
 	public Token token;
@@ -11,12 +12,10 @@ public abstract class ComandoAltoNivel {
 	/*
 	String getLexema() {
 	}
-	
-	abstract ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		
-	}
-    
 	*/
+	abstract ListaComandosPrimitivos geraListaComandosPrimitivos();
+    
+	
 	public abstract String toString();
 	
 }

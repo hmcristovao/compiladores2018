@@ -15,6 +15,7 @@ import comandos.*;
 public class Compilador {
 
 	static Tabela tabela = new Tabela();
+	static ListaComandosAltoNivel listaComandosAltoNivel;
 	
    public static void main(String args[])  throws ErroSemantico
    {
@@ -22,8 +23,10 @@ public class Compilador {
       
       try {        
         compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo16.spc"));
-		
-        Compilador.one_line();
+
+		listaComandosAltoNivel = new ListaComandosAltoNivel();
+        listaComandosAltoNivel = Compilador.one_line();
+		System.out.println(listaComandosAltoNivel);
         
       }
       catch(FileNotFoundException e) {
@@ -216,28 +219,36 @@ void termo4(Expressao e): {Token s,a; Item item = null;}{
 //--------------------------------------------------------------------------------------------
 
 
-void one_line() : {}
+ListaComandosAltoNivel one_line() : {ListaComandosAltoNivel listaComandos;}
 {
-   inicio() <EOF>
-   
+   listaComandos = inicio() <EOF>
+   {return listaComandos;}
 }
 
 ListaComandosAltoNivel inicio():
-{ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel(); } {
-	(comando(listaComandosAltoNivel) )*{return listaComandosAltoNivel; }< EOF>
+{ComandoAltoNivel cmd = null; ListaComandosAltoNivel listaComandos = new ListaComandosAltoNivel(); } {
+	(cmd = comando()
+	{
+	  listaComandos.addComando(cmd);
+	}
+	)*
+	{return listaComandos;}< EOF>
 }
 
-void comando(ListaComandosAltoNivel listaComandosAltoNivel): {} {
-  	atribuicao(listaComandosAltoNivel)
-  | declaracao(listaComandosAltoNivel)
-  | se(listaComandosAltoNivel)
-  | enquanto(listaComandosAltoNivel)
-  | le(listaComandosAltoNivel)
-  | exibe(listaComandosAltoNivel)
+ComandoAltoNivel comando(): {ComandoAltoNivel cmd =null;} {
+  ( cmd = atribuicao()
+  | cmd = declaracao()
+  | cmd = se()
+  | cmd = enquanto()
+  | cmd = le()
+  | cmd = exibe()
+  )
+  {return cmd;}
+  
 }
 
-void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
-{Expressao e; Token var,cmd; Simbolo simb = null; ComandoAtribuicao cmdA = null;}{
+ComandoAltoNivel atribuicao():
+{Expressao e; Token var,cmd; Simbolo simb = null; ComandoAltoNivel comando;}{
 					   
 	var = < VAR >
 	{
@@ -248,91 +259,97 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
 	}
 	cmd = < ATRIB > e = expressao()
 	{
-		cmdA = new ComandoAtribuicao(simb,e,cmd);
-	  	listaComandosAltoNivel.addComando(cmdA);
+		comando = new ComandoAtribuicao(simb,e,cmd);
+	  	//listaComandosAltoNivel.addComando(comando);
 	}
 	< PV >
+	{return comando;}
 	
 }
 
-void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
-{Expressao e; Simbolo simb = null; Token var,cmd; TipoDado tipo; ComandoAtribuicao cmdA = null;} {
+ComandoAltoNivel declaracao():
+{Expressao e; Simbolo simb = null; Token var,cmd; TipoDado tipo; ComandoAltoNivel comando;} {
   	
 	(< NUMERO >{ tipo = TipoDado.NUM; } | < PALAVRA >{ tipo = TipoDado.STR; })
 	var=< VAR >
 	{
 	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
-
+	  	comando = null;
 	}
 	(cmd = < ATRIB > e = expressao()
 	{	  
 		simb = new Simbolo(var.image,tipo);
-		cmdA = new ComandoAtribuicao(simb,e,cmd);
-	  	listaComandosAltoNivel.addComando(cmdA);
+		comando = new ComandoAtribuicao(simb,e,cmd);
+	  	//listaComandosAltoNivel.addComando(comando);
 	}
 	)?
 	(< VIRGULA > var = < VAR >(cmd = < ATRIB > e = expressao()
 	{
 		simb = new Simbolo(var.image,tipo);
-		cmdA = new ComandoAtribuicao(simb,e,cmd);
-	  	listaComandosAltoNivel.addComando(cmdA);
+		comando = new ComandoAtribuicao(simb,e,cmd);
+	  	//listaComandosAltoNivel.addComando(comando);
 	})?
 	{
 	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
 	}
 	)*
 	< PV >
+	{return comando;}
 	
 }
 
-void se(ListaComandosAltoNivel listaComandosAltoNivel):
-{Expressao e; Token var,cmd; ComandoCondicional cmdC = null; ListaComandosAltoNivel lista = null;} {
+ComandoAltoNivel se():
+{Expressao e; Token var,cmd; ComandoAltoNivel comando; ListaComandosAltoNivel lista = null;} {
 	cmd = < SE > <AP > e = expressao() < FP > lista = inicio()
 	{
-		cmdC = new ComandoCondicional(e,lista,cmd);
-		listaComandosAltoNivel.addComando(cmdC);
+		comando = new ComandoCondicional(e,lista,cmd);
+		//listaComandosAltoNivel.addComando(comando);
 	} < FIMSE >
+	{return comando;}
 }
 
-void enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
-{Expressao e; Token var,cmd; ComandoEnquanto cmdE = null;ListaComandosAltoNivel lista = null;} {
+ComandoAltoNivel enquanto():
+{Expressao e; Token var,cmd; ComandoAltoNivel comando; ListaComandosAltoNivel lista = null;} {
 
 	cmd = < ENQUANTO > < AP > e = expressao() < FP > lista = inicio()
 	{
-		cmdE = new ComandoEnquanto(e,lista,cmd);
-		listaComandosAltoNivel.addComando(cmdE);
-	}< FIMENQUANTO >
+		comando = new ComandoEnquanto(e,lista,cmd);
+		//listaComandosAltoNivel.addComando(comando);
+	}
+	< FIMENQUANTO >
+	{return comando;}
 }
 
-void le(ListaComandosAltoNivel listaComandosAltoNivel):
-{Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;} {
+ComandoAltoNivel le():
+{Simbolo simb = null; Token cmd, r; ComandoAltoNivel comando;} {
 	cmd = < LEITURA > r = < VAR >
 	{
 	  simb = new Simbolo(r.image, TipoDado.STR);
-	  cmdE = new ComandoEntrada(simb ,cmd);
-	  listaComandosAltoNivel.addComando(cmdE);
+	  comando = new ComandoEntrada(simb ,cmd);
+	  //listaComandos.addComando(comando);
 	}
 	(< VIRGULA > r = <VAR >
 	{
 	  simb = new Simbolo(r.image, TipoDado.STR);
-	  cmdE = new ComandoEntrada(simb ,cmd);
-	  listaComandosAltoNivel.addComando(cmdE);
+	  comando = new ComandoEntrada(simb ,cmd);
+	  //listaComandos.addComando(comando);
 	}
 	)*< PV >
-	
+	{return comando;}
 }
 
-void exibe(ListaComandosAltoNivel listaComandosAltoNivel):
-{Expressao e; ComandoSaida cmdS = null;Token cmd; } {
+ComandoAltoNivel exibe():
+{Expressao e; ComandoAltoNivel comando; Token cmd; } {
 	cmd = < EXIBE > e = expressao()
 	{
-	  cmdS = new ComandoSaida(e,cmd);
-	  listaComandosAltoNivel.addComando(cmdS);
+	  comando = new ComandoSaida(e,cmd);
+	  //listaComandos.addComando(comando);
 	}
 	(< VIRGULA > e = expressao()
 	{
-	   cmdS = new ComandoSaida(e,cmd);
-	  listaComandosAltoNivel.addComando(cmdS);
+	  comando = new ComandoSaida(e,cmd);
+	  //listaComandos.addComando(comando);
 	}
 	)*< PV >
+	{return comando;}
 }

@@ -9,9 +9,20 @@ public class ListaComandosAltoNivel {
 	}
 	
 	public void addComando(ComandoAltoNivel comando) {		
-		this.listaComandosAltoNivel.add(comando);
+		
+		if(comando!=null)this.listaComandosAltoNivel.add(comando);
 
-		System.out.println(listaComandosAltoNivel);
+	}
+	
+	public LinkedList<ComandoAltoNivel> getListaComandosAltoNivel()
+	{
+		return this.listaComandosAltoNivel;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "" + this.getListaComandosAltoNivel();
 	}
 	
 }

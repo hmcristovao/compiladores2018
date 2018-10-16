@@ -1,6 +1,7 @@
 package comandos;
 import semantico.*;
 import parser.*;
+import primitivo.ListaComandosPrimitivos;
 
 public class ComandoEntrada extends ComandoAltoNivel{
 	Simbolo simbolo;
@@ -14,4 +15,7 @@ public class ComandoEntrada extends ComandoAltoNivel{
 		return this.token + "/" + this.simbolo.getNome();
 	}
 	
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		return;
+	}	
 }

@@ -10,6 +10,7 @@ import comandos.*;
 public class Compilador implements CompiladorConstants {
 
         static Tabela tabela = new Tabela();
+        static ListaComandosAltoNivel listaComandosAltoNivel;
 
    public static void main(String args[])  throws ErroSemantico
    {
@@ -18,7 +19,9 @@ public class Compilador implements CompiladorConstants {
       try {
         compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo16.spc"));
 
-        Compilador.one_line();
+                listaComandosAltoNivel = new ListaComandosAltoNivel();
+        listaComandosAltoNivel = Compilador.one_line();
+                System.out.println(listaComandosAltoNivel);
 
       }
       catch(FileNotFoundException e) {
@@ -234,13 +237,16 @@ public class Compilador implements CompiladorConstants {
   }
 
 //--------------------------------------------------------------------------------------------
-  static final public void one_line() throws ParseException {
-    inicio();
+  static final public ListaComandosAltoNivel one_line() throws ParseException {
+                                     ListaComandosAltoNivel listaComandos;
+    listaComandos = inicio();
     jj_consume_token(0);
+    {if (true) return listaComandos;}
+    throw new Error("Missing return statement in function");
   }
 
   static final public ListaComandosAltoNivel inicio() throws ParseException {
- ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
+ ComandoAltoNivel cmd = null; ListaComandosAltoNivel listaComandos = new ListaComandosAltoNivel();
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -257,55 +263,62 @@ public class Compilador implements CompiladorConstants {
         jj_la1[8] = jj_gen;
         break label_5;
       }
-      comando(listaComandosAltoNivel);
+      cmd = comando();
+          listaComandos.addComando(cmd);
     }
-                                            {if (true) return listaComandosAltoNivel;}
+         {if (true) return listaComandos;}
     jj_consume_token(0);
     throw new Error("Missing return statement in function");
   }
 
-  static final public void comando(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+  static final public ComandoAltoNivel comando() throws ParseException {
+                             ComandoAltoNivel cmd =null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VAR:
-      atribuicao(listaComandosAltoNivel);
+      cmd = atribuicao();
       break;
     case NUMERO:
     case PALAVRA:
-      declaracao(listaComandosAltoNivel);
+      cmd = declaracao();
       break;
     case SE:
-      se(listaComandosAltoNivel);
+      cmd = se();
       break;
     case ENQUANTO:
-      enquanto(listaComandosAltoNivel);
+      cmd = enquanto();
       break;
     case LEITURA:
-      le(listaComandosAltoNivel);
+      cmd = le();
       break;
     case EXIBE:
-      exibe(listaComandosAltoNivel);
+      cmd = exibe();
       break;
     default:
       jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+   {if (true) return cmd;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
- Expressao e; Token var,cmd; Simbolo simb = null; ComandoAtribuicao cmdA = null;
+  static final public ComandoAltoNivel atribuicao() throws ParseException {
+ Expressao e; Token var,cmd; Simbolo simb = null; ComandoAltoNivel comando;
     var = jj_consume_token(VAR);
                 AcoesSemanticas.inicializacao(tabela, var.image);
                 simb = new Simbolo(var.image,TipoDado.STR);
     cmd = jj_consume_token(ATRIB);
     e = expressao();
-                cmdA = new ComandoAtribuicao(simb,e,cmd);
-                listaComandosAltoNivel.addComando(cmdA);
+                comando = new ComandoAtribuicao(simb,e,cmd);
+                //listaComandosAltoNivel.addComando(comando);
+
     jj_consume_token(PV);
+         {if (true) return comando;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void declaracao(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
- Expressao e; Simbolo simb = null; Token var,cmd; TipoDado tipo; ComandoAtribuicao cmdA = null;
+  static final public ComandoAltoNivel declaracao() throws ParseException {
+ Expressao e; Simbolo simb = null; Token var,cmd; TipoDado tipo; ComandoAltoNivel comando;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
       jj_consume_token(NUMERO);
@@ -322,13 +335,15 @@ public class Compilador implements CompiladorConstants {
     }
     var = jj_consume_token(VAR);
                 AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
+                comando = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
       cmd = jj_consume_token(ATRIB);
       e = expressao();
                 simb = new Simbolo(var.image,tipo);
-                cmdA = new ComandoAtribuicao(simb,e,cmd);
-                listaComandosAltoNivel.addComando(cmdA);
+                comando = new ComandoAtribuicao(simb,e,cmd);
+                //listaComandosAltoNivel.addComando(comando);
+
       break;
     default:
       jj_la1[11] = jj_gen;
@@ -351,8 +366,9 @@ public class Compilador implements CompiladorConstants {
         cmd = jj_consume_token(ATRIB);
         e = expressao();
                 simb = new Simbolo(var.image,tipo);
-                cmdA = new ComandoAtribuicao(simb,e,cmd);
-                listaComandosAltoNivel.addComando(cmdA);
+                comando = new ComandoAtribuicao(simb,e,cmd);
+                //listaComandosAltoNivel.addComando(comando);
+
         break;
       default:
         jj_la1[13] = jj_gen;
@@ -361,39 +377,48 @@ public class Compilador implements CompiladorConstants {
                 AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
     }
     jj_consume_token(PV);
+         {if (true) return comando;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void se(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
- Expressao e; Token var,cmd; ComandoCondicional cmdC = null; ListaComandosAltoNivel lista = null;
+  static final public ComandoAltoNivel se() throws ParseException {
+ Expressao e; Token var,cmd; ComandoAltoNivel comando; ListaComandosAltoNivel lista = null;
     cmd = jj_consume_token(SE);
     jj_consume_token(AP);
     e = expressao();
     jj_consume_token(FP);
     lista = inicio();
-                cmdC = new ComandoCondicional(e,lista,cmd);
-                listaComandosAltoNivel.addComando(cmdC);
+                comando = new ComandoCondicional(e,lista,cmd);
+                //listaComandosAltoNivel.addComando(comando);
+
     jj_consume_token(FIMSE);
+         {if (true) return comando;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
- Expressao e; Token var,cmd; ComandoEnquanto cmdE = null;ListaComandosAltoNivel lista = null;
+  static final public ComandoAltoNivel enquanto() throws ParseException {
+ Expressao e; Token var,cmd; ComandoAltoNivel comando; ListaComandosAltoNivel lista = null;
     cmd = jj_consume_token(ENQUANTO);
     jj_consume_token(AP);
     e = expressao();
     jj_consume_token(FP);
     lista = inicio();
-                cmdE = new ComandoEnquanto(e,lista,cmd);
-                listaComandosAltoNivel.addComando(cmdE);
+                comando = new ComandoEnquanto(e,lista,cmd);
+                //listaComandosAltoNivel.addComando(comando);
+
     jj_consume_token(FIMENQUANTO);
+         {if (true) return comando;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void le(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
- Simbolo simb = null; Token cmd, r; ComandoEntrada cmdE = null;
+  static final public ComandoAltoNivel le() throws ParseException {
+ Simbolo simb = null; Token cmd, r; ComandoAltoNivel comando;
     cmd = jj_consume_token(LEITURA);
     r = jj_consume_token(VAR);
           simb = new Simbolo(r.image, TipoDado.STR);
-          cmdE = new ComandoEntrada(simb ,cmd);
-          listaComandosAltoNivel.addComando(cmdE);
+          comando = new ComandoEntrada(simb ,cmd);
+          //listaComandos.addComando(comando);
+
     label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -407,18 +432,22 @@ public class Compilador implements CompiladorConstants {
       jj_consume_token(VIRGULA);
       r = jj_consume_token(VAR);
           simb = new Simbolo(r.image, TipoDado.STR);
-          cmdE = new ComandoEntrada(simb ,cmd);
-          listaComandosAltoNivel.addComando(cmdE);
+          comando = new ComandoEntrada(simb ,cmd);
+          //listaComandos.addComando(comando);
+
     }
     jj_consume_token(PV);
+         {if (true) return comando;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void exibe(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
- Expressao e; ComandoSaida cmdS = null;Token cmd;
+  static final public ComandoAltoNivel exibe() throws ParseException {
+ Expressao e; ComandoAltoNivel comando; Token cmd;
     cmd = jj_consume_token(EXIBE);
     e = expressao();
-          cmdS = new ComandoSaida(e,cmd);
-          listaComandosAltoNivel.addComando(cmdS);
+          comando = new ComandoSaida(e,cmd);
+          //listaComandos.addComando(comando);
+
     label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -431,10 +460,13 @@ public class Compilador implements CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       e = expressao();
-           cmdS = new ComandoSaida(e,cmd);
-          listaComandosAltoNivel.addComando(cmdS);
+          comando = new ComandoSaida(e,cmd);
+          //listaComandos.addComando(comando);
+
     }
     jj_consume_token(PV);
+         {if (true) return comando;}
+    throw new Error("Missing return statement in function");
   }
 
   static private boolean jj_initialized_once = false;

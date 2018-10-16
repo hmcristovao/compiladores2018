@@ -1,6 +1,7 @@
 package comandos;
 import geradorCodigo.*;
 import parser.*;
+import primitivo.ListaComandosPrimitivos;
 
 public class ComandoEnquanto extends ComandoAltoNivel{
 	Expressao expressao;
@@ -15,5 +16,9 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	public String toString() {
 		return this.token + "/" + this.expressao.listaExpPosfixa + "/" + this.listaComandosAltoNivelTrue.listaComandosAltoNivel;
 	}	
+	
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		return;
+	}
 	
 }

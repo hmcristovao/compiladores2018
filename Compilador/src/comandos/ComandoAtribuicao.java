@@ -1,6 +1,7 @@
 package comandos;
 import semantico.*;
 import geradorCodigo.*;
+import primitivo.*;
 import parser.Token;
 
 public class ComandoAtribuicao extends ComandoAltoNivel {
@@ -17,4 +18,8 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		return this.token +"/"+this.variavel.getNome() + "/" + this.expressao.listaExpPosfixa;
 	}
 	
+	 public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		 return;
+	 }
 }
+
