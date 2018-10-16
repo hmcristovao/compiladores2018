@@ -6,7 +6,10 @@ public class ListaComandosAltoNivel {
 	LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
 	
 	public ListaComandosAltoNivel() {
-		// TODO Auto-generated constructor stub
+		listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();
+		
 	}
-
+	public void addComandoAltoNivel(ComandoAltoNivel comando) {
+		this.listaComandosAltoNivel.add(comando);
+	}
 }

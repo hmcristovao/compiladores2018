@@ -4,21 +4,19 @@ import java.util.LinkedList;
 
 import geradorCodigo.Expressao;
 import parser.Token;
-import semantico.Simbolo;
+import semantico.Item;
 
-public class ComandoEntrada extends ComandoAltoNivel{
-	LinkedList<Simbolo> variaveis;
-	public ComandoEntrada(Token token, LinkedList<Simbolo> variaveis){
+public class ComandoSaida extends ComandoAltoNivel {
+	LinkedList<Expressao> expressoes;
+	public ComandoSaida(Token token, LinkedList<Expressao> expressoes) {
 		super(token);
-		this.variaveis = variaveis;
+		this.expressoes = expressoes;
 	}
-
 
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		//implementar na segunda passagem
+		// segunda passagem
 		return null;
 	}
-
 
 	public String toString() {
 		

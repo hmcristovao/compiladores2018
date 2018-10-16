@@ -10,6 +10,7 @@ import java.util.*;
 import semantico.*;
 import geradorCodigo.*;
 import apoio.*;
+import comando.*;
 
 public class Compilador {  
    public static Tabela tabela;
@@ -94,25 +95,34 @@ TOKEN [IGNORE_CASE] : {
 	< CONCAT: "&" > 
  }
   
-void programa() : { }
-{
-  ( comando() )*
-}
-
-void comando() : { }
+ListaComandosAltoNivel programa() : { ListaComandosAltoNivel comandos = new ListaComandosAltoNivel();
+ComandoAltoNivel comandoAltoNivel;}
 {
   
-  atribuicao() | declaracao() | se() | enquanto() | le() | exibe()
+  ( comandoAltoNivel = comando() { comandos.add(comandoAltoNivel);} )*
 }
 
-void atribuicao() : {
+ComandoAltoNivel comando() : { ComandoAltoNivel comando; }
+{
+  
+  comando = atribuicao() | comando = declaracao() | comando = se() | comando = enquanto() | comando = le() | comando = exibe()
+	{return comando;}
+}
+
+ComandoAtribuicao atribuicao() : {
+  	Expressao exp;
 	Token v;
+	ComandoAtribuicao comandoAtribuicao;
 }
 {
-  v = <VAR> { tabela.verificaExistenciaSimbolo(v); }<ATRIB> expressaoMestre() <PV>
+  v = <VAR> {tabela.verificaExistenciaSimbolo(v);} <ATRIB> exp = expressaoMestre() {
+		comandoAtribuicao = new ComandoAtribuicao(v, tabela.consultaSimbolo(v.image), exp);
+		
+        } <PV> { return comandoAtribuicao; }
 }
 
-void declaracao() : {
+ComandoDeclaracao declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE OU PODE RETORNAR UM COMANDO ALTO NIVEL
+  	Expressao exp;
 	Simbolo simb;
 	Token t, v; //t - recebe o tipo, v - recebe o nome da variavel
 }
@@ -122,44 +132,73 @@ void declaracao() : {
 	  if (t.image.equals("NUMERO")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
 	  else { tabela.incluiSimbolo(v, TipoDado.STR); }
 	 }
-	( <ATRIB> expressaoMestre() )? (<VIRGULA> v = <VAR>	
+	( <ATRIB> exp = expressaoMestre() )? (<VIRGULA> v = <VAR>	
 		{
 		  if (t.image.equals("NUMERO")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
 	  	else { tabela.incluiSimbolo(v, TipoDado.STR); }
 	  	}
-	( <ATRIB> expressaoMestre() )? )* <PV>
+	( <ATRIB> exp = expressaoMestre() )? )* <PV> { return null; }
 }
 
-void se() : { }
+ComandoCondicional se() : { Expressao exp; }
 {
-  <SE> <AP> expressaoMestre() <FP> programa() <FIMSE>
+  <SE> <AP> exp = expressaoMestre() <FP> programa() <FIMSE> { return null;}
 }
 
-void enquanto() : { }
+ComandoEnquanto enquanto() : {
+  Expressao exp;
+  ListaComandosAltoNivel comandosAltoNivel;
+  ComandoEnquanto comandoEnquanto;}
 {
-  <ENQUANTO> <AP> expressaoMestre() <FP> programa() <FIMENQUANTO>
+  <ENQUANTO> <AP> exp = expressaoMestre() <FP> comandosAltoNivel = programa() <FIMENQUANTO> {
+    comandoEnquanto = new ComandoEnquanto(null, exp, comandosAltoNivel);
+    return ComandoEnquanto; }
 }
 
-void le() : {
+ComandoEntrada le() : {
 	Token v;
+	ComandoEntrada comandoEntrada;
+	LinkedList<Simbolo> variaveis = new LinkedList<Simbolo>();
 }
 {
-  <LEITURA> v = <VAR> { tabela.verificaExistenciaSimbolo(v); } ( <VIRGULA> v = <VAR> { tabela.verificaExistenciaSimbolo(v); } )* <PV>
+  <LEITURA> v = <VAR> {
+	if(tabela.verificaExistenciaSimbolo(v)) {
+		variaveis.add(tabela.consultaSimbolo(v.image));
+	}
+	} ( <VIRGULA> v = <VAR> {
+	  if(tabela.verificaExistenciaSimbolo(v)) {
+		variaveis.add(tabela.consultaSimbolo(v.image));
+		}
+	} )* <PV> {
+	  comandoEntrada = new ComandoEntrada(null, variaveis);//PERGUNTAR PQ TA DIFERENTE NO DIAGRAMA
+	  return comandoEntrada; }
 }
 
-void exibe() : { }
+ComandoSaida exibe() : {
+  Expressao exp;
+  ComandoSaida comandoSaida;
+  LinkedList<Expressao> expressoes = new LinkedList<Expressao>();
+}
 {
-  <EXIBE> expressaoMestre() ( <VIRGULA> expressaoMestre() )* <PV>
+  <EXIBE> exp = expressaoMestre()
+	{ expressoes.add(exp); /*adiciona um item na lista*/ }
+	( <VIRGULA> exp = expressaoMestre() { expressoes.add(exp); /*adiciona um item na lista*/ } )* <PV>
+	{ //cria o objeto da classe Comando saida após ter adicionado todos os membros na lista
+		comandoSaida = new ComandoSaida(null, expressoes); //PERGUNTAR PQ PRECISA DO TOKEN AQUI
+		return comandoSaida;
+	} 
 }
 
-void expressaoMestre() : {
+Expressao expressaoMestre() : {
 	Expressao exp = new Expressao(); //cria uma nova linkedlist
 }
 
 { 
   	expressao(exp) {  	  	
     	System.out.println(exp.expressaoPosfixa); /*imprime a lista*/
+		return exp;
 	}
+	
 }
 
 void expressao(Expressao exp) : {
