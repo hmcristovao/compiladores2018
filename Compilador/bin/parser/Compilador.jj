@@ -37,9 +37,9 @@ public class Compilador
     {
       System.out.println("Erro sintatico\n" + e.getMessage());
     }
-    // catch (ParseException e) {
-    // System.out.println("Erro semantico\n" + e.getMessage());
-    //}
+     catch (ErroSemantico e) {
+     System.out.println("Erro semantico\n" + e.getMessage());
+    }
   }
 }
 
@@ -161,7 +161,8 @@ void declaracao() :
   t = < VAR >
   {
     simb = new Simbolo(t.image);
-    tabela.incluiSimbolo(simb);
+    if(!tabela.verificaExistenciaSimbolo(t.image))tabela.incluiSimbolo(simb);
+    else throw new ErroSemantico("A variavel -" + t.image + "- ja existe!\n");
   }
   (
     < ATRIB > 
@@ -172,7 +173,8 @@ void declaracao() :
     < VIRGULA > t = < VAR >
     {
       simb = new Simbolo(t.image);
-      tabela.incluiSimbolo(simb);
+    if(!tabela.verificaExistenciaSimbolo(t.image))tabela.incluiSimbolo(simb);
+    else throw new ErroSemantico("A variavel -" + t.image + "- ja existe!\n");
     }
     (
       < ATRIB > 
@@ -375,16 +377,11 @@ void termo4() :
       tabela.incluiSimbolo(simb);
   }
 | t = < VAR >
-  {
-
-      simb = new Simbolo(t.image);
-      tabela.incluiSimbolo(simb);
-
-  }
+  
   {
     simb2= new Simbolo(t.image);
-    if (!tabela.verificaExistenciaSimbolo(simb2.getNome()) )
-    System.out.println("Erro semantico \n A variavel -" + t.image + "- \n nao foi inicializada");
+    if (!tabela.verificaExistenciaSimbolo(t.image) )
+    throw new ErroSemantico("A variavel -" + t.image + "- \n nao foi inicializada");
   }
 | v = < STRING >
   {
