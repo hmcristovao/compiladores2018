@@ -29,9 +29,9 @@ public class Compilador implements CompiladorConstants {
     {
       System.out.println("Erro sintatico\u005cn" + e.getMessage());
     }
-    // catch (ParseException e) {
-    // System.out.println("Erro semantico\n" + e.getMessage());
-    //}
+     catch (ErroSemantico e) {
+     System.out.println("Erro semantico\u005cn" + e.getMessage());
+    }
   }
 
   static final public void inicio() throws ParseException {
@@ -113,7 +113,8 @@ public class Compilador implements CompiladorConstants {
     }
     t = jj_consume_token(VAR);
     simb = new Simbolo(t.image);
-    tabela.incluiSimbolo(simb);
+    if(!tabela.verificaExistenciaSimbolo(t.image))tabela.incluiSimbolo(simb);
+    else {if (true) throw new ErroSemantico("A variavel -" + t.image + "- ja existe!\u005cn");}
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
       jj_consume_token(ATRIB);
@@ -136,7 +137,8 @@ public class Compilador implements CompiladorConstants {
       jj_consume_token(VIRGULA);
       t = jj_consume_token(VAR);
       simb = new Simbolo(t.image);
-      tabela.incluiSimbolo(simb);
+    if(!tabela.verificaExistenciaSimbolo(t.image))tabela.incluiSimbolo(simb);
+    else {if (true) throw new ErroSemantico("A variavel -" + t.image + "- ja existe!\u005cn");}
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ATRIB:
         jj_consume_token(ATRIB);
@@ -385,11 +387,9 @@ Token t;
       break;
     case VAR:
       t = jj_consume_token(VAR);
-      simb = new Simbolo(t.image);
-      tabela.incluiSimbolo(simb);
     simb2= new Simbolo(t.image);
-    if (!tabela.verificaExistenciaSimbolo(simb2.getNome()) )
-    System.out.println("Erro semantico \u005cn A variavel -" + t.image + "- \u005cn nao foi inicializada");
+    if (!tabela.verificaExistenciaSimbolo(t.image) )
+    {if (true) throw new ErroSemantico("Erro semantico \u005cn A variavel -" + t.image + "- \u005cn nao foi inicializada");}
       break;
     case STRING:
       v = jj_consume_token(STRING);
