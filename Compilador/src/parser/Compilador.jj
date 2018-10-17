@@ -82,27 +82,34 @@ TOKEN : {
 	< IGUAL: "=" > |
 	< CONCAT: "&" > 
  }
-void inicio() : {ListaComandosAltoNivel listaComandosAltoNivel = null; }
+void inicio() : {}
 {
-	listaComandosAltoNivel = programa() <EOF> 
+	programa() <EOF> 
 }
-ListaComandosAltoNivel programa() : {ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();}
-{
+ListaComandosAltoNivel programa() : {ComandoAltoNivel comando = null;ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();}
+{ 
    (
-     comando(listaComandosAltoNivel)
+     comando = comando(listaComandosAltoNivel) {
+			if(comando != null) {
+				listaComandosAltoNivel.addComando(comando);
+			}
+       }
    )*
    {
 		return listaComandosAltoNivel;
-   }
+   }<EOF >
 }
-void comando(ListaComandosAltoNivel listaComandosAltoNivel) : {listaComandosAltoNivel = null;} 
+ComandoAltoNivel comando(ListaComandosAltoNivel listaComandosAltoNivel) :
+ {ComandoAltoNivel comando = null;} 
 {
-        atribuicao(listaComandosAltoNivel)
+  	(
+        comando = atribuicao(listaComandosAltoNivel)
       | declaracao()
-      | se(listaComandosAltoNivel)
-      | enquanto(listaComandosAltoNivel)
-      | le(listaComandosAltoNivel)
-      | exibe(listaComandosAltoNivel)
+      | comando = se(listaComandosAltoNivel)
+      | comando = enquanto(listaComandosAltoNivel)
+      | comando = le(listaComandosAltoNivel)
+      | comando = exibe(listaComandosAltoNivel)
+  	) { return comando; }
 }
 
 //			EXPRESSOES
@@ -213,7 +220,7 @@ void termo4(Expressao expressao_lista) : { Token t;} //expressao entre parentece
 }
 
 //			COMANDOS
-void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel) :
+ComandoAtribuicao atribuicao(ListaComandosAltoNivel listaComandosAltoNivel) :
 	{Simbolo simb; Token t; Expressao expressao; ComandoAtribuicao comandoAtribuicao;}
 {
 	t = <VAR>
@@ -229,7 +236,7 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel) :
   	   	//listaComandosAltoNivel.addComando(comandoAtribuicao);
 		System.out.println(comandoAtribuicao.toString());
     }
-    <PV>
+    <PV> { return comandoAtribuicao;}
 }
 
 void declaracao() : {Token t; TipoDado tipo; }
@@ -247,7 +254,7 @@ void declaracao() : {Token t; TipoDado tipo; }
 	)* <PV>
 }
 
-void se(ListaComandosAltoNivel listaComandosAltoNivel) :
+ComandoCondicional se(ListaComandosAltoNivel listaComandosAltoNivel) :
 {Token t; Expressao expressao; ComandoCondicionalSimples comandoCondicional;} //if
 {
   	t = <SE> <AP> expressao = expressao() <FP> listaComandosAltoNivel = programa()
@@ -256,10 +263,10 @@ void se(ListaComandosAltoNivel listaComandosAltoNivel) :
   	   //listaComandosAltoNivel.addComando(comandoCondicional);
   	   System.out.println(comandoCondicional.toString());
   	 }
-  	<FIMSE>
+  	<FIMSE> {return comandoCondicional; }
 }
 
-void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) :
+ComandoEnquanto enquanto(ListaComandosAltoNivel listaComandosAltoNivel) :
  {Token t; Expressao expressao; ComandoEnquanto comandoEnquanto; } //while
 {
   	t = <ENQUANTO> <AP> expressao = expressao() <FP> listaComandosAltoNivel = programa()
@@ -268,10 +275,10 @@ void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) :
   	   //listaComandosAltoNivel.addComando(comandoEnquanto);
   	   System.out.println(comandoEnquanto.toString());
   	 }
-  	<FIMENQUANTO>
+  	<FIMENQUANTO> {return comandoEnquanto; }
 }
 
-void le(ListaComandosAltoNivel listaComandosAltoNivel) : { Token t; Token variavel; Simbolo simb; ComandoEntrada comandoEntrada; } //read
+ComandoEntrada le(ListaComandosAltoNivel listaComandosAltoNivel) : { Token t; Token variavel; Simbolo simb; ComandoEntrada comandoEntrada; } //read
 {
   	t = <LEITURA> variavel = <VAR>
   	   {
@@ -289,10 +296,10 @@ void le(ListaComandosAltoNivel listaComandosAltoNivel) : { Token t; Token variav
 		  //listaComandosAltoNivel.addComando(comandoEntrada);
 		  System.out.println(comandoEntrada.toString());
 		}
-  	 )* <PV>
+  	 )* <PV> {return comandoEntrada; }
 }
 
-void exibe(ListaComandosAltoNivel listaComandosAltoNivel) : {Token t; Expressao expressao; ComandoSaida comandoSaida; } //print
+ComandoSaida exibe(ListaComandosAltoNivel listaComandosAltoNivel) : {Token t; Expressao expressao; ComandoSaida comandoSaida; } //print
 {
   	t = <EXIBE> expressao = expressao()
   	 {
@@ -306,5 +313,5 @@ void exibe(ListaComandosAltoNivel listaComandosAltoNivel) : {Token t; Expressao 
 	   	  //listaComandosAltoNivel.addComando(comandoSaida);
 	      System.out.println(comandoSaida.toString());
 		}
-  	 )* <PV>
+  	 )* <PV> {return comandoSaida; }
 }
