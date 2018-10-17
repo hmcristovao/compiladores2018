@@ -1,5 +1,6 @@
 package comando;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import parser.Token;
 
 public abstract class ComandoAltoNivel {

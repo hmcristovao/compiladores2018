@@ -24,7 +24,6 @@ public class Expressao {
 	public void addItemInfixo(Item _item){
 
 	}
-
 	
 	public void addItemPosfixo(Item _item){
 		if(Tabela.tab.containsKey(_item.token.image)) { //caso entre aqui, eh uma variavel
@@ -37,19 +36,14 @@ public class Expressao {
 		else{
 			this.expressaoPosfixa.add(_item);
 		}
-
 	}
 	
 	public String geraCodigoDestino(){
-		return null;
-		
+		return "codDestino";
 	}
 	
 	public String toString() {
 		return "expressaoPosFixa: "+Arrays.toString(this.expressaoPosfixa.toArray());
-	}
-	
-	
-	
+	}	
 	
 }

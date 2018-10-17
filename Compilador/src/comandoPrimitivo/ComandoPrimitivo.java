@@ -1,4 +1,4 @@
-package comando;
+package comandoPrimitivo;
 
 public abstract class ComandoPrimitivo {
 

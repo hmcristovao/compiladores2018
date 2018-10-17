@@ -11,6 +11,7 @@ import semantico.*;
 import geradorCodigo.*;
 import apoio.*;
 import comando.*;
+import comandoPrimitivo.*;
 
 public class Compilador {  
    public static Tabela tabela;
@@ -18,14 +19,20 @@ public class Compilador {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
       tabela = new Tabela();
-      ListaComandosAltoNivel programaMain;
+      ListaComandosAltoNivel listaComandosAltoNivel;
+      ListaComandosPrimitivos listaComandosPrimitivos;
       
       try {
          compilador = new Compilador(new FileInputStream("exemplo01.spc"));
-         programaMain = Compilador.programa();
-         System.out.println("\n---------------------------\n");
+         listaComandosAltoNivel = Compilador.programa();
+		 System.out.println("\n---------------------------\n");
          System.out.println("TABELA DE SIMBOLOS");
          System.out.println(tabela.tab);
+		 
+		//começa a segunda passagem a partir daqui
+        listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
+		////codigoDestino = listaComandosPrimitivos.geraCodigoDestinoTotal();
+         
       }  
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -102,7 +109,7 @@ ListaComandosAltoNivel programa() : {
 }
 {
   
-  ( comandoAltoNivel = comando() { comandos.addComandoAltoNivel(comandoAltoNivel); } )* { return comandos; }
+  ( comandoAltoNivel = comando() { comandos.addComando(comandoAltoNivel); } )* { return comandos; }
 }
 
 ComandoAltoNivel comando() : { ComandoAltoNivel comando; }
@@ -133,19 +140,24 @@ ComandoDeclaracao declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE
   	Expressao exp;
 	Simbolo simb;
 	Token t, v; //t - recebe o tipo, v - recebe o nome da variavel
+	ComandoDeclaracao comandoDeclaracao;
 }
 {
   	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
 	{
-	  if (t.image.equals("NUMERO")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
+	  if (t.image.equals("numero")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
 	  else { tabela.incluiSimbolo(v, TipoDado.STR); }
 	 }
 	( <ATRIB> exp = expressaoMestre() )? (<VIRGULA> v = <VAR>	
 		{
-		  if (t.image.equals("NUMERO")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
+		  if (t.image.equals("numero")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
 	  	else { tabela.incluiSimbolo(v, TipoDado.STR); }
 	  	}
-	( <ATRIB> exp = expressaoMestre() )? )* <PV> { return null; }
+	( <ATRIB> exp = expressaoMestre() )? )* <PV>
+	{
+	  comandoDeclaracao = new ComandoDeclaracao(null);
+	  return comandoDeclaracao;
+	}
 }
 
 ComandoCondicional se() : {

@@ -2,6 +2,8 @@ package comando;
 
 import java.util.LinkedList;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
+import comandoPrimitivo.PrimitivoEntrada;
 import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.Simbolo;
@@ -16,13 +18,22 @@ public class ComandoEntrada extends ComandoAltoNivel{
 
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		//implementar na segunda passagem
-		return null;
+		ListaComandosPrimitivos listaEntrada = new ListaComandosPrimitivos();
+		//gera um primitivo de entrada para cada variavel
+		for (int i = 0; i < this.variaveis.size(); i++) {
+			Simbolo simb = this.variaveis.get(i);
+			PrimitivoEntrada primitivoEntrada = new PrimitivoEntrada(simb.getReferencia(), simb.getTipo());
+			listaEntrada.addComando(primitivoEntrada);
+        }
+		
+		return listaEntrada;
 	}
-
 
 	public String toString() {
-		
-		return null;
+		String entradaString = "";
+		for (int i = 0; i < this.variaveis.size(); i++) {
+			entradaString += " var: "+this.variaveis.get(i).getNome();
+        }
+		return entradaString;
 	}
-
 }

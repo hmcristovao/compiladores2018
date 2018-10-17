@@ -1,5 +1,6 @@
 package comando;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import geradorCodigo.Expressao;
 import parser.Token;
 

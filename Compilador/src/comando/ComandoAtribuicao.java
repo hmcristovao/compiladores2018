@@ -1,5 +1,7 @@
 package comando;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
+import comandoPrimitivo.PrimitivoAtribuicao;
 import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.Simbolo;
@@ -15,11 +17,10 @@ public class ComandoAtribuicao extends ComandoAltoNivel{
 
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		//implementar na segunda passagem
+		//implementar na segunda passagem		
 		return null;
 	}
 
-	
 	public String toString() {
 		
 		return null;
