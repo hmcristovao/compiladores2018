@@ -1,5 +1,6 @@
 package comando;
 
+
 import java.util.LinkedList;
 
 public class ListaComandosAltoNivel
@@ -14,8 +15,7 @@ public class ListaComandosAltoNivel
 
 	public void addComando(ComandoAltoNivel _comand)
 	{
-		if ( _comand != null )
-			this.ListaComandosAltoNivel.add(_comand);
+		this.ListaComandosAltoNivel.add(_comand);
 	}
 
 	public LinkedList<ComandoAltoNivel> getListaComandosAltoNivel()
@@ -26,7 +26,12 @@ public class ListaComandosAltoNivel
 	@Override
 	public String toString()
 	{
-		return "BLOCO " + this.getListaComandosAltoNivel();
+		LinkedList<ComandoAltoNivel> lista = this.ListaComandosAltoNivel;
+		for(ComandoAltoNivel comando : lista)
+		{
+			System.out.println(comando.toString());
+		}
+		return "";
 	}	
 
 }

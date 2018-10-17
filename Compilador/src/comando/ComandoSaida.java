@@ -21,11 +21,10 @@ public class ComandoSaida extends ComandoAltoNivel
 	@Override
 	public String toString()
 	{
-		return "<" + this.getLexema()+", " + this.getExpressao() + ">";
+		return this.getLexema()+" "+this.getExpressao();
 	}
 
-	public Expressao getExpressao() 
-	{
-		return this.expressao;
+	public Expressao getExpressao() {
+		return expressao;
 	}
 }

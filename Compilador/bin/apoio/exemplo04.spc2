@@ -1,3 +1,0 @@
-numero a;
-a <- 2 + 3;
-exibe a;

@@ -24,6 +24,6 @@ public class ComandoAtribuicao extends ComandoAltoNivel
 	@Override
 	public String toString()
 	{
-		return "<" + this.getLexema() + ", " + variavel.getLexema() + ": Expressao_POS: " + expressao.getExpressaoPosfixa() + ">";
+		return this.getLexema()+" "+variavel.getLexema() + " Expressao_POS: "+expressao.getExpressaoPosfixa();
 	}
 }
