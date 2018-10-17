@@ -16,11 +16,6 @@ public abstract class ComandoCondicional extends ComandoAltoNivel
 	}
 	
 	
-/*	public abstract ListaComandosPrimitivos geraListaComandosPrimitivos()
-	{
-
-	}	*/
-
 	public Expressao getExpressao() {
 		return expressao;
 	}
@@ -31,5 +26,4 @@ public abstract class ComandoCondicional extends ComandoAltoNivel
 	}
 
 
-	public abstract String toString();
 }

@@ -1,13 +1,13 @@
-<<<<<<< HEAD:exemplo13.spc
-se (2=2)
-   exibe  "Igual!!";
-fim-se 
-||||||| merged common ancestors
-se (2=2)
-   exibe  "Igual!!";
+numero a;
+numero b;
+a<-2;
+b<-42;
+se (a=2)
+   le a;
+   se(b=4)
+   	  le b;
+   fim-se	
 fim-se
-=======
-se (2=2)
-   exibe  "Igual!!";
-fim-se 
->>>>>>> master:src/apoio/exemplo13.spc2
+se (b=6)
+	le a;
+fim-se

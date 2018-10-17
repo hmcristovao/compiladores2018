@@ -2,6 +2,7 @@ package comando;
 import geradorCodigo.*;
 import parser.*;
 import semantico.Simbolo;
+import semantico.TipoDado;
 
 public class ComandoSaida extends ComandoAltoNivel
 {
@@ -26,5 +27,15 @@ public class ComandoSaida extends ComandoAltoNivel
 
 	public Expressao getExpressao() {
 		return expressao;
+	}
+
+	@Override
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		//Expressao expDestAssemb = this.expressao;
+		//TipoDado tipo = this.variavel.getTipoDado();
+		//PrimitivoSaida comandoPrimitivo = new PrimitivoSaida("expDestAssemb",tipo);
+		ListaComandosPrimitivos listaAtribuicao = new ListaComandosPrimitivos();
+		//listaAtribuicao.addComando(comandoPrimitivo);
+		return listaAtribuicao;
 	}
 }

@@ -10,19 +10,24 @@ import semantico.*;
 public class Compilador implements Config, CompiladorConstants {
   static public Tabela tabela;
   static public ListaComandosAltoNivel listaComandosAltoNivel;
-  //public static ListaComandosPrimitivos listaComandosPrimitivos;  public static String codigoDestino;
+  public static ListaComandosPrimitivos listaComandosPrimitivos =null;
+  public static StringBuilder codigoDestino;
 
   public static void main(String args []) throws ParseException
   {
         Compilador compilador = null;
         listaComandosAltoNivel = new ListaComandosAltoNivel();
+        codigoDestino = new StringBuilder();
         tabela = new Tabela();
+/* Exemplo de StringBuilder	StringBuilder nomes = new StringBuilder();    nomes.append("Carlos>").append("Maria>").append("José>").append("Renata");         System.out.println(nomes.toString());*/
 
         try
     {
                 compilador = new Compilador(new FileInputStream(nomeArquivo));
         Compilador.inicio(listaComandosAltoNivel);
-                System.out.println(listaComandosAltoNivel.toString());
+                System.out.println(listaComandosAltoNivel);
+                listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosTotal();
+                System.out.println(listaComandosPrimitivos);
         System.out.println("\u005cnExecucao finalizada com sucesso !\u005cn");
     }
     catch(FileNotFoundException e)
@@ -46,7 +51,7 @@ public class Compilador implements Config, CompiladorConstants {
   static final public Expressao expressao() throws ParseException {
                          Expressao exp = new Expressao();
     posExpressao(exp);
-          System.out.println(exp.getExpressaoInfixa());
+          //System.out.println(exp.getExpressaoInfixa());
           {if (true) return exp;}
     throw new Error("Missing return statement in function");
   }

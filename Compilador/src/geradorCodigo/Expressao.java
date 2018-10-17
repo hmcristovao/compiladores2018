@@ -34,9 +34,9 @@ public class Expressao
 		this.getExpressaoPosfixa().add(_item);
 	}
 
-/*	public Tipo getTipo()
+	/*public TipoDado getTipo()
 	{
-		return null;
+		return expressaoInfixa.get(0).getLexema();
 	}*/
 
 	public String geraCodigoDestino()

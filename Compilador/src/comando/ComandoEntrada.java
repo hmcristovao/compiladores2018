@@ -12,15 +12,22 @@ public class ComandoEntrada extends ComandoAltoNivel
 		this.variavel = _variavel;
 	}
 
-/*	public ListaComandosPrimitivos 
-			geraListaComandosPrimitivos()
-	{
 
-	}*/
 
 	@Override
 	public String toString()
 	{
-		return this.getLexema()+variavel.getLexema();
+		return this.getLexema()+" "+variavel.getLexema();
+	}
+
+	@Override
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() 
+	{
+		int referencia = this.variavel.getReferencia();
+		TipoDado tipo = this.variavel.getTipoDado();
+		PrimitivoEntrada comandoPrimitivo = new PrimitivoEntrada(referencia,tipo);
+		ListaComandosPrimitivos listaAtribuicao = new ListaComandosPrimitivos();
+		listaAtribuicao.addComando(comandoPrimitivo);
+		return listaAtribuicao;
 	}
 }

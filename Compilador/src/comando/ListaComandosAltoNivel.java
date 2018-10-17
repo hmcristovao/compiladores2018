@@ -18,6 +18,24 @@ public class ListaComandosAltoNivel
 		this.ListaComandosAltoNivel.add(_comand);
 	}
 
+	public ListaComandosPrimitivos geraListaComandoPrimitivosTotal()
+	{
+		ListaComandosPrimitivos listaComandosPrimitivosTotal = new ListaComandosPrimitivos();
+		ListaComandosPrimitivos elementoLista;
+		
+		for(ComandoAltoNivel comando : ListaComandosAltoNivel )
+		{
+			elementoLista = comando.geraListaComandosPrimitivos();
+			LinkedList<ComandoPrimitivo> cadeiaComandos = elementoLista.getListaComandosPrimitivos();
+			for( ComandoPrimitivo _cmdp : cadeiaComandos )
+			{
+				listaComandosPrimitivosTotal.addComando(_cmdp);
+			}
+		}
+		
+		return listaComandosPrimitivosTotal;
+	}
+	
 	public LinkedList<ComandoAltoNivel> getListaComandosAltoNivel()
 	{
 		return this.ListaComandosAltoNivel;
@@ -26,10 +44,9 @@ public class ListaComandosAltoNivel
 	@Override
 	public String toString()
 	{
-		LinkedList<ComandoAltoNivel> lista = this.ListaComandosAltoNivel;
-		for(ComandoAltoNivel comando : lista)
+		for(ComandoAltoNivel comando :this.ListaComandosAltoNivel)
 		{
-			System.out.println(comando.toString());
+			System.out.println(comando);
 		}
 		return "";
 	}	
