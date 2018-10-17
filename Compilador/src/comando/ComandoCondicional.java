@@ -10,17 +10,12 @@ public abstract class ComandoCondicional extends ComandoAltoNivel {
 		super(token);
 		this.expressao = expressao;
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
-		
 	}
-	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {	
 		return null;
 	}
 
-	
-	public String toString() {
-		
+	public String toString() {	
 		return null;
 	}
-
 }

@@ -12,12 +12,10 @@ public class ComandoEnquanto extends ComandoAltoNivel {
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 	}
 
-
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		//segunda passagem
 		return null;
 	}
-
 	
 	public String toString() {
 		

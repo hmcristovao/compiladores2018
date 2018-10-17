@@ -10,5 +10,4 @@ public class ComandoCondicionalComposto extends ComandoCondicional {
 		super(token, expressao, listaComandosAltoNivelTrue);
 		// TODO Auto-generated constructor stub
 	}
-
 }

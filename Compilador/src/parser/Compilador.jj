@@ -18,10 +18,11 @@ public class Compilador {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
       tabela = new Tabela();
+      ListaComandosAltoNivel programaMain;
       
       try {
          compilador = new Compilador(new FileInputStream("exemplo01.spc"));
-         Compilador.programa();
+         programaMain = Compilador.programa();
          System.out.println("\n---------------------------\n");
          System.out.println("TABELA DE SIMBOLOS");
          System.out.println(tabela.tab);
@@ -95,18 +96,25 @@ TOKEN [IGNORE_CASE] : {
 	< CONCAT: "&" > 
  }
   
-ListaComandosAltoNivel programa() : { ListaComandosAltoNivel comandos = new ListaComandosAltoNivel();
-ComandoAltoNivel comandoAltoNivel;}
+ListaComandosAltoNivel programa() : {
+  ListaComandosAltoNivel comandos = new ListaComandosAltoNivel();
+  ComandoAltoNivel comandoAltoNivel;
+}
 {
   
-  ( comandoAltoNivel = comando() { comandos.add(comandoAltoNivel);} )*
+  ( comandoAltoNivel = comando() { comandos.addComandoAltoNivel(comandoAltoNivel); } )* { return comandos; }
 }
 
 ComandoAltoNivel comando() : { ComandoAltoNivel comando; }
 {
   
-  comando = atribuicao() | comando = declaracao() | comando = se() | comando = enquanto() | comando = le() | comando = exibe()
-	{return comando;}
+  comando = atribuicao() { return comando; } |
+  comando = declaracao() { return comando; } |
+  comando = se() { return comando; } |
+  comando = enquanto() { return comando; } |
+  comando = le() { return comando; } |
+  comando = exibe() { return comando; }
+  
 }
 
 ComandoAtribuicao atribuicao() : {
@@ -140,9 +148,15 @@ ComandoDeclaracao declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE
 	( <ATRIB> exp = expressaoMestre() )? )* <PV> { return null; }
 }
 
-ComandoCondicional se() : { Expressao exp; }
+ComandoCondicional se() : {
+  Expressao exp;
+  ComandoCondicionalSimples comandoCondicionalSimples;
+  ListaComandosAltoNivel  programaSe;
+}
 {
-  <SE> <AP> exp = expressaoMestre() <FP> programa() <FIMSE> { return null;}
+  <SE> <AP> exp = expressaoMestre() <FP> programaSe = programa() <FIMSE>
+  	{  comandoCondicionalSimples = new ComandoCondicionalSimples(null, exp, programaSe);
+  		return comandoCondicionalSimples;}
 }
 
 ComandoEnquanto enquanto() : {
@@ -150,9 +164,11 @@ ComandoEnquanto enquanto() : {
   ListaComandosAltoNivel comandosAltoNivel;
   ComandoEnquanto comandoEnquanto;}
 {
-  <ENQUANTO> <AP> exp = expressaoMestre() <FP> comandosAltoNivel = programa() <FIMENQUANTO> {
+  <ENQUANTO> <AP> exp = expressaoMestre() <FP> comandosAltoNivel = programa() <FIMENQUANTO>
+  {
     comandoEnquanto = new ComandoEnquanto(null, exp, comandosAltoNivel);
-    return ComandoEnquanto; }
+    return comandoEnquanto;
+  }
 }
 
 ComandoEntrada le() : {

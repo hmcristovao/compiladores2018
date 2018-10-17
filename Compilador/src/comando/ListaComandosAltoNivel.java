@@ -7,8 +7,8 @@ public class ListaComandosAltoNivel {
 	
 	public ListaComandosAltoNivel() {
 		listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();
-		
 	}
+	
 	public void addComandoAltoNivel(ComandoAltoNivel comando) {
 		this.listaComandosAltoNivel.add(comando);
 	}
