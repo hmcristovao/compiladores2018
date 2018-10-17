@@ -136,9 +136,7 @@ void comando() :
 }
 
 void atribuicao() :
-{
-  
-}
+{}
 {
   < VAR > 
   < ATRIB > 
@@ -151,7 +149,6 @@ void declaracao() :
 {
   Simbolo simb;
   Token t;
-
 }
 {
   (
@@ -186,9 +183,7 @@ void declaracao() :
 }
 
 void se() :
-{
-
-}
+{}
 {
   < SE > < AP > 
   expressao()
@@ -197,9 +192,7 @@ void se() :
 }
 
 void enquanto() :
-{
-
-}
+{}
 {
   < ENQUANTO > < AP > 
   expressao()
@@ -345,13 +338,12 @@ void termo4() :
   Token v, t;
   Simbolo simb, simb2;
   
-  
-  Operando num= new Operando();
-  num.tipoDado=TipoDado.NUM;
-  Operando var= new Operando();
- var.tipoElemento=TipoElemento.VAR;
- Operando str= new Operando();
-      str.tipoDado=TipoDado.STRING;
+  	Operando num= new Operando();
+  	num.tipoDado=TipoDado.NUM;
+  	Operando var= new Operando();
+ 	var.tipoElemento=TipoElemento.VAR;
+ 	Operando str= new Operando();
+	str.tipoDado=TipoDado.STRING;
 }
 {
   < AP > expressao() < FP >

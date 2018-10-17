@@ -1,13 +1,6 @@
-/Compilador.class
-/CompiladorConstants.class
-/CompiladorTokenManager.class
-/ParseException.class
-/SimpleCharStream.class
-/Token.class
-/TokenMgrError.class
-/minhasClasses/
-/parser/
+/.DS_Store
 /apoio/
+/parser/
 /semantico/
-/geradorCodigo/
-/exemplo17.spc2
+/comandoPrimitivo/
+/comandoAltoNivel/

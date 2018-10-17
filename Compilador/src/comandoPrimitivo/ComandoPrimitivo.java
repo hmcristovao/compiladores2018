@@ -1,4 +1,4 @@
-package parser;
+package comandoPrimitivo;
 
 public abstract class ComandoPrimitivo {
 

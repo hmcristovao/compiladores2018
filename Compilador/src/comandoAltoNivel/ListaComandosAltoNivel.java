@@ -1,7 +1,8 @@
-package parser;
+package comandoAltoNivel;
 //----- importando outros pacotes que serao utilizados
 import java.io.*;
 import apoio.*;
+import comandoPrimitivo.ListaComandosPrimitivos;
 import semantico.*;
 import java.util.LinkedList;
 import java.util.AbstractList.*;

@@ -18,7 +18,7 @@ public class Tabela {
       }
       
       public Simbolo consultaSimbolo(String _chave) {
-    	  return (tab.get(_chave)); //terminar aqui
+    	  return (tab.get(_chave)); 
       }
       
       public int consultaReferencia(String _chave) {

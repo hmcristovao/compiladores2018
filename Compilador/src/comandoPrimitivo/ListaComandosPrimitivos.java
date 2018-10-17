@@ -1,17 +1,17 @@
-package parser;
+package comandoPrimitivo;
 
 import java.util.LinkedList;
 
-public class ListaComandosPrimitivos extends ComandoPrimitivo{
+public class ListaComandosPrimitivos extends ComandoPrimitivo {
 
 	LinkedList<ComandoPrimitivo> listaComandosPrimitivos= new LinkedList<ComandoPrimitivo>();
 	
 	void addComando(ComandoPrimitivo comando) {
-		//IMPLEMENTAÇAO VAI AQUI############################3
+		//IMPLEMENTAï¿½AO VAI AQUI############################3
 	}
 	
 	public String geraCoigoDestino() {
-		//IMPLEMENTAÇAO VAI AQUI############################3
+		//IMPLEMENTAï¿½AO VAI AQUI############################3
 		return null;
 	}
 

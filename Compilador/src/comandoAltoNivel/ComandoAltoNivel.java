@@ -1,6 +1,9 @@
-package parser;
+package comandoAltoNivel;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.HeaderTokenizer.Token;
+import comandoPrimitivo.ListaComandosPrimitivos;
+import parser.Token;
+
+//import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.HeaderTokenizer.Token;
 
 public abstract class ComandoAltoNivel {
 	Token token;
