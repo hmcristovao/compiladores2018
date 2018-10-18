@@ -133,10 +133,9 @@ ComandoAtribuicao atribuicao() : {
 	ComandoAtribuicao comandoAtribuicao;
 }
 {
-  v = <VAR> {tabela.verificaExistenciaSimbolo(v);} <ATRIB> exp = expressaoMestre() {
+  v = <VAR> { tabela.verificaExistenciaSimbolo(v); } <ATRIB> exp = expressaoMestre() {
 		comandoAtribuicao = new ComandoAtribuicao(v, tabela.consultaSimbolo(v.image), exp);
-		
-        } <PV> { return comandoAtribuicao; }
+	} <PV> { return comandoAtribuicao; }
 }
 
 void declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE OU PODE RETORNAR UM COMANDO ALTO NIVEL

@@ -1,6 +1,9 @@
 package comando;
 
 import comandoPrimitivo.ListaComandosPrimitivos;
+import comandoPrimitivo.PrimitivoGoto;
+import comandoPrimitivo.PrimitivoLabel;
+import comandoPrimitivo.PrimitivoSeExpFalsoGoto;
 import geradorCodigo.Expressao;
 import parser.Token;
 
@@ -15,11 +18,25 @@ public class ComandoEnquanto extends ComandoAltoNivel {
 
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		//segunda passagem
-		return null;
+		
+		//cria os comandos primitivos
+		PrimitivoLabel labelInicio = new PrimitivoLabel("enquantoInicio");
+		PrimitivoLabel labelFalse = new PrimitivoLabel("enquantoFim");
+		PrimitivoSeExpFalsoGoto primitivoEnquanto = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFalse, this.listaComandosAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		PrimitivoGoto gotoEnquanto = new PrimitivoGoto(labelInicio);
+		
+		//cria a lista de comandos primitivos		
+		ListaComandosPrimitivos listaEnquanto = new ListaComandosPrimitivos();
+		//adiciona na ordem
+		listaEnquanto.addComando(labelInicio);
+		listaEnquanto.addComando(primitivoEnquanto);
+		listaEnquanto.addComando(gotoEnquanto);
+		listaEnquanto.addComando(labelFalse);
+		
+		return listaEnquanto;
 	}
 	
-	public String toString() {
-		
+	public String toString() {		
 		return null;
 	}
 

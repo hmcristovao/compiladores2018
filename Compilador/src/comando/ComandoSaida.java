@@ -3,13 +3,12 @@ package comando;
 import java.util.LinkedList;
 
 import comandoPrimitivo.ListaComandosPrimitivos;
-import comandoPrimitivo.PrimitivoEntrada;
 import comandoPrimitivo.PrimitivoSaida;
 import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.Item;
 import semantico.Operando;
-import semantico.Simbolo;
+import semantico.TipoDado;
 
 public class ComandoSaida extends ComandoAltoNivel {
 	LinkedList<Expressao> expressoes;
@@ -26,14 +25,23 @@ public class ComandoSaida extends ComandoAltoNivel {
 			Expressao exp = this.expressoes.get(i);
 			//cria um primitivo de saida para cada item da expressão
 			LinkedList<Item> expressaoPosfixa = exp.getExpressaoPosfixa();
+			
+			//verifica se todos os operandos da expressão são do tipo NUM ou STR
+			TipoDado tipoExpressao = TipoDado.NUM;
 			for(int j = 0; j < expressaoPosfixa.size(); j++) { //pega todos os itens da expressao
 				//verifica se o item é um operando
 				if(expressaoPosfixa.get(j) instanceof Operando) {
 					Operando operando = (Operando) expressaoPosfixa.get(j); 
-					PrimitivoSaida primitivoSaida = new PrimitivoSaida(operando.getTipoDado(), exp.geraCodigoDestino() );
-					listaSaida.addComando(primitivoSaida);
+					/* Se forem todos números a expressão é do tipo NUM
+					 * se houver alguma string, a expressão é do tipo STR
+					 * */
+					if(operando.getTipoDado() == TipoDado.STR) {
+						tipoExpressao = operando.getTipoDado();
+					}
 				}	
 			}
+			PrimitivoSaida primitivoSaida = new PrimitivoSaida(tipoExpressao, exp.geraCodigoDestino() );
+			listaSaida.addComando(primitivoSaida);
         }
 		return listaSaida;
 	}

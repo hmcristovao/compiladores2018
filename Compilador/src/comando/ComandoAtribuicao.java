@@ -17,8 +17,16 @@ public class ComandoAtribuicao extends ComandoAltoNivel{
 
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		//implementar na segunda passagem		
-		return null;
+		//implementar na segunda passagem
+		ListaComandosPrimitivos listaAtribuicao = new ListaComandosPrimitivos();
+		
+		//cria o primitivo da atribuicao para a variável
+		PrimitivoAtribuicao primitivo = new PrimitivoAtribuicao(this.variavel.getReferencia(), this.variavel.getTipo(), this.expressao.geraCodigoDestino());
+		
+		//adiciona a variável na lista de atribuicao
+		listaAtribuicao.addComando(primitivo);
+		
+		return listaAtribuicao;
 	}
 
 	public String toString() {
