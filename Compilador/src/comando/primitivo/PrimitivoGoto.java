@@ -5,15 +5,22 @@ public class PrimitivoGoto extends ComandoPrimitivo{
 	PrimitivoLabel label;
 	
 	public PrimitivoGoto(PrimitivoLabel _label) {
-		//this.referencia = _referencia;
 		this.label = _label;
 		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
+	String geraCodigoDestino() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return null; //"Comando leitura\n" +"Variavel " + this.variavel.getLexema()
+		return "goto "+this.label;
 	}
+
+
 
 }

@@ -1,6 +1,9 @@
 package comando.altoNivel;
 
 import comando.primitivo.ListaComandosPrimitivos;
+import comando.primitivo.PrimitivoGoto;
+import comando.primitivo.PrimitivoLabel;
+import comando.primitivo.PrimitivoSeExpFalsoGoto;
 import geradorCodigo.Expressao;
 import parser.Token;
 
@@ -18,6 +21,16 @@ public class ComandoCondicionalSimples extends ComandoCondicional {
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivo() {
 		// TODO Auto-generated method stub
+		
+		ListaComandosPrimitivos listaCmdCondicionalSimples = new ListaComandosPrimitivos();
+		ListaComandosPrimitivos listaCmdPriTrue = super.getListaComandosAltoNivelTrue().geraListaComandosPrimitivosTotal();
+		
+		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
+		PrimitivoSeExpFalsoGoto seExpFalseGoto = new PrimitivoSeExpFalsoGoto("expDestAssemb", labelFalse, listaCmdPriTrue);
+		listaCmdCondicionalSimples.addComando(seExpFalseGoto);
+		listaCmdCondicionalSimples.addComando(labelFalse);
+		
+		
 		return null;
 	}
 }

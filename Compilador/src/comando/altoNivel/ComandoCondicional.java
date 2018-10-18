@@ -21,4 +21,9 @@ public abstract class ComandoCondicional extends ComandoAltoNivel {
 		return null;
 	}
 
+	public ListaComandosAltoNivel getListaComandosAltoNivelTrue() {
+		// TODO Auto-generated method stub
+		return this.listaComandosAltoNivelTrue;
+	}
+
 }

@@ -1,5 +1,5 @@
 numero a,b,c;
-a <- 0;
-b <- 1;
-c <- 2;
-le c;
+
+enquanto (a = 2)
+	b <- 2;
+fimenquanto

@@ -16,10 +16,18 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo {
 	}
 	
 	@Override
+	String geraCodigoDestino() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Referência: " + this.referencia + " / " + "Tipo de dado: " + this.tipo;
 	}
+
+
 
 	//public abstract ListaComandosAltoNivel geraListaComandosAltoNivel();
 }

@@ -15,9 +15,17 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 	}
 	
 	@Override
+	String geraCodigoDestino() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Tipo de dado: " + tipo.name(); //"Comando leitura\n" +"Variavel " + this.variavel.getLexema()
 	}
+
+	
 
 }
