@@ -214,7 +214,7 @@ ComandoSaida exibe() : {
 	{ //cria o objeto da classe Comando saida após ter adicionado todos os membros na lista
 		comandoSaida = new ComandoSaida(null, expressoes); //PERGUNTAR PQ PRECISA DO TOKEN AQUI
 		return comandoSaida;
-	} 
+	}
 }
 
 Expressao expressaoMestre() : {

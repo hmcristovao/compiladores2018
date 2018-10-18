@@ -2,6 +2,7 @@ package comando;
 
 import java.util.LinkedList;
 
+import comandoPrimitivo.ComandoPrimitivo;
 import comandoPrimitivo.ListaComandosPrimitivos;
 
 public class ListaComandosAltoNivel {
@@ -20,15 +21,20 @@ public class ListaComandosAltoNivel {
 	 }
 	 
 	 public ListaComandosPrimitivos geraListaComandosPrimitivosTotal() {
-		 
+		 ListaComandosPrimitivos listaComandosPrimitivosTotal = new ListaComandosPrimitivos();
 		 //percorre a lista gerando os comandos de cada um
 		 for (int i = 0; i < this.listaComandosAltoNivel.size(); i++) {
 			 ComandoAltoNivel comando = this.listaComandosAltoNivel.get(i);
-			 System.out.println(comando.toString());
+			 
+			 //pega os comandos primitivos de um determinado comando de alto nível			 
+			 //percorre cada comando individualmente
+			 LinkedList<ComandoPrimitivo> listaComandosPrimitivosAux = comando.geraListaComandosPrimitivos().getListaComandosPrimitivos();
+			 for (int j = 0; j < listaComandosPrimitivosAux.size(); j++) {
+				 //adiciona cada comando na lista de comandos total
+				 listaComandosPrimitivosTotal.addComando(listaComandosPrimitivosAux.get(i));
+			 }			 
 		 }
-		 
-		 ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();		 
-		 return listaComandosPrimitivos;
+		 return listaComandosPrimitivosTotal;
 	 }
 	 
 	 public String toString() {

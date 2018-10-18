@@ -20,7 +20,7 @@ public class ComandoSaida extends ComandoAltoNivel {
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		// segunda passagem
 		ListaComandosPrimitivos listaSaida = new ListaComandosPrimitivos();
-		//gera um primitivo de entrada para cada variavel
+		//gera um primitivo de saida para cada variavel
 		for (int i = 0; i < this.expressoes.size(); i++) {
 			Expressao exp = this.expressoes.get(i);
 			PrimitivoSaida primitivoSaida = new PrimitivoSaida(null, exp.geraCodigoDestino() );
