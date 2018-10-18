@@ -26,7 +26,8 @@ public class Compilador implements CompiladorConstants {
 
                 listaCP = listaCAN.geraListaComandosPrimitivosTotal();
 
-                 System.out.println(listaCAN);
+                System.out.println(listaCAN);
+                 System.out.println(listaCP);
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");

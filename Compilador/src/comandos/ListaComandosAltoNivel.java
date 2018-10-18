@@ -23,10 +23,10 @@ public class ListaComandosAltoNivel {
 		 for(int i=0; i<listaComandosAltoNivel.size() ; i++) {
 			 
 			 if(listaComandosAltoNivel.get(i).token.toString().equals("<-")) {
-				 ComandoAtribuicao comandoAtrib = (ComandoAtribuicao) listaComandosAltoNivel.get(i);
-				 //System.out.println(comandoAtrib.expressao.listaExpPosfixa.get(0));
+				ComandoAtribuicao comandoAtrib = (ComandoAtribuicao) listaComandosAltoNivel.get(i);
 				ComandoPrimitivo prim = new PrimitivoAtribuicao(comandoAtrib.variavel.getReferencia(), 
 						comandoAtrib.variavel.getTipo(), comandoAtrib.expressao.toString());
+				
 				lcmp.listaComandosPrimitivos.add(prim);
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("le")) {
@@ -36,7 +36,8 @@ public class ListaComandosAltoNivel {
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("exibe")) {
 				 ComandoSaida comandoSai = (ComandoSaida) listaComandosAltoNivel.get(i);
-				 //ComandoPrimitivo prim = new PrimitivoSaida(comandoSai.expressao.listaExpPosfixa, tipo)
+				 ComandoPrimitivo prim = new PrimitivoSaida(comandoSai.expressao.toString());
+				 lcmp.listaComandosPrimitivos.add(prim);
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("enquanto")) {
 				 //faz mais coisas

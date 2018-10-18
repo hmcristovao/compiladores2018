@@ -4,10 +4,11 @@ import semantico.TipoDado;
 
 public class PrimitivoSaida extends ComandoPrimitivo{
 	public String expDestinoAssembler;
-	public TipoDado tipo; 
+	//public TipoDado tipo; 
 	
-	public PrimitivoSaida(int ref, TipoDado tipo) {
-		this.tipo = tipo;
+	public PrimitivoSaida(String exp) {
+		this.expDestinoAssembler = exp;
+		//this.tipo = tipo;
 	}
 	
 	public String geraCodigoDestino() {

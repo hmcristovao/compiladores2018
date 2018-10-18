@@ -24,7 +24,7 @@ public class ListaComandosPrimitivos {
 	}
 	
 	public String toString() {
-		return "qualquer bosta";
+		return "" + listaComandosPrimitivos.get(0);
 	}
 	
 }
