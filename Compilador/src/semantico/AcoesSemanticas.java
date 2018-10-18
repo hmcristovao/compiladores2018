@@ -19,6 +19,7 @@ public class AcoesSemanticas   {
 				 _tabela.set_marcador(_tabela.get_marcador() + 2);	 
 			}	
 			else {
+				
 				_simbolo = new Simbolo(_token, TipoDado.STR, _tabela.get_marcador());
 				_tabela.inclui(_simbolo);
 				_tabela.set_marcador(_tabela.get_marcador() + 1);

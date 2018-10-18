@@ -5,8 +5,8 @@ import apoio.*;
 import geradorCodigo.*;
 import semantico.*;
 import exception.*;
-import comando.*;
-import java.util.LinkedList;
+import comando.altoNivel.*;
+import comando.primitivo.*;
 
 /** Token Manager. */
 public class CompiladorTokenManager implements CompiladorConstants

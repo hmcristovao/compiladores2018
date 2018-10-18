@@ -11,20 +11,28 @@ import apoio.*;
 import geradorCodigo.*;
 import semantico.*;
 import exception.*;
-import comando.*;
-import java.util.LinkedList;
+import comando.altoNivel.*;
+import comando.primitivo.*;
 
 public class Compilador implements Config {
 	static Tabela tabela = new Tabela();
+	
+	static ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
+
+	static ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
+	
 	public static void main(String args[])  throws SemanticException  {
       	try {
-      	  	 System.out.println("Lista de Comandos:\n");
 	         Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
-	         compilador.inicio();
-	         System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
-	         /*System.out.println("\nTabela de Simbolos:");
+	         compilador.inicio(listaComandosAltoNivel);
+	         listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
+	     //    System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
+			
+	         System.out.println(listaComandosPrimitivos.toString());
+
+	         System.out.println("\nTabela de Simbolos:");
 	 		 System.out.println(tabela);
-	 		 System.out.println("\nMarcador:\n" + tabela.get_marcador());*/
+	 		 System.out.println("\nMarcador:\n" + tabela.get_marcador());
 		 }
 	     catch(TokenMgrError e) {
 	        System.out.println("Erro lexico\n" + e.getMessage());
@@ -91,7 +99,7 @@ TOKEN : {
 //=========================================Gramática de Expressões==========================================
 	Expressao expressaoPrincipal() : {Expressao _expressao = new Expressao();}  
 	{
-	     expressao(_expressao)	{/*System.out.println(_expressao);*/ return _expressao; }
+	     expressao(_expressao)	{ return _expressao; }
 	}
 	void expressao(Expressao _expressao) : {Token token;}  
 	{
@@ -156,13 +164,13 @@ TOKEN : {
 	}
 	
 //=========================================Gramática Completa==============================================
-void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }	
+void inicio(ListaComandosAltoNivel listaComandoAltoNivel) : {}	
 	{
-	      listaComandoAltoNivel = programa()   < EOF >   
+	      programa(listaComandoAltoNivel)   < EOF >  
 	}
-	ListaComandosAltoNivel programa() : {ListaComandosAltoNivel listaComandoAltoNivel = new ListaComandosAltoNivel();}	
+	void programa(ListaComandosAltoNivel listaComandoAltoNivel) : {}	
 	{
-	      (comando(listaComandoAltoNivel) )* { return listaComandoAltoNivel; }
+	      (comando(listaComandoAltoNivel) )* 
 	}
 	void comando(ListaComandosAltoNivel _listaComandoAltoNivel) : {} 
 	{
@@ -182,8 +190,7 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 		}
 		<RECEBE> expressao = expressaoPrincipal()
 		{
-			_listaComandoAltoNivel.addComando(comandoAtribuicao = new ComandoAtribuicao(token,simbolo = new Simbolo(token,TipoDado.STR),expressao));
-			System.out.println(comandoAtribuicao.toString());
+			_listaComandoAltoNivel.addComando(comandoAtribuicao = new ComandoAtribuicao(token,tabela.consultaSimbolo(token.image),expressao));
 		}
 		< PV >
 	}
@@ -192,13 +199,11 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 	{
 	      <LEITURA> token = <VAR> 
 	      {
-				_listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
-				System.out.println(comandoEntrada.toString());
+				_listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,tabela.consultaSimbolo(token.image)));
 	      }
 	      ( < VIRGULA > token = < VAR >
 	      {
-				_listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
-				System.out.println(comandoEntrada.toString());
+				_listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,tabela.consultaSimbolo(token.image)));
 	      }
 	      )* < PV >
 	}
@@ -208,12 +213,10 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 	      token = <EXIBE> expressao = expressaoPrincipal()
 	      {
 	        	_listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
-	        	System.out.println(comandoSaida.toString());
 	      }
 	      ( < VIRGULA > expressao = expressaoPrincipal()
 	      {
 	        	_listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
-	        	System.out.println(comandoSaida.toString());
 	      }
 	      )* < PV > 
 	}
@@ -231,22 +234,20 @@ void inicio() : {ListaComandosAltoNivel listaComandoAltoNivel = null; }
 	    )* < PV >
 	}
 	void enquanto(ListaComandosAltoNivel _listaComandoAltoNivel) :
-	{Token token; Expressao expressao; ComandoEnquanto comandoEnquanto; ListaComandosAltoNivel listaComandoAltoNivel = null;}
+	{Token token; Expressao expressao; ComandoEnquanto comandoEnquanto; ListaComandosAltoNivel listaComandoAltoNivel = new ListaComandosAltoNivel();}
 	{
-	      token = < ENQUANTO > < AP > expressao = expressaoPrincipal() < FP > listaComandoAltoNivel = programa()
-	      {;
+	      token = < ENQUANTO > < AP > expressao = expressaoPrincipal() < FP > programa(listaComandoAltoNivel)
+	      {
 				_listaComandoAltoNivel.addComando(comandoEnquanto = new ComandoEnquanto(token, expressao, listaComandoAltoNivel));
-				System.out.println(comandoEnquanto.toString());
 	      }
 	      < FIMENQUANTO > 
 	}
 	void se(ListaComandosAltoNivel _listaComandoAltoNivel) :
-	{Token token; Expressao expressao; ComandoCondicional comandoCondicional; ListaComandosAltoNivel listaComandoAltoNivel = null;}
+	{Token token; Expressao expressao; ComandoCondicional comandoCondicional; ListaComandosAltoNivel listaComandoAltoNivel = new ListaComandosAltoNivel();}
 	{
-	      token = < SE > < AP > expressao = expressaoPrincipal() < FP > listaComandoAltoNivel = programa()
+	      token = < SE > < AP > expressao = expressaoPrincipal() < FP > programa(listaComandoAltoNivel)
 	      {
 	        	_listaComandoAltoNivel.addComando(comandoCondicional = new ComandoCondicionalSimples(token, expressao, listaComandoAltoNivel));
-	        	System.out.println(comandoCondicional.toString());
 	      }
 	      < FIMSE >
 	}

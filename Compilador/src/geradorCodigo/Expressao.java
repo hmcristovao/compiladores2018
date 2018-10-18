@@ -32,7 +32,10 @@ public class Expressao {
 		return null;
 	 }
 	 
-	 String geraCodigoDestino() {
+	 public String geraCodigoDestino() {
+		 String codigoDestino;
+	//	for(Item item : listaExpPosfixa)
+	//		if(item.get {}
 		return null;
 	 }
 	 

@@ -1,7 +1,11 @@
 package comando.altoNivel;
 
+import comando.primitivo.ListaComandosPrimitivos;
+import comando.primitivo.PrimitivoEntrada;
+import comando.primitivo.PrimitivoSaida;
 import geradorCodigo.Expressao;
 import parser.Token;
+import semantico.TipoDado;
 
 public class ComandoSaida extends ComandoAltoNivel {
 	
@@ -17,5 +21,17 @@ public class ComandoSaida extends ComandoAltoNivel {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Comando exibição\n" +"Expressão " + this.expressao.toString();
+	}
+
+	@Override
+	public ListaComandosPrimitivos geraListaComandosPrimitivo() {
+	//	int referencia = this.variavel.getReferencia();
+//		TipoDado tipo = this.variavel.getTipo();
+		
+//		PrimitivoSaida comandoPrimitivo = new PrimitivoSaida(expressao);
+//		ListaComandosPrimitivos comandoSaida = new ListaComandosPrimitivos();
+//		comandoSaida.addComando(comandoPrimitivo);
+		
+		return null; //comandoSaida;
 	}
 }

@@ -1,5 +1,7 @@
 package comando.altoNivel;
 
+import comando.primitivo.ListaComandosPrimitivos;
+import comando.primitivo.PrimitivoAtribuicao;
 import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.Simbolo;
@@ -17,10 +19,17 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void adicionaComando(Token _token, Expressao _expressao) {
-		Simbolo simbolo = new Simbolo(_token,TipoDado.STR);
+	@Override
+	public ListaComandosPrimitivos geraListaComandosPrimitivo() {
+		int referencia = this.variavel.getReferencia();
+		TipoDado tipo = this.variavel.getTipo();
+		String expDestinoAssembler = expressao.toString();
 		
+		PrimitivoAtribuicao comandoPrimitivo = new PrimitivoAtribuicao(referencia, tipo, expDestinoAssembler);
+		ListaComandosPrimitivos comandoAtribuicao = new ListaComandosPrimitivos();
+		comandoAtribuicao.addComando(comandoPrimitivo);
 		
+		return comandoAtribuicao;
 	}
 
 	@Override
@@ -28,6 +37,4 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		// TODO Auto-generated method stub
 		return "Comando atribuição\n" +"Variavel " + this.variavel.getLexema() + " recebe " + this.expressao.getListaExpPosfixa();
 	}
-
-	//public abstract ListaComandosAltoNivel geraListaComandosAltoNivel();
 }

@@ -5,28 +5,28 @@ import apoio.*;
 import geradorCodigo.*;
 import semantico.*;
 import exception.*;
-import comando.*;
-import comando.altoNivel.ComandoAtribuicao;
-import comando.altoNivel.ComandoCondicional;
-import comando.altoNivel.ComandoCondicionalSimples;
-import comando.altoNivel.ComandoEnquanto;
-import comando.altoNivel.ComandoEntrada;
-import comando.altoNivel.ComandoSaida;
-import comando.altoNivel.ListaComandosAltoNivel;
-
-import java.util.LinkedList;
+import comando.altoNivel.*;
+import comando.primitivo.*;
 
 public class Compilador implements Config, CompiladorConstants {
         static Tabela tabela = new Tabela();
+
+        static ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
+
+        static ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
+
         public static void main(String args[])  throws SemanticException  {
         try {
-                 System.out.println("Lista de Comandos:\u005cn");
                  Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
-                 Compilador.inicio();
-                 System.out.println("\u005cnAnalise lexica, sintatica e semantica sem erros!");
-                 /*System.out.println("\nTabela de Simbolos:");
-	 		 System.out.println(tabela);
-	 		 System.out.println("\nMarcador:\n" + tabela.get_marcador());*/
+                 compilador.inicio(listaComandosAltoNivel);
+                 listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
+             //    System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
+
+                 System.out.println(listaComandosPrimitivos.toString());
+
+                 System.out.println("\u005cnTabela de Simbolos:");
+                         System.out.println(tabela);
+                         System.out.println("\u005cnMarcador:\u005cn" + tabela.get_marcador());
                  }
              catch(TokenMgrError e) {
                 System.out.println("Erro lexico\u005cn" + e.getMessage());
@@ -46,7 +46,7 @@ public class Compilador implements Config, CompiladorConstants {
   static final public Expressao expressaoPrincipal() throws ParseException {
                                           Expressao _expressao = new Expressao();
     expressao(_expressao);
-                                         /*System.out.println(_expressao);*/ {if (true) return _expressao;}
+                                          {if (true) return _expressao;}
     throw new Error("Missing return statement in function");
   }
 
@@ -224,14 +224,12 @@ public class Compilador implements Config, CompiladorConstants {
   }
 
 //=========================================Gramática Completa==============================================
-  static final public void inicio() throws ParseException {
-                 ListaComandosAltoNivel listaComandoAltoNivel = null;
-    listaComandoAltoNivel = programa();
+  static final public void inicio(ListaComandosAltoNivel listaComandoAltoNivel) throws ParseException {
+    programa(listaComandoAltoNivel);
     jj_consume_token(0);
   }
 
-  static final public ListaComandosAltoNivel programa() throws ParseException {
-                                             ListaComandosAltoNivel listaComandoAltoNivel = new ListaComandosAltoNivel();
+  static final public void programa(ListaComandosAltoNivel listaComandoAltoNivel) throws ParseException {
     label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -250,8 +248,6 @@ public class Compilador implements Config, CompiladorConstants {
       }
       comando(listaComandoAltoNivel);
     }
-                                                   {if (true) return listaComandoAltoNivel;}
-    throw new Error("Missing return statement in function");
   }
 
   static final public void comando(ListaComandosAltoNivel _listaComandoAltoNivel) throws ParseException {
@@ -288,8 +284,7 @@ public class Compilador implements Config, CompiladorConstants {
                   AcoesSemanticas.tratamentoVariavelNaoDeclarada(tabela,token);
     jj_consume_token(RECEBE);
     expressao = expressaoPrincipal();
-                        _listaComandoAltoNivel.addComando(comandoAtribuicao = new ComandoAtribuicao(token,simbolo = new Simbolo(token,TipoDado.STR),expressao));
-                        System.out.println(comandoAtribuicao.toString());
+                        _listaComandoAltoNivel.addComando(comandoAtribuicao = new ComandoAtribuicao(token,tabela.consultaSimbolo(token.image),expressao));
     jj_consume_token(PV);
   }
 
@@ -297,8 +292,7 @@ public class Compilador implements Config, CompiladorConstants {
          Token token; ComandoEntrada comandoEntrada; Simbolo simbolo;
     jj_consume_token(LEITURA);
     token = jj_consume_token(VAR);
-                                _listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
-                                System.out.println(comandoEntrada.toString());
+                                _listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,tabela.consultaSimbolo(token.image)));
     label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -311,8 +305,7 @@ public class Compilador implements Config, CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       token = jj_consume_token(VAR);
-                                _listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,simbolo = new Simbolo(token,TipoDado.STR)));
-                                System.out.println(comandoEntrada.toString());
+                                _listaComandoAltoNivel.addComando(comandoEntrada = new ComandoEntrada(token,tabela.consultaSimbolo(token.image)));
     }
     jj_consume_token(PV);
   }
@@ -322,7 +315,6 @@ public class Compilador implements Config, CompiladorConstants {
     token = jj_consume_token(EXIBE);
     expressao = expressaoPrincipal();
                         _listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
-                        System.out.println(comandoSaida.toString());
     label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -336,7 +328,6 @@ public class Compilador implements Config, CompiladorConstants {
       jj_consume_token(VIRGULA);
       expressao = expressaoPrincipal();
                         _listaComandoAltoNivel.addComando(comandoSaida = new ComandoSaida(token,expressao));
-                        System.out.println(comandoSaida.toString());
     }
     jj_consume_token(PV);
   }
@@ -395,27 +386,24 @@ public class Compilador implements Config, CompiladorConstants {
   }
 
   static final public void enquanto(ListaComandosAltoNivel _listaComandoAltoNivel) throws ParseException {
-         Token token; Expressao expressao; ComandoEnquanto comandoEnquanto; ListaComandosAltoNivel listaComandoAltoNivel = null;
+         Token token; Expressao expressao; ComandoEnquanto comandoEnquanto; ListaComandosAltoNivel listaComandoAltoNivel = new ListaComandosAltoNivel();
     token = jj_consume_token(ENQUANTO);
     jj_consume_token(AP);
     expressao = expressaoPrincipal();
     jj_consume_token(FP);
-    listaComandoAltoNivel = programa();
-               ;
+    programa(listaComandoAltoNivel);
                                 _listaComandoAltoNivel.addComando(comandoEnquanto = new ComandoEnquanto(token, expressao, listaComandoAltoNivel));
-                                System.out.println(comandoEnquanto.toString());
     jj_consume_token(FIMENQUANTO);
   }
 
   static final public void se(ListaComandosAltoNivel _listaComandoAltoNivel) throws ParseException {
-         Token token; Expressao expressao; ComandoCondicional comandoCondicional; ListaComandosAltoNivel listaComandoAltoNivel = null;
+         Token token; Expressao expressao; ComandoCondicional comandoCondicional; ListaComandosAltoNivel listaComandoAltoNivel = new ListaComandosAltoNivel();
     token = jj_consume_token(SE);
     jj_consume_token(AP);
     expressao = expressaoPrincipal();
     jj_consume_token(FP);
-    listaComandoAltoNivel = programa();
+    programa(listaComandoAltoNivel);
                         _listaComandoAltoNivel.addComando(comandoCondicional = new ComandoCondicionalSimples(token, expressao, listaComandoAltoNivel));
-                        System.out.println(comandoCondicional.toString());
     jj_consume_token(FIMSE);
   }
 

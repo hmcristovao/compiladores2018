@@ -22,6 +22,10 @@ public class Tabela {
             return ((Simbolo)this.tabela.get(_chave)).getReferencia();
       }
       
+      public Simbolo consultaSimbolo(String _chave) {
+    	  return ((Simbolo)this.tabela.get(_chave));
+      }
+      
       public boolean isExiste(String _chave) {
           if(this.tabela.containsKey(_chave))   
         	  return true;

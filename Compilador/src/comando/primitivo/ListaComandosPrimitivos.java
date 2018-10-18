@@ -2,6 +2,7 @@ package comando.primitivo;
 
 import java.util.LinkedList;
 
+
 public class ListaComandosPrimitivos {
 	LinkedList<ComandoPrimitivo> listaComandoPrimitivo;
 	
@@ -18,5 +19,10 @@ public class ListaComandosPrimitivos {
 	
 	public String toString() {
 		return listaComandoPrimitivo.toString();
+	}
+	
+	public LinkedList<ComandoPrimitivo> getListaComandosPrimitivos(){
+		return this.listaComandoPrimitivo;
+		
 	}
 }

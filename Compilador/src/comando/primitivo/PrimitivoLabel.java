@@ -3,7 +3,7 @@ package comando.primitivo;
 public class PrimitivoLabel extends ComandoPrimitivo{
 
 	String label;
-	static int contador;
+	static int contador = 1;
 	
 	public PrimitivoLabel(String _label) {
 		//this.referencia = _referencia;

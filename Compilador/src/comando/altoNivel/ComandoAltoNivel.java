@@ -1,6 +1,7 @@
 package comando.altoNivel;
 
 import parser.Token;
+import comando.primitivo.*;
 
 public abstract class ComandoAltoNivel {
 	Token token;
@@ -15,5 +16,5 @@ public abstract class ComandoAltoNivel {
 	
 	public abstract String toString();
 
-	//public abstract ListaComandosAltoNivel geraListaComandosAltoNivel();
+	public abstract ListaComandosPrimitivos geraListaComandosPrimitivo();
 }
