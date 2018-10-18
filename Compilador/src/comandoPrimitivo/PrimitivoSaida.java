@@ -16,6 +16,6 @@ public class PrimitivoSaida extends ComandoPrimitivo {
 	}
 
 	public String toString() {
-		return "tipo "+this.tipo+" expDestinoAssembler "+this.expDestinoAssembler+"\n";
+		return "Saida: tipo "+this.tipo+" expDestinoAssembler "+this.expDestinoAssembler+"\n";
 	}
 }

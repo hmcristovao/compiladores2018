@@ -31,6 +31,7 @@ public class Compilador {
 		 
 		//começa a segunda passagem a partir daqui
         listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
+        System.out.println(listaComandosPrimitivos);
 		////codigoDestino = listaComandosPrimitivos.geraCodigoDestinoTotal();
          
       }  
@@ -112,15 +113,17 @@ ListaComandosAltoNivel programa() : {
   ( comandoAltoNivel = comando() { comandos.addComando(comandoAltoNivel); } )* { return comandos; }
 }
 
-ComandoAltoNivel comando() : { ComandoAltoNivel comando; }
+ComandoAltoNivel comando() : {
+  ComandoAltoNivel comando = null; }
 {
-  
-  comando = atribuicao() { return comando; } |
-  comando = declaracao() { return comando; } |
-  comando = se() { return comando; } |
-  comando = enquanto() { return comando; } |
-  comando = le() { return comando; } |
-  comando = exibe() { return comando; }
+  	(
+	  comando = atribuicao() |
+	  declaracao() |
+	  comando = se() |
+	  comando = enquanto() |
+	  comando = le()|
+	  comando = exibe()
+  	){ return comando; }
   
 }
 
@@ -136,11 +139,10 @@ ComandoAtribuicao atribuicao() : {
         } <PV> { return comandoAtribuicao; }
 }
 
-ComandoDeclaracao declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE OU PODE RETORNAR UM COMANDO ALTO NIVEL
+void declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE OU PODE RETORNAR UM COMANDO ALTO NIVEL
   	Expressao exp;
 	Simbolo simb;
-	Token t, v; //t - recebe o tipo, v - recebe o nome da variavel
-	ComandoDeclaracao comandoDeclaracao;
+	Token t, v; //t - recebe o tipo, v - recebe o nome da variavel;
 }
 {
   	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
@@ -154,10 +156,6 @@ ComandoDeclaracao declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE
 	  	else { tabela.incluiSimbolo(v, TipoDado.STR); }
 	  	}
 	( <ATRIB> exp = expressaoMestre() )? )* <PV>
-	{
-	  comandoDeclaracao = new ComandoDeclaracao(null);
-	  return comandoDeclaracao;
-	}
 }
 
 ComandoCondicional se() : {
@@ -223,7 +221,7 @@ Expressao expressaoMestre() : {
 
 { 
   	expressao(exp) {  	  	
-    	System.out.println(exp.expressaoPosfixa); /*imprime a lista*/
+    	System.out.println("expressao posfixa: "+exp.expressaoPosfixa); /*imprime a lista*/
 		return exp;
 	}
 	

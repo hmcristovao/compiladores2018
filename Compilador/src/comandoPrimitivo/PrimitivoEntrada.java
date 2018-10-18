@@ -16,7 +16,7 @@ public class PrimitivoEntrada extends ComandoPrimitivo{
 	}
 
 	public String toString() {
-		return " ref "+this.referencia+" tipo "+this.tipo;
+		return "Entrada: ref "+this.referencia+" tipo "+this.tipo+"\n";
 	}
 
 }

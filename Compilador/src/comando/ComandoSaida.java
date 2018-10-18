@@ -8,6 +8,7 @@ import comandoPrimitivo.PrimitivoSaida;
 import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.Item;
+import semantico.Operando;
 import semantico.Simbolo;
 
 public class ComandoSaida extends ComandoAltoNivel {
@@ -23,10 +24,17 @@ public class ComandoSaida extends ComandoAltoNivel {
 		//gera um primitivo de saida para cada variavel
 		for (int i = 0; i < this.expressoes.size(); i++) {
 			Expressao exp = this.expressoes.get(i);
-			PrimitivoSaida primitivoSaida = new PrimitivoSaida(null, exp.geraCodigoDestino() );
-			listaSaida.addComando(primitivoSaida);
+			//cria um primitivo de saida para cada item da expressão
+			LinkedList<Item> expressaoPosfixa = exp.getExpressaoPosfixa();
+			for(int j = 0; j < expressaoPosfixa.size(); j++) { //pega todos os itens da expressao
+				//verifica se o item é um operando
+				if(expressaoPosfixa.get(j) instanceof Operando) {
+					Operando operando = (Operando) expressaoPosfixa.get(j); 
+					PrimitivoSaida primitivoSaida = new PrimitivoSaida(operando.getTipoDado(), exp.geraCodigoDestino() );
+					listaSaida.addComando(primitivoSaida);
+				}	
+			}
         }
-		
 		return listaSaida;
 	}
 

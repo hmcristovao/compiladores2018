@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import comandoPrimitivo.ListaComandosPrimitivos;
 import comandoPrimitivo.PrimitivoEntrada;
-import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.Simbolo;
 
@@ -25,7 +24,6 @@ public class ComandoEntrada extends ComandoAltoNivel{
 			PrimitivoEntrada primitivoEntrada = new PrimitivoEntrada(simb.getReferencia(), simb.getTipo());
 			listaEntrada.addComando(primitivoEntrada);
         }
-		
 		return listaEntrada;
 	}
 

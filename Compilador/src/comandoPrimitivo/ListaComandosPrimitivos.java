@@ -22,6 +22,6 @@ public class ListaComandosPrimitivos {
 	}
 	
 	public String toString() {
-		return "ListaComandosPrimitivos";
+		return "ListaComandosPrimitivos:\n"+listaComandosPrimitivos.toString();
 	}
 }
