@@ -19,13 +19,13 @@ public class Compilador implements Config, CompiladorConstants {
         listaComandosAltoNivel = new ListaComandosAltoNivel();
         codigoDestino = new StringBuilder();
         tabela = new Tabela();
-/* Exemplo de StringBuilder	StringBuilder nomes = new StringBuilder();    nomes.append("Carlos>").append("Maria>").append("José>").append("Renata");         System.out.println(nomes.toString());*/
+/* Exemplo de StringBuilder	StringBuilder nomes = new StringBuilder();    nomes.append("Carlos>").append("Maria>").append("Josï¿½>").append("Renata");         System.out.println(nomes.toString());*/
 
         try
     {
                 compilador = new Compilador(new FileInputStream(nomeArquivo));
         Compilador.inicio(listaComandosAltoNivel);
-                System.out.println(listaComandosAltoNivel);
+//		System.out.println(listaComandosAltoNivel);
                 listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosTotal();
                 System.out.println(listaComandosPrimitivos);
         System.out.println("\u005cnExecucao finalizada com sucesso !\u005cn");

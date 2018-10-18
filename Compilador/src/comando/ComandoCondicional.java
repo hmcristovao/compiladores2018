@@ -16,13 +16,15 @@ public abstract class ComandoCondicional extends ComandoAltoNivel
 	}
 	
 	
-	public Expressao getExpressao() {
-		return expressao;
+	public Expressao getExpressao() 
+	{
+		return this.expressao;
 	}
 
 
-	public ListaComandosAltoNivel getListaComandosAltoNivelTrue() {
-		return listaComandosAltoNivelTrue;
+	public ListaComandosAltoNivel getListaComandosAltoNivelTrue() 
+	{
+		return this.listaComandosAltoNivelTrue;
 	}
 
 

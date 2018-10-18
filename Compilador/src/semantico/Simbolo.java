@@ -52,6 +52,6 @@ public class Simbolo
 	@Override
 	public String toString()
 	{
-		return "Lexema :"+this.getLexema()+" Tipo Dado: "+this.getTipoDado()+" Referencia: "+this.getReferencia();
+		return "Lexema : " + this.getLexema() + " Tipo Dado: " + this.getTipoDado() + " Referencia: "+this.getReferencia();
 	}
 }

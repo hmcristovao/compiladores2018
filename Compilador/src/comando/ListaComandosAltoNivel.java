@@ -44,11 +44,7 @@ public class ListaComandosAltoNivel
 	@Override
 	public String toString()
 	{
-		for(ComandoAltoNivel comando :this.ListaComandosAltoNivel)
-		{
-			System.out.println(comando);
-		}
-		return "";
+		return "{" + this.getListaComandosAltoNivel() + "}";
 	}	
 
 }

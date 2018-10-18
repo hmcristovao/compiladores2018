@@ -22,20 +22,23 @@ public class ComandoSaida extends ComandoAltoNivel
 	@Override
 	public String toString()
 	{
-		return this.getLexema()+" "+this.getExpressao();
+		return "<" + this.getLexema() + ", " + this.getExpressao() + ">";
 	}
 
-	public Expressao getExpressao() {
-		return expressao;
+	public Expressao getExpressao() 
+	{
+		return this.expressao;
 	}
 
 	@Override
-	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() 
+	{
 		//Expressao expDestAssemb = this.expressao;
 		//TipoDado tipo = this.variavel.getTipoDado();
-		//PrimitivoSaida comandoPrimitivo = new PrimitivoSaida("expDestAssemb",tipo);
+		PrimitivoSaida comandoPrimitivo = new PrimitivoSaida("expDestAssemb", TipoDado.NUM );
 		ListaComandosPrimitivos listaAtribuicao = new ListaComandosPrimitivos();
-		//listaAtribuicao.addComando(comandoPrimitivo);
+		listaAtribuicao.addComando(comandoPrimitivo);
+	
 		return listaAtribuicao;
 	}
 }

@@ -23,7 +23,7 @@ public class ComandoEnquanto extends ComandoAltoNivel
 	@Override
 	public String toString()
 	{
-		return this.getLexema()+" "+this.getExpressao()+" "+this.getListaComandosAltoNivelTrue();
+		return "<" + this.getLexema() + "," + this.getExpressao() + ", " + this.getListaComandosAltoNivelTrue() + ">";
 	}
 
 	public Expressao getExpressao()
@@ -50,7 +50,6 @@ public class ComandoEnquanto extends ComandoAltoNivel
 		listaCmdEnqt.addComando(seExpFalseGoto);
 		listaCmdEnqt.addComando(labelGoto);
 		listaCmdEnqt.addComando(labelFalse);
-		
 		
 		return listaCmdEnqt;
 	}

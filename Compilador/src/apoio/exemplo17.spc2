@@ -5,9 +5,13 @@ enquanto (a=0)
    exibe "Digite um valor: ";
    le  valor;
 
-   soma <- soma + valor;
-   cont <- cont + 1;
-
+   se ( a = cont )
+	   soma <- soma + valor;
+	   cont <- cont + 1;
+   	   se ( cont = 0 )
+   	   		le cont;
+   	   fim-se
+   fim-se
    exibe "Digite: 0 - continuar ou 1 - terminar: ";
    le  a;
 

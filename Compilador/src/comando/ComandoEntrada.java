@@ -17,7 +17,7 @@ public class ComandoEntrada extends ComandoAltoNivel
 	@Override
 	public String toString()
 	{
-		return this.getLexema()+" "+variavel.getLexema();
+		return "<" + this.getLexema() + ", " + variavel.getLexema() + ">" ;
 	}
 
 	@Override
@@ -28,6 +28,7 @@ public class ComandoEntrada extends ComandoAltoNivel
 		PrimitivoEntrada comandoPrimitivo = new PrimitivoEntrada(referencia,tipo);
 		ListaComandosPrimitivos listaAtribuicao = new ListaComandosPrimitivos();
 		listaAtribuicao.addComando(comandoPrimitivo);
+		
 		return listaAtribuicao;
 	}
 }

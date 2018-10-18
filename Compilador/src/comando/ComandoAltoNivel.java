@@ -15,8 +15,8 @@ public abstract class ComandoAltoNivel
 	{
 		return token.image;
 	}
-	public abstract ListaComandosPrimitivos
-				geraListaComandosPrimitivos();
+	
+	public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();
 
 	@Override
 	abstract public String toString();

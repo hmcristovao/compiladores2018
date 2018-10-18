@@ -1,8 +1,6 @@
 package comando;
 import parser.*;
-import semantico.*;
 import geradorCodigo.*;
-import javafx.scene.control.Label;
 
 public class ComandoCondicionalSimples extends ComandoCondicional
 {
@@ -16,7 +14,7 @@ public class ComandoCondicionalSimples extends ComandoCondicional
 	@Override
 	public String toString()
 	{
-		return this.getLexema()+" "+this.getExpressao()+" "+this.getListaComandosAltoNivelTrue().toString();
+		return "<" + this.getLexema() + ", " + this.getExpressao() +", " + this.getListaComandosAltoNivelTrue() + ">";
 	}
 
 	@Override
