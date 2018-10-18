@@ -12,9 +12,6 @@ public abstract class ComandoCondicional extends ComandoAltoNivel{
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 	}
 
-	@Override
-	public String toString() {
-	     return null;
-	 }
+	public abstract String toString();
 
 }

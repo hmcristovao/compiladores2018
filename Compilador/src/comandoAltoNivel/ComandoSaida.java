@@ -2,17 +2,19 @@ package comandoAltoNivel;
 
 import comandoPrimitivo.ListaComandosPrimitivos;
 import geradorCodigo.Expressao;
+import parser.Token;
 
 public class ComandoSaida extends ComandoAltoNivel {
 	
 	Expressao expressao;
 	
-	public ComandoSaida (Expressao expressao) {
+	public ComandoSaida (Expressao expressao, Token token) {
 		this.expressao = expressao;
+		this.token = token;
 	}
 	
 	public String toString() {
-		return "exibe " + this.expressao.getListaExpPosFixa() + "\n";
+		return this.getLexama() + " " + this.expressao.getListaExpPosFixa() + "\n";
 	}
 
 	@Override

@@ -18,10 +18,13 @@ public class Compilador implements CompiladorConstants {
 
       try {
 
-         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo16.spc2"));
-         Compilador.inicio();
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo10.spc2"));
+         ListaComandosAltoNivel lista = new ListaComandosAltoNivel();
+         Compilador.inicio(lista);
          System.out.println("");
-         Tabela.imprimeTabela();
+        // Tabela.imprimeTabela();
+
+        System.out.println(lista);
 
       }
       catch(FileNotFoundException e)
@@ -210,15 +213,12 @@ public class Compilador implements CompiladorConstants {
   }
 
 //GRAMATICA COMPLETA
-  static final public void inicio() throws ParseException {
- ListaComandosAltoNivel listaComandosAltoNivel = null;
-    listaComandosAltoNivel = programa();
-          ListaComandosAltoNivel.imprimeListaComandosAltoNivel();
+  static final public void inicio(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+    programa(listaComandosAltoNivel);
     jj_consume_token(0);
   }
 
-  static final public ListaComandosAltoNivel programa() throws ParseException {
- ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
+  static final public void programa(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -237,8 +237,6 @@ public class Compilador implements CompiladorConstants {
       }
       comando(listaComandosAltoNivel);
     }
-   {if (true) return listaComandosAltoNivel;}
-    throw new Error("Missing return statement in function");
   }
 
   static final public void comando(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
@@ -270,25 +268,22 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-  Token t;
-  ComandoAtribuicao comando = null;
-  Simbolo simbolo = null;
+  Token atrib, var;
+  ComandoAltoNivel comando = null;
   Expressao expressao = null;
-    t = jj_consume_token(VAR);
-                Tabela.verificaVariavelDeclarada(t.image);
-    jj_consume_token(ATRIB);
+    var = jj_consume_token(VAR);
+                Tabela.verificaVariavelDeclarada(var.image);
+    atrib = jj_consume_token(ATRIB);
     expressao = iniciaExpressao();
-                simbolo = new Simbolo(t, TipoDado.PALAVRA);
-                comando = new ComandoAtribuicao(simbolo, expressao);
+                comando = new ComandoAtribuicao(tabela.pesquisaTabela(var.image), expressao, atrib);
                 listaComandosAltoNivel.addComando(comando);
     jj_consume_token(PV);
   }
 
   static final public void declaracao(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-        Token variavel;
+        Token atrib, variavel;
         TipoDado tipo = null;
-        ComandoAtribuicao comando = null;
-    Simbolo simbolo = null;
+        ComandoAltoNivel comando = null;
     Expressao expressao = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
@@ -308,10 +303,9 @@ public class Compilador implements CompiladorConstants {
                 Tabela.insereNaTabela(variavel, tipo);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
-      jj_consume_token(ATRIB);
+      atrib = jj_consume_token(ATRIB);
       expressao = iniciaExpressao();
-            simbolo = new Simbolo(variavel, TipoDado.PALAVRA);
-                comando = new ComandoAtribuicao(simbolo, expressao);
+                comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
                 listaComandosAltoNivel.addComando(comando);
       break;
     default:
@@ -332,60 +326,58 @@ public class Compilador implements CompiladorConstants {
       variavel = jj_consume_token(VAR);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ATRIB:
-        jj_consume_token(ATRIB);
+        atrib = jj_consume_token(ATRIB);
         expressao = iniciaExpressao();
+                Tabela.insereNaTabela(variavel, tipo);
+                comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
+                listaComandosAltoNivel.addComando(comando);
         break;
       default:
         jj_la1[13] = jj_gen;
         ;
       }
-                Tabela.insereNaTabela(variavel, tipo);
-                simbolo = new Simbolo(variavel, TipoDado.PALAVRA);
-                comando = new ComandoAtribuicao(simbolo, expressao);
-                listaComandosAltoNivel.addComando(comando);
     }
     jj_consume_token(PV);
   }
 
   static final public void se(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-        Token t;
-        ListaComandosAltoNivel listaComandosAltoNivelTrue = null;
+        Token se;
+        ListaComandosAltoNivel listaProgramaSe =  new ListaComandosAltoNivel();
         Expressao expressao = null;
-        ComandoCondicionalSimples comando = null;
-    jj_consume_token(SE);
+        ComandoAltoNivel  comando = null;
+    se = jj_consume_token(SE);
     jj_consume_token(AP);
     expressao = iniciaExpressao();
     jj_consume_token(FP);
-    listaComandosAltoNivelTrue = programa();
-                comando = new ComandoCondicionalSimples(expressao, listaComandosAltoNivelTrue);
-                listaComandosAltoNivel.addComando(comando);
+    programa(new ListaComandosAltoNivel());
     jj_consume_token(FIMSE);
+                comando = new ComandoCondicionalSimples(expressao, listaProgramaSe, se);
+                //System.out.println(listaComandosAltoNivel.getListaComandosAltoNivel().get(0));
+                listaComandosAltoNivel.addComando(comando);
   }
 
   static final public void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-        Token t;
-        ListaComandosAltoNivel listaComandosAltoNivelTrue = null;
+        Token enq;
+        ListaComandosAltoNivel listaProgramaEnquanto = new ListaComandosAltoNivel();
         Expressao expressao = null;
-        ComandoEnquanto comando = null;
-    jj_consume_token(ENQUANTO);
+        ComandoAltoNivel comando = null;
+    enq = jj_consume_token(ENQUANTO);
     jj_consume_token(AP);
     expressao = iniciaExpressao();
     jj_consume_token(FP);
-    listaComandosAltoNivelTrue = programa();
-                comando = new ComandoEnquanto(expressao, listaComandosAltoNivelTrue);
+    programa(listaProgramaEnquanto);
+                comando = new ComandoEnquanto(expressao, listaProgramaEnquanto, enq);
                 listaComandosAltoNivel.addComando(comando);
     jj_consume_token(FIMENQUANTO);
   }
 
   static final public void le(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-  Token t;
-  Simbolo simbolo = null;
+  Token le, t;
   ComandoEntrada comando = null;
-    jj_consume_token(LEITURA);
+    le = jj_consume_token(LEITURA);
     t = jj_consume_token(VAR);
-                simbolo = new Simbolo(t, TipoDado.PALAVRA);
-        comando = new ComandoEntrada(simbolo);
-                listaComandosAltoNivel.addComando(comando);
+        comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
+        listaComandosAltoNivel.addComando(comando);
     label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -398,21 +390,20 @@ public class Compilador implements CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       t = jj_consume_token(VAR);
-                simbolo = new Simbolo(t, TipoDado.PALAVRA);
-        comando = new ComandoEntrada(simbolo);
-                listaComandosAltoNivel.addComando(comando);
+        comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
+        listaComandosAltoNivel.addComando(comando);
     }
     jj_consume_token(PV);
   }
 
-  static final public void exibe(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-  Token t;
+  static final public void exibe(ListaComandosAltoNivel listaExibe) throws ParseException {
+  Token exibe;
   Expressao expressao = null;
   ComandoSaida comando = null;
-    t = jj_consume_token(EXIBE);
+    exibe = jj_consume_token(EXIBE);
     expressao = iniciaExpressao();
-                comando = new ComandoSaida(expressao);
-                listaComandosAltoNivel.addComando(comando);
+                comando = new ComandoSaida(expressao, exibe);
+                listaExibe.addComando(comando);
     label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -425,8 +416,8 @@ public class Compilador implements CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       iniciaExpressao();
-                comando = new ComandoSaida(expressao);
-                listaComandosAltoNivel.addComando(comando);
+                comando = new ComandoSaida(expressao, exibe);
+                listaExibe.addComando(comando);
     }
     jj_consume_token(PV);
   }

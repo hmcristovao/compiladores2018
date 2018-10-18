@@ -2,6 +2,7 @@ package comandoAltoNivel;
 
 import comandoPrimitivo.ListaComandosPrimitivos;
 import geradorCodigo.Expressao;
+import parser.Token;
 import semantico.*;
 
 public class ComandoAtribuicao extends ComandoAltoNivel {
@@ -9,13 +10,14 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 	Simbolo simbolo;
 	Expressao expressao;
 	
-	public ComandoAtribuicao (Simbolo simbolo, Expressao expressao) {
+	public ComandoAtribuicao (Simbolo simbolo, Expressao expressao, Token token) {
 		this.simbolo = simbolo;
 		this.expressao = expressao;
+		this.token = token;
 	}
 	
 	public String toString() {
-		return "Atribuicao " + this.simbolo.getNome() + this.expressao.getListaExpPosFixa() + "\n";
+		return this.getLexama() + " " + this.simbolo.getNome() + " " + this.expressao.getListaExpPosFixa() + "\n";
 	}
 
 	@Override

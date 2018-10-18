@@ -2,19 +2,21 @@ package comandoAltoNivel;
 
 import comandoPrimitivo.ListaComandosPrimitivos;
 import geradorCodigo.Expressao;
+import parser.Token;
 
 public class ComandoEnquanto extends ComandoAltoNivel{
 	
 	ListaComandosAltoNivel listaComandosAltoNivelTrue;
 	Expressao expressao;
 	
-	public ComandoEnquanto (Expressao expressao, ListaComandosAltoNivel listaComandosAltoNivelTrue) {
+	public ComandoEnquanto (Expressao expressao, ListaComandosAltoNivel listaComandosAltoNivelTrue, Token token) {
 		this.expressao = expressao;
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
+		this.token = token;
 	}
 	
 	public String toString() {
-		return "Enquanto " + this.expressao.getListaExpPosFixa() +"\n";
+		return this.getLexama() + " " + this.expressao.getListaExpPosFixa() + " "  + "\n";
 	}
 
 	@Override

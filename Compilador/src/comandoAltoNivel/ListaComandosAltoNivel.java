@@ -23,6 +23,12 @@ public class ListaComandosAltoNivel {
 		System.out.println(listaComandosAltoNivel);
 	}
 	
+	@Override
+	public String toString()
+	{
+		return "" + this.getListaComandosAltoNivel();
+	}
+	
 
 
 }

@@ -6,9 +6,9 @@ import parser.Token;
 public abstract class ComandoAltoNivel {
 	
 	Token token;
-	
+		
 	String getLexama() {
-		return null;
+		return token.image;
 	}
 	
 	abstract ListaComandosPrimitivos geraListaComandosPrimitivos();	
