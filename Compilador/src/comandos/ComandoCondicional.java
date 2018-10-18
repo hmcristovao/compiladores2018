@@ -18,7 +18,7 @@ public class ComandoCondicional extends ComandoAltoNivel{
 	}	
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		return;
+		return null;//TO-DO
 	}
 
 }

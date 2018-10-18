@@ -2,7 +2,7 @@ package semantico;
 import java.util.HashMap;
 
 public class Tabela {
-      private HashMap<String,Simbolo> tab;
+      public HashMap<String,Simbolo> tab;
       public int marcador = 1;
       
       public Tabela() {
@@ -25,7 +25,7 @@ public class Tabela {
       public boolean isExiste(String _chave) {
             return this.tab.containsKey(_chave);
       }
-      
+            
       public String toString() {
             return this.tab.toString();
       }

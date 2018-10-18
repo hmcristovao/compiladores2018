@@ -5,8 +5,8 @@ import primitivo.*;
 import parser.Token;
 
 public class ComandoAtribuicao extends ComandoAltoNivel {
-	Simbolo variavel;
-	Expressao expressao;
+	public Simbolo variavel;
+	public Expressao expressao;
 	
 	public ComandoAtribuicao(Simbolo simb, Expressao exp, Token token) {
 		super(token);
@@ -19,7 +19,7 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 	}
 	
 	 public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		 return;
+		 return null; //TO-DO
 	 }
 }
 

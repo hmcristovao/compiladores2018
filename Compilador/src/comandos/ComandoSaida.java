@@ -16,7 +16,7 @@ public class ComandoSaida extends ComandoAltoNivel{
 	}
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		return;
+		return null; //THUG LIFE !!
 	}	
 	
 }

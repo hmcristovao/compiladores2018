@@ -1,11 +1,10 @@
 package semantico;
 import parser.*;
 
-public class Simbolo {
-	
+public class Simbolo {	
 	private String nome;
 	Token token;
-	private TipoDado tipo;
+	public TipoDado tipo;
 	private int referencia;
 	
 	public Simbolo(String nome, TipoDado tipo) {
@@ -35,12 +34,13 @@ public class Simbolo {
 	}
 	
 	public void setReferencia(Tabela tab, TipoDado tipo) {
-		
+		//System.out.println(tipo);
 		this.referencia = tab.marcador;
 		
-		if(tipo.equals("numero"))
+		if(tipo.equals(TipoDado.NUM)) {
 			tab.marcador+=2;
-		else if(tipo.equals("palavra"))
+		}			
+		else if(tipo.equals(TipoDado.STR))
 			tab.marcador+=1;
 		
 	}
