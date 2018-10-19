@@ -18,7 +18,7 @@ public class Compilador implements CompiladorConstants {
 
       try {
 
-         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo10.spc2"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo17.spc2"));
          ListaComandosAltoNivel lista = new ListaComandosAltoNivel();
          Compilador.inicio(lista);
          System.out.println("");
@@ -349,10 +349,9 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(AP);
     expressao = iniciaExpressao();
     jj_consume_token(FP);
-    programa(new ListaComandosAltoNivel());
+    programa(listaProgramaSe);
     jj_consume_token(FIMSE);
                 comando = new ComandoCondicionalSimples(expressao, listaProgramaSe, se);
-                //System.out.println(listaComandosAltoNivel.getListaComandosAltoNivel().get(0));
                 listaComandosAltoNivel.addComando(comando);
   }
 
@@ -415,7 +414,7 @@ public class Compilador implements CompiladorConstants {
         break label_8;
       }
       jj_consume_token(VIRGULA);
-      iniciaExpressao();
+      expressao = iniciaExpressao();
                 comando = new ComandoSaida(expressao, exibe);
                 listaExibe.addComando(comando);
     }

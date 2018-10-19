@@ -16,7 +16,7 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	}
 	
 	public String toString() {
-		return this.getLexama() + " " + this.expressao.getListaExpPosFixa() + " "  + "\n";
+		return this.getLexama() + " " + this.expressao.getListaExpPosFixa() + "\n" + listaComandosAltoNivelTrue.toString() + "\n";
 	}
 
 	@Override

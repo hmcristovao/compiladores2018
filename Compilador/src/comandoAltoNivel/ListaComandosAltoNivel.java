@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class ListaComandosAltoNivel {
 	
 
-	static LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
+	LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
 	
 	public ListaComandosAltoNivel() {
 		listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();   
@@ -19,14 +19,11 @@ public class ListaComandosAltoNivel {
 		return listaComandosAltoNivel;
 	}
 	
-	public static void imprimeListaComandosAltoNivel(){
-		System.out.println(listaComandosAltoNivel);
-	}
 	
 	@Override
 	public String toString()
 	{
-		return "" + this.getListaComandosAltoNivel();
+		return  this.getListaComandosAltoNivel().toString();
 	}
 	
 

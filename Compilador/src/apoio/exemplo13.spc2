@@ -1,3 +1,8 @@
+
+numero a <- 2 + 3;
+
 se (2=2)
    exibe  "Igual!!";
 fim-se 
+
+le a;

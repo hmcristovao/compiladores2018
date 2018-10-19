@@ -19,7 +19,7 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 
 	
 	public String toString() {
-		return this.getLexama() + " " + this.expressao.getListaExpPosFixa() + listaComandosAltoNivelTrue.getListaComandosAltoNivel() + "\n";
+		return this.getLexama() + " " + this.expressao.getListaExpPosFixa()  + "\n" +  listaComandosAltoNivelTrue.toString() + "\n";
 	}
 
 	
