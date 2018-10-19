@@ -23,6 +23,10 @@ public class Compilador implements Config, CompiladorConstants {
 
         try
     {
+                PrintStream consoleSaida = new PrintStream(consoleArquivo);
+                System.setOut(consoleSaida);
+                System.setErr(consoleSaida);
+
                 compilador = new Compilador(new FileInputStream(nomeArquivo));
         Compilador.inicio(listaComandosAltoNivel);
 //		System.out.println(listaComandosAltoNivel);
@@ -57,7 +61,7 @@ public class Compilador implements Config, CompiladorConstants {
   }
 
   static final public void posExpressao(Expressao exp) throws ParseException {
-                                   Token token = null; Item item  = null;
+                                    Token token = null; Item item  = null;
     termo(exp);
     label_1:
     while (true) {
@@ -70,9 +74,9 @@ public class Compilador implements Config, CompiladorConstants {
         break label_1;
       }
       token = jj_consume_token(OU);
-                                    item = new Operador(token, TipoOperador.OU); exp.addItemInfixo(item);
+                                      item = new Operador(token, TipoOperador.OU); exp.addItemInfixo(item);
       termo(exp);
-                                                                                                                       item = new Operador(token, TipoOperador.OU); exp.addItemPosfixo(item);
+                     item = new Operador(token, TipoOperador.OU); exp.addItemPosfixo(item);
     }
   }
 
@@ -82,9 +86,9 @@ public class Compilador implements Config, CompiladorConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IGUAL:
       token = jj_consume_token(IGUAL);
-                                        item = new Operador(token, TipoOperador.IGUAL); exp.addItemInfixo(item);
+                                         item = new Operador(token, TipoOperador.IGUAL); exp.addItemInfixo(item);
       termo1(exp);
-                                                                                                                               item = new Operador(token, TipoOperador.IGUAL); exp.addItemPosfixo(item);
+                     item = new Operador(token, TipoOperador.IGUAL); exp.addItemPosfixo(item);
       break;
     default:
       jj_la1[1] = jj_gen;
@@ -108,7 +112,7 @@ public class Compilador implements Config, CompiladorConstants {
       token = jj_consume_token(CONCAT);
                                          item = new Operador(token, TipoOperador.CONCAT); exp.addItemInfixo(item);
       termo2(exp);
-                                                                                                                                 item = new Operador(token, TipoOperador.CONCAT); exp.addItemPosfixo(item);
+                     item = new Operador(token, TipoOperador.CONCAT); exp.addItemPosfixo(item);
     }
   }
 
@@ -133,16 +137,16 @@ public class Compilador implements Config, CompiladorConstants {
         break;
       case SUB:
         token = jj_consume_token(SUB);
-                                                                                   op = TipoOperador.SUB;
+                                                   op = TipoOperador.SUB;
         break;
       default:
         jj_la1[4] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-                                                                                                             item = new Operador(token, op); exp.addItemInfixo(item);
+                                                                             item = new Operador(token, op); exp.addItemInfixo(item);
       termo3(exp);
-         item = new Operador(token, op); exp.addItemPosfixo(item);
+                                               item = new Operador(token, op); exp.addItemPosfixo(item);
     }
   }
 
@@ -167,16 +171,16 @@ public class Compilador implements Config, CompiladorConstants {
         break;
       case DIV:
         token = jj_consume_token(DIV);
-         op = TipoOperador.DIV;
+                                                   op = TipoOperador.DIV;
         break;
       default:
         jj_la1[6] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-                                   item = new Operador(token, op); exp.addItemInfixo(item);
+                                                                              item = new Operador(token, op); exp.addItemInfixo(item);
       termo4(exp);
-         item = new Operador(token, op); exp.addItemPosfixo(item);
+                     item = new Operador(token, op); exp.addItemPosfixo(item);
     }
   }
 
