@@ -2,6 +2,8 @@ package primeiraPassagem;
 
 import java.util.LinkedList;
 
+import segundaPassagem.ListaComandosPrimitivos;
+
 public class ListaComandoAltoNivel {
 	private LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
 	
@@ -22,5 +24,9 @@ public class ListaComandoAltoNivel {
 	}
 	public void imprime() {
 		System.out.println(this.listaComandosAltoNivel);
+	}
+	
+	public ListaComandosPrimitivos geraListaComandosPrimitivosTotal() {
+		return null;		
 	}
 }

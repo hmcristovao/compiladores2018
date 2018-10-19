@@ -11,12 +11,14 @@ import semantico.*;
 import geradorCodigo.*;
 import apoio.*;
 import primeiraPassagem.*;
+import segundaPassagem.*;
 
 public class Compilador {
   
   	public static boolean error=false;
 	public static Tabela tabela = new Tabela();
 	public static ListaComandoAltoNivel listaMain = null;
+	public static ListaComandosPrimitivos listaPrimitiva = null;
 
    public static void main(String args[])  throws ParseException  {
       Compilador compilador;
