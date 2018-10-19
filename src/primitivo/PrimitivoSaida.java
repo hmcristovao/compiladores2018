@@ -15,13 +15,13 @@ public class PrimitivoSaida extends ComandoPrimitivo {
     @Override
     public String geraCodigoDestino() {
         // TODO Auto-generated method stub
-        return null;
+    	return null;
     }
 
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return null;
+    	return "\n\nPrimitiva Saida: tipo "+this.tipo+" expDestinoAssembler "+this.expDestinoAssembler+"\n";
     }
 
 }

@@ -1,6 +1,9 @@
 package gerador;
 
 import primitivo.ListaComandosPrimitivos;
+import primitivo.PrimitivoGoto;
+import primitivo.PrimitivoLabel;
+import primitivo.PrimitivoSeExpFalsoGoto;
 import semantico.Simbolo;
 
 public class ComandoEnquanto extends ComandoAltoNivel {
@@ -15,8 +18,21 @@ public class ComandoEnquanto extends ComandoAltoNivel {
 
 	@Override
     public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+		ListaComandosPrimitivos enquanto = new ListaComandosPrimitivos();
+		
+		PrimitivoLabel Linicio= new PrimitivoLabel("LabelInicio");
+		PrimitivoLabel Lfalse = new PrimitivoLabel("LabelFalse");	
+		PrimitivoSeExpFalsoGoto primitivoEnquanto = new PrimitivoSeExpFalsoGoto(expressao.toString(), Lfalse, listaComandosAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		PrimitivoGoto gotoEnquanto = new PrimitivoGoto(Linicio);
+		
+		enquanto.addComando(Linicio);
+		enquanto.addComando(primitivoEnquanto);
+		enquanto.addComando(gotoEnquanto);
+		enquanto.addComando(Lfalse);
+		
+		
+		return enquanto;
+	}
 
     @Override
     public String toString() {

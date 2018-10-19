@@ -13,8 +13,8 @@ public abstract class ComandoCondicional extends ComandoAltoNivel {
 
     @Override
     public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-    	// TODO Auto-generated method stub
-    	return null;
+		ListaComandosPrimitivos condicional = new ListaComandosPrimitivos();
+		return condicional;
     }
 
     @Override

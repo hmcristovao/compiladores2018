@@ -21,7 +21,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return null;
+    	return "\n\nPrimitiva SeExp: SeExpFalsoGoto: expDestinoAssembler " +this.expDestinoAssembler+ " labelFalse "+this.labelFalse+" listaComandosPrimitivosTrue "+this.listaComandosPrimitivosTrue ;
     }
 
 }

@@ -17,7 +17,8 @@ public class ComandoCondicionalComposto extends ComandoCondicional {
 
     @Override
     public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-        return super.geraListaComandosPrimitivos(); //To change body of generated methods, choose Tools | Templates.
+		ListaComandosPrimitivos condicionalComposto = new ListaComandosPrimitivos();
+		return condicionalComposto;
     }
 
     public ListaComandosAltoNivel getListaComandosAltoNivelFalse() {

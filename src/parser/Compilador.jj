@@ -28,16 +28,21 @@ public class Compilador {
 	public static void main(String args[])  throws ParseException, IOException  {
 		Compilador compilador = null;
 		try {
-			//Config.salvarEmDisco("exemplos/exemplo.spc");
+			//Config.salvarEmDisco("exemplos/exemplo5.spc");
 			
 			ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
 			compilador = new Compilador(new FileInputStream(Config.NOMEARQ));
+
+			//Primeira Passagem
 			listaComandosAltoNivel = Compilador.inicio();
-			System.out.println("\nTabela de simbolos: \n" + tabela);
+			//System.out.println("\nTabela de simbolos: \n" + tabela);
 			System.out.println("\nComandos Primeira Passagem: \n" + listaComandosAltoNivel);
 
-			
+			System.out.println("\n\n\n\n =============================================== \n\n\n\n");
+			//Segunda Passagem
 			ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
+			listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
+			System.out.println("\nComandos Segunda passagem: \n" + listaComandosPrimitivos);
 
 			String codigoDestino = "";
 			
@@ -195,7 +200,7 @@ ComandoAltoNivel saida() : { ComandoSaida cmd = null; Expressao exp, exp2; } {
 
 Expressao expressao() : {Expressao expressao = new Expressao(); } {
 	expressaoAuxiliar(expressao) {
-		System.out.println(expressao.getListaExpressaoPosFixa().toString());
+		//System.out.println(expressao.getListaExpressaoPosFixa().toString());
 //		System.out.println(expressao.getListaExpressaoInFixa().toString());
 	}
 	{ return expressao; }

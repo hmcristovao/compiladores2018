@@ -11,12 +11,13 @@ public class ListaComandosPrimitivos {
     }
 
     public void addComando(ComandoPrimitivo _cmd) {
+    	this.listaComandosPrimitivos.add(_cmd);
     }
 
     public LinkedList<ComandoPrimitivo> getListaComandosPrimitivos() {
-        return listaComandosPrimitivos;
+        return this.listaComandosPrimitivos;
     }
     public String toString(){
-        return null;
+    	return "Lista de Comandos Primitivos:\n"+ this.listaComandosPrimitivos.toString();
     }
 }

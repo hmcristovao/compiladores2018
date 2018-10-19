@@ -23,7 +23,7 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return null;
+         	return "\n\nPrimitiva Atribuicao:\n ref "+this.referencia+" tipo "+this.tipo+" expDestinoAssembler "+this.expDestinoAssembler+"\n";
     }
 
     public int getReferencia() {

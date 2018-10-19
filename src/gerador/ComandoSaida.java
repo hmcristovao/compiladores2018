@@ -1,7 +1,11 @@
 package gerador;
 
 import primitivo.ListaComandosPrimitivos;
+import primitivo.PrimitivoEntrada;
+import primitivo.PrimitivoSaida;
+import semantico.Operando;
 import semantico.Simbolo;
+import semantico.TipoDado;
 
 public class ComandoSaida extends ComandoAltoNivel {
 
@@ -13,8 +17,13 @@ public class ComandoSaida extends ComandoAltoNivel {
 
 	@Override
     public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+		ListaComandosPrimitivos saida = new ListaComandosPrimitivos();
+		
+		PrimitivoSaida primitivoSaida = new PrimitivoSaida(TipoDado.NUM, expressao.toString());
+		saida.addComando(primitivoSaida);
+		
+		return saida;
+	}
 
     @Override
     public String toString() {

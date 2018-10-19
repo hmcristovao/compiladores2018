@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import semantico.Item;
 import semantico.Operador;
 import semantico.Operando;
+import semantico.TipoDado;
 
 public class Expressao {
 
@@ -27,6 +28,7 @@ public class Expressao {
     public LinkedList<Item> getListaExpressaoPosFixa() {
         return this.expressaoPosfixa;
     }
+    
 
     public void setListaExpressaoPosFixa(LinkedList<Item> listaExpPosFixa) {
         this.expressaoPosfixa = listaExpPosFixa;
