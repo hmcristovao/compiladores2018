@@ -16,7 +16,7 @@ import comandoPrimitivo.*;
 public class Compilador {  
    public static Tabela tabela;
    
-   public static void main(String args[])  throws ParseException  {
+   public static void main(String args[])  throws ParseException,  IOException{
       Compilador compilador = null;
       tabela = new Tabela();
       ListaComandosAltoNivel listaComandosAltoNivel;
@@ -32,7 +32,9 @@ public class Compilador {
 		//começa a segunda passagem a partir daqui
         listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
         System.out.println(listaComandosPrimitivos);
-		////codigoDestino = listaComandosPrimitivos.geraCodigoDestinoTotal();
+
+		//começa a terceira passagem a partir daqui
+		String codigoDestino = listaComandosPrimitivos.geraCodigoDestinoTotal();
          
       }  
       catch(FileNotFoundException e) {

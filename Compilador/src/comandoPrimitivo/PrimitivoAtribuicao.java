@@ -14,7 +14,7 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo{
 	}
 	
 	public String geraCodigoDestino() {
-		return null;
+		return this.expDestinoAssembler;
 	}
 	
 	 public String toString() {

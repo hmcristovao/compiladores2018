@@ -11,13 +11,13 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 		this.listaComandosPrimitivosTrue = listaComandosPrimitivosTrue;
 	}
 	
-	public String geraCodigoDestino() {
-		return null;
+	public String geraCodigoDestino() { //terceira passagem
+		return "";
 	}
 
 	
 	public String toString() {
-		return "SeExpFalsoGoto: expDestinoAssembler " +this.expDestinoAssembler+ " labelFalse "+this.labelFalse+" listaComandosPrimitivosTrue "+this.listaComandosPrimitivosTrue ;
+		return "SeExpFalsoGoto: expDestinoAssembler " +this.expDestinoAssembler+ " labelFalse "+this.labelFalse+" listaComandosPrimitivosTrue "+this.listaComandosPrimitivosTrue+"\n" ;
 	}
 
 }

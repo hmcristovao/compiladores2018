@@ -13,4 +13,4 @@ se (d = y)
 	exibe "ihu";
 fim-se
 
-exibe x+10;
+exibe y+10, x-99*4, 10+2;

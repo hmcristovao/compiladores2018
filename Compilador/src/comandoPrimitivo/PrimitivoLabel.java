@@ -9,7 +9,7 @@ public class PrimitivoLabel extends ComandoPrimitivo {
 		contador++; //toda vez que cria uma nova label incrementa o marcador
 	}
 	public String geraCodigoDestino() { //terceira passagem gerar código intermediario
-		return null;
+		return "";
 	}
 
 	public String toString() {

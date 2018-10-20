@@ -12,7 +12,7 @@ public class PrimitivoSaida extends ComandoPrimitivo {
 	}
 	
 	public String geraCodigoDestino() { //terceira passagem gerar código intermediario
-		return null;
+		return this.expDestinoAssembler;
 	}
 
 	public String toString() {
