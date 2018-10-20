@@ -17,7 +17,15 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	}
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		////???
-		return null;
+		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
+		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
+		PrimitivoLabel labelGoto = new PrimitivoLabel("LabelGoto");
+		PrimitivoGoto _goto = new PrimitivoGoto(labelGoto);
+		PrimitivoSeExpFalsoGoto primitivoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(" ",labelFalse,this.listaComandoAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		lista.addComando(labelGoto);
+		lista.addComando(primitivoSeExpFalsoGoto);
+		lista.addComando(_goto);
+		lista.addComando(labelFalse);
+		return lista;
 	}
 }

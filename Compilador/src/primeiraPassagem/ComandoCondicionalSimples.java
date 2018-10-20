@@ -13,6 +13,11 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 	}
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		return null;
+		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
+		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
+		PrimitivoSeExpFalsoGoto primitivoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(" ",labelFalse,super.listaComandoAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		lista.addComando(primitivoSeExpFalsoGoto);
+		lista.addComando(labelFalse);
+		return lista;
 	}
 }

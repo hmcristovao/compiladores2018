@@ -17,6 +17,15 @@ public class ComandoCondicionalComposto extends ComandoCondicional{
 	}
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		return null;
+		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
+		PrimitivoLabel labelTrue = new PrimitivoLabel("LabelTrue");
+		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
+		PrimitivoGoto _goto = new PrimitivoGoto(labelTrue);
+		PrimitivoSeExpFalsoGoto primitivoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(" ",labelFalse,super.listaComandoAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		lista.addComando(primitivoSeExpFalsoGoto);
+		lista.addComando(_goto);
+		lista.addComando(labelFalse);
+		lista.addComando(labelTrue);
+		return lista;
 	}
 }

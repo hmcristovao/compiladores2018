@@ -236,8 +236,7 @@ void termo4(Expressao pilha) : {Token t;Token t1;}
 /*
 Duvidas:
 Como Resolver o problema de expressões do tipo +2+-3 e etc;
-Arrumar Metodo de gerar comandos primitivos nas classes : ComandoSaida,
-ComandoEnquanto, ComandoCondicionalSimples e ComandoCondicionalComposto.
+Arrumar Metodo de gerar comandos primitivos nas classes : ComandoSaida.
 Sobre ordem dos ComandoAltoNivel na ListaComandoAltoNivel, importa? ( le e exibe);
 */
 

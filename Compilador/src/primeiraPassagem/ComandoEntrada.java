@@ -14,7 +14,7 @@ public class ComandoEntrada extends ComandoAltoNivel{
 	}
 	
 	public String toString() {
-		return super.getLexema() + this.variavel.getLexema();
+		return super.getLexema() +"["+ this.variavel.getLexema()+"]";
 	}
 	
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
