@@ -1,4 +1,4 @@
-numero a<-2;
+numero a<-2,a<-3;
 se (a=2)
    exibe  "Igual!!";
 fim-se 

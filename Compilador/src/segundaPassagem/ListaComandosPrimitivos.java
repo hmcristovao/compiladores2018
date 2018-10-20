@@ -5,25 +5,25 @@ import java.util.LinkedList;
 import primeiraPassagem.ComandoAltoNivel;
 
 public class ListaComandosPrimitivos {
-	private LinkedList<ComandoPrimitivo> ListaComandosPrimitivos;
+	private LinkedList<ComandoPrimitivo> listaComandosPrimitivos;
 	
 	public ListaComandosPrimitivos() {
-		this.ListaComandosPrimitivos = new LinkedList<ComandoPrimitivo>();
+		this.listaComandosPrimitivos = new LinkedList<ComandoPrimitivo>();
 	}
 
 	public void addComando(ComandoPrimitivo _comando) {
-		this.ListaComandosPrimitivos.add(_comando);
+		this.listaComandosPrimitivos.add(_comando);
 	}
 	
-	public LinkedList<ComandoAltoNivel> getListaComandosPrimitivos() {
-		return null;
+	public LinkedList<ComandoPrimitivo> getListaComandosPrimitivos() {
+		return this.listaComandosPrimitivos;
 	}
 	
 	public String geraCodigoDestinoTotal() {
-		return this.geraCodigoDestinoTotal().toString();
+		return null;
 	}
 	
 	public String toString() {
-		return this.getListaComandosPrimitivos().toString();
+		return "{" + this.getListaComandosPrimitivos().toString() + "}";
 	}
 }

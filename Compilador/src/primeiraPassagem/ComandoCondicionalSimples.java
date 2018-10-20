@@ -1,6 +1,7 @@
 package primeiraPassagem;
 import geradorCodigo.*;
 import parser.Token;
+import segundaPassagem.*;
 public class ComandoCondicionalSimples extends ComandoCondicional{
 
 	public ComandoCondicionalSimples(Expressao _expressao, ListaComandoAltoNivel _listaComandoAltoNivelTrue, Token _token){
@@ -9,5 +10,9 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 	
 	public String toString() {
 		return super.getLexema() + super.expressao.toString() + super.listaComandoAltoNivelTrue.toString();
+	}
+	
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		return null;
 	}
 }

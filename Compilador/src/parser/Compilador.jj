@@ -29,9 +29,12 @@ public class Compilador {
 	      	System.out.println("\nSem erros sintáticos\n");
 	      else
 	      	System.out.println("\nForam encontrados erros sintáticos, mas foram ignorados para melhor análise\n");
-		 System.out.println("\n"+tabela.toString());
+		 System.out.println("\nTabela:\n"+tabela.toString());
          if (listaMain!=null)
-         	System.out.println("\n"+listaMain.toString());
+         	System.out.println("\nComandos Alto Nivel:\n"+listaMain.toString());
+         listaPrimitiva=listaMain.geraListaComandosPrimitivosTotal();
+         if (listaPrimitiva!=null)
+         	System.out.println("\nComandos Primitivos:\n"+listaPrimitiva.toString());
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -233,6 +236,9 @@ void termo4(Expressao pilha) : {Token t;Token t1;}
 /*
 Duvidas:
 Como Resolver o problema de expressões do tipo +2+-3 e etc;
+Arrumar Metodo de gerar comandos primitivos nas classes : ComandoSaida,
+ComandoEnquanto, ComandoCondicionalSimples e ComandoCondicionalComposto.
+Sobre ordem dos ComandoAltoNivel na ListaComandoAltoNivel, importa? ( le e exibe);
 */
 
 

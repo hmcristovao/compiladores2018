@@ -2,6 +2,7 @@ package primeiraPassagem;
 
 import geradorCodigo.Expressao;
 import parser.Token;
+import segundaPassagem.*;
 
 public class ComandoCondicionalComposto extends ComandoCondicional{
 	public ListaComandoAltoNivel listaComandoAltoNivelFalse;
@@ -13,5 +14,9 @@ public class ComandoCondicionalComposto extends ComandoCondicional{
 	
 	public String toString() {
 		return super.expressao.toString() + super.listaComandoAltoNivelTrue.toString() + this.listaComandoAltoNivelFalse.toString();
+	}
+	
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		return null;
 	}
 }

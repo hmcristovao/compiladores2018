@@ -1,17 +1,19 @@
 package segundaPassagem;
 
-public class PrimitivoGoto {
+public class PrimitivoGoto extends ComandoPrimitivo{
 	
 	PrimitivoLabel label;
 	
-	//public PrimitivoGoto(PrimitivoLabel)
+	public PrimitivoGoto(PrimitivoLabel _label) {
+		this.label=_label;
+	}
 	
 	public String geraCodigoDestino() {
 		return null;
 	}
 
 	public String toString() {
-		return null;
+		return "Comando Goto : " + "-" + this.label;
 	}
 
 }

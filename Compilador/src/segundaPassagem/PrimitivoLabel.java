@@ -1,18 +1,21 @@
 package segundaPassagem;
 
-public class PrimitivoLabel {
+public class PrimitivoLabel extends ComandoPrimitivo{
 	
 	private String label;
-	private static int contador;
+	private static int contador=0;
 	
-	//public PrimitivoLabel(String)
+	public PrimitivoLabel(String _label) {
+		this.label=_label;
+		contador++;
+	}
 	
 	public String geraCodigoDestino() {
 		return null;
 	}
 
 	public String toString() {
-		return null;
+		return "Comando label: " + "-" + this.label;
 	}
 
 }

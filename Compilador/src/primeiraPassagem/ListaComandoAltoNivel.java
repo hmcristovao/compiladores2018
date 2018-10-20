@@ -2,7 +2,7 @@ package primeiraPassagem;
 
 import java.util.LinkedList;
 
-import segundaPassagem.ListaComandosPrimitivos;
+import segundaPassagem.*;
 
 public class ListaComandoAltoNivel {
 	private LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
@@ -22,11 +22,16 @@ public class ListaComandoAltoNivel {
 	public String toString(){
 		return this.getListaComandoAltoNivel().toString();
 	}
-	public void imprime() {
-		System.out.println(this.listaComandosAltoNivel);
-	}
-	
+
 	public ListaComandosPrimitivos geraListaComandosPrimitivosTotal() {
-		return null;		
+		ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
+		ListaComandosPrimitivos listaParcial;
+		for(ComandoAltoNivel comandoAltoNivel : this.listaComandosAltoNivel) {
+			listaParcial = comandoAltoNivel.geraListaComandosPrimitivos();
+			for(ComandoPrimitivo comandoPrimitivo : listaParcial.getListaComandosPrimitivos()) {
+				listaComandosPrimitivos.addComando(comandoPrimitivo);
+			}
+		}
+		return listaComandosPrimitivos;
 	}
 }

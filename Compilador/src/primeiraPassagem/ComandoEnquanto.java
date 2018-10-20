@@ -1,6 +1,7 @@
 package primeiraPassagem;
 import geradorCodigo.*;
 import parser.Token;
+import segundaPassagem.*;
 public class ComandoEnquanto extends ComandoAltoNivel{
 	Expressao expressao;
 	ListaComandoAltoNivel listaComandoAltoNivelTrue;
@@ -13,5 +14,10 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	
 	public String toString() {
 		return super.getLexema() + this.expressao.toString() + this.listaComandoAltoNivelTrue.toString();
+	}
+	
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		////???
+		return null;
 	}
 }
