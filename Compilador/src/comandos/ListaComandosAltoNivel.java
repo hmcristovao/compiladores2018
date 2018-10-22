@@ -36,7 +36,7 @@ public class ListaComandosAltoNivel {
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("exibe")) {
 				 ComandoSaida comandoSai = (ComandoSaida) listaComandosAltoNivel.get(i);
-				 ComandoPrimitivo prim = new PrimitivoSaida(comandoSai.expressao.toString());
+				 ComandoPrimitivo prim = new PrimitivoSaida(comandoSai.expressao.toString(),asdasdasdadadsdas);
 				 lcmp.listaComandosPrimitivos.add(prim);
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("enquanto")) {

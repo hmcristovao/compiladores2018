@@ -1,7 +1,7 @@
 package primitivo;
 
 public class PrimitivoGoto extends ComandoPrimitivo{
-	PrimitivoLabel label;
+	PrimitivoLabel label; //para onde o desvio será feito
 	
 	public PrimitivoGoto(PrimitivoLabel label) {
 		this.label = label;
