@@ -112,15 +112,15 @@ ListaComandosAltoNivel programa() : {
 }
 {
   
-  ( comandoAltoNivel = comando() { comandos.addComando(comandoAltoNivel); } )* { return comandos; }
+  ( comandoAltoNivel = comando(comandos) { comandos.addComando(comandoAltoNivel); } )* { return comandos; }
 }
 
-ComandoAltoNivel comando() : {
+ComandoAltoNivel comando(ListaComandosAltoNivel comandos) : {
   ComandoAltoNivel comando = null; }
 {
   	(
 	  comando = atribuicao() |
-	  declaracao() |
+	  declaracao(comandos) |
 	  comando = se() |
 	  comando = enquanto() |
 	  comando = le()|
@@ -140,23 +140,24 @@ ComandoAtribuicao atribuicao() : {
 	} <PV> { return comandoAtribuicao; }
 }
 
-void declaracao( ) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE OU PODE RETORNAR UM COMANDO ALTO NIVEL
+void declaracao(ListaComandosAltoNivel comandos) : {//PERGUNTAR SE EH NECESSARIO CRIAR UMA CLASSE OU PODE RETORNAR UM COMANDO ALTO NIVEL
   	Expressao exp;
-	Simbolo simb;
 	Token t, v; //t - recebe o tipo, v - recebe o nome da variavel;
 }
 {
   	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
 	{
-	  if (t.image.equals("numero")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
-	  else { tabela.incluiSimbolo(v, TipoDado.STR); }
+	  AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, null);
 	 }
-	( <ATRIB> exp = expressaoMestre() )? (<VIRGULA> v = <VAR>	
+	( <ATRIB> exp = expressaoMestre()
 		{
-		  if (t.image.equals("numero")) { tabela.incluiSimbolo(v, TipoDado.NUM); }
-	  	else { tabela.incluiSimbolo(v, TipoDado.STR); }
-	  	}
-	( <ATRIB> exp = expressaoMestre() )? )* <PV>
+		 AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, exp);
+	  	})?
+		(<VIRGULA> v = <VAR>	(<ATRIB> exp = expressaoMestre()
+		{
+		 AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, exp);
+	  	})?
+	  	)* <PV>
 }
 
 ComandoCondicional se() : {

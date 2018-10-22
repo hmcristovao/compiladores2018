@@ -12,7 +12,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 	}
 	
 	public String geraCodigoDestino() { //terceira passagem
-		return "";
+		return this.expDestinoAssembler;
 	}
 
 	

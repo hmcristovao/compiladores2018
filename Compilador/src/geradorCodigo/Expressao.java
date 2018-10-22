@@ -7,11 +7,11 @@ import semantico.*;
 public class Expressao {
 	public LinkedList<Item> expressaoInfixa;
 	public LinkedList<Item> expressaoPosfixa;
-	public static int heapControl;
+	public static int idExpressao = 0;
 	public Expressao(){
 		this.expressaoInfixa = new LinkedList<Item>();
 		this.expressaoPosfixa = new LinkedList<Item>();
-		heapControl = 0;
+		this.idExpressao++;
 	}
 		
 	public LinkedList<Item> getExpressaoInfixa(){
@@ -83,19 +83,31 @@ public class Expressao {
 				}
 				
 				if(operador.token.image.equals("|")) { //ou
-					//codExpressao+="\n ddiv \n";
+					codExpressao+="dup\r\n"
+							+ "dconst_0\r\n"
+							+ "dcmpg\r\n"
+							+ "dstore_1\r\n"
+							+ "dcmpg\r\n"
+							+ "dload_1\r\n"
+							+ "dcmpg\r\n"
+							+ "ifeq EMPILHA_"+this.idExpressao+"\r\n"
+							+ "dconst_1\r\n"
+							+ "goto FIM_"+this.idExpressao+"\r\n"
+							+ "EMPILHA_"+this.idExpressao+": dconst_0 \r\n"
+							+ "FIM_"+this.idExpressao+ ": nop\r\n";
+				
 				}
 				
-				if(operador.token.image.equals("<-")) { //atribuição
-					//codExpressao+="\n ddiv \n";
-				}
+//				if(operador.token.image.equals("<-")) { //atribuição
+//					//retornando isso na função PrimitivoAtribuicao
+//				}
 				
 				if(operador.token.image.equals("=")) { //igual(comparação)
-					//codExpressao+="\n ddiv \n";
+					
 				}
 				
 				if(operador.token.image.equals("&")) { //concatenação
-					//codExpressao+="\n ddiv \n";
+					
 				}
 				
 			}

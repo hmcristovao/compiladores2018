@@ -1,5 +1,5 @@
 numero a <- 10+3+5;
-numero b, c,d;
+numero b <- 33, c,d;
 palavra x, y;
 
 le a,b,c,d;
@@ -9,7 +9,7 @@ d <- 99;
 
 y <- "hello"+"world";
 
-se (d = y)
+se (d|y)
 	exibe "ihu";
 fim-se
 
