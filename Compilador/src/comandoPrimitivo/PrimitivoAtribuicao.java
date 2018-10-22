@@ -14,10 +14,11 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo{
 	}
 	
 	public String geraCodigoDestino() {
-		String codigoDestinoAtribuicao = "\n begin \n";
+		String codigoDestinoAtribuicao = ";begin atribuicao \n";
 		
 		codigoDestinoAtribuicao += expDestinoAssembler;
-		codigoDestinoAtribuicao+="dstore " + this.referencia + " \r\n end \n";
+		codigoDestinoAtribuicao+="dstore " + this.referencia + " \r\n"
+				+ ";end atribuicao \n";
 		return codigoDestinoAtribuicao;
 	}
 	

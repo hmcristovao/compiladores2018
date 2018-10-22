@@ -11,7 +11,7 @@ public class Expressao {
 	public Expressao(){
 		this.expressaoInfixa = new LinkedList<Item>();
 		this.expressaoPosfixa = new LinkedList<Item>();
-		this.idExpressao++;
+		idExpressao++;
 	}
 		
 	public LinkedList<Item> getExpressaoInfixa(){
@@ -42,6 +42,26 @@ public class Expressao {
 		String codExpressao = "";
 		
 		for(int i = 0; i < this.expressaoPosfixa.size(); i++) {
+			
+			//verifica de antemão se é uma concatenação, se for pula os dois argumentos (OTIMIZAÇÃO)
+			if(i < this.expressaoPosfixa.size()-2
+				&& this.expressaoPosfixa.get(i+2) instanceof Operador
+				&& this.expressaoPosfixa.get(i+2).token.image.equals("&")) {
+					i+=2;
+					//a concatenação sempre vai gerar uma string
+					//pega os dois operandos, cria uma unica string e empilha
+					Operando op1, op2;
+					op1 = (Operando)this.expressaoPosfixa.get(i-2);
+					op2 = (Operando)this.expressaoPosfixa.get(i-1);
+					String resultConcat = "";
+					resultConcat += op1.token.image.substring(0, op1.token.image.length()-1);
+					resultConcat += op2.token.image.substring(1);
+					//empilha a string concatenada
+					codExpressao+=";begin concatenacao\n"
+							+ "ldc "+resultConcat+"\r\n"
+							+ ";end concatenacao\n";					
+					continue;
+			}
 			
 			//caso seja um operando
 			if(this.expressaoPosfixa.get(i) instanceof Operando) {
@@ -83,33 +103,28 @@ public class Expressao {
 				}
 				
 				if(operador.token.image.equals("|")) { //ou
-					codExpressao+="dup\r\n"
+					codExpressao+=";begin ou logico\n"
+							+"dup\r\n"
 							+ "dconst_0\r\n"
 							+ "dcmpg\r\n"
 							+ "dstore_1\r\n"
 							+ "dcmpg\r\n"
 							+ "dload_1\r\n"
 							+ "dcmpg\r\n"
-							+ "ifeq EMPILHA_"+this.idExpressao+"\r\n"
+							+ "ifeq EMPILHA_"+idExpressao+"\r\n"
 							+ "dconst_1\r\n"
-							+ "goto FIM_"+this.idExpressao+"\r\n"
-							+ "EMPILHA_"+this.idExpressao+": dconst_0 \r\n"
-							+ "FIM_"+this.idExpressao+ ": nop\r\n";
+							+ "goto FIM_"+idExpressao+"\r\n"
+							+ "EMPILHA_"+idExpressao+": dconst_0 \r\n"
+							+ "FIM_"+idExpressao+ ": nop\r\n"
+							+ ";end ou logico\n";
 				
 				}
 				
-//				if(operador.token.image.equals("<-")) { //atribuição
-//					//retornando isso na função PrimitivoAtribuicao
-//				}
-				
-				if(operador.token.image.equals("=")) { //igual(comparação)
-					
+				if(operador.token.image.equals("=")) { //igual(comparação lógica)
+					codExpressao+=";begin igual logico\n"
+							+ "dcmpg\r\n"
+							+ ";end igual logico\n";
 				}
-				
-				if(operador.token.image.equals("&")) { //concatenação
-					
-				}
-				
 			}
 		}
 		

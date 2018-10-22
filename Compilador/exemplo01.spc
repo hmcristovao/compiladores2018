@@ -7,10 +7,14 @@ le x, y;
 
 d <- 99;
 
-y <- "hello"+"world";
+y <- "hello "&"world";
 
-se (d|y)
+se (d=y)
 	exibe "ihu";
 fim-se
 
 exibe y+10, x-99*4, 10+2;
+
+enquanto(b=a)
+	exibe "hehe";
+fim-enquanto

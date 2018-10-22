@@ -21,28 +21,18 @@ public class ListaComandosPrimitivos {
 		return this.listaComandosPrimitivos;
 	}
 	
-	public String geraCodigoDestinoTotal() throws IOException { //terceira passagem START
-		String path = "C:\\arquivos_saida\\TESTE.txt";
-		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-		
+	public String geraCodigoDestinoTotal(){ //terceira passagem START
+		String stringCodigoTotal = "";
 		//percorre a lista com todos os comandos primitivos do programa
 		for(int i = 0; i < this.listaComandosPrimitivos.size(); i++) {
 			//writer.write("numero"+i);
 			String codigoDestino = this.listaComandosPrimitivos.get(i).geraCodigoDestino();
 			if(!codigoDestino.equals("")) {
-				writer.write(codigoDestino);
-				writer.newLine();
+				stringCodigoTotal+=codigoDestino;
+				stringCodigoTotal+="\r\n";
 			}
-			
 		}
-		
-		//Criando o conteúdo do arquivo
-		writer.flush();
-		//Fechando conexão e escrita do arquivo.
-		writer.close();
-		System.out.println("Arquivo gravado em: " + path);
-		return "geraCodigoDestinoTotal";
+		return stringCodigoTotal;
 	}
 	
 	public String toString() {

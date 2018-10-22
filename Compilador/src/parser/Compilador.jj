@@ -35,6 +35,9 @@ public class Compilador {
 
 		//começa a terceira passagem a partir daqui
 		String codigoDestino = listaComandosPrimitivos.geraCodigoDestinoTotal();
+
+		//gera o arquivo com o código após a terceira passagem
+		AcoesSemanticas.geraCodigo3Passagem("a.j", codigoDestino);
          
       }  
       catch(FileNotFoundException e) {
@@ -147,17 +150,20 @@ void declaracao(ListaComandosAltoNivel comandos) : {//PERGUNTAR SE EH NECESSARIO
 {
   	(t = <NUMERO>| t = <PALAVRA>) v = <VAR>
 	{
-	  AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, null);
-	 }
-	( <ATRIB> exp = expressaoMestre()
-		{
-		 AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, exp);
-	  	})?
-		(<VIRGULA> v = <VAR>	(<ATRIB> exp = expressaoMestre()
-		{
-		 AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, exp);
-	  	})?
-	  	)* <PV>
+	  AcoesSemanticas.addVariavelDeclarada(t, v, tabela); //somente adiciona variavel na tabela de simbolos
+ 	}
+	(<ATRIB> exp = expressaoMestre()
+	{
+	 AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, exp);
+  	})?
+	(<VIRGULA> v = <VAR>
+	{
+	  AcoesSemanticas.addVariavelDeclarada(t, v, tabela); //somente adiciona variavel na tabela de simbolos
+ 	}
+	(<ATRIB> exp = expressaoMestre()
+	{
+	 AcoesSemanticas.addAtribuicaoVariavel(comandos, t, v, tabela, exp);
+  	})?)*<PV>
 }
 
 ComandoCondicional se() : {

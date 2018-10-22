@@ -12,7 +12,14 @@ public class PrimitivoEntrada extends ComandoPrimitivo{
 	}
 	
 	public String geraCodigoDestino() { //terceira passagem gerar código intermediario
-		return "";
+		//sempre lê para alguma variavel ja declarada
+		//a entrada vem da pilha? DUVIDA
+		String codDestinoEntrada = "";
+		
+		codDestinoEntrada+=";begin entrada\n"
+				+ "dstore " + this.referencia + " \r\n"
+				+ ";end entrada \n";
+		return codDestinoEntrada;
 	}
 
 	public String toString() {

@@ -12,7 +12,11 @@ public class PrimitivoSaida extends ComandoPrimitivo {
 	}
 	
 	public String geraCodigoDestino() { //terceira passagem gerar código intermediario
-		return this.expDestinoAssembler;
+		String codDestinoSaida = "";
+		codDestinoSaida += "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n"
+				+ this.expDestinoAssembler
+				+ "invokevirtual java/io/PrintStream/println(D)V\r\n";
+		return codDestinoSaida;
 	}
 
 	public String toString() {
