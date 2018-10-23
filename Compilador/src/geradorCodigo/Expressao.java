@@ -26,5 +26,11 @@ public class Expressao {
 		System.out.println(listaExpPosFixa);
 	}
 	
+	public String geraCodigoDestino(){
+		String codExpressao = "";
+		
+		return codExpressao;
+	
+	}
 
 }

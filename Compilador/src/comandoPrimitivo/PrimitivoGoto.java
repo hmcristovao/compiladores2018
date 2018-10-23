@@ -13,7 +13,7 @@ public class PrimitivoGoto extends ComandoPrimitivo{
 	}
 	
 	public String toString() {
-		return "Primitivo Goto" + this.label + "\n";
+		return "Primitivo Goto " + this.label + "\n";
 	}
 
 }

@@ -1,6 +1,6 @@
 package comandoAltoNivel;
 
-import comandoPrimitivo.ListaComandosPrimitivos;
+import comandoPrimitivo.*;
 import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.*;
@@ -22,8 +22,14 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 
 	@Override
 	ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
+		
+		PrimitivoAtribuicao comando = new PrimitivoAtribuicao(this.simbolo.getReferencia(), this.simbolo.getTipo(), this.expressao.geraCodigoDestino());
+		
+		lista.addComando(comando);
+				
+		return lista;
 	}
 	
 }

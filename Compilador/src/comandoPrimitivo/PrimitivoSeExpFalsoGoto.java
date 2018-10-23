@@ -17,7 +17,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 	}
 	
 	public String toString() {
-		return "Primitivo SeExpFalsoGoto" + this.expDestinoAssembler + this.labelFalse + this.listaComandosPrimitivosTrue + "\n";
+		return "Primitivo SeExpFalsoGoto" + this.expDestinoAssembler + " " + this.labelFalse + " \t" + this.listaComandosPrimitivosTrue;
 	}
 	
 	

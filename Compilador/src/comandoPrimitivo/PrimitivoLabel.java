@@ -14,7 +14,7 @@ public class PrimitivoLabel extends ComandoPrimitivo{
 	}
 	
 	public String toString() {
-		return "Primitivo Label" + this.label + this.contador + "\n";
+		return "Primitivo Label " + this.label + " " +  this.contador + "\n";
 	}
 
 }

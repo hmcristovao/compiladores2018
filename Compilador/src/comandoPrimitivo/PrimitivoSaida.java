@@ -19,7 +19,7 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 	}
 	
 	public String toString() {
-		return "Primitivo Saida " + this.tipo + this.expDestinoAssembler +"\n";
+		return "Primitivo Saida " + this.tipo + " " + this.expDestinoAssembler +"\n";
 	}
 
 }

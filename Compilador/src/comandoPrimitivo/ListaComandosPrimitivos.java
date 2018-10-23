@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class ListaComandosPrimitivos {
 	
-	static LinkedList<ComandoPrimitivo> listaComandosPrimitivos;
+	LinkedList<ComandoPrimitivo> listaComandosPrimitivos;
 	
 	public ListaComandosPrimitivos() {
 		this.listaComandosPrimitivos = new LinkedList<ComandoPrimitivo>(); 
@@ -18,7 +18,10 @@ public class ListaComandosPrimitivos {
 		return this.listaComandosPrimitivos;
 	}
 	
-	public static void imprimeListaComandosPrimitivos(){
-		System.out.println(listaComandosPrimitivos);
+	@Override
+	public String toString()
+	{
+		return  this.getListaComandosPrimitivos().toString();
 	}
+	
 }

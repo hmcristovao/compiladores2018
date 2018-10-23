@@ -1,6 +1,7 @@
 package comandoAltoNivel;
 
 import comandoPrimitivo.ListaComandosPrimitivos;
+import comandoPrimitivo.PrimitivoEntrada;
 import parser.Token;
 import semantico.Simbolo;
 
@@ -19,8 +20,14 @@ public class ComandoEntrada extends ComandoAltoNivel {
 
 	@Override
 	ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
+		
+		PrimitivoEntrada comando = new PrimitivoEntrada(this.simbolo.getReferencia(), this.simbolo.getTipo());
+		
+		lista.addComando(comando);
+				
+		return lista;
 	}
 	
 

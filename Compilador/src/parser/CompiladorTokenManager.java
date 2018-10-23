@@ -7,6 +7,7 @@ import apoio.*;
 import tratamentoErro.*;
 import comandoAltoNivel.*;
 import java.util.LinkedList;
+import comandoPrimitivo.*;
 
 /** Token Manager. */
 public class CompiladorTokenManager implements CompiladorConstants

@@ -21,7 +21,7 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo {
 	}
 	
 	public String toString() {
-		return "Primitivo Atribuicao " + this.referencia + this.tipo + this.expDestinoAssembler +"\n";
+		return "Primitivo Atribuicao " + this.referencia + " " + this.tipo + " " + this.expDestinoAssembler +"\n";
 	}	
 
 }

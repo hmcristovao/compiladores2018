@@ -8,6 +8,7 @@ import apoio.*;
 import tratamentoErro.*;
 import comandoAltoNivel.*;
 import java.util.LinkedList;
+import comandoPrimitivo.*;
 
 public class Compilador implements CompiladorConstants {
 
@@ -18,9 +19,16 @@ public class Compilador implements CompiladorConstants {
 
       try {
 
-         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo17.spc2"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo14.spc2"));
+
          ListaComandosAltoNivel lista = new ListaComandosAltoNivel();
+         ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
+
          Compilador.inicio(lista);
+
+         listaComandosPrimitivos = lista.geraListaComandoPrimitivosCompleta();
+                 System.out.println(listaComandosPrimitivos);
+
          System.out.println("");
         // Tabela.imprimeTabela();
 

@@ -12,7 +12,7 @@ public abstract class ComandoAltoNivel {
 	}
 	
 	abstract ListaComandosPrimitivos geraListaComandosPrimitivos();	
-	
+		
 	abstract public String toString();
 
 }
