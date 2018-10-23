@@ -14,7 +14,8 @@ public class AcoesSemanticas {
 		if(tabela.isExiste(var))
 			throw new ErroSemantico("Erro semântico \n A variável " + var + " já foi declarada");
 		else {
-	  		simb = new Simbolo(var, tipo);
+	  		simb = new Simbolo(var, tipo,tabela.marcador);
+	  		
 	  		simb.setReferencia(tabela, tipo);
 	  		tabela.inclui(simb);
 		}

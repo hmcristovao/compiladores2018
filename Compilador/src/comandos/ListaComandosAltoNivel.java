@@ -23,25 +23,35 @@ public class ListaComandosAltoNivel {
 		 for(int i=0; i<listaComandosAltoNivel.size() ; i++) {
 			 
 			 if(listaComandosAltoNivel.get(i).token.toString().equals("<-")) {
+				/*
 				ComandoAtribuicao comandoAtrib = (ComandoAtribuicao) listaComandosAltoNivel.get(i);
 				ComandoPrimitivo prim = new PrimitivoAtribuicao(comandoAtrib.variavel.getReferencia(), 
 						comandoAtrib.variavel.getTipo(), comandoAtrib.expressao.toString());
-				
 				lcmp.listaComandosPrimitivos.add(prim);
+				*/
+				ComandoAtribuicao comandoAtrib = (ComandoAtribuicao) listaComandosAltoNivel.get(i);
+				lcmp.addComando(comandoAtrib.geraListaComandosPrimitivos());	 
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("le")) {
 				 ComandoEntrada comandoEnt = (ComandoEntrada) listaComandosAltoNivel.get(i);
 				 ComandoPrimitivo prim = new PrimitivoEntrada(comandoEnt.simbolo.getReferencia(), comandoEnt.simbolo.getTipo());
+	
 				 lcmp.listaComandosPrimitivos.add(prim);
+				
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("exibe")) {
 				 ComandoSaida comandoSai = (ComandoSaida) listaComandosAltoNivel.get(i);
-				 ComandoPrimitivo prim = new PrimitivoSaida(comandoSai.expressao.toString(),asdasdasdadadsdas);
-				 lcmp.listaComandosPrimitivos.add(prim);
+				// ComandoPrimitivo prim = new PrimitivoSaida(comandoSai.expressao.toString(),);
+				 //lcmp.listaComandosPrimitivos.add(prim);
 			 }
 			 else if(listaComandosAltoNivel.get(i).token.toString().equals("enquanto")) {
 				 //faz mais coisas
 			 }
+		 //*/
+			 //if(listaComandosAltoNivel.get(i).token.toString().equals("<-")) {
+				 //ComandoAtribuicao comandoAtrib = (ComandoAtribuicao) listaComandosAltoNivel.get(i);
+				// lcmp.addComando(comandoAtrib.geraListaComandosPrimitivos());
+			// }
 		 }	 
 		 
 		 return lcmp;

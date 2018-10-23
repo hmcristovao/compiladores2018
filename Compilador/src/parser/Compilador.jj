@@ -15,7 +15,7 @@ import primitivo.*;
 
 public class Compilador {
 
-	static Tabela tabela = new Tabela();
+	public static Tabela tabela = new Tabela();
 	static ListaComandosAltoNivel listaCAN;
 	static ListaComandosPrimitivos listaCP;
 	
@@ -24,15 +24,17 @@ public class Compilador {
       Compilador compilador = null;
       
       try {        
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo01.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
 
 		listaCAN = new ListaComandosAltoNivel();
+		listaCP = new ListaComandosPrimitivos();
         listaCAN = Compilador.one_line();
 
 		listaCP = listaCAN.geraListaComandosPrimitivosTotal();
 
-		System.out.println(listaCAN);
-   		 System.out.println(listaCP);
+		//System.out.println(listaCAN);
+   		System.out.println(listaCP);
+      	//System.out.println(tabela);
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -255,7 +257,7 @@ void atribuicao(ListaComandosAltoNivel listaCAN): {Expressao e; Token var,cmd; S
 	var = < VAR >
 	{
   		AcoesSemanticas.inicializacao(tabela, var.image);
-		simb = new Simbolo(var.image,TipoDado.STR);
+		simb = new Simbolo(var.image,TipoDado.STR,tabela.marcador);
   		
 	}
 	cmd = < ATRIB > e = expressao()
@@ -276,7 +278,7 @@ void declaracao(ListaComandosAltoNivel listaCAN):{Expressao e; Simbolo simb = nu
 	}
 	(cmd = < ATRIB > e = expressao()
 	{	  
-		simb = new Simbolo(var.image,tipo);
+		simb = new Simbolo(var.image,tipo,tabela.marcador);
 		comando = new ComandoAtribuicao(simb,e,cmd);
 		
 	  	listaCAN.addComando(comando);
@@ -284,7 +286,7 @@ void declaracao(ListaComandosAltoNivel listaCAN):{Expressao e; Simbolo simb = nu
 	)?
 	(< VIRGULA > var = < VAR >(cmd = < ATRIB > e = expressao()
 	{
-		simb = new Simbolo(var.image,tipo);
+		simb = new Simbolo(var.image,tipo,tabela.marcador);
 		comando = new ComandoAtribuicao(simb,e,cmd);
 
 		listaCAN.addComando(comando);
@@ -320,14 +322,14 @@ void le(ListaComandosAltoNivel listaCAN):
 {Simbolo simb = null; Token cmd, r; ComandoAltoNivel comando; ComandoEntrada cmdE;} {
 	cmd = < LEITURA > r = < VAR >
 	{
-		simb = new Simbolo(r.image, TipoDado.STR);
+		simb = new Simbolo(r.image, TipoDado.STR,tabela.marcador);
 		comando = new ComandoEntrada(simb ,cmd);
 
 		listaCAN.addComando(comando);
 	}
 	(< VIRGULA > r = <VAR >
 	{
-	  simb = new Simbolo(r.image, TipoDado.STR);
+	  simb = new Simbolo(r.image, TipoDado.STR,tabela.marcador);
 	  comando = new ComandoEntrada(simb ,cmd);
 
 	  listaCAN.addComando(comando);	

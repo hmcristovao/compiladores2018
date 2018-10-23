@@ -1,5 +1,6 @@
 package comandos;
 import geradorCodigo.*;
+import primitivo.*;
 import parser.*;
 import primitivo.ListaComandosPrimitivos;
 
@@ -15,7 +16,7 @@ public class ComandoSaida extends ComandoAltoNivel{
 		return this.token+"/"+this.expressao.listaExpPosfixa;
 	}
 	
-	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+	public ComandoPrimitivo geraListaComandosPrimitivos() {
 		return null; //THUG LIFE !!
 	}	
 	

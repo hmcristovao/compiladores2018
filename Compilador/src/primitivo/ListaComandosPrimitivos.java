@@ -12,7 +12,7 @@ public class ListaComandosPrimitivos {
 	}
 	
 	public void addComando(ComandoPrimitivo cmd) {
-		
+		if(cmd!=null) this.listaComandosPrimitivos.add(cmd);
 	}
 	
 	public LinkedList<ComandoAltoNivel> getListaComandosPrimitivos(){
@@ -24,7 +24,7 @@ public class ListaComandosPrimitivos {
 	}
 	
 	public String toString() {
-		return "" + listaComandosPrimitivos.get(0);
+		return "" + this.listaComandosPrimitivos;
 	}
 	
 }

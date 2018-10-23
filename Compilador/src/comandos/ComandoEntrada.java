@@ -1,5 +1,6 @@
 package comandos;
 import semantico.*;
+import primitivo.*;
 import java.util.LinkedList;
 import parser.*;
 import primitivo.ListaComandosPrimitivos;
@@ -16,7 +17,7 @@ public class ComandoEntrada extends ComandoAltoNivel{
 		return this.token + "/" + this.simbolo.getNome();
 	}
 	
-	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+	public ComandoPrimitivo geraListaComandosPrimitivos() {
 		return null;//TO-DO
 	}	
 }

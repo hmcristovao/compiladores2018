@@ -7,9 +7,10 @@ public class Simbolo {
 	public TipoDado tipo;
 	private int referencia;
 	
-	public Simbolo(String nome, TipoDado tipo) {
+	public Simbolo(String nome, TipoDado tipo, int ref) {
 		this.nome = nome;
-		this.tipo = tipo;	
+		this.tipo = tipo;
+		this.referencia = ref;
 	}
 	
 	public String toString() {
@@ -18,7 +19,7 @@ public class Simbolo {
 	  }
 	
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
 
 	public void setNome(String nome) {
@@ -26,17 +27,11 @@ public class Simbolo {
 	}
 
 	public TipoDado getTipo() {
-		return tipo;
-	}
-	
-	public int getReferencia(){
-		return referencia;
+		return this.tipo;
 	}
 	
 	public void setReferencia(Tabela tab, TipoDado tipo) {
-		//System.out.println(tipo);
-		this.referencia = tab.marcador;
-		
+
 		if(tipo.equals(TipoDado.NUM)) {
 			tab.marcador+=2;
 		}			
@@ -44,5 +39,11 @@ public class Simbolo {
 			tab.marcador+=1;
 		
 	}
+	
+	public int getReferencia(){
+		return this.referencia;
+	}
+	
+
 	
 }

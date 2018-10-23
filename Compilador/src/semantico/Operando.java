@@ -6,16 +6,20 @@ public class Operando extends Item {
 	TipoElemento tipoElemento;
 	
 	public Operando(TipoDado tipoDado, TipoElemento tipoElemento, Token token) {
-      super(token);
-      this.tipoDado = tipoDado;
-      this.tipoElemento = tipoElemento;
+	  super(token);
+	  this.tipoDado = tipoDado;
+	  this.tipoElemento = tipoElemento;
 	}
 	
+   public String getLexema() {
+	      return "Operando";
+   }
+   
    public TipoDado getTipoDado() {
 	      return this.tipoDado;
    }
 	
-   public TipoElemento getTipo() {
+   public TipoElemento getTipoElemento() {
 	      return this.tipoElemento;
    }
    

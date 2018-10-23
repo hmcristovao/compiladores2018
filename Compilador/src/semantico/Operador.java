@@ -9,7 +9,11 @@ public class Operador extends Item{
 	      super(token);
 	      this.tipoOperador = tipoOperador;
 		}
-		
+   
+	public String getLexema() {
+	      return "Operador";
+   }
+   
    public TipoOperador getTipoOperador() {
 	     return this.tipoOperador;
    }

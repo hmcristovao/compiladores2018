@@ -10,7 +10,7 @@ import primitivo.*;
 
 public class Compilador implements CompiladorConstants {
 
-        static Tabela tabela = new Tabela();
+        public static Tabela tabela = new Tabela();
         static ListaComandosAltoNivel listaCAN;
         static ListaComandosPrimitivos listaCP;
 
@@ -19,15 +19,17 @@ public class Compilador implements CompiladorConstants {
       Compilador compilador = null;
 
       try {
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo01.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
 
                 listaCAN = new ListaComandosAltoNivel();
+                listaCP = new ListaComandosPrimitivos();
         listaCAN = Compilador.one_line();
 
                 listaCP = listaCAN.geraListaComandosPrimitivosTotal();
 
-                System.out.println(listaCAN);
-                 System.out.println(listaCP);
+                //System.out.println(listaCAN);
+                System.out.println(listaCP);
+        //System.out.println(tabela);
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -311,7 +313,7 @@ public class Compilador implements CompiladorConstants {
                                                    Expressao e; Token var,cmd; Simbolo simb = null; ComandoAltoNivel comando;
     var = jj_consume_token(VAR);
                 AcoesSemanticas.inicializacao(tabela, var.image);
-                simb = new Simbolo(var.image,TipoDado.STR);
+                simb = new Simbolo(var.image,TipoDado.STR,tabela.marcador);
     cmd = jj_consume_token(ATRIB);
     e = expressao();
           comando = new ComandoAtribuicao(simb,e,cmd);
@@ -342,7 +344,7 @@ public class Compilador implements CompiladorConstants {
     case ATRIB:
       cmd = jj_consume_token(ATRIB);
       e = expressao();
-                simb = new Simbolo(var.image,tipo);
+                simb = new Simbolo(var.image,tipo,tabela.marcador);
                 comando = new ComandoAtribuicao(simb,e,cmd);
 
                 listaCAN.addComando(comando);
@@ -367,7 +369,7 @@ public class Compilador implements CompiladorConstants {
       case ATRIB:
         cmd = jj_consume_token(ATRIB);
         e = expressao();
-                simb = new Simbolo(var.image,tipo);
+                simb = new Simbolo(var.image,tipo,tabela.marcador);
                 comando = new ComandoAtribuicao(simb,e,cmd);
 
                 listaCAN.addComando(comando);
@@ -411,7 +413,7 @@ public class Compilador implements CompiladorConstants {
  Simbolo simb = null; Token cmd, r; ComandoAltoNivel comando; ComandoEntrada cmdE;
     cmd = jj_consume_token(LEITURA);
     r = jj_consume_token(VAR);
-                simb = new Simbolo(r.image, TipoDado.STR);
+                simb = new Simbolo(r.image, TipoDado.STR,tabela.marcador);
                 comando = new ComandoEntrada(simb ,cmd);
 
                 listaCAN.addComando(comando);
@@ -427,7 +429,7 @@ public class Compilador implements CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       r = jj_consume_token(VAR);
-          simb = new Simbolo(r.image, TipoDado.STR);
+          simb = new Simbolo(r.image, TipoDado.STR,tabela.marcador);
           comando = new ComandoEntrada(simb ,cmd);
 
           listaCAN.addComando(comando);
