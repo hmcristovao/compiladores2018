@@ -20,7 +20,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 				+ this.expDestinoAssembler
 				+ "dconst_0\n"
 				+ "dcmpg\n"
-				+ "ifeq "+this.labelFalse.geraCodigoDestino().substring(1)+"\n"
+				+ "ifeq "+this.labelFalse.geraCodigoDestino().substring(0, this.labelFalse.geraCodigoDestino().length()-1)+"\n"
 				+ this.listaComandosPrimitivosTrue.geraCodigoDestinoTotal()
 				+ ";end se exp falso\n";
 		//compara se o resultado da 

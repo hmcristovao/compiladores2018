@@ -13,9 +13,18 @@ public class PrimitivoSaida extends ComandoPrimitivo {
 	
 	public String geraCodigoDestino() { //terceira passagem gerar código intermediario
 		String codDestinoSaida = "";
-		codDestinoSaida += "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n"
-				+ this.expDestinoAssembler
-				+ "invokevirtual java/io/PrintStream/println(D)V\r\n";
+		if(tipo == TipoDado.NUM) {
+			codDestinoSaida += "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n"
+					+ this.expDestinoAssembler
+					+ "invokevirtual java/io/PrintStream/println(D)V";
+		}else {
+			codDestinoSaida += this.expDestinoAssembler
+					+ "astore_3\r\n" 
+					+ "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n"
+					+ this.expDestinoAssembler
+					+ "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V";
+		}		
+		
 		return codDestinoSaida;
 	}
 

@@ -16,20 +16,19 @@ public class PrimitivoEntrada extends ComandoPrimitivo{
 		//a entrada vem da pilha? DUVIDA
 		String codDestinoEntrada = "";
 		
-		codDestinoEntrada+=";begin entrada\n";
-		codDestinoEntrada+="new java/util/Scanner\n"
-				+ "dup\n" //necessario?
-				+ "getstatic java/lang/System.in:Ljava/io/InputStream;\n"
-				+ "invokespecial java/util/Scanner.\"<init>\":(Ljava/io/InputStream;)V\n"
-				+ "astore_3\n" //carrega para a memoria
-				+ "aload_3\n"; //empilha 
+		codDestinoEntrada+=";begin entrada\r\n";
+		codDestinoEntrada+="new java/util/Scanner\r\n"
+				+ "dup\r\n"
+				+ "getstatic java/lang/System/in Ljava/io/InputStream;\r\n"
+				+ "invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V\r\n"; 
 		if(tipo == TipoDado.NUM) { 
-			codDestinoEntrada+="invokevirtual java/util/Scanner.nextDouble:()D\n";
+			codDestinoEntrada+="invokevirtual java/util/Scanner/nextDouble()D\r\n";
+			codDestinoEntrada+= "dstore " + this.referencia + " \r\n";
 		}else { //caso não seja um número será uma STR
-			codDestinoEntrada+="invokevirtual java/util/Scanner.next:()Ljava/lang/String;\n";	
+			codDestinoEntrada+="invokevirtual java/util/Scanner/nextLine()Ljava/lang/String;\r\n";
+			codDestinoEntrada+= "astore " + this.referencia + " \r\n";
 		}
-		codDestinoEntrada+= "dstore " + this.referencia + " \r\n"
-				+ ";end entrada \n";
+		codDestinoEntrada+= ";end entrada \n";
 		return codDestinoEntrada;
 	}
 

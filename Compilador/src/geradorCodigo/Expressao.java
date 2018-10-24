@@ -79,7 +79,13 @@ public class Expressao {
 				
 				if(operando.getTipoElemento() == TipoElemento.VAR) { //caso seja uma variavel
 					Simbolo simbolo = Tabela.tab.get(operando.token.image);
-					codExpressao+="dload "+simbolo.getReferencia()+"\r\n";
+					if(operando.getTipoDado() == TipoDado.NUM) { //caso seja um número
+						codExpressao+="dload "+simbolo.getReferencia()+"\r\n";
+					}
+					
+					if(operando.getTipoDado() == TipoDado.STR) { //caso seja uma string
+						codExpressao+="aload "+simbolo.getReferencia()+"\r\n";
+					}
 				}
 			}
 			

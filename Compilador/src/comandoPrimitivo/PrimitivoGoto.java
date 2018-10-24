@@ -9,7 +9,7 @@ public class PrimitivoGoto extends ComandoPrimitivo {
 
 	public String geraCodigoDestino() {
 		//salta para a label sem os dois pontos
-		return "goto "+this.label.geraCodigoDestino().substring(1)+"\r\n";
+		return "goto "+this.label.geraCodigoDestino().substring(0, this.label.geraCodigoDestino().length()-1)+"\r\n";
 	}
 	
 	public String toString() {

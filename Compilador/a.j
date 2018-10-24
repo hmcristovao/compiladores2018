@@ -13,9 +13,7 @@ return
 .limit locals 100
 ;begin atribuicao 
 ldc2_w 10.0
-ldc2_w 3.0
-dadd
-ldc2_w 5.0
+ldc2_w 55.0
 dadd
 dstore 1 
 ;end atribuicao 
@@ -25,138 +23,43 @@ ldc2_w 33.0
 dstore 3 
 ;end atribuicao 
 
+;begin atribuicao 
+ldc "Digite um numero: "
+astore 9 
+;end atribuicao 
+
+aload 9
+astore_3
+getstatic java/lang/System/out Ljava/io/PrintStream;
+aload 9
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
 ;begin entrada
 new java/util/Scanner
 dup
-getstatic java/lang/System.in:Ljava/io/InputStream;
-invokespecial java/util/Scanner."<init>":(Ljava/io/InputStream;)V
-astore_3
-aload_3
-invokevirtual java/util/Scanner.nextDouble:()D
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextDouble()D
 dstore 1 
 ;end entrada 
 
-;begin entrada
-new java/util/Scanner
-dup
-getstatic java/lang/System.in:Ljava/io/InputStream;
-invokespecial java/util/Scanner."<init>":(Ljava/io/InputStream;)V
-astore_3
-aload_3
-invokevirtual java/util/Scanner.nextDouble:()D
-dstore 3 
-;end entrada 
-
-;begin entrada
-new java/util/Scanner
-dup
-getstatic java/lang/System.in:Ljava/io/InputStream;
-invokespecial java/util/Scanner."<init>":(Ljava/io/InputStream;)V
-astore_3
-aload_3
-invokevirtual java/util/Scanner.nextDouble:()D
-dstore 5 
-;end entrada 
-
-;begin entrada
-new java/util/Scanner
-dup
-getstatic java/lang/System.in:Ljava/io/InputStream;
-invokespecial java/util/Scanner."<init>":(Ljava/io/InputStream;)V
-astore_3
-aload_3
-invokevirtual java/util/Scanner.nextDouble:()D
-dstore 7 
-;end entrada 
-
-;begin entrada
-new java/util/Scanner
-dup
-getstatic java/lang/System.in:Ljava/io/InputStream;
-invokespecial java/util/Scanner."<init>":(Ljava/io/InputStream;)V
-astore_3
-aload_3
-invokevirtual java/util/Scanner.next:()Ljava/lang/String;
-dstore 9 
-;end entrada 
-
-;begin entrada
-new java/util/Scanner
-dup
-getstatic java/lang/System.in:Ljava/io/InputStream;
-invokespecial java/util/Scanner."<init>":(Ljava/io/InputStream;)V
-astore_3
-aload_3
-invokevirtual java/util/Scanner.next:()Ljava/lang/String;
-dstore 10 
-;end entrada 
-
 ;begin atribuicao 
-ldc2_w 99.0
-dstore 7 
-;end atribuicao 
-
-;begin atribuicao 
-;begin concatenacao
-ldc "hello world"
-;end concatenacao
-dstore 10 
-;end atribuicao 
-
-;begin se exp falso
-dload 7
-dload 10
-;begin igual logico
-dcmpg
-;end igual logico
-dconst_0
-dcmpg
-ifeq condicionalSimples_0
-getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "ihu"
-invokevirtual java/io/PrintStream/println(D)V
-
-;end se exp falso
-
-:condicionalSimples_0
-getstatic java/lang/System/out Ljava/io/PrintStream;
-dload 10
-ldc2_w 10.0
-dadd
-invokevirtual java/io/PrintStream/println(D)V
-
-getstatic java/lang/System/out Ljava/io/PrintStream;
-dload 9
-ldc2_w 99.0
-ldc2_w 4.0
-dmul
-dsub
-invokevirtual java/io/PrintStream/println(D)V
-
-getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc2_w 10.0
-ldc2_w 2.0
-dadd
-invokevirtual java/io/PrintStream/println(D)V
-
-:enquantoInicio_1
-;begin se exp falso
-dload 3
 dload 1
-;begin igual logico
-dcmpg
-;end igual logico
-dconst_0
-dcmpg
-ifeq enquantoFim_2
+ldc2_w 1.0
+dadd
+dstore 1 
+;end atribuicao 
+
+;begin concatenacao
+ldc "resultado final"
+;end concatenacao
+astore_3
 getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "hehe"
+;begin concatenacao
+ldc "resultado final"
+;end concatenacao
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
+getstatic java/lang/System/out Ljava/io/PrintStream;
+dload 1
 invokevirtual java/io/PrintStream/println(D)V
-
-;end se exp falso
-
-goto enquantoInicio_1
-
-:enquantoFim_2
 return
 .end method

@@ -17,8 +17,13 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo{
 		String codigoDestinoAtribuicao = ";begin atribuicao \n";
 		
 		codigoDestinoAtribuicao += expDestinoAssembler;
-		codigoDestinoAtribuicao+="dstore " + this.referencia + " \r\n"
-				+ ";end atribuicao \n";
+		if(tipo == TipoDado.NUM) {
+			codigoDestinoAtribuicao+="dstore " + this.referencia + " \r\n";
+		}else { //lembrar de por else if quando colocar mais tipos de dados
+			codigoDestinoAtribuicao+="astore " + this.referencia + " \r\n";
+		}
+		
+		codigoDestinoAtribuicao+=";end atribuicao \n";
 		return codigoDestinoAtribuicao;
 	}
 	
