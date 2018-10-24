@@ -11,7 +11,6 @@ public class ListaComandosAltoNivel {
 	}
 	
 	public void addComando(ComandoAltoNivel _comando){
-		System.out.println("entrou");
 		this.listaComandosAltoNivel.add(_comando);
 		//System.out.println("adicionou o comando\n");
 	}
