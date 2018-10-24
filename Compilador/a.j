@@ -13,53 +13,42 @@ return
 .limit locals 100
 ;begin atribuicao 
 ldc2_w 10.0
-ldc2_w 55.0
+dstore 1 
+;end atribuicao 
+
+;begin atribuicao 
+ldc "merda"
+astore 3 
+;end atribuicao 
+
+;begin atribuicao 
+ldc " kkk"
+astore 4 
+;end atribuicao 
+
+;begin atribuicao 
+ldc2_w 9.0
+ldc2_w 9.0
 dadd
 dstore 1 
 ;end atribuicao 
 
 ;begin atribuicao 
-ldc2_w 33.0
-dstore 3 
-;end atribuicao 
-
-;begin atribuicao 
-ldc "Digite um numero: "
-astore 9 
-;end atribuicao 
-
-aload 9
-astore_3
-getstatic java/lang/System/out Ljava/io/PrintStream;
-aload 9
-invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
-;begin entrada
-new java/util/Scanner
+new java/lang/StringBuilder
 dup
-getstatic java/lang/System/in Ljava/io/InputStream;
-invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
-invokevirtual java/util/Scanner/nextDouble()D
-dstore 1 
-;end entrada 
-
-;begin atribuicao 
-dload 1
-ldc2_w 1.0
-dadd
-dstore 1 
+invokespecial java/lang/StringBuilder/<init>()V
+aload 3
+invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+aload 4
+invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;
+;end concatenacao
+astore 5 
 ;end atribuicao 
 
-;begin concatenacao
-ldc "resultado final"
-;end concatenacao
-astore_3
 getstatic java/lang/System/out Ljava/io/PrintStream;
-;begin concatenacao
-ldc "resultado final"
-;end concatenacao
+aload 5
 invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
-getstatic java/lang/System/out Ljava/io/PrintStream;
-dload 1
-invokevirtual java/io/PrintStream/println(D)V
+
 return
 .end method

@@ -16,13 +16,11 @@ public class PrimitivoSaida extends ComandoPrimitivo {
 		if(tipo == TipoDado.NUM) {
 			codDestinoSaida += "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n"
 					+ this.expDestinoAssembler
-					+ "invokevirtual java/io/PrintStream/println(D)V";
+					+ "invokevirtual java/io/PrintStream/println(D)V\r\n";
 		}else {
-			codDestinoSaida += this.expDestinoAssembler
-					+ "astore_3\r\n" 
-					+ "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n"
+			codDestinoSaida += "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n"
 					+ this.expDestinoAssembler
-					+ "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V";
+					+ "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\r\n";
 		}		
 		
 		return codDestinoSaida;

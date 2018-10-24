@@ -53,13 +53,64 @@ public class Expressao {
 					Operando op1, op2;
 					op1 = (Operando)this.expressaoPosfixa.get(i-2);
 					op2 = (Operando)this.expressaoPosfixa.get(i-1);
-					String resultConcat = "";
-					resultConcat += op1.token.image.substring(0, op1.token.image.length()-1);
-					resultConcat += op2.token.image.substring(1);
-					//empilha a string concatenada
-					codExpressao+=";begin concatenacao\n"
-							+ "ldc "+resultConcat+"\r\n"
-							+ ";end concatenacao\n";					
+					
+					//codigo concatena
+					codExpressao+="new java/lang/StringBuilder\r\n"
+							+ "dup\r\n"
+							+ "invokespecial java/lang/StringBuilder/<init>()V\r\n";
+					
+					//primeiro operando
+					if(op1.getTipoElemento() == TipoElemento.CTE) { //caso seja uma constante
+						if(op1.getTipoDado() == TipoDado.NUM) { //caso seja um número
+							Double numero = Double.parseDouble(op1.token.image);
+							codExpressao+="ldc2_w "+numero+"\r\n";
+						}
+						
+						if(op1.getTipoDado() == TipoDado.STR) { //caso seja uma string
+							codExpressao+="ldc "+op1.token.image+"\r\n";
+						}
+					}
+					
+					if(op1.getTipoElemento() == TipoElemento.VAR) { //caso seja uma variavel
+						Simbolo simbolo = Tabela.tab.get(op1.token.image);
+						if(op1.getTipoDado() == TipoDado.NUM) { //caso seja um número
+							codExpressao+="dload "+simbolo.getReferencia()+"\r\n";
+						}
+						
+						if(op1.getTipoDado() == TipoDado.STR) { //caso seja uma string
+							codExpressao+="aload "+simbolo.getReferencia()+"\r\n";
+						}
+					}
+					
+					
+					
+					codExpressao+="invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;\r\n";
+					
+					//segundo operando
+					if(op2.getTipoElemento() == TipoElemento.CTE) { //caso seja uma constante
+						if(op2.getTipoDado() == TipoDado.NUM) { //caso seja um número
+							Double numero = Double.parseDouble(op2.token.image);
+							codExpressao+="ldc2_w "+numero+"\r\n";
+						}
+						
+						if(op2.getTipoDado() == TipoDado.STR) { //caso seja uma string
+							codExpressao+="ldc "+op2.token.image+"\r\n";
+						}
+					}
+					
+					if(op2.getTipoElemento() == TipoElemento.VAR) { //caso seja uma variavel
+						Simbolo simbolo = Tabela.tab.get(op2.token.image);
+						if(op2.getTipoDado() == TipoDado.NUM) { //caso seja um número
+							codExpressao+="dload "+simbolo.getReferencia()+"\r\n";
+						}
+						
+						if(op2.getTipoDado() == TipoDado.STR) { //caso seja uma string
+							codExpressao+="aload "+simbolo.getReferencia()+"\r\n";
+						}
+					}
+					codExpressao+= "invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;\r\n"
+							+ "invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;\r\n";
+					codExpressao+=";end concatenacao\n";
 					continue;
 			}
 			
