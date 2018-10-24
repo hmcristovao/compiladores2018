@@ -12,7 +12,9 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 	}
 	
 	public String geraCodigoDestino() {
-		return null;
+		return "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n" + 
+				"dload" + this.referencia + "\r\n" +
+				"invokevirtual java/io/PrintStream/println(D)V\r\n";
 	}
 	
 	public String toString() {

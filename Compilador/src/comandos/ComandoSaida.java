@@ -1,8 +1,9 @@
 package comandos;
 import geradorCodigo.*;
 import primitivo.*;
+import semantico.Item;
+import semantico.Operando;
 import parser.*;
-import primitivo.ListaComandosPrimitivos;
 
 public class ComandoSaida extends ComandoAltoNivel{
 	Expressao expressao;
@@ -17,7 +18,13 @@ public class ComandoSaida extends ComandoAltoNivel{
 	}
 	
 	public ComandoPrimitivo geraListaComandosPrimitivos() {
-		return null; //THUG LIFE !!
-	}	
+		String exp = this.expressao.geraCodigoDestino();	
+		Item item = this.expressao.listaExpPosfixa.get(0);
+		Operando op = (Operando) item;
+		
+		ComandoPrimitivo prim = new PrimitivoSaida(exp, op.getTipoDado()); 
+		
+		return prim;
+	 }
 	
 }

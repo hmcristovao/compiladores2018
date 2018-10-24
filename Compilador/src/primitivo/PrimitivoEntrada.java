@@ -18,6 +18,5 @@ public class PrimitivoEntrada extends ComandoPrimitivo{
 	public String toString() {
 		return this.referencia + "/" + this.tipo;
 	}
-	
-	
+		
 }

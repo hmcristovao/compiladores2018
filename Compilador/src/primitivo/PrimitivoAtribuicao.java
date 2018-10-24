@@ -4,7 +4,7 @@ import semantico.*;
 public class PrimitivoAtribuicao extends ComandoPrimitivo{
 	int referencia;
 	TipoDado tipo;
-	String expDestinoAssembler; //assembly
+	String expDestinoAssembler;
 	
 	public PrimitivoAtribuicao(int referencia, TipoDado tipo, String exp) {
 		this.referencia = referencia;
@@ -12,8 +12,8 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo{
 		this.expDestinoAssembler = exp;		
 	}
 	
-	public String geraCodigoDestino() {
-		return null;
+	public String geraCodigoDestino(){	
+		return this.expDestinoAssembler + "dstore " + this.referencia + "\r\n";
 	}
 	
 	public String toString() {

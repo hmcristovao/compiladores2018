@@ -29,9 +29,9 @@ public class Compilador {
 		listaCAN = new ListaComandosAltoNivel();
 		listaCP = new ListaComandosPrimitivos();
         listaCAN = Compilador.one_line();
-
+		
 		listaCP = listaCAN.geraListaComandosPrimitivosTotal();
-
+		
 		//System.out.println(listaCAN);
    		System.out.println(listaCP);
       	//System.out.println(tabela);

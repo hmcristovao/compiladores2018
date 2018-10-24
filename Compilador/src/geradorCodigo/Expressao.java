@@ -13,6 +13,7 @@ public class Expressao {
    
    public String geraCodigoDestino() {
 	   String saida = "";
+	   
 	   for(int i = 0; i<this.listaExpPosfixa.size(); i++) {
 		   
 		   //Item na posicao i da lista posfixa
