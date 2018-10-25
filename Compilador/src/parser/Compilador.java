@@ -27,7 +27,7 @@ public class Compilador implements CompiladorConstants {
          Compilador.inicio(lista);
 
          listaComandosPrimitivos = lista.geraListaComandoPrimitivosCompleta();
-                 System.out.println(listaComandosPrimitivos.geraCodigoDestinoCompleto());
+                 System.out.println(listaComandosPrimitivos);
 
                  CodigoDestino codigoDestino = new CodigoDestino();
                  codigoDestino.geraArquivo("./src/apoio/" + Config.nomeArquivo + Config.extensaoCodigoDestino, listaComandosPrimitivos);
@@ -326,7 +326,7 @@ public class Compilador implements CompiladorConstants {
     case ATRIB:
       atrib = jj_consume_token(ATRIB);
       expressao = iniciaExpressao();
-                comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
+                comando = new ComandoAtribuicao(Tabela.pesquisaTabela(variavel.image), expressao, atrib);
                 listaComandosAltoNivel.addComando(comando);
       break;
     default:
@@ -345,12 +345,13 @@ public class Compilador implements CompiladorConstants {
       }
       jj_consume_token(VIRGULA);
       variavel = jj_consume_token(VAR);
+           //System.out.println(variavel.image);
+                Tabela.insereNaTabela(variavel, tipo);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ATRIB:
         atrib = jj_consume_token(ATRIB);
         expressao = iniciaExpressao();
-                Tabela.insereNaTabela(variavel, tipo);
-                comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
+                comando = new ComandoAtribuicao(Tabela.pesquisaTabela(variavel.image), expressao, atrib);
                 listaComandosAltoNivel.addComando(comando);
         break;
       default:

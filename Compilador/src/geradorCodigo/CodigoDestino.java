@@ -25,8 +25,8 @@ public class CodigoDestino {
 	        arqSaida.write("return\n");
 	        arqSaida.write(".end method\n\n");
 	        arqSaida.write(".method public static main([Ljava/lang/String;)V\n");
-	        arqSaida.write(".limit stack 4\n");  
-	        arqSaida.write(".limit locals" + (Compilador.tabela.getMarcador()+2) +"\n"); 
+	        arqSaida.write(".limit stack 400\n");  
+	        arqSaida.write(".limit locals " + (Compilador.tabela.getMarcador()+2) +"\n"); 
 	        arqSaida.write(listaComandosPrimitivos.geraCodigoDestinoCompleto());
 	        arqSaida.write("return\n");
 	        arqSaida.write(".end method\n");

@@ -20,10 +20,18 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo {
 		
 		String codigoDestino = expDestinoAssembler;
 		
-		if(referencia >= 4) {
-			codigoDestino += "dstore " + this.referencia + "\n";
+		if(codigoDestino.contains("dcmpg")) {
+			if(referencia >= 4) {
+				codigoDestino += "istore " + this.referencia + "\n";
+			}else {
+				codigoDestino += "istore_" + this.referencia + "\n";
+			}
 		}else {
-			codigoDestino += "dstore_" + this.referencia + "\n";
+			if(referencia >= 4) {
+				codigoDestino += "dstore " + this.referencia + "\n";
+			}else {
+				codigoDestino += "dstore_" + this.referencia + "\n";
+			}
 		}
 		
 		return codigoDestino;

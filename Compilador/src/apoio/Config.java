@@ -2,7 +2,7 @@ package apoio;
 
 public interface Config {
 	
-	String nomeArquivo = "exemplo15";
+	String nomeArquivo = "teste";
 
 	String extensaoFonte = ".spc2";
 

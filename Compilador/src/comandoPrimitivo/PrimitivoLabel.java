@@ -16,7 +16,7 @@ public class PrimitivoLabel extends ComandoPrimitivo{
 	}
 
 	public String geraCodigoDestino() {
-		String codigoDestino = ":" + this.label + "\n";
+		String codigoDestino = this.label + ":" + "\n";
 		return codigoDestino;
 	}
 	

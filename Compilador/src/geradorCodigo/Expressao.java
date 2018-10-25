@@ -112,6 +112,7 @@ public class Expressao {
 					concat += listaOperandoString.poll();
 					
 					codigoDestinoExpressao += "ldc " + "\"" + concat.replaceAll("\"", "") + "\"" + "\n";
+					listaOperandoString.add("\"" + concat.replaceAll("\"", "") + "\"");
 					
 				}
 			

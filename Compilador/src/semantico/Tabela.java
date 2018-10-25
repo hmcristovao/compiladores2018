@@ -31,7 +31,7 @@ public class Tabela {
 		return tab.size();
 	}
 	
-	public Simbolo pesquisaTabela(String chave) {
+	public static Simbolo pesquisaTabela(String chave) {
 		return tab.get(chave);
 	}
 	
@@ -76,5 +76,9 @@ public class Tabela {
 		 }
 		 
 	 }
+	
+	public String toString() {
+		return this.tab.toString();
+	}
 
 }

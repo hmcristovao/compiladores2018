@@ -92,7 +92,7 @@ public interface CompiladorConstants {
     "\"-\"",
     "\"*\"",
     "\"/\"",
-    "\"OR\"",
+    "\"OR \"",
     "\"<-\"",
     "\"=\"",
     "\"&\"",

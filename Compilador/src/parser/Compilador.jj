@@ -33,7 +33,7 @@ public class Compilador {
          Compilador.inicio(lista);
 
          listaComandosPrimitivos = lista.geraListaComandoPrimitivosCompleta();
-		 System.out.println(listaComandosPrimitivos.geraCodigoDestinoCompleto());
+		 System.out.println(listaComandosPrimitivos);
 
 		 CodigoDestino codigoDestino = new CodigoDestino();
 		 codigoDestino.geraArquivo("./src/apoio/" + Config.nomeArquivo + Config.extensaoCodigoDestino, listaComandosPrimitivos);
@@ -101,7 +101,7 @@ TOKEN : {
 	< SUB: "-" > |
 	< MUL: "*" > |
     < DIV: "/" > |
-    < OU: "OR" > |
+    < OU: "OR " > |
     < ATRIB: "<-"  > |
     < IGUAL: "=" > |
    	< CONCAT: "&" > 
@@ -203,6 +203,7 @@ void termo4(Expressao exp):
   	Tabela.verificaVariavelDeclarada(var.image);
   	item = new Operando(tabela.tipoVariavel(var.image),TipoElemento.VAR, var);
   	exp.addListaExpPosFixa(item);
+  	
 }
 |entrada=<STRING>
 {
@@ -273,14 +274,18 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
   	}
   	( atrib = <ATRIB> expressao=iniciaExpressao() 
   	{
-  	  	comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
+  	  	comando = new ComandoAtribuicao(Tabela.pesquisaTabela(variavel.image), expressao, atrib);
   	  	listaComandosAltoNivel.addComando(comando);
   	}
   	)?
-  	 (<VIRGULA>  variavel=<VAR> ( atrib = <ATRIB> expressao=iniciaExpressao()
-  	{
+  	 (<VIRGULA>  variavel=<VAR>
+  	 {
+  	   //System.out.println(variavel.image);
 	  	Tabela.insereNaTabela(variavel, tipo);
-  	  	comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
+  	 }
+  	 ( atrib = <ATRIB> expressao=iniciaExpressao()
+  	{
+  	  	comando = new ComandoAtribuicao(Tabela.pesquisaTabela(variavel.image), expressao, atrib);
   	  	listaComandosAltoNivel.addComando(comando);
   	}
   	)? 
