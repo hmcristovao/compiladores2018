@@ -16,10 +16,30 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	
 	public String toString() {
 		return this.token + "/" + this.expressao.listaExpPosfixa + "/" + this.listaComandosAltoNivelTrue.listaComandosAltoNivel;
-	}	
+	}
 	
-	public ComandoPrimitivo geraListaComandosPrimitivos() {
-		return null;//TO-DO
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		
+		PrimitivoLabel labelInicio = new PrimitivoLabel("labelEnquanto");
+		
+		PrimitivoLabel labelFim = new PrimitivoLabel("fimEnquanto");
+		
+		PrimitivoSeExpFalsoGoto cmpFalse = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFim, this.listaComandosAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		
+		PrimitivoGoto vaipra = new PrimitivoGoto(labelInicio);
+		
+		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
+		
+		lista.addComando(labelInicio);
+		
+		lista.addComando(cmpFalse);
+		
+		lista.addComando(vaipra);
+		
+		lista.addComando(labelFim);		
+		
+				
+		return lista;
 	}
 	
 }

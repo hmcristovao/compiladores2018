@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import geradorCodigo.*;
 import comandos.*;
 import primitivo.*;
+import jasmin.*;
 
 public class Compilador {
 
@@ -24,17 +25,40 @@ public class Compilador {
       Compilador compilador = null;
       
       try {        
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo13.spc"));
 
-		listaCAN = new ListaComandosAltoNivel();
-		listaCP = new ListaComandosPrimitivos();
+		//listaCAN = new ListaComandosAltoNivel();
+		//listaCP = new ListaComandosPrimitivos();
+		
         listaCAN = Compilador.one_line();
 		
 		listaCP = listaCAN.geraListaComandosPrimitivosTotal();
-		
+
+		String codigoDestino;
+
+		codigoDestino = listaCP.geraCodigoDestinoTotal();
+		BufferedWriter arqSaida;
+		try {
+			arqSaida = new BufferedWriter(new FileWriter("prog_destino.j"));
+		 
+			arqSaida.write(codigoDestino);
+			arqSaida.close();
+		}
+		catch(IOException e) {
+              System.out.println("Problema no arquivo 'prog_destino.j'");
+        }
+        catch(Exception e) {
+              System.out.println(e.getMessage());
+        }
+
+		String arquivo[] = {"prog_destino.j"};
+		Main.main(arquivo);            
 		//System.out.println(listaCAN);
-   		System.out.println(listaCP);
+   		//System.out.println(listaCP.geraCodigoDestinoTotal());
       	//System.out.println(tabela);
+
+		
+      	
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -256,7 +280,7 @@ void comando(ListaComandosAltoNivel listaCAN): {} {
 void atribuicao(ListaComandosAltoNivel listaCAN): {Expressao e; Token var,cmd; Simbolo simb = null; ComandoAltoNivel comando;}{
 	var = < VAR >
 	{
-  		AcoesSemanticas.inicializacao(tabela, var.image);
+  		AcoesSemanticas.inicializacao(var.image);
 		simb = new Simbolo(var.image,TipoDado.STR,tabela.marcador);
   		
 	}
@@ -273,7 +297,7 @@ void declaracao(ListaComandosAltoNivel listaCAN):{Expressao e; Simbolo simb = nu
 	(< NUMERO >{ tipo = TipoDado.NUM; } | < PALAVRA >{ tipo = TipoDado.STR; })
 	var=< VAR >
 	{
-	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
+	  	AcoesSemanticas.redeclaracao(var.image, simb, tipo);
 	  	comando = null;
 	}
 	(cmd = < ATRIB > e = expressao()
@@ -292,7 +316,7 @@ void declaracao(ListaComandosAltoNivel listaCAN):{Expressao e; Simbolo simb = nu
 		listaCAN.addComando(comando);
 	})?
 	{
-	  	AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
+	  	AcoesSemanticas.redeclaracao(var.image, simb, tipo);
 	}
 	)*
 	< PV >
@@ -322,6 +346,7 @@ void le(ListaComandosAltoNivel listaCAN):
 {Simbolo simb = null; Token cmd, r; ComandoAltoNivel comando; ComandoEntrada cmdE;} {
 	cmd = < LEITURA > r = < VAR >
 	{
+	  	AcoesSemanticas.declaracao(r.image);
 		simb = new Simbolo(r.image, TipoDado.STR,tabela.marcador);
 		comando = new ComandoEntrada(simb ,cmd);
 

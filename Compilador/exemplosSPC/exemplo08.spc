@@ -1,3 +1,4 @@
+numero l,m;
 le l,m;
 numero y;
 y<-2;

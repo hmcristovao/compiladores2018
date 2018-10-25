@@ -13,7 +13,7 @@ public abstract class ComandoAltoNivel {
 	String getLexema() {
 	}
 	*/
-	abstract ComandoPrimitivo geraListaComandosPrimitivos();
+	abstract ListaComandosPrimitivos geraListaComandosPrimitivos();
     
 	
 	public abstract String toString();

@@ -7,13 +7,11 @@ public class PrimitivoGoto extends ComandoPrimitivo{
 		this.label = label;
 	}
 	
-	String geraCodigoDestino() {
-		// TODO Auto-generated method stub
-		return null;
+	String geraCodigoDestino() {		
+		return "goto " + this.label.geraCodigoDestino().replace(":", "");
 	}
 	
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "" + this.label;
 	}
 }

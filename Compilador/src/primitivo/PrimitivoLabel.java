@@ -9,11 +9,11 @@ public class PrimitivoLabel extends ComandoPrimitivo{
 	}
 	
 	public String geraCodigoDestino() {
-		return null;
+		return this.label + ":" + "\r\n";
 	}
 	
 	public String toString() {
-		return null;
+		return this.label + "\r\n";
 	}
 	
 	public static int getContador() {

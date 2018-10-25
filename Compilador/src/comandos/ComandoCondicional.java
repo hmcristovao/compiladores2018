@@ -2,7 +2,6 @@ package comandos;
 import geradorCodigo.*;
 import primitivo.*;
 import parser.*;
-import primitivo.ListaComandosPrimitivos;
 
 public class ComandoCondicional extends ComandoAltoNivel{
 	Expressao expressao;
@@ -18,8 +17,20 @@ public class ComandoCondicional extends ComandoAltoNivel{
 		return this.token + "/" + this.expressao.listaExpPosfixa + "/";
 	}	
 	
-	public ComandoPrimitivo geraListaComandosPrimitivos() {
-		return null;//TO-DO
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		
+		PrimitivoLabel labelFim = new PrimitivoLabel("fimSe");
+		
+		PrimitivoSeExpFalsoGoto deuRuim = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFim, this.listaComandosAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		
+		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
+		
+		lista.addComando(deuRuim);
+			
+		lista.addComando(labelFim);		
+		
+		return lista;
+		
 	}
 
 }

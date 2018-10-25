@@ -17,7 +17,13 @@ public class ComandoEntrada extends ComandoAltoNivel{
 		return this.token + "/" + this.simbolo.getNome();
 	}
 	
-	public ComandoPrimitivo geraListaComandosPrimitivos() {
-		return null;//TO-DO
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+
+		int ref = Compilador.tabela.consultaReferencia(simbolo.getNome());
+		ComandoPrimitivo prim = new PrimitivoEntrada(ref, simbolo.getTipo());
+		 ListaComandosPrimitivos lista = new ListaComandosPrimitivos();	
+		 lista.addComando(prim);
+		 
+		return lista;
 	}	
 }

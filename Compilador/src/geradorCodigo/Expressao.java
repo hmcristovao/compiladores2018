@@ -40,7 +40,7 @@ public class Expressao {
 			   }
 				   
 			   else if(op.getTipoDado().equals(TipoDado.STR)) {
-				   saida += "ldc" + op.token.image + "\r\n";
+				   saida += "ldc " + op.token.image + "\r\n";
 			   }
 		   }
 		   //Operadores

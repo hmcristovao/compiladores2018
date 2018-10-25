@@ -17,14 +17,18 @@ public class ComandoSaida extends ComandoAltoNivel{
 		return this.token+"/"+this.expressao.listaExpPosfixa;
 	}
 	
-	public ComandoPrimitivo geraListaComandosPrimitivos() {
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		String exp = this.expressao.geraCodigoDestino();	
 		Item item = this.expressao.listaExpPosfixa.get(0);
-		Operando op = (Operando) item;
+		Operando op = (Operando) item;		
 		
-		ComandoPrimitivo prim = new PrimitivoSaida(exp, op.getTipoDado()); 
+		//System.out.println(op.token.image);
 		
-		return prim;
-	 }
+		ComandoPrimitivo prim = new PrimitivoSaida(exp,op.getTipoDado()); 
+		 ListaComandosPrimitivos lista = new ListaComandosPrimitivos();	
+		 lista.addComando(prim);
+		 
+		return lista;
+		}
 	
 }

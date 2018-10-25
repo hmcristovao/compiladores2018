@@ -18,9 +18,16 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		return this.token +"/"+this.variavel.getNome() + "/" + this.expressao.listaExpPosfixa;
 	}
 	
-	 public ComandoPrimitivo geraListaComandosPrimitivos() {
+	 public ListaComandosPrimitivos geraListaComandosPrimitivos() {
+		
+		
+		 
 		 String exp = this.expressao.geraCodigoDestino();
-		ComandoPrimitivo prim = new PrimitivoAtribuicao(this.variavel.getReferencia(), this.variavel.getTipo(), exp); 
-		return prim;
+		
+		 ComandoPrimitivo prim = new PrimitivoAtribuicao(this.variavel.getReferencia(), this.variavel.getTipo(), exp); 
+		 ListaComandosPrimitivos lista = new ListaComandosPrimitivos();	
+		 lista.addComando(prim);
+		 
+		return lista;
 	 }
 }

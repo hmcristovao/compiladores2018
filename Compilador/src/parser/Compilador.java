@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import geradorCodigo.*;
 import comandos.*;
 import primitivo.*;
+import jasmin.*;
 
 public class Compilador implements CompiladorConstants {
 
@@ -19,17 +20,40 @@ public class Compilador implements CompiladorConstants {
       Compilador compilador = null;
 
       try {
-        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo08.spc"));
+        compilador = new Compilador(new FileInputStream("exemplosSPC/exemplo13.spc"));
 
-                listaCAN = new ListaComandosAltoNivel();
-                listaCP = new ListaComandosPrimitivos();
+                //listaCAN = new ListaComandosAltoNivel();
+                //listaCP = new ListaComandosPrimitivos();
+
         listaCAN = Compilador.one_line();
 
                 listaCP = listaCAN.geraListaComandosPrimitivosTotal();
 
+                String codigoDestino;
+
+                codigoDestino = listaCP.geraCodigoDestinoTotal();
+                BufferedWriter arqSaida;
+                try {
+                        arqSaida = new BufferedWriter(new FileWriter("prog_destino.j"));
+
+                        arqSaida.write(codigoDestino);
+                        arqSaida.close();
+                }
+                catch(IOException e) {
+              System.out.println("Problema no arquivo 'prog_destino.j'");
+        }
+        catch(Exception e) {
+              System.out.println(e.getMessage());
+        }
+
+                String arquivo[] = {"prog_destino.j"};
+                Main.main(arquivo);
                 //System.out.println(listaCAN);
-                System.out.println(listaCP);
+                //System.out.println(listaCP.geraCodigoDestinoTotal());
         //System.out.println(tabela);
+
+
+
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -312,7 +336,7 @@ public class Compilador implements CompiladorConstants {
   static final public void atribuicao(ListaComandosAltoNivel listaCAN) throws ParseException {
                                                    Expressao e; Token var,cmd; Simbolo simb = null; ComandoAltoNivel comando;
     var = jj_consume_token(VAR);
-                AcoesSemanticas.inicializacao(tabela, var.image);
+                AcoesSemanticas.inicializacao(var.image);
                 simb = new Simbolo(var.image,TipoDado.STR,tabela.marcador);
     cmd = jj_consume_token(ATRIB);
     e = expressao();
@@ -338,7 +362,7 @@ public class Compilador implements CompiladorConstants {
       throw new ParseException();
     }
     var = jj_consume_token(VAR);
-                AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
+                AcoesSemanticas.redeclaracao(var.image, simb, tipo);
                 comando = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ATRIB:
@@ -378,7 +402,7 @@ public class Compilador implements CompiladorConstants {
         jj_la1[13] = jj_gen;
         ;
       }
-                AcoesSemanticas.declaracao(tabela, var.image, simb, tipo);
+                AcoesSemanticas.redeclaracao(var.image, simb, tipo);
     }
     jj_consume_token(PV);
   }
@@ -413,6 +437,7 @@ public class Compilador implements CompiladorConstants {
  Simbolo simb = null; Token cmd, r; ComandoAltoNivel comando; ComandoEntrada cmdE;
     cmd = jj_consume_token(LEITURA);
     r = jj_consume_token(VAR);
+                AcoesSemanticas.declaracao(r.image);
                 simb = new Simbolo(r.image, TipoDado.STR,tabela.marcador);
                 comando = new ComandoEntrada(simb ,cmd);
 

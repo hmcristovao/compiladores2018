@@ -4,7 +4,7 @@ enquanto (a=0)
 
    exibe "Digite um valor: ";
    le  valor;
-
+   
    soma <- soma + valor;
    cont <- cont + 1;
 

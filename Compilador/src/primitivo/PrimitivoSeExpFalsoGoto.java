@@ -14,13 +14,18 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 	}
 	
 	String geraCodigoDestino() {
-		// TODO Auto-generated method stub
-		return null;
+		String corpo = this.expDestinoAssembler + "dconst_0 \r\n" + "dcmpg \r\n" + "ifeq " + 
+						this.labelfalse;
+		
+		for(int i=0; i<this.listaComandosPrimitivosTrue.listaComandosPrimitivos.size(); i++) {
+			corpo += this.listaComandosPrimitivosTrue.listaComandosPrimitivos.get(i).geraCodigoDestino();
+		}
+		
+		return corpo;
 	}
 	
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "" + this.expDestinoAssembler;
 	}
 
 }
