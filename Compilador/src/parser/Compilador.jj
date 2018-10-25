@@ -25,7 +25,7 @@ public class Compilador {
             
       try {
        	 
-         compilador = new Compilador(new FileInputStream("./src/apoio/exemplo14.spc2"));
+         compilador = new Compilador(new FileInputStream("./src/apoio/" + Config.nomeArquivo + Config.extensaoFonte));
 
          ListaComandosAltoNivel lista = new ListaComandosAltoNivel();
          ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
@@ -33,12 +33,15 @@ public class Compilador {
          Compilador.inicio(lista);
 
          listaComandosPrimitivos = lista.geraListaComandoPrimitivosCompleta();
-		 System.out.println(listaComandosPrimitivos);
-         
-         System.out.println("");
-        // Tabela.imprimeTabela();
+		 System.out.println(listaComandosPrimitivos.geraCodigoDestinoCompleto());
 
-        System.out.println(lista);
+		 CodigoDestino codigoDestino = new CodigoDestino();
+		 codigoDestino.geraArquivo("./src/apoio/" + Config.nomeArquivo + Config.extensaoCodigoDestino, listaComandosPrimitivos);
+
+         //System.out.println("");
+         //Tabela.imprimeTabela();
+
+        //System.out.println(lista);
 
       }
       catch(FileNotFoundException e)
@@ -118,51 +121,56 @@ Expressao iniciaExpressao():
 }
 
 void expressao(Expressao exp):
-{Token t ;TipoOperador operador = null;}
+{Token t ; Item item = null;}
 {
 	 termo(exp)(t=< OU > termo(exp)
 	  {
-	 	exp.addListaExpPosFixa(operador.OU, t.image);	 	
+	    item = new Operador(TipoOperador.OU,t);
+	 	exp.addListaExpPosFixa(item);	 	
 	 }
 	 )*
 		
 }
 
 void  termo(Expressao exp):
-{Token t; TipoOperador operador = null;}
+{Token t; Item item = null;}
 {
   	termo1(exp) (t=< IGUAL > termo1(exp)
   	{
-	 	exp.addListaExpPosFixa(operador.IGUAL, t.image);
+  	  	item = new Operador(TipoOperador.IGUAL,t);
+	 	exp.addListaExpPosFixa(item);
   	}
   	)?
 }
 
 void termo1(Expressao exp):
-{Token t; TipoOperador operador = null;}
+{Token t; Item item = null;}
 {
   	termo2(exp) (t=< CONCAT > termo2(exp)
   	{
-  		exp.addListaExpPosFixa(operador.CONCAT, t.image);
+  	  	item = new Operador(TipoOperador.CONCAT,t);
+  		exp.addListaExpPosFixa(item);
   	}
   	)*
 } 
 void termo2(Expressao exp):
-{Token t; TipoOperador operador;}
+{Token t; TipoOperador operador; Item item = null;}
 {
   	termo3(exp) ((t=< SOMA > {operador = TipoOperador.SOMA;} | t=< SUB > {operador = TipoOperador.SUB;}) termo3(exp)
   	{
-  		exp.addListaExpPosFixa(operador, t.image);
+  	  	item = new Operador(operador,t);
+  		exp.addListaExpPosFixa(item);
   	}
   	)*
 }
 
 void termo3(Expressao exp):
-{Token t; TipoOperador operador;}
+{Token t; TipoOperador operador; Item item = null;}
 {
    termo4(exp) ((t=< MUL > {operador = TipoOperador.MUL;} | t=< DIV > {operador = TipoOperador.DIV;}) termo4(exp)
    {
-     	exp.addListaExpPosFixa(operador, t.image);
+     	item = new Operador(operador,t);
+     	exp.addListaExpPosFixa(item);
    }
   	)*
 }
@@ -171,30 +179,35 @@ void termo3(Expressao exp):
 void termo4(Expressao exp):
 {
 	Token var, entrada, sinal;
-	TipoElemento tipo = null;
+	Item item = null;
 }
 {
  <AP> expressao(exp) <FP> 
 |entrada=<NUM>
 {
-  	exp.addListaExpPosFixa(TipoElemento.CTE, entrada.image);
+  	item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, entrada);
+  	exp.addListaExpPosFixa(item);
 } 
 |<SOMA>entrada=<NUM>
 {
-  	exp.addListaExpPosFixa(TipoElemento.CTE, entrada.image);
+  	item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, entrada);
+  	exp.addListaExpPosFixa(item);
 }
 |sinal=<SUB>entrada=<NUM>
 {
-  	exp.addListaExpPosFixa(TipoElemento.CTE, (sinal.image+entrada.image));
+  	item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, entrada, sinal);
+  	exp.addListaExpPosFixa(item);
 }
 |var=<VAR>
 {
   	Tabela.verificaVariavelDeclarada(var.image);
-  	exp.addListaExpPosFixa(TipoElemento.VAR, var.image);
+  	item = new Operando(tabela.tipoVariavel(var.image),TipoElemento.VAR, var);
+  	exp.addListaExpPosFixa(item);
 }
 |entrada=<STRING>
 {
-  	exp.addListaExpPosFixa(TipoElemento.CTE, entrada.image);
+  	item = new Operando(TipoDado.PALAVRA,TipoElemento.CTE, entrada);
+  	exp.addListaExpPosFixa(item);
 }
 
 }

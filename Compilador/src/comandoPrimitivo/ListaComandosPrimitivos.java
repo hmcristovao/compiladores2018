@@ -18,6 +18,20 @@ public class ListaComandosPrimitivos {
 		return this.listaComandosPrimitivos;
 	}
 	
+	public String geraCodigoDestinoCompleto() {
+		
+		String codigoDestinoCompleto = "";
+	
+		for(ComandoPrimitivo comamadoPrimitivo : this.listaComandosPrimitivos) {
+			String codigoDestino = comamadoPrimitivo.geraCodigoDestino();
+			
+			if(!codigoDestino.isEmpty()) {
+				codigoDestinoCompleto += codigoDestino + "\n";
+			}
+		}
+		return codigoDestinoCompleto;
+	}
+	
 	@Override
 	public String toString()
 	{

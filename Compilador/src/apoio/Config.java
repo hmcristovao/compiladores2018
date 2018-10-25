@@ -2,12 +2,11 @@ package apoio;
 
 public interface Config {
 	
-	String nomeArquivo = "exemplo";
+	String nomeArquivo = "exemplo15";
 
 	String extensaoFonte = ".spc2";
 
-	String extensaoPrimPassagem = "";
+	String extensaoCodigoDestino = ".j";
 
-	String extensaoSegPassagem = ""; 
 	
 }

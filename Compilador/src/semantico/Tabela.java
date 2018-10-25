@@ -39,18 +39,8 @@ public class Tabela {
 		System.out.println(tab);
 	}
 	
-	public static TipoDado tipoVariavel(String chave) {
-		TipoDado tipo = null;
-		
-		if(chave.equals("numero")) {
-			tipo = TipoDado.NUMERO;
-			
-		}
-		if(chave.equals("palavra")) {
-			tipo = TipoDado.PALAVRA;
-		}
-		
-		return tipo;
+	public static TipoDado tipoVariavel(String chave) {		
+		return tab.get(chave).getTipo();
 	}
 	
 	public static void incrementaMarcador(TipoDado tipo) {

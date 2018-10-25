@@ -25,8 +25,13 @@ public class ComandoSaida extends ComandoAltoNivel {
 		
 		for(Item item : expressao.getListaExpPosFixa()) {
 			
-			if(item.getTipo() == TipoDado.PALAVRA) {
-				tipo = TipoDado.PALAVRA;
+			if(item.getLexema().equals("Operando")) {
+				
+				Operando operando = (Operando)item;
+				
+				if(operando.getTipoDado() == TipoDado.PALAVRA) {
+					tipo = TipoDado.PALAVRA;
+				}
 			}
 			
 		}

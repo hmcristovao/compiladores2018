@@ -3,14 +3,21 @@ package comandoPrimitivo;
 public class PrimitivoLabel extends ComandoPrimitivo{
 	
 	String label;
-	static int contador;
+	static int contador = 0;
 	
 	public PrimitivoLabel(String label) {
-		this.label = label;		
+		this.label = label + "_" +  this.contador;	
+		this.contador++;
+		
 	}
 	
+	public String getLabel() {
+		return label;
+	}
+
 	public String geraCodigoDestino() {
-		return null;
+		String codigoDestino = ":" + this.label + "\n";
+		return codigoDestino;
 	}
 	
 	public String toString() {
