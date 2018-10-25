@@ -32,7 +32,7 @@ public class ComandoEnquanto extends ComandoAltoNivel {
 		PrimitivoLabel labelFalse = new PrimitivoLabel("False");
 		PrimitivoGoto primitivoGoto = new PrimitivoGoto(labelInicio);
 		ListaComandosPrimitivos listaTrue = this.listaComandosAltoNivelTrue.geraListaComandosPrimitivosTotal();
-		PrimitivoSeExpFalsoGoto seExpFalseGoto = new PrimitivoSeExpFalsoGoto("expAssembler", labelFalse, listaTrue);
+		PrimitivoSeExpFalsoGoto seExpFalseGoto = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFalse, listaTrue);
 		
 		ListaComandosPrimitivos primitivoEnquanto = new ListaComandosPrimitivos();
 		primitivoEnquanto.addComando(labelInicio);

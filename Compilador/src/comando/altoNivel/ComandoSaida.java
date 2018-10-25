@@ -1,10 +1,11 @@
 package comando.altoNivel;
 
 import comando.primitivo.ListaComandosPrimitivos;
-import comando.primitivo.PrimitivoEntrada;
 import comando.primitivo.PrimitivoSaida;
 import geradorCodigo.Expressao;
 import parser.Token;
+import semantico.Item;
+import semantico.Operando;
 import semantico.TipoDado;
 
 public class ComandoSaida extends ComandoAltoNivel {
@@ -25,13 +26,17 @@ public class ComandoSaida extends ComandoAltoNivel {
 
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivo() {
-	//	int referencia = this.variavel.getReferencia();
-//		TipoDado tipo = this.variavel.getTipo();
+		ListaComandosPrimitivos comandoSaida = new ListaComandosPrimitivos();
+		TipoDado tipo = TipoDado.NUM;
 		
-//		PrimitivoSaida comandoPrimitivo = new PrimitivoSaida(expressao);
-//		ListaComandosPrimitivos comandoSaida = new ListaComandosPrimitivos();
-//		comandoSaida.addComando(comandoPrimitivo);
-		
-		return null; //comandoSaida;
+		for(Item item : expressao.getListaExpPosfixa()) {
+			if(item.getLexema().equals("Operando")) {
+				Operando operando = (Operando)item;
+				if(operando.getTipoDado() == TipoDado.STR) tipo = TipoDado.STR;
+			}
+		}
+		PrimitivoSaida comando = new PrimitivoSaida(this.expressao.geraCodigoDestino(), tipo);
+		comandoSaida.addComando(comando);	
+		return comandoSaida;
 	}
 }

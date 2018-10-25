@@ -13,7 +13,7 @@ public class Simbolo {
           this.token = _token;
     	  this.nome = _token.image;
           this.tipo = _tipo;
-          this.referencia = _referencia;
+          this.referencia = marcador;
           if(_tipo == TipoDado.NUM) {
         	  Simbolo.set_marcador(Simbolo.get_marcador() + 2);
           }

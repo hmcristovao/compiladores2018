@@ -20,9 +20,7 @@ public class Compilador implements Config, CompiladorConstants {
                  Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
                  compilador.inicio(listaComandosAltoNivel);
                  listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
-             //    System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
 
-                // System.out.println(listaComandosPrimitivos.toString());
                  String listaTerceiraPassagem = listaComandosPrimitivos.geraCodigoDestinoCompleto();
                          GeradorCodigoDestino.geraCodigoAssembler(listaTerceiraPassagem, nomeArquivoSaidaTerceiraPassagem);
 
@@ -416,7 +414,7 @@ public class Compilador implements Config, CompiladorConstants {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x8000000,0x20000000,0x40000000,0xc00000,0xc00000,0x3000000,0x3000000,0xec4000,0x81ae0,0x81ae0,0x20000,0x20000,0x1800,0x10000000,0x20000,0x10000000,};
+      jj_la1_0 = new int[] {0x40000,0x100000,0x200000,0x6000,0x6000,0x18000,0x18000,0x58806000,0x10001ae0,0x10001ae0,0x4000000,0x4000000,0x1800,0x80000,0x4000000,0x80000,};
    }
 
   /** Constructor with InputStream. */

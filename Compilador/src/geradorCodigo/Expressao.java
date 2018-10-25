@@ -38,11 +38,8 @@ public class Expressao {
 		this.listaExpPosfixa.add(_item);
 	}
 	
-	 TipoDado getTipo() {
-		return null;
-	 }
 	 
-	 public String geraCodigoDestino(ListaComandosPrimitivos _lista) {
+	 public String geraCodigoDestino() {
 		 	String codigoDestino = "";
 		 	for(Item item : this.listaExpPosfixa) {
 		 		if(item.getTipo().equals("Operando")) {
@@ -54,9 +51,9 @@ public class Expressao {
 						if(operando.getTipoElemento() == TipoElemento.VAR){			
 							int referencia = Compilador.tabela.consultaReferencia(operando.getLexema());
 							if(referencia >= 4) {
-								codigoDestino += "dload " + referencia + "\n";
+								codigoDestino += "dload_" + referencia + "\n";
 							}else {
-								codigoDestino += "dload " + referencia + "\n";
+								codigoDestino += "dload_" + referencia + "\n";
 							}
 						}
 					}
@@ -69,7 +66,7 @@ public class Expressao {
 						
 						if(operando.getTipoElemento() == TipoElemento.VAR){			
 							int referencia = Compilador.tabela.consultaReferencia(operando.getLexema());						
-							codigoDestino += "aload " + referencia + "\n";
+							codigoDestino += "aload_" + referencia + "\n";
 						}
 					}
 				}
@@ -83,19 +80,16 @@ public class Expressao {
 					if(operador.getTipoOperador() == TipoOperador.DIV) codigoDestino += "ddiv\n";
 					if(operador.getTipoOperador() == TipoOperador.IGUAL) codigoDestino += "dcmpg\n";
 					if(operador.getTipoOperador() == TipoOperador.OU) codigoDestino += "ior\n";				
-					if(operador.getTipoOperador() == TipoOperador.CONCAT) {
-						String concat = listaOperandoString.poll();
-						concat += listaOperandoString.poll();
-		
-						codigoDestino += "ldc " + "\"" + concat.replaceAll("\"", "") + "\"" + "\n";
-						
-					}
+				
+					
 				}
 			}
 			return codigoDestino;
 		}
 
 	 public String toString() {
-		return this.listaExpPosfixa.toString();
+		String resultado = this.listaExpPosfixa.toString().replace("[", "");
+		resultado = resultado.replace("]","");
+		return resultado;
 	 }
 }

@@ -9,16 +9,17 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo {
 	String expDestinoAssembler;
 	
 	public PrimitivoAtribuicao(int _referencia, TipoDado _tipo, String _expDestinoAssembler) {
+		// TODO Auto-generated constructor stub
 		this.referencia = _referencia;
 		this.tipo = _tipo;
 		this.expDestinoAssembler = _expDestinoAssembler;
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	String geraCodigoDestino() {
+		System.out.println(expDestinoAssembler);
 		String codigoDestino = expDestinoAssembler;
-		if(referencia >= 4) codigoDestino += "dstore " + this.referencia + "\n";
+		if(referencia >= 4) codigoDestino += "dstore_" + this.referencia + "\n";
 		else {
 			codigoDestino += "dstore_" + this.referencia + "\n";
 		}
@@ -30,8 +31,4 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo {
 		// TODO Auto-generated method stub
 		return "Referência: " + this.referencia + " / " + "Tipo de dado: " + this.tipo;
 	}
-
-
-
-	//public abstract ListaComandosAltoNivel geraListaComandosAltoNivel();
 }

@@ -19,11 +19,11 @@ public class PrimitivoEntrada extends ComandoPrimitivo{
 								+ "dup\n" 
 								+ "getstatic java/lang/System.in Ljava/io/InputStream;\n"
 								+ "invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V\n";
-		if(tipo == TipoDado.NUM) codigoDestino+="invokevirtual java/util/Scanner.nextDouble()D\n";
+		if(tipo == TipoDado.NUM) codigoDestino += "invokevirtual java/util/Scanner.nextDouble()D\n";
 		else { 
 			codigoDestino+="invokevirtual java/util/Scanner.next()Ljava/lang/String;\n";	
 		}
-		if(referencia >= 4) codigoDestino += "dstore " + this.referencia + "\n";
+		if(referencia >= 4) codigoDestino += "dstore_" + this.referencia + "\n";
 		else {
 			codigoDestino += "dstore_" + this.referencia + "\n";
 		}		

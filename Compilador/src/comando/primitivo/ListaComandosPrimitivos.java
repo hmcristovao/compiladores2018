@@ -21,12 +21,9 @@ public class ListaComandosPrimitivos {
 		
 		String codigoDestinoCompleto = "";
 	
-		for(ComandoPrimitivo comamadoPrimitivo : this.listaComandoPrimitivo) {
-			String codigoDestino = comamadoPrimitivo.geraCodigoDestino();
-			
-			if(!codigoDestino.isEmpty()) {
-				codigoDestinoCompleto += codigoDestino + "\n";
-			}
+		for(ComandoPrimitivo comandoPrimitivo : this.listaComandoPrimitivo) {
+			String codigoDestino = comandoPrimitivo.geraCodigoDestino();
+			if(!codigoDestino.isEmpty()) codigoDestinoCompleto += codigoDestino + "\n";
 		}
 		return codigoDestinoCompleto;
 	}

@@ -1,0 +1,11 @@
+numero a;
+a <- 57;
+exibe a;
+
+palavra s;
+s <- "VARIAVEL STRING";
+exibe s;
+
+exibe 28.0;
+
+exibe "CONSTANTE STRING";

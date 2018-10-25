@@ -27,41 +27,41 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int PALAVRA = 12;
   /** RegularExpression Id. */
-  int CHAR = 13;
+  int SOMA = 13;
   /** RegularExpression Id. */
-  int AP = 14;
+  int SUB = 14;
   /** RegularExpression Id. */
-  int FP = 15;
+  int MUL = 15;
   /** RegularExpression Id. */
-  int PV = 16;
+  int DIV = 16;
   /** RegularExpression Id. */
-  int VIRGULA = 17;
+  int POT = 17;
   /** RegularExpression Id. */
-  int STRING = 18;
+  int OU = 18;
   /** RegularExpression Id. */
-  int VAR = 19;
+  int RECEBE = 19;
   /** RegularExpression Id. */
-  int DIGIT = 20;
+  int IGUAL = 20;
   /** RegularExpression Id. */
-  int NUM = 21;
+  int CONCAT = 21;
   /** RegularExpression Id. */
-  int SOMA = 22;
+  int CHAR = 22;
   /** RegularExpression Id. */
-  int SUB = 23;
+  int AP = 23;
   /** RegularExpression Id. */
-  int MUL = 24;
+  int FP = 24;
   /** RegularExpression Id. */
-  int DIV = 25;
+  int PV = 25;
   /** RegularExpression Id. */
-  int POT = 26;
+  int VIRGULA = 26;
   /** RegularExpression Id. */
-  int OU = 27;
+  int STRING = 27;
   /** RegularExpression Id. */
-  int RECEBE = 28;
+  int VAR = 28;
   /** RegularExpression Id. */
-  int IGUAL = 29;
+  int DIGIT = 29;
   /** RegularExpression Id. */
-  int CONCAT = 30;
+  int NUM = 30;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -81,15 +81,6 @@ public interface CompiladorConstants {
     "\"fimenquanto\"",
     "\"numero\"",
     "\"palavra\"",
-    "<CHAR>",
-    "\"(\"",
-    "\")\"",
-    "\";\"",
-    "\",\"",
-    "<STRING>",
-    "<VAR>",
-    "<DIGIT>",
-    "<NUM>",
     "\"+\"",
     "\"-\"",
     "\"*\"",
@@ -99,6 +90,15 @@ public interface CompiladorConstants {
     "\"<-\"",
     "\"=\"",
     "\"&\"",
+    "<CHAR>",
+    "\"(\"",
+    "\")\"",
+    "\";\"",
+    "\",\"",
+    "<STRING>",
+    "<VAR>",
+    "<DIGIT>",
+    "<NUM>",
   };
 
 }

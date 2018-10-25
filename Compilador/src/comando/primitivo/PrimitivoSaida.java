@@ -7,9 +7,8 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 	String expDestinoAssembler;
 	TipoDado tipo;
 	
-//	public PrimitivoSaida(int _referencia, TipoDado _tipo) {
-	public PrimitivoSaida(TipoDado _tipo) {		
-	//this.referencia = _referencia;
+	public PrimitivoSaida(String _expressao, TipoDado _tipo) {	
+		this.expDestinoAssembler = _expressao;
 		this.tipo = _tipo;
 		// TODO Auto-generated constructor stub
 	}

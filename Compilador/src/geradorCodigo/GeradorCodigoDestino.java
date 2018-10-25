@@ -25,8 +25,8 @@ public class GeradorCodigoDestino  {
                   arqSaida.write("return\r\n");
                   arqSaida.write(".end method\r\n");
                   arqSaida.write(".method public static main([Ljava/lang/String;)V\r\n");
-                  arqSaida.write(".limit stack 4 \r\n");  
-                  arqSaida.write(".limit locals" + (Compilador.tabela.getMarcador()+2) + "\r\n"); 
+                  arqSaida.write(".limit stack 400 \r\n");  
+                  arqSaida.write(".limit locals " + (Compilador.tabela.getMarcador()+2) + "\r\n"); 
                   arqSaida.write(_lista);
                   arqSaida.write("return\r\n");
                   arqSaida.write(".end method\r\n");

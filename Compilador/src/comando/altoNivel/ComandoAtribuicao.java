@@ -23,9 +23,8 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 	public ListaComandosPrimitivos geraListaComandosPrimitivo() {
 		int referencia = this.variavel.getReferencia();
 		TipoDado tipo = this.variavel.getTipo();
-		String expDestinoAssembler = expressao.toString();
 		
-		PrimitivoAtribuicao comandoPrimitivo = new PrimitivoAtribuicao(referencia, tipo, expDestinoAssembler);
+		PrimitivoAtribuicao comandoPrimitivo = new PrimitivoAtribuicao(referencia, tipo, this.expressao.geraCodigoDestino());
 		ListaComandosPrimitivos comandoAtribuicao = new ListaComandosPrimitivos();
 		comandoAtribuicao.addComando(comandoPrimitivo);
 		

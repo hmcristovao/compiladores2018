@@ -1,5 +1,0 @@
-numero a,b,c;
-
-enquanto (a = 2)
-	b <- 2;
-fimenquanto

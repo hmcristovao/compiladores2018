@@ -26,9 +26,7 @@ public class Compilador implements Config {
 	         Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
 	         compilador.inicio(listaComandosAltoNivel);
 	         listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
-	     //    System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
-			
-	        // System.out.println(listaComandosPrimitivos.toString());
+		
 	         String listaTerceiraPassagem = listaComandosPrimitivos.geraCodigoDestinoCompleto();
 			 GeradorCodigoDestino.geraCodigoAssembler(listaTerceiraPassagem, nomeArquivoSaidaTerceiraPassagem);
 
@@ -73,6 +71,18 @@ TOKEN [IGNORE_CASE] : {
   		<NUMERO: "numero" >  |
   		<PALAVRA: "palavra" >  
 }
+//----------OPERADORES---------
+TOKEN : {
+ 	< SOMA: "+" > |
+	< SUB: "-" > |
+	< MUL: "*" > |
+    < DIV: "/" > |
+    < POT: "^" > |
+    < OU: "OU" > |
+    < RECEBE: "<-"  > |
+    < IGUAL: "=" > |
+   	< CONCAT: "&" > 
+}
 //----------CARACTERES----------
 TOKEN : {
 		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
@@ -88,18 +98,7 @@ TOKEN : {
 	< #DIGIT: ["0"-"9"] > |  
     < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > 
 }
-//----------OPERADORES---------
-TOKEN : {
- 	< SOMA: "+" > |
-	< SUB: "-" > |
-	< MUL: "*" > |
-    < DIV: "/" > |
-    < POT: "^" > |
-    < OU: "OU" > |
-    < RECEBE: "<-"  > |
-    < IGUAL: "=" > |
-   	< CONCAT: "&" > 
-}
+
 
 //=========================================Gramática de Expressões==========================================
 	Expressao expressaoPrincipal() : {Expressao _expressao = new Expressao();}  
