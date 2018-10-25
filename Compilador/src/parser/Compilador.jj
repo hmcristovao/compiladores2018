@@ -12,6 +12,7 @@ import geradorCodigo.*;
 import apoio.*;
 import primeiraPassagem.*;
 import segundaPassagem.*;
+import jasmin.*;
 
 public class Compilador {
   
@@ -19,6 +20,7 @@ public class Compilador {
 	public static Tabela tabela = new Tabela();
 	public static ListaComandoAltoNivel listaMain = null;
 	public static ListaComandosPrimitivos listaPrimitiva = null;
+	public static CodigoDestino codigoDestino = null;
 
    public static void main(String args[])  throws ParseException  {
       Compilador compilador;
@@ -35,7 +37,8 @@ public class Compilador {
          listaPrimitiva=listaMain.geraListaComandosPrimitivosTotal();
          if (listaPrimitiva!=null)
          	System.out.println("\nComandos Primitivos:\n"+listaPrimitiva.toString());
-         System.out.println("\nTeste:\n"+listaPrimitiva.geraCodigoDestinoTotal());	
+         codigoDestino = new CodigoDestino(listaPrimitiva);	
+         System.out.println("\nCodigo Destino:\n"+listaPrimitiva.geraCodigoDestinoTotal());	
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -238,7 +241,8 @@ void termo4(Expressao pilha) : {Token t;Token t1;}
 Duvidas:
 Como Resolver o problema de expressões do tipo +2+-3 e etc;
 Arrumar Metodo de gerar comandos primitivos nas classes : ComandoSaida.
-Falta Terminar o metodo geraCodigoDestino de Expressao, pois tem alguns operadores não considerados (IGUAL,OR,CONCAT)
+Falta Terminar o metodo geraCodigoDestino de Expressao,
+pois tem alguns operadores não considerados (IGUAL,OR,CONCAT)
 */
 
 
