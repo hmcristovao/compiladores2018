@@ -15,7 +15,7 @@ import comando.altoNivel.*;
 import comando.primitivo.*;
 
 public class Compilador implements Config {
-	static Tabela tabela = new Tabela();
+	public static Tabela tabela = new Tabela();
 	
 	static ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
 
@@ -29,12 +29,12 @@ public class Compilador implements Config {
 	     //    System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
 			
 	        // System.out.println(listaComandosPrimitivos.toString());
-	        // String lista = geradorCodigo.
-			 GeradorCodigoDestino.geraCodigoAssembler(listaComandosPrimitivos.toString(), nomeArquivoSaidaTerceiraPassagem);
+	         String listaTerceiraPassagem = listaComandosPrimitivos.geraCodigoDestinoCompleto();
+			 GeradorCodigoDestino.geraCodigoAssembler(listaTerceiraPassagem, nomeArquivoSaidaTerceiraPassagem);
 
 	         System.out.println("\nTabela de Simbolos:");
 	 		 System.out.println(tabela);
-	 		 System.out.println("\nMarcador:\n" + tabela.get_marcador());
+	 		 System.out.println("\nMarcador:\n" + tabela.getMarcador());
 		 }
 	     catch(TokenMgrError e) {
 	        System.out.println("Erro lexico\n" + e.getMessage());
@@ -149,7 +149,7 @@ TOKEN : {
 		  }
 	      )*
 	}
-	void termo4(Expressao _expressao) : {Token token; Item item = null;} 
+	void termo4(Expressao _expressao) : {Token token, sinal; Item item = null;} 
 	{
 			< AP > expressao(_expressao) < FP >
 		 	|token = < VAR >
@@ -160,12 +160,19 @@ TOKEN : {
 		  	|token = < STRING >
 		  	{
      			_expressao.addItemPosfixo(new Operando(token, TipoDado.STR, TipoElemento.CTE));		
-		    } 
-		  	
-		  	|(< SOMA > | < SUB >)?  token = <NUM>
+		    }
+		    | token = <NUM>
 		  	{
 		  	  _expressao.addItemPosfixo(new Operando(token, TipoDado.NUM, TipoElemento.CTE));
-      		}	
+      		}
+		  	|< SOMA >  token = <NUM>
+		  	{
+		  	  _expressao.addItemPosfixo(new Operando(token, TipoDado.NUM, TipoElemento.CTE));
+      		}
+      		|sinal = < SUB >  token = <NUM>
+      		{
+		  	  _expressao.addItemPosfixo(new Operando(token, sinal,TipoDado.NUM, TipoElemento.CTE));
+      		}
 	}
 	
 //=========================================Gramática Completa==============================================

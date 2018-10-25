@@ -34,11 +34,11 @@ public class Tabela {
           }
       }
       
-      public int get_marcador() {
+      public int getMarcador() {
 		return marcador;
       }
       
-      public void set_marcador(int _marcador) {
+      public void setMarcador(int _marcador) {
 		this.marcador = _marcador;
       }
       

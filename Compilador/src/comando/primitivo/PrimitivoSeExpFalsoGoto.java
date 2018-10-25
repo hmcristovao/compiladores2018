@@ -16,8 +16,13 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 	
 	@Override
 	String geraCodigoDestino() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigoDestino = this.expDestinoAssembler
+									+ "dconst_0\n"
+									+ "dcmpg\n"
+									+ "ifeq "+this.labelFalse.getLabel() + "\n"
+									+ this.listaComandosPrimitivosTrue.geraCodigoDestinoCompleto();
+		
+		return codigoDestino;
 	}
 
 	@Override

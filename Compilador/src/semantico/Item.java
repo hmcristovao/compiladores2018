@@ -3,7 +3,7 @@ package semantico;
 import parser.Token;
 
 public abstract class Item {
-	private Token token;
+	public Token token;
 		
 	public Item(Token _token, TipoOperador _operador) {
 		   this.token = _token;
@@ -13,9 +13,8 @@ public abstract class Item {
 		   this.token = _token;
 		}
 
-	public String getLexema() {
-			return this.token.image;
-		}
+	public abstract String getTipo();
+	public abstract String getLexema();
 
 	public abstract String toString();
 }

@@ -13,6 +13,16 @@ public class Operador extends Item {
 		   this.tipoOperador = _operador;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public String getTipo() {
+		return "Operador";
+	}
+	public String getLexema() {
+		return token.image;
+	}
+	public TipoOperador getTipoOperador() {
+		return tipoOperador;
+	}
 
 	@Override
 	public String toString() {

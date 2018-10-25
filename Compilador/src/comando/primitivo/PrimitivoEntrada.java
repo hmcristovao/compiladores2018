@@ -15,8 +15,20 @@ public class PrimitivoEntrada extends ComandoPrimitivo{
 	
 	@Override
 	String geraCodigoDestino() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigoDestino = "new java/util/Scanner\n"
+								+ "dup\n" 
+								+ "getstatic java/lang/System.in Ljava/io/InputStream;\n"
+								+ "invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V\n";
+		if(tipo == TipoDado.NUM) codigoDestino+="invokevirtual java/util/Scanner.nextDouble()D\n";
+		else { 
+			codigoDestino+="invokevirtual java/util/Scanner.next()Ljava/lang/String;\n";	
+		}
+		if(referencia >= 4) codigoDestino += "dstore " + this.referencia + "\n";
+		else {
+			codigoDestino += "dstore_" + this.referencia + "\n";
+		}		
+		
+		return codigoDestino;
 	}
 
 	

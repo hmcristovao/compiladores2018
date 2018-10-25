@@ -16,8 +16,11 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 	
 	@Override
 	String geraCodigoDestino() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigoDestino = "getstatic java/lang/System/out Ljava/io/PrintStream;\n"
+				+ this.expDestinoAssembler
+				+ "invokevirtual java/io/PrintStream/println(D)V\n";
+		
+		return codigoDestino;
 	}
 	
 	@Override

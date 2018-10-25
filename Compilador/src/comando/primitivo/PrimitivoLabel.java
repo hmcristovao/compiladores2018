@@ -6,14 +6,17 @@ public class PrimitivoLabel extends ComandoPrimitivo{
 	static int contador = 1;
 	
 	public PrimitivoLabel(String _label) {
-		this.label = _label+PrimitivoLabel.contador;
-		// TODO Auto-generated constructor stub
+		this.label = _label+ "_" +PrimitivoLabel.contador;
 	}
 	
 	@Override
 	String geraCodigoDestino() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigoDestino = this.label + ":" + "\n";
+		return codigoDestino;
+	}
+	
+	public String getLabel() {
+		return label;
 	}
 	
 	@Override

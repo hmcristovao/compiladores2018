@@ -17,6 +17,20 @@ public class ListaComandosPrimitivos {
 		this.listaComandoPrimitivo.add(_comando);
 	}
 	
+	public String geraCodigoDestinoCompleto() {
+		
+		String codigoDestinoCompleto = "";
+	
+		for(ComandoPrimitivo comamadoPrimitivo : this.listaComandoPrimitivo) {
+			String codigoDestino = comamadoPrimitivo.geraCodigoDestino();
+			
+			if(!codigoDestino.isEmpty()) {
+				codigoDestinoCompleto += codigoDestino + "\n";
+			}
+		}
+		return codigoDestinoCompleto;
+	}
+	
 	public String toString() {
 		return listaComandoPrimitivo.toString();
 	}

@@ -14,15 +14,15 @@ public class AcoesSemanticas   {
 		else{
 			Simbolo _simbolo = null;
 			if(_tipo == TipoDado.NUM) {
-				 _simbolo = new Simbolo(_token, TipoDado.NUM, _tabela.get_marcador());	
+				 _simbolo = new Simbolo(_token, TipoDado.NUM, _tabela.getMarcador());	
 				 _tabela.inclui(_simbolo);
-				 _tabela.set_marcador(_tabela.get_marcador() + 2);	 
+				 _tabela.setMarcador(_tabela.getMarcador() + 2);	 
 			}	
 			else {
 				
-				_simbolo = new Simbolo(_token, TipoDado.STR, _tabela.get_marcador());
+				_simbolo = new Simbolo(_token, TipoDado.STR, _tabela.getMarcador());
 				_tabela.inclui(_simbolo);
-				_tabela.set_marcador(_tabela.get_marcador() + 1);
+				_tabela.setMarcador(_tabela.getMarcador() + 1);
 			}
 		}
 	} 

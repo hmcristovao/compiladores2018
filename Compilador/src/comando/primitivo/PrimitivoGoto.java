@@ -11,8 +11,8 @@ public class PrimitivoGoto extends ComandoPrimitivo{
 	
 	@Override
 	String geraCodigoDestino() {
-		// TODO Auto-generated method stub
-		return null;
+		String codigoDestino = "goto " + this.label.getLabel().replace(":", "") + "\n";		
+		return codigoDestino;
 	}
 	
 	@Override
