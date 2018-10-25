@@ -35,6 +35,7 @@ public class Compilador {
          listaPrimitiva=listaMain.geraListaComandosPrimitivosTotal();
          if (listaPrimitiva!=null)
          	System.out.println("\nComandos Primitivos:\n"+listaPrimitiva.toString());
+         System.out.println("\nTeste:\n"+listaPrimitiva.geraCodigoDestinoTotal());	
       }
       catch(FileNotFoundException e) {
          System.out.println("Erro: arquivo nao encontrado");
@@ -238,6 +239,8 @@ Duvidas:
 Como Resolver o problema de expressões do tipo +2+-3 e etc;
 Arrumar Metodo de gerar comandos primitivos nas classes : ComandoSaida.
 Sobre ordem dos ComandoAltoNivel na ListaComandoAltoNivel, importa? ( le e exibe);
+Falta Terminar os metodos geraCodigoDestino de PrimitivoGoto PrimitivoLabel e PrimitivoSeExpFalgoGoto
+Falta Terminar o metodo geraCodigoDestino de Expressao, pois tem alguns operadores não considerados
 */
 
 

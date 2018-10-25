@@ -6,7 +6,7 @@ public class PrimitivoLabel extends ComandoPrimitivo{
 	private static int contador=0;
 	
 	public PrimitivoLabel(String _label) {
-		this.label=_label;
+		this.label=_label + "_" + contador;
 		contador++;
 	}
 	

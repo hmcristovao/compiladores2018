@@ -21,7 +21,7 @@ public class ComandoCondicionalComposto extends ComandoCondicional{
 		PrimitivoLabel labelTrue = new PrimitivoLabel("LabelTrue");
 		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
 		PrimitivoGoto _goto = new PrimitivoGoto(labelTrue);
-		PrimitivoSeExpFalsoGoto primitivoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(" ",labelFalse,super.listaComandoAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		PrimitivoSeExpFalsoGoto primitivoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(super.expressao.geraCodigoDestino(),labelFalse,super.listaComandoAltoNivelTrue.geraListaComandosPrimitivosTotal());
 		lista.addComando(primitivoSeExpFalsoGoto);
 		lista.addComando(_goto);
 		lista.addComando(labelFalse);

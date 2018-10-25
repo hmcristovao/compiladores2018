@@ -20,7 +20,12 @@ public class ListaComandosPrimitivos {
 	}
 	
 	public String geraCodigoDestinoTotal() {
-		return null;
+		String saida="";
+		for(int i=0; i < listaComandosPrimitivos.size();i++) {
+			ComandoPrimitivo com = listaComandosPrimitivos.get(i);
+			saida+=com.geraCodigoDestino();
+		}
+		return saida;
 	}
 	
 	public String toString() {

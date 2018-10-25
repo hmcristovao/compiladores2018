@@ -21,7 +21,7 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
 		PrimitivoLabel labelGoto = new PrimitivoLabel("LabelGoto");
 		PrimitivoGoto _goto = new PrimitivoGoto(labelGoto);
-		PrimitivoSeExpFalsoGoto primitivoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(" ",labelFalse,this.listaComandoAltoNivelTrue.geraListaComandosPrimitivosTotal());
+		PrimitivoSeExpFalsoGoto primitivoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(),labelFalse,this.listaComandoAltoNivelTrue.geraListaComandosPrimitivosTotal());
 		lista.addComando(labelGoto);
 		lista.addComando(primitivoSeExpFalsoGoto);
 		lista.addComando(_goto);
