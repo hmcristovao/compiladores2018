@@ -3,7 +3,7 @@ package semantico;
 import java.util.HashMap;
 public class Tabela {
 	private HashMap<String,Simbolo> tab;
-	private static int index = 0;
+	private static int index = 1;
  
 	public Tabela() {
             this.tab = new HashMap<String,Simbolo>();
