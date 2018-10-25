@@ -10,8 +10,12 @@ public class PrimitivoLabel extends ComandoPrimitivo{
 		contador++;
 	}
 	
+	public String getLabel() {
+		return this.label;
+	}
+	
 	public String geraCodigoDestino() {
-		return null;
+		return this.label+":\r\n";
 	}
 
 	public String toString() {

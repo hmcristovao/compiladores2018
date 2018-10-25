@@ -132,8 +132,8 @@ ComandoAltoNivel comando(ListaComandoAltoNivel listaComandoAltoNivel):{
   		|_comando = atribuicao()
   		|_comando = se()
   		|_comando = enquanto()
-  		|_comando = le(listaComandoAltoNivel)
-  		|_comando = exibe(listaComandoAltoNivel)
+  		|le(listaComandoAltoNivel)
+  		|exibe(listaComandoAltoNivel)
   		) { return _comando; }
 }
 
@@ -184,14 +184,14 @@ ComandoEnquanto enquanto():{
   t = < ENQUANTO > < AP > exp = expressao() < FP > lista = programa() < FIMENQUANTO > { return new ComandoEnquanto(exp,lista,t);}
 }
 
-ComandoEntrada le(ListaComandoAltoNivel listaComandoAltoNivel) : { Token t; Token var;Token var1;}
+void le(ListaComandoAltoNivel listaComandoAltoNivel) : { Token t; Token var;}
 {
-	t = < LEITURA > var1 = < VAR > (< VIRGULA > var = < VAR >{ listaComandoAltoNivel.addComando( new ComandoEntrada(tabela.consultaSimbolo(var.image),t) ); })* < PV >{ return new ComandoEntrada(tabela.consultaSimbolo(var1.image),t); }
+	t = < LEITURA > var = < VAR > { listaComandoAltoNivel.addComando( new ComandoEntrada(tabela.consultaSimbolo(var.image),t) ); } (< VIRGULA > var = < VAR >{ listaComandoAltoNivel.addComando( new ComandoEntrada(tabela.consultaSimbolo(var.image),t) ); })* < PV >
 }
 
-ComandoSaida exibe(ListaComandoAltoNivel listaComandoAltoNivel) : {Token t; Expressao exp; Expressao exp1; }
+void exibe(ListaComandoAltoNivel listaComandoAltoNivel) : {Token t; Expressao exp; }
 {
-   t= < EXIBE > exp1 = expressao() (< VIRGULA >exp = expressao() { listaComandoAltoNivel.addComando( new ComandoSaida(exp,t) ); })* < PV >{ return new ComandoSaida(exp1,t); }
+   t= < EXIBE > exp = expressao() { listaComandoAltoNivel.addComando( new ComandoSaida(exp,t) ); } (< VIRGULA >exp = expressao() { listaComandoAltoNivel.addComando( new ComandoSaida(exp,t) ); })* < PV >
 }
 
 Expressao expressao() : {Expressao pilha = new Expressao();}
@@ -238,9 +238,7 @@ void termo4(Expressao pilha) : {Token t;Token t1;}
 Duvidas:
 Como Resolver o problema de expressões do tipo +2+-3 e etc;
 Arrumar Metodo de gerar comandos primitivos nas classes : ComandoSaida.
-Sobre ordem dos ComandoAltoNivel na ListaComandoAltoNivel, importa? ( le e exibe);
-Falta Terminar os metodos geraCodigoDestino de PrimitivoGoto PrimitivoLabel e PrimitivoSeExpFalgoGoto
-Falta Terminar o metodo geraCodigoDestino de Expressao, pois tem alguns operadores não considerados
+Falta Terminar o metodo geraCodigoDestino de Expressao, pois tem alguns operadores não considerados (IGUAL,OR,CONCAT)
 */
 
 
