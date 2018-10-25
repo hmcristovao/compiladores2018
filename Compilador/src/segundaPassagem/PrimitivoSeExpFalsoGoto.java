@@ -14,9 +14,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 	
 	public String geraCodigoDestino() {
 		String saida = this.expDestinoAssembler;
-		saida+="dconst_0\r\n";
-		saida+="dcmpg\r\n";
-		saida+="ifeq " + this.labelFalse.getLabel() + "\r\n";
+		saida+="ifne " + this.labelFalse.getLabel() + "\r\n";
 		saida+=this.listaComandosPrimitivosTrue.geraCodigoDestinoTotal();
 		return saida;
 	}

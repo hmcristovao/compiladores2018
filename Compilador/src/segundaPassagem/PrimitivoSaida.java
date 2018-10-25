@@ -16,7 +16,10 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 		String saida="";
 		saida += "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n";
 		saida += this.expDestinoAssembler;
-		saida += "invokevirtual java/io/PrintStream/println(D)V\r\n";
+		if( tipo == TipoDado.NUMERO )
+			saida += "invokevirtual java/io/PrintStream/println(D)V\r\n";
+		else if( tipo == TipoDado.PALAVRA )
+			saida+= "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n";
 		return saida;
 	}
 

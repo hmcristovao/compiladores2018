@@ -4,11 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import segundaPassagem.ListaComandosPrimitivos;
-
 public class CodigoDestino {
-	//private String codigoDestino;
-	public CodigoDestino(ListaComandosPrimitivos listaComandos) {
+	public CodigoDestino(String codigoDestino) {
         BufferedWriter arqSaida;
         try {
               arqSaida = new BufferedWriter(new FileWriter("prog_destino.j"));
@@ -25,7 +22,7 @@ public class CodigoDestino {
               arqSaida.write(".method public static main([Ljava/lang/String;)V\r\n");
               arqSaida.write(".limit stack 4\r\n");  
               arqSaida.write(".limit locals 100\r\n"); // máximo de variáveis locais (deve ser calculado)
-              arqSaida.write(listaComandos.geraCodigoDestinoTotal());
+              arqSaida.write(codigoDestino);
               arqSaida.write("return\r\n");
               arqSaida.write(".end method\r\n");
               arqSaida.close();

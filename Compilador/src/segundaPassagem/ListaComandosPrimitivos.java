@@ -2,8 +2,6 @@ package segundaPassagem;
 
 import java.util.LinkedList;
 
-import primeiraPassagem.ComandoAltoNivel;
-
 public class ListaComandosPrimitivos {
 	private LinkedList<ComandoPrimitivo> listaComandosPrimitivos;
 	

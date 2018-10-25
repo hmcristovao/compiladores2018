@@ -7,14 +7,20 @@ import semantico.*;
 public class Expressao {
 	public LinkedList<Item> expressaoInfixa;
 	public LinkedList<Item> expressaoPosfixa;
-	
+	public TipoDado tipoDado;
 	public Expressao() {
 		expressaoInfixa  = new LinkedList<Item>();
 		expressaoPosfixa  = new LinkedList<Item>();
+		tipoDado = TipoDado.NUMERO;
 		
 	}
 	
 	public void addItemPoxfixo(Item novo) {
+		if(tipoDado == TipoDado.NUMERO && novo instanceof Operando) {
+			Operando op  = (Operando)novo;
+			tipoDado = op.getTipoDado();
+		}
+			
 		expressaoPosfixa.add(novo);
 	}
 	
@@ -25,6 +31,10 @@ public class Expressao {
 	
 	public void imprime() {
 		System.out.println(this.expressaoPosfixa);
+	}
+	
+	public TipoDado getTipoDado() {
+		return tipoDado;
 	}
 	
 	public String geraCodigoDestino() {
@@ -41,9 +51,9 @@ public class Expressao {
 				else if ( op.getTipoOperador() == TipoOperador.DIV )
 					saida+="ddiv\r\n";
 				else if ( op.getTipoOperador() == TipoOperador.IGUAL )
-					saida+="igual";
+					saida+="dcmpg\r\n";
 				else if ( op.getTipoOperador() == TipoOperador.OR )
-					saida+="ou";
+					saida+="ior\r\n";
 			}else if (this.expressaoPosfixa.get(i) instanceof Operando){
 				Operando op = (Operando)this.expressaoPosfixa.get(i);
 				if( op.getTipoElemento() == TipoElemento.CTE) {
