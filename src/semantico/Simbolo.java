@@ -9,30 +9,21 @@ public class Simbolo {
     private TipoDado tipo;
     private int referencia;
 
+    public Simbolo(Token token, TipoDado tipo) {
+        this.nome = token.image;
+    	this.token = token;
+        this.tipo = tipo;
+    }
+    
     public Simbolo(Token token, TipoDado tipo, int referencia) {
         this.nome = token.image;
     	this.token = token;
         this.tipo = tipo;
         this.referencia = referencia;
     }
-    
-    public Simbolo(String _nome, Token token, TipoDado tipo, int referencia) {
-        this.nome = _nome;
-    	this.token = token;
-        this.tipo = tipo;
-        this.referencia = referencia;
-    }
 
     public String getLexema() {
-        return null;
-    }
-
-    public String getNome() {
-        return this.nome;
-    }
-
-    public int getReferencia() {
-        return this.referencia;
+    	return this.token.image;
     }
 
     public TipoDado getTipo() {
@@ -43,15 +34,18 @@ public class Simbolo {
         this.referencia = referencia;
     }
 
-    @Override
+	public int getReferencia() {
+		return referencia;
+	}
+	
+
+	public String getNome() {
+		return nome;
+	}
+
     public String toString() {
-
-        return "\nNome:" + this.getNome() + "\tToken: " + this.token.image 
-        	 + "\tTipo:" + this.getTipo() + "\tReferência:" + this.getReferencia();
+        return "\nNome:" + this.getNome() + "\tTipo:" + this.getTipo() + "\tReferencia:" + this.getReferencia();
     }
 
-    public void setTipo(TipoDado tipo) {
-        this.tipo = tipo;
-    }
 
 }

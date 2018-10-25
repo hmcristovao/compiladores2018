@@ -3,7 +3,7 @@ package semantico;
 public enum TipoDado {
     NUM,
     STR;
-
+	
     public static TipoDado getTipoDado(TipoDado _tipo) {
         if (_tipo.equals(NUM)) return NUM;
         else return STR;

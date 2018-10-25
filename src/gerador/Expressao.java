@@ -2,38 +2,30 @@ package gerador;
 
 import java.util.LinkedList;
 
-import semantico.Item;
-import semantico.Operador;
-import semantico.Operando;
+import parser.Compilador;
+import semantico.Simbolo;
 import semantico.TipoDado;
 
 public class Expressao {
+	public LinkedList<Item> expressaoInfixa;
+	public LinkedList<Item> expressaoPosfixa;
+	private static Integer contLabel = 0;
+	
 
-    private LinkedList<Item> expressaoInfixa;
-    private LinkedList<Item> expressaoPosfixa;
-
-    public Expressao() {
-        expressaoInfixa = new LinkedList<Item>();
+	public Expressao() {
+		expressaoInfixa = new LinkedList<Item>();
         expressaoPosfixa = new LinkedList<Item>();
-    }
-
-    public LinkedList<Item> getListaExpressaoInFixa() {
-        return this.expressaoInfixa;
-    }
-
-    public void setListaExpressaoInfixa(LinkedList<Item> listaExpInfixa) {
-        this.expressaoInfixa = listaExpInfixa;
-    }
-
-    public LinkedList<Item> getListaExpressaoPosFixa() {
-        return this.expressaoPosfixa;
-    }
-    
-
-    public void setListaExpressaoPosFixa(LinkedList<Item> listaExpPosFixa) {
-        this.expressaoPosfixa = listaExpPosFixa;
-    }
-
+		
+	}
+	
+	public LinkedList<Item> getExpressaoInfixa(){
+		return this.expressaoInfixa;
+	}
+	
+	public LinkedList<Item> getExpressaoPosfixa(){
+		return this.expressaoPosfixa;
+	}
+	
     public void addItemInfixo(Item _item) {
         expressaoInfixa.add(_item);
     }
@@ -42,50 +34,82 @@ public class Expressao {
         expressaoPosfixa.add(_item);
     }
     
-    //  Une a segunda exp a primeira, retorna a primeira contendo as duas
-    public Expressao concatExpressoes(Expressao _exp1, Expressao _exp2) {
-    	_exp1.expressaoInfixa.addAll(_exp2.expressaoInfixa);
-       	_exp1.expressaoPosfixa.addAll(_exp2.expressaoPosfixa);
-    	return _exp1;
+    public TipoDado getTipoDado() {
+    	return null;
     }
-
+    
+    
     public String geraCodigoDestino() {
-        return null;
-    }
+    	String concatenacao = "";
+        String codigoCodigoDestino = "";
+        
+        for(Item item : this.getExpressaoPosfixa()) {
+        	if (item instanceof Operador) {
+        		Operador op = (Operador) item;
+        		
+        		if(op.getTipoOperador() == TipoOperador.ADD) {
+        			codigoCodigoDestino += "dadd\n";
+        		}
+        		else if (op.getTipoOperador() == TipoOperador.SUB) {
+        			codigoCodigoDestino += "dsub\n";
+        		}
+        		else if (op.getTipoOperador() == TipoOperador.MUL) {
+        			codigoCodigoDestino += "dmul\n";
+        		}
+        		else if (op.getTipoOperador() == TipoOperador.DIV) {
+        			codigoCodigoDestino += "ddiv\n";
+        		}
+        		else if (op.getTipoOperador() == TipoOperador.OU) {
+        			codigoCodigoDestino += "ior\n";
+        		}
+        		else if (op.getTipoOperador() == TipoOperador.IGUAL) {
+        			codigoCodigoDestino += "dcmpg\n";
+        			codigoCodigoDestino+="ifeq LABEL_0"+contLabel+ "\r\n";
+        			codigoCodigoDestino+="dconst_0 \r\n";
+        			codigoCodigoDestino+="goto LABEL_0"+(contLabel+1) +"\r\n";
+        			codigoCodigoDestino+= ("LABEL_0"+contLabel + ":\r\n");
+        			codigoCodigoDestino+="dconst_1 \r\n";
+        			codigoCodigoDestino+="LABEL_0"+(contLabel+1) + ":\r\n";
+        			contLabel+=2;
+        		}
+        		else if (op.getTipoOperador() == TipoOperador.CONCAT) {
+        			codigoCodigoDestino += "";
+        		}
+        	}
+        	else if (item instanceof Operando ) {
+        		Operando op = (Operando) item;
+        		
+        		if(op.getTipoElemento() == TipoElemento.CTE) {
+        			if(op.getTipoDado() == TipoDado.NUM) {
+        				Double aux = Double.parseDouble(op.getLexema());
+        				codigoCodigoDestino += "ldc2_w " +aux+"\r\n";
+        			}
+        			else if (op.getTipoDado() == TipoDado.STR) {
+        				String aux = op.getLexema();
+        				codigoCodigoDestino += "ldc "+aux+"\r\n";
+        				
+        			}
+        		}
+        		else if(op.getTipoElemento() == TipoElemento.VAR) {
+        			int referencia = Compilador.tabela.consultaReferencia(op.getLexema());
+        			if(op.getTipoDado() == TipoDado.NUM) {
+        				codigoCodigoDestino += "dload "+referencia+"\r\n";
+        			}
+        			else if (op.getTipoDado() == TipoDado.STR) {
+        				codigoCodigoDestino += "aload "+referencia+"\r\n";
+        			}        			
+        		}        	
 
-    public String strExpPosfixa() {
-        String saida = "";
-        for (Item item : this.expressaoPosfixa) {
-            if(item instanceof Operador) saida += ((Operador) item).toString();
-            else  saida += ((Operando) item).toString();
+        	}
+        	
         }
-        return saida;
+        
+        return codigoCodigoDestino;
     }
-
-    @Override
+    
     public String toString() {
-        return "\n\tExpressao Posfixa: " + this.expressaoPosfixa.toString()
-        	 + "\n\tExpressao Infixa: " + this.expressaoInfixa.toString();
-    }
+        return "\nExpressao Posfixa: " + this.expressaoPosfixa.toString()
+        	 + "\nExpressao Infixa: " + this.expressaoInfixa.toString();
+}
 
-    /*
-
-    public TipoOperador getTipoOperador() {
-        return this.getListaExpressaoInfixa().get(0).getTipoOperador();
-    }
-
-    public void addListaPos(String valor, Tipo tipo) {
-        Item item = new Item();
-        item.setTipo(tipo);
-        item.setValor(valor);
-        expressaoPosfixa.add(item);
-    }
-
-    public void addListaInf(String valor, Tipo tipo) {
-        Item item = new Item();
-        item.setTipo(tipo);
-        item.setValor(valor);
-        expressaoInfixa.add(item);
-    }
-     */
 }
