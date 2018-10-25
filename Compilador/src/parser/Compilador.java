@@ -15,14 +15,16 @@ public class Compilador implements Config, CompiladorConstants {
 
         static ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
 
-        public static void main(String args[])  throws SemanticException  {
+        public static void main(String args[]) throws SemanticException, ParseException,  IOException  {
         try {
                  Compilador compilador = new Compilador(new FileInputStream(nomeArquivoFonte + extensaoFonte));
                  compilador.inicio(listaComandosAltoNivel);
                  listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandosPrimitivosTotal();
              //    System.out.println("\nAnalise lexica, sintatica e semantica sem erros!");
 
-                 System.out.println(listaComandosPrimitivos.toString());
+                // System.out.println(listaComandosPrimitivos.toString());
+                // String lista = geradorCodigo.
+                         GeradorCodigoDestino.geraCodigoAssembler(listaComandosPrimitivos.toString(), nomeArquivoSaidaTerceiraPassagem);
 
                  System.out.println("\u005cnTabela de Simbolos:");
                          System.out.println(tabela);
@@ -38,7 +40,10 @@ public class Compilador implements Config, CompiladorConstants {
                  System.out.println("Erro semantico\u005cn" + e.getMessage());
              }
              catch(FileNotFoundException e) {
-                 System.out.println("Erro: arquivo nao encontrado");
+                 System.out.println("Erro: arquivo de leitura nao encontrado");
+             }
+             catch(IOException e) {
+                         System.out.println("Erro: erro no arquivo " + nomeArquivoSaidaTerceiraPassagem);
              }
    }
 

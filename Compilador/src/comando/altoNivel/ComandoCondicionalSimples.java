@@ -1,7 +1,6 @@
 package comando.altoNivel;
 
 import comando.primitivo.ListaComandosPrimitivos;
-import comando.primitivo.PrimitivoGoto;
 import comando.primitivo.PrimitivoLabel;
 import comando.primitivo.PrimitivoSeExpFalsoGoto;
 import geradorCodigo.Expressao;

@@ -1,0 +1,2 @@
+numero a;
+le a;

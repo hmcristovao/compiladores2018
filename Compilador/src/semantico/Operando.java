@@ -14,11 +14,11 @@ public class Operando extends Item {
 		   this.tipoElemento = _tipoElemento;
 		}
 
-	TipoDado getTipoDado() {
+	public TipoDado getTipoDado() {
 		return tipoDado;
 	}
 
-	TipoElemento get_tipoElemento() {
+	public TipoElemento get_tipoElemento() {
 		return tipoElemento;
 	}
 
