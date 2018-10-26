@@ -15,25 +15,20 @@ public class ComandoEnquanto extends ComandoAltoNivel
 		this.listaComandosAltoNivelTrue = _listaTrue;
 	}
 
-/*	public ListaComandosPrimitivos geraListaComandosPrimitivos()
-	{
-
-	}*/
-
 	@Override
 	public String toString()
 	{
-		return "<" + this.getLexema() + "," + this.getExpressao() + ", " + this.getListaComandosAltoNivelTrue() + ">";
+		return "<" + this.getLexema() + "," + this.getExpressao() + ", " + this.getListaComandosAltoNivelTrue() + ">\n";
 	}
 
 	public Expressao getExpressao()
 	{
-		return expressao;
+		return this.expressao;
 	}
 
 	public ListaComandosAltoNivel getListaComandosAltoNivelTrue() 
 	{
-		return listaComandosAltoNivelTrue;
+		return this.listaComandosAltoNivelTrue;
 	}
 
 	@Override
@@ -45,7 +40,7 @@ public class ComandoEnquanto extends ComandoAltoNivel
 		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
 		PrimitivoLabel labelInicio = new PrimitivoLabel("LabelInicio");
 		PrimitivoGoto labelGoto =  new PrimitivoGoto(labelInicio);
-		PrimitivoSeExpFalsoGoto seExpFalseGoto = new PrimitivoSeExpFalsoGoto(labelFalse, "expDestAssemb", listaCmdPriTrue);
+		PrimitivoSeExpFalsoGoto seExpFalseGoto = new PrimitivoSeExpFalsoGoto(labelFalse, this.getExpressao().geraCodigoDestino(), listaCmdPriTrue);
 		listaCmdEnqt.addComando(labelInicio);
 		listaCmdEnqt.addComando(seExpFalseGoto);
 		listaCmdEnqt.addComando(labelGoto);

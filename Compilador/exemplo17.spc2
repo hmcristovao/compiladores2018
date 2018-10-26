@@ -1,0 +1,6 @@
+palavra a;
+numero x;
+le x;
+exibe x + 15 + 2;
+se ( x = 2 )
+fim-se

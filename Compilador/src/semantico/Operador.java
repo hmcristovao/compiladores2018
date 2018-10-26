@@ -11,6 +11,7 @@ public class Operador extends Item
 		super(_token);
 		this.tipoOperador = operador;
 	}
+	
 	public TipoOperador getTipoOperador()
 	{
 		return tipoOperador;

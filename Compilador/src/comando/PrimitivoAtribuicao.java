@@ -5,12 +5,10 @@ import semantico.TipoDado;
 public class PrimitivoAtribuicao extends ComandoPrimitivo
 {
 	private int referencia;
-
 	private TipoDado tipo;
-
-	private String expDestinoAssembler;
+	private StringBuilder expDestinoAssembler;
 	
-	public PrimitivoAtribuicao(int _referencia, TipoDado _tipo, String _expDestAssemb)
+	public PrimitivoAtribuicao(int _referencia, TipoDado _tipo, StringBuilder _expDestAssemb)
 	{
 		this.referencia = _referencia;
 		this.tipo = _tipo;
@@ -18,17 +16,34 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo
 	}
 	
 	@Override
-	public String geraCodigoDestino() 
+	public StringBuilder geraCodigoDestino() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder codigoDestino = new StringBuilder();
+		char separador, prefixoAtrib;
+		
+		separador = '_';
+		if ( this.getReferencia() > 3 ) separador = ' ';
+		
+		switch ( this.getTipo() )
+		{
+			case NUM:
+				prefixoAtrib = 'd';
+				break;
+			case STR:
+				prefixoAtrib = 'a';
+				break;
+			default:
+				prefixoAtrib = ' ';
+		}
+		
+		codigoDestino.append( this.getExpDestinoAssembler().toString() + prefixoAtrib + "store" + separador + this.getReferencia() + "\n");
+		return codigoDestino;
 	}
 
 	@Override
 	public String toString()
 	{
-		// TODO Auto-generated method stub
-		return "atrib("+this.getTipo()+";"+this.getReferencia()+")";
+		return "atrib("+this.getTipo() + ";" + this.getReferencia() + "; expDestinoAssembly )\n";
 	}
 
 	public TipoDado getTipo()
@@ -41,7 +56,7 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo
 		return this.referencia;
 	}
 	
-	public String getExpDestinoAssembler()
+	public StringBuilder getExpDestinoAssembler()
 	{
 		return this.expDestinoAssembler;
 	}

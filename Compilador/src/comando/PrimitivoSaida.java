@@ -1,27 +1,42 @@
 package comando;
 
+import parser.Compilador;
 import semantico.TipoDado;
 
 public class PrimitivoSaida extends ComandoPrimitivo
 {
 
-	private String expDestinoAssembler;
-
-	private TipoDado tipo; //tipo de dado da express�o?
-	//onde pega isso??? express�o nao possui tipo, teria ent�o que acessar um item da lista
-	//de itens da expressao e ver o tipo? mas qual item seria
+	private StringBuilder expDestinoAssembler;
+	private TipoDado tipo; 
 	
-	public PrimitivoSaida(String _expDestAssemb, TipoDado _tipo)
+	public PrimitivoSaida(StringBuilder _expDestAssemb, TipoDado _tipo)
 	{
 		this.expDestinoAssembler = _expDestAssemb;
 		this.tipo = _tipo;
 	}
 	
 	@Override
-	public String geraCodigoDestino()
+	public StringBuilder geraCodigoDestino()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder codigoDestino = new StringBuilder();
+		codigoDestino.append("getstatic java/lang/System/out Ljava/io/PrintStream;\r\n");
+		codigoDestino.append(this.getExpDestinoAssembler());
+		String paramExibicao = new String();
+		
+		switch( this.getTipo() )
+		{
+			case STR:
+				paramExibicao = "Ljava/lang/String;";
+				break;
+				
+			case NUM:
+				paramExibicao = "D";
+				break;
+		}
+		
+		codigoDestino.append("invokevirtual java/io/PrintStream/print(" + paramExibicao + ")V\r\n" );
+		
+		return codigoDestino;
 	}
 
 	@Override
@@ -29,7 +44,7 @@ public class PrimitivoSaida extends ComandoPrimitivo
 	{
 		// TODO Auto-generated method stub
 		//return this.expDestinoAssembler+"("+this.getTipo()+")";
-		return "saida(" + this.getTipo() + ")";
+		return "saida(" + this.getTipo() + ")\n";
 }
 	
 	
@@ -38,7 +53,7 @@ public class PrimitivoSaida extends ComandoPrimitivo
 		return this.tipo;
 	}
 	
-	public String getExpDestinoAssembler()
+	public StringBuilder getExpDestinoAssembler()
 	{
 		return this.expDestinoAssembler;
 	}

@@ -12,17 +12,19 @@ public class PrimitivoGoto extends ComandoPrimitivo
 	}
 	
 	@Override
-	public String geraCodigoDestino()
+	public StringBuilder geraCodigoDestino()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder codigoDestino = new StringBuilder();
+		codigoDestino.append("goto " + this.getLabel() + "\n");
+		
+		return codigoDestino;
 	}
 
 	@Override
 	public String toString() 
 	{
 		// TODO Auto-generated method stub
-		return "goto("+this.getLabel()+")";
+		return "goto("+this.getLabel()+")\n";
 	}
 	
 	public PrimitivoLabel getLabel()

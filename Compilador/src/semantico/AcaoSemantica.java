@@ -28,6 +28,14 @@ public class AcaoSemantica
 			Simbolo simbolo = new Simbolo( _token, _tipo );
 	  		_tabela.incluiSimbolo(simbolo);
 	  	}
-	 
     }
+	
+	public static void verificarTipoConcatenacao( Tabela _tabela, Token _tokenA, Token _tokenB )
+	{
+		TipoDado tpDadoA, tpDadoB ;
+		tpDadoA =  _tabela.consultaTipo( _tokenA.image );
+		tpDadoB =  _tabela.consultaTipo( _tokenB.image );
+		if ( tpDadoA != TipoDado.STR ||  tpDadoB != TipoDado.STR )
+			throw new ErroSemantico("Concatenação inválida: '" + _tokenA.image + "' é do tipo " + tpDadoA + " e  repetida na linha " + _tokenB.beginLine + "\n");
+	}
 }

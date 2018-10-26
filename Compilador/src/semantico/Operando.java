@@ -3,37 +3,36 @@ import parser.*;
 
 public class Operando extends Item
 {
-	private TipoDado tipoDado = null;
-	private TipoElemento tipoElemento = null;
+	private TipoDado tipoDado;
+	private TipoElemento tipoElemento;
 
-	public Operando(Token _token, TipoElemento elemento)
+//	public Operando(Token _token, TipoElemento elemento)
+//	{
+//		super(_token);
+//		this.tipoElemento = elemento;
+//	}
+	
+	public Operando(Token _token, TipoDado _dado, TipoElemento _tpElemento )
 	{
 		super(_token);
-		this.tipoElemento = elemento;
+		this.tipoDado = _dado;
+		this.tipoElemento = _tpElemento;
 	}
 	
-	public Operando(Token _token, TipoDado dado)
-	{
-		super(_token);
-		this.tipoDado = dado;
-	}
 	public TipoDado getTipoDado()
 	{
-		return tipoDado;
+		return this.tipoDado;
 
 	}
 
 	public TipoElemento getTipoElemento()
 	{
-		return tipoElemento;
-
+		return this.tipoElemento;
 	}
 
 	@Override
 	public String toString()
 	{
-		if(tipoElemento==null)
-			return "(" + this.getLexema() + ";" +  this.getTipoDado() + ")";	
-		return "(" + this.getLexema() + ";" +  this.getTipoElemento() + ")";
+		return "(" + this.getLexema() + ";" +  this.getTipoDado() + ";" +  this.getTipoElemento() + ")";
 	}
 }

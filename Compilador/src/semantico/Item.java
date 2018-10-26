@@ -11,7 +11,9 @@ public abstract class Item
 	{
 		this.token = _token;
 	}
-	public String getLexema() {
+	
+	public String getLexema() 
+	{
 		return this.token.image;
 	}
 

@@ -1,9 +1,0 @@
-numero a, b, x <-0;
-palavra s <- "Olá";
-s <- "hello";
-
-se (s = "vai") 
-	le a;
-	exibe a + 1;
-	x <- x + 1;
-fim-se

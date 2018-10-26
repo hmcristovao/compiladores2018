@@ -22,6 +22,7 @@ public class Simbolo
 	{
 		return this.token;
 	}
+	
 	public Simbolo(Token _token, TipoDado _tipo)
 	{
 		this.nome = _token.image;
@@ -52,6 +53,6 @@ public class Simbolo
 	@Override
 	public String toString()
 	{
-		return "Lexema : " + this.getLexema() + " Tipo Dado: " + this.getTipoDado() + " Referencia: "+this.getReferencia();
+		return "(" + this.getLexema() + "; " + this.getTipoDado() + "; Ref: " + this.getReferencia() + ")\n";
 	}
 }

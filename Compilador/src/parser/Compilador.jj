@@ -1,27 +1,29 @@
-options{  DEBUG_PARSER = false;  DEBUG_TOKEN_MANAGER = false;}PARSER_BEGIN(Compilador)package parser;import java.io.*;import apoio.*;import comando.*;import geradorCodigo.*;import tratamentoErro.*;import semantico.*;public class Compilador implements Config{  static public Tabela tabela;  static public ListaComandosAltoNivel listaComandosAltoNivel;  public static ListaComandosPrimitivos listaComandosPrimitivos =null;  public static StringBuilder codigoDestino;      public static void main(String args []) throws ParseException   {	Compilador compilador = null;	listaComandosAltoNivel = new ListaComandosAltoNivel();	codigoDestino = new StringBuilder();	tabela = new Tabela();/* Exemplo de StringBuilder	StringBuilder nomes = new StringBuilder();    nomes.append("Carlos>").append("Maria>").append("Jos�>").append("Renata");         System.out.println(nomes.toString());*/	try    {		PrintStream consoleSaida = new PrintStream(consoleArquivo);		System.setOut(consoleSaida);		System.setErr(consoleSaida);				compilador = new Compilador(new FileInputStream(nomeArquivo));        Compilador.inicio(listaComandosAltoNivel);//		System.out.println(listaComandosAltoNivel);
-		listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosTotal();		System.out.println(listaComandosPrimitivos);        System.out.println("\nExecucao finalizada com sucesso !\n");    }    catch(FileNotFoundException e)    {        System.err.println("Erro: Arquivo informado nao foi encontrado. \n");    }    catch(TokenMgrError e)    {        System.err.println("Erro lexico: " + e.getMessage());    }    catch(ParseException e)    {		System.err.println("Erro Sintatico: " + e.getMessage());    }    catch(ErroSemantico e)    {		System.err.println("Erro Semantico: " + e.getMessage());    }  }}PARSER_END(Compilador) SKIP : {" " | "\t" | "\r" | "\n"}//TOKENS DE COMANDOS TOKEN [IGNORE_CASE] :{  	< EXIBE: "exibe" >  |  	< LEITURA: "le" > | 	< SE: "se" > |    < FIMSE: "fim-se" > |    < ENQUANTO: "enquanto" > |    < FIMENQUANTO: "fim-enquanto" > }//TOKENS DE TipoDadoS TOKEN [IGNORE_CASE] :{ 	< NUMERO: "numero" >  | 	< PALAVRA: "palavra" >  }//----------CARACTERES----------TOKEN : {	< #CHAR: ["a"-"z"] | ["A" - "Z"] > |    	< AP: "(" > |    < FP: ")" > |	< PV: ";" > |	< VIRGULA: "," > |    < STRING: "\"" (~["\""])* "\"" > |   	< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > }//-----------NUMEROS-----------TOKEN :{  < #DIGIT: ["0"-"9"] > |    < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > }//----------TipoDadoOperadorES---------TOKEN :{  < SOMA: "+" > |  < SUB: "-" > |  < MUL: "*" > |  < DIV: "/" > |  < OU: "OR" > |  < ATRIB: "<-"  > |  < IGUAL: "=" > |  < CONCAT: "&" > }Expressao expressao( ): {Expressao exp = new Expressao();}
+options{  DEBUG_PARSER = false;  DEBUG_TOKEN_MANAGER = false;}PARSER_BEGIN(Compilador)package parser;import java.io.*;import apoio.*;import comando.*;import geradorCodigo.*;import tratamentoErro.*;import semantico.*;import jasmin.*;public class Compilador implements Config{  public static Tabela tabela;  public static ListaComandosAltoNivel listaComandosAltoNivel = null;  public static ListaComandosPrimitivos listaComandosPrimitivos = null;  public static String arquivo[] = { pacoteExemplos + nomeArquivoAssembler + extensaoSegPassagem };       public static void main(String args []) throws ParseException   {	Compilador compilador = null;	listaComandosAltoNivel = null;	tabela = null;		try    {		compilador = new Compilador(new FileInputStream( pacoteExemplos + nomeArquivo + extensaoFonte));		tabela = new Tabela();		listaComandosAltoNivel = Compilador.inicio();;		listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosTotal();
+		CodigoDestino.geraCodigoAssembler( listaComandosPrimitivos );				System.out.println("\nTABELA DE SÍMBOLOS:\n" + tabela +						   "\n\nCOMANDOS ALTO NÍVEL:\n" + listaComandosAltoNivel +						 		   "\n\nCOMANDOS PRIMITIVOS:\n" + listaComandosPrimitivos);
+				Main.main(arquivo);        System.out.println("\nExecucao finalizada com sucesso !\n");    }    catch(FileNotFoundException e)    {        System.err.println("Erro: Arquivo informado nao foi encontrado. \n");    }    catch(TokenMgrError e)    {        System.err.println("Erro lexico: " + e.getMessage());    }    catch(ParseException e)    {		System.err.println("Erro Sintatico: " + e.getMessage());    }    catch(ErroSemantico e)    {		System.err.println("Erro Semantico: " + e.getMessage());    }  }}PARSER_END(Compilador) SKIP : {" " | "\t" | "\r" | "\n"}//TOKENS DE COMANDOS TOKEN [IGNORE_CASE] :{  	< EXIBE: "exibe" >  |  	< LEITURA: "le" > | 	< SE: "se" > |    < FIMSE: "fim-se" > |    < ENQUANTO: "enquanto" > |    < FIMENQUANTO: "fim-enquanto" > }//TOKENS DE TipoDadoS TOKEN [IGNORE_CASE] :{ 	< NUMERO: "numero" >  | 	< PALAVRA: "palavra" >  }//----------TipoDadoOperadorES---------TOKEN :{  < SOMA: "+" > |  < SUB: "-" > |  < MUL: "*" > |  < DIV: "/" > |  < OU: "OR" > |  < ATRIB: "<-"  > |  < IGUAL: "=" > |  < CONCAT: "&" > }//----------CARACTERES----------TOKEN : {	< #CHAR: ["a"-"z"] | ["A" - "Z"] > |    	< AP: "(" > |    < FP: ")" > |	< PV: ";" > |	< VIRGULA: "," > |    < STRING: "\"" (~["\""])* "\"" > |  	< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > |
+   	< COMENTLINHA: "//" (~["\n"])* ("\n")? > |	< COMENTBLOCO: "/*" ( (~["*"])*| "*"(~["/"])+ )* "*/" >
+}//-----------NUMEROS-----------TOKEN :{  < #DIGIT: ["0"-"9"] > |    < NUM: (< DIGIT >)* (".")? (< DIGIT >)+ > }Expressao expressao( ): {Expressao exp = new Expressao();}
 {
-	posExpressao(exp)	{	  //System.out.println(exp.getExpressaoInfixa());	  return exp;	}
-}
+	posExpressao(exp) { return exp; }}
 
 void posExpressao(Expressao exp): { Token token = null; Item item  = null; }
 {
   (
-	termo(exp) ( token = < OU > { item = new Operador(token, TipoOperador.OU); exp.addItemInfixo(item);}	termo(exp) { item = new Operador(token, TipoOperador.OU); exp.addItemPosfixo(item); } )*
+	termo(exp)	(	  token = < OU >	  {	    item = new Operador(token, TipoOperador.OU);	    exp.addItemInfixo(item);	  }	  termo(exp)	  {	    item = new Operador(token, TipoOperador.OU);	    exp.addItemPosfixo(item);	  }	)*
   )
 }
 
 void termo(Expressao exp): {Token token = null; Item item  = null;}
 {
-	termo1(exp) ( token = < IGUAL > {item = new Operador(token, TipoOperador.IGUAL); exp.addItemInfixo(item);}	termo1(exp) {item = new Operador(token, TipoOperador.IGUAL); exp.addItemPosfixo(item);} )? 
+	termo1(exp)	(	  token = < IGUAL >	  {	    item = new Operador(token, TipoOperador.IGUAL);	    exp.addItemInfixo(item);	  }	  termo1(exp)	  {	    item = new Operador(token, TipoOperador.IGUAL);	    exp.addItemPosfixo(item);	  }	)? 
 }
 
 void termo1(Expressao exp): {Token token = null; Item item = null;}
 {
-	termo2(exp) (token = < CONCAT > {item = new Operador(token, TipoOperador.CONCAT); exp.addItemInfixo(item);}	termo2(exp) {item = new Operador(token, TipoOperador.CONCAT); exp.addItemPosfixo(item);})*
+	termo2(exp)	(	  token = < CONCAT >	  {	    item = new Operador(token, TipoOperador.CONCAT);	    exp.addItemInfixo(item);	  }	  termo2(exp)	  {	    item = new Operador(token, TipoOperador.CONCAT);	    exp.addItemPosfixo(item);	  }	)*
 }
 
-void termo2(Expressao exp): {Token token = null; Operador item = null; TipoOperador op = null;}
+void termo2(Expressao exp):{  Token token = null;  Operador item = null;  TipoOperador op = null;}
 {
 	termo3(exp) ((token = < SOMA > {op = TipoOperador.ADD;} |				  token = < SUB > {op = TipoOperador.SUB;}) {item = new Operador(token, op); exp.addItemInfixo(item);}				  termo3(exp) {item = new Operador(token, op); exp.addItemPosfixo(item);})*
   
@@ -29,82 +31,65 @@ void termo2(Expressao exp): {Token token = null; Operador item = null; TipoOpera
 
 void termo3(Expressao exp): {Token token = null; Operador item = null; TipoOperador op = null;}
 {
-	termo4(exp) ((token = < MUL > {op = TipoOperador.MUL;} |				  token = < DIV > {op = TipoOperador.DIV;}) { item = new Operador(token, op); exp.addItemInfixo(item); }	termo4(exp){ item = new Operador(token, op); exp.addItemPosfixo(item); })*
+	termo4(exp) ((token = < MUL > {op = TipoOperador.MUL;} |				  token = < DIV > {op = TipoOperador.DIV;}) { item = new Operador(token, op); exp.addItemInfixo(item); }	termo4(exp){ item = new Operador(token, op); exp.addItemPosfixo(item);  })*
   
 }
 
-void termo4(Expressao exp): {Token token = null, token_sinal = null; Operando item = null; Operador item2 = null; String sinal = "";}
+void termo4(Expressao exp):{  Token token = null, token_sinal = null;  Operando item = null;  Operador item_apresentacao = null;}
 {
-	< AP > expressao() < FP > | 
+	< AP > posExpressao( exp ) < FP > | 
   (
-  token = < NUM > {item = new Operando(token, TipoElemento.CTE);} | 
-  token_sinal = < SOMA > token = < NUM > {item = new Operando(token, TipoElemento.CTE); sinal ="+";} | 
-  token_sinal = < SUB > token = < NUM > {item = new Operando(token, TipoElemento.CTE); sinal = "-";} | 
-  token = < VAR > {AcaoSemantica.declaracaoPrevia(tabela, token); item = new Operando(token, TipoElemento.VAR);}| 
-  token = < STRING > {item = new Operando(token, TipoElemento.CTE);}
+	  token = < NUM > {item = new Operando(token, TipoDado.NUM, TipoElemento.CTE);} | 
+	  token_sinal = < SOMA > token = < NUM >	  {	    item = new Operando(token, TipoDado.NUM, TipoElemento.CTE );		item_apresentacao = new Operador(token_sinal, TipoOperador.ADD );		exp.addItemInfixo( item_apresentacao );	  } | 
+	  token_sinal = < SUB > token = < NUM >	  {	    token.image = token_sinal.image + token.image;	    item = new Operando(token, TipoDado.NUM, TipoElemento.CTE);	  } | 
+	  token = < VAR >	  {	    Compilador.tabela.declaracaoPrevia(token);		item = new Operando( token, Compilador.tabela.consultaTipo( token.image ), TipoElemento.VAR );	  }| 
+	  token = < STRING > {item = new Operando(token, TipoDado.STR, TipoElemento.CTE);}
   )
-  {
-    if(sinal=="")    {		exp.addItemPosfixo(item);		exp.addItemInfixo(item);    }
-    else if(sinal=="+")
-    {
-      item2 = new Operador(token_sinal, TipoOperador.ADD);
-      exp.addItemPosfixo(item2);
-      exp.addItemPosfixo(item);      exp.addItemInfixo(item2);      exp.addItemInfixo(item);
-    }
-    else if(sinal=="-")
-    {
-      item2 = new Operador(token_sinal, TipoOperador.SUB);
-      exp.addItemPosfixo(item2);
-      exp.addItemPosfixo(item);      exp.addItemInfixo(item2);      exp.addItemInfixo(item);
-    }
-  }
+  {	exp.addItemPosfixo(item);	exp.addItemInfixo(item);  }
 }
 
-void inicio(ListaComandosAltoNivel lista): {}
+ListaComandosAltoNivel inicio(): { ListaComandosAltoNivel lista = new ListaComandosAltoNivel();}
 {
-	programa(lista) < EOF >
+	programa(lista) < EOF > { return lista; }
 }
 
 void programa(ListaComandosAltoNivel lista): {}
 {
 	(comando(lista))*
-	  
 }
 
 void comando(ListaComandosAltoNivel lista): {}
 {
-	(	 atribuicao(lista) | declaracao() | se(lista) | enquanto(lista) | le(lista) | exibe(lista)
+	( atribuicao(lista) |	  declaracao(lista) |	  se(lista) |	  enquanto(lista) |	  le(lista) |	  exibe(lista)|	  < COMENTLINHA > |	  < COMENTBLOCO > 
 	)}
 
 void atribuicao(ListaComandosAltoNivel lista): {Token token; Expressao exp;}
 {
-	token = < VAR > { AcaoSemantica.declaracaoPrevia(tabela, token); } < ATRIB > exp = expressao() < PV >	{lista.addComando(new ComandoAtribuicao(tabela.consultaSimbolo(token.image), exp));}
+	token = < VAR > { Compilador.tabela.declaracaoPrevia(token); } < ATRIB > exp = expressao() < PV >	{ lista.addComando(new ComandoAtribuicao(tabela.consultaSimbolo(token.image), exp)); }
 }
 
-void declaracao(): {Token token; TipoDado tipo; TipoElemento tipo2;}
+void declaracao( ListaComandosAltoNivel lista ):{  Token token; TipoDado tpDado;  TipoElemento tpElemento;  Expressao expAtrib;}
 {
-	( < NUMERO > { tipo = TipoDado.NUM; } | < PALAVRA > { tipo = TipoDado.STR; } ) 
-  token = < VAR > { AcaoSemantica.criarVariavel(tabela, token, tipo); }
-  ( < ATRIB > expressao() { tipo2 = TipoElemento.CTE; } )?
-	(< VIRGULA > token = < VAR > { AcaoSemantica.criarVariavel(tabela, token, tipo); }
-  (< ATRIB > expressao() { tipo2 = TipoElemento.CTE; } )? )* < PV >	  
+  ( < NUMERO > { tpDado = TipoDado.NUM; } | < PALAVRA > { tpDado = TipoDado.STR; } ) 
+  token = < VAR > { Compilador.tabela.criarVariavel(token, tpDado); }
+  ( < ATRIB > expAtrib = expressao()  	{lista.addComando(new ComandoAtribuicao(tabela.consultaSimbolo(token.image), expAtrib )); }  )?
+  ( < VIRGULA > token = < VAR > { Compilador.tabela.criarVariavel(token, tpDado); }
+	  ( < ATRIB > expAtrib = expressao()	  	{ lista.addComando(new ComandoAtribuicao(tabela.consultaSimbolo(token.image), expAtrib )); }	  )?  )* < PV >	  
 }
 
-void se(ListaComandosAltoNivel lista): {Expressao exp; Token token; ListaComandosAltoNivel lista_se;}
-{  	{lista_se = new ListaComandosAltoNivel();}
-	token = < SE >< AP > exp = expressao() < FP > programa(lista_se) < FIMSE >	{lista.addComando(new ComandoCondicionalSimples(token, exp, lista_se));}}
+void se(ListaComandosAltoNivel lista):{  Expressao exp; Token token;  ListaComandosAltoNivel lista_se = new ListaComandosAltoNivel();}
+{	token = < SE >< AP > exp = expressao() < FP > programa(lista_se) < FIMSE >	{ lista.addComando(new ComandoCondicionalSimples(token, exp, lista_se)); }}
 
-void enquanto(ListaComandosAltoNivel lista): {Expressao exp; ListaComandosAltoNivel lista_enquanto; Token token;}
-{  	{lista_enquanto = new ListaComandosAltoNivel();}
-	token = < ENQUANTO > < AP > exp = expressao() < FP > programa(lista_enquanto) < FIMENQUANTO >	{lista.addComando(new ComandoEnquanto(token, exp, lista_enquanto));}
+void enquanto(ListaComandosAltoNivel lista):{  Expressao exp;  ListaComandosAltoNivel lista_enquanto = new ListaComandosAltoNivel();  Token token;}
+{	token = < ENQUANTO > < AP > exp = expressao() < FP > programa(lista_enquanto) < FIMENQUANTO >	{ lista.addComando(new ComandoEnquanto(token, exp, lista_enquanto)); }
 	}
 
 void le(ListaComandosAltoNivel lista): {Token token, token_leitura;}
 {
-	token_leitura = < LEITURA > token = < VAR > {AcaoSemantica.declaracaoPrevia(tabela, token);}	{lista.addComando(new ComandoEntrada(token_leitura, tabela.consultaSimbolo(token.image)));}
-  (    < VIRGULA > token = < VAR > {AcaoSemantica.declaracaoPrevia(tabela, token);}	{lista.addComando(new ComandoEntrada(token_leitura, tabela.consultaSimbolo(token.image)));}	  )* < PV >
+	token_leitura = < LEITURA > token = < VAR > {Compilador.tabela.declaracaoPrevia(token);}	{lista.addComando(new ComandoEntrada(token_leitura, tabela.consultaSimbolo(token.image)));}
+  (    < VIRGULA > token = < VAR > {Compilador.tabela.declaracaoPrevia(token);}	{lista.addComando(new ComandoEntrada(token_leitura, tabela.consultaSimbolo(token.image)));}	  )* < PV >
 }
 
 void exibe(ListaComandosAltoNivel lista): {Token token; Expressao exp;}
 {
-	token = < EXIBE > exp = expressao() {lista.addComando(new ComandoSaida(token, exp));}	(< VIRGULA > exp = expressao()	{lista.addComando(new ComandoSaida(token, exp));})* < PV >}
+	token = < EXIBE > exp = expressao() {lista.addComando(new ComandoSaida(token, exp));}	( < VIRGULA > exp = expressao(){ lista.addComando(new ComandoSaida(token, exp));} )* < PV >}

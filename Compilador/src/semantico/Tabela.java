@@ -1,6 +1,8 @@
 package semantico;
 
 import parser.*;
+import tratamentoErro.ErroSemantico;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -13,32 +15,22 @@ public class Tabela
 	public Tabela()
 	{
 		this.tabela = new HashMap<String,Simbolo>();
-		//TODO : verificar se ao iniciar uma tabela a referencia inicia como zero ou 1
 		this.proximaReferencia = 1;
 	}	
 
 	public void incluiSimbolo(Simbolo _simbolo)
 	{
-		_simbolo.setReferencia(this.proximaReferencia);
+		_simbolo.setReferencia(this.getProximaReferencia());
 		this.tabela.put(_simbolo.getLexema(), _simbolo);
-		this.incrementaReferencia(_simbolo.getTipoDado());
-		//System.out.println(_simbolo.getLexema()+_simbolo.getReferencia()+_simbolo.getTipoDado());
+		this.setProximaReferencia( this.getProximaReferencia() + this.incrementoReferencia(_simbolo.getTipoDado()) );
 	}
 
 	public HashMap<String, Simbolo> getTabela()
 	{
 		return this.tabela;
 	}
-	public void showTabela()
-	{
-		HashMap<String, Simbolo> tab = this.getTabela();
-		for(Simbolo i : tab.values() )
-		{
-			System.out.println("Lexema :"+i.getLexema()+" Tipo Dado: "+i.getTipoDado()+" Referencia: "+i.getReferencia());
-		}
-	}
 	
-	public void incrementaReferencia(TipoDado _tipo)
+	public int incrementoReferencia(TipoDado _tipo)
 	{
 		int incremento;
 		switch (_tipo)
@@ -53,7 +45,7 @@ public class Tabela
 				incremento = 0;
 		}
 		
-		this.setProximaReferencia(this.getProximaReferencia() + incremento);		
+		return incremento;		
 	}
 
 	public void setProximaReferencia(int _referencia)
@@ -85,6 +77,28 @@ public class Tabela
 	{
 		return this.proximaReferencia;
 	}
+
+	public void declaracaoPrevia(Token _token)
+	{
+		if(!this.verificaExistenciaSimbolo(_token.image))
+		{
+			throw new ErroSemantico("Variavel '"+_token.image+"' nao declarada na linha "+_token.beginLine+"\n");
+		}
+	}
+	
+	public void criarVariavel(Token _token, TipoDado _tipo)
+    {
+
+	  	if ( this.verificaExistenciaSimbolo( _token.image ) )
+	  	{
+	  		throw new ErroSemantico("Variavel '" + _token.image + "' repetida na linha " + _token.beginLine + "\n");
+	  	}
+	  	else
+	  	{
+			Simbolo simbolo = new Simbolo( _token, _tipo );
+	  		this.incluiSimbolo(simbolo);
+	  	}
+    }
 
 	@Override
 	public String toString()

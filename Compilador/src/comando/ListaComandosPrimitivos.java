@@ -22,12 +22,19 @@ public class ListaComandosPrimitivos
 	{
 		return this.listaComandosPrimitivos;
 	}
-/*
-	public String geraCodigoDestinoTotal()
+
+	public StringBuilder geraCodigoDestinoTotal()
 	{
+		StringBuilder codigoDestino = new StringBuilder();
 		
+		for (ComandoPrimitivo comandoPrimitivo : this.listaComandosPrimitivos) 
+		{
+			codigoDestino.append( comandoPrimitivo.geraCodigoDestino() );
+			codigoDestino.append("\n");
+		}
+		return codigoDestino;
 	}
-	*/
+	
 	
 	public String toString()
 	{

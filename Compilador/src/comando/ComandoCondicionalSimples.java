@@ -14,7 +14,7 @@ public class ComandoCondicionalSimples extends ComandoCondicional
 	@Override
 	public String toString()
 	{
-		return "<" + this.getLexema() + ", " + this.getExpressao() +", " + this.getListaComandosAltoNivelTrue() + ">";
+		return "<" + this.getLexema() + ", " + this.getExpressao() +", " + this.getListaComandosAltoNivelTrue() + ">\n";
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class ComandoCondicionalSimples extends ComandoCondicional
 		ListaComandosPrimitivos listaCmdPriTrue = super.getListaComandosAltoNivelTrue().geraListaComandoPrimitivosTotal();
 		
 		PrimitivoLabel labelfalse = new PrimitivoLabel("LabelFalse");
-		PrimitivoSeExpFalsoGoto seExpFalseGoto = new PrimitivoSeExpFalsoGoto(labelfalse, "expDestAssemb", listaCmdPriTrue);
+		PrimitivoSeExpFalsoGoto seExpFalseGoto = new PrimitivoSeExpFalsoGoto(labelfalse, this.getExpressao().geraCodigoDestino() , listaCmdPriTrue);
 		listaCmdCondicionalSimples.addComando(seExpFalseGoto);
 		listaCmdCondicionalSimples.addComando(labelfalse);
 		

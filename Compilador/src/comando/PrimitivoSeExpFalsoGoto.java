@@ -1,14 +1,15 @@
 package comando;
 
+import java.util.LinkedList;
+
 public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo
 {
 
 	private PrimitivoLabel labelFalse;
-	private String expDestinoAssembler;
+	private StringBuilder expDestinoAssembler;
 	private ListaComandosPrimitivos listaComandosPrimitivosTrue;
 	
-	public PrimitivoSeExpFalsoGoto(PrimitivoLabel _labelfalse,
-			String _expDestAssemb, ListaComandosPrimitivos _listComPriTrue)
+	public PrimitivoSeExpFalsoGoto(PrimitivoLabel _labelfalse, StringBuilder _expDestAssemb, ListaComandosPrimitivos _listComPriTrue)
 	{
 		this.labelFalse = _labelfalse;
 		this.expDestinoAssembler = _expDestAssemb;
@@ -16,18 +17,27 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo
 	}
 	
 	@Override
-	public String geraCodigoDestino() 
+	public StringBuilder geraCodigoDestino() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder codigoDestino = new StringBuilder();
+		codigoDestino.append( this.expDestinoAssembler );
+		codigoDestino.append("dconst_0 \ndcmpg \n");
+		codigoDestino.append("ifeq " + this.labelFalse + "\n" );
+		
+		LinkedList<ComandoPrimitivo> meusComandosPrimitvos = this.getListaComandosPrimitivosTrue().getListaComandosPrimitivos();
+		for (ComandoPrimitivo comandoPrimitivo : meusComandosPrimitvos ) 
+		{
+			codigoDestino.append( comandoPrimitivo.geraCodigoDestino() );
+		}
+		
+		return codigoDestino;
 	}
 
 	@Override
 	public String toString() 
 	{
 		// TODO Auto-generated method stub
-		return "SeExpFalsoGoto(" + this.expDestinoAssembler + ", " + this.getLabel() + "," +
-				this.getListaComandosPrimitivosTrue()+")";
+		return "SeExpFalsoGoto(" + this.getLabel() + "," + this.getListaComandosPrimitivosTrue()+")\n";
 	}
 	
 	public PrimitivoLabel getLabel()
@@ -35,7 +45,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo
 		return this.labelFalse;
 	}
 	
-	public String getExpDestinoAssembler()
+	public StringBuilder getExpDestinoAssembler()
 	{
 		return this.expDestinoAssembler;
 	}

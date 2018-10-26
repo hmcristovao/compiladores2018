@@ -14,15 +14,10 @@ public class ComandoSaida extends ComandoAltoNivel
 		this.expressao = _expressao;
 	}
 
-//	public ListaComandosPrimitivos geraListaComandosPrimitivos()
-//	{
-//		return null;
-//	}
-
 	@Override
 	public String toString()
 	{
-		return "<" + this.getLexema() + ", " + this.getExpressao() + ">";
+		return "<" + this.getLexema() + ", " + this.getExpressao() + ">\n";
 	}
 
 	public Expressao getExpressao() 
@@ -33,12 +28,15 @@ public class ComandoSaida extends ComandoAltoNivel
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() 
 	{
-		//Expressao expDestAssemb = this.expressao;
-		//TipoDado tipo = this.variavel.getTipoDado();
-		PrimitivoSaida comandoPrimitivo = new PrimitivoSaida("expDestAssemb", TipoDado.NUM );
-		ListaComandosPrimitivos listaAtribuicao = new ListaComandosPrimitivos();
-		listaAtribuicao.addComando(comandoPrimitivo);
+		StringBuilder expDestAssemb = this.getExpressao().geraCodigoDestino();
+		TipoDado tipo = this.getExpressao().tipoDadoExpressao();
+		
+//		System.out.println( this.getExpressao()  + expDestAssemb.toString() + "\n" + tipo);
+		
+		PrimitivoSaida comandoPrimitivo = new PrimitivoSaida( expDestAssemb, tipo );
+		ListaComandosPrimitivos listaSaida = new ListaComandosPrimitivos();
+		listaSaida.addComando(comandoPrimitivo);
 	
-		return listaAtribuicao;
+		return listaSaida;
 	}
 }

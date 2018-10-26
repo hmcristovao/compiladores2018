@@ -1,4 +1,0 @@
-{[LabelInicio_4, SeExpFalsoGoto(expDestAssemb, LabelFalse_3,{[saida(NUM), entrada(NUM;3), SeExpFalsoGoto(expDestAssemb, LabelFalse_2,{[atrib(NUM;1), atrib(NUM;5), SeExpFalsoGoto(expDestAssemb, LabelFalse_1,{[entrada(NUM;5)]}), LabelFalse_1]}), LabelFalse_2, saida(NUM), entrada(NUM;7)]}), goto(LabelInicio_4), LabelFalse_3, saida(NUM)]}
-
-Execucao finalizada com sucesso !
-

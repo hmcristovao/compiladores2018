@@ -17,7 +17,7 @@ public class ComandoEntrada extends ComandoAltoNivel
 	@Override
 	public String toString()
 	{
-		return "<" + this.getLexema() + ", " + variavel.getLexema() + ">" ;
+		return "<" + this.getLexema() + ", " + variavel.getLexema() + ">\n" ;
 	}
 
 	@Override
