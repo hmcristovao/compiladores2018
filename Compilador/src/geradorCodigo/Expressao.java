@@ -1,12 +1,8 @@
 package geradorCodigo;
-
-
 import java.util.LinkedList;
-import java.util.Stack;
 
 import comando.PrimitivoLabel;
 import parser.Compilador;
-import parser.Token;
 import semantico.*;
 import comando.*;
 
