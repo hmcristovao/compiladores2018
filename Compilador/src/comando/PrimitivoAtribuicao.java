@@ -36,7 +36,9 @@ public class PrimitivoAtribuicao extends ComandoPrimitivo
 				prefixoAtrib = ' ';
 		}
 		
-		codigoDestino.append( this.getExpDestinoAssembler().toString() + prefixoAtrib + "store" + separador + this.getReferencia() + "\n");
+		codigoDestino.append( ";\tINICIO ATRIBUICAO \n" + this.getExpDestinoAssembler().toString()  
+							 + prefixoAtrib + "store" + separador + this.getReferencia() 
+							 + "\n;\tFIM ATRIBUICAO\n");
 		return codigoDestino;
 	}
 

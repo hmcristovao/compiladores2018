@@ -10,7 +10,7 @@ import comando.*;
 
 public class CodigoDestino implements Config
 {	
-	 private static int limitePilha = 90;
+	 private static int limitePilha = Compilador.tabela.getProximaReferencia() + 10;
 	 private static int limiteVariaveisLocais = 100;
 	 private static int referenciaVariavelTemporaria = limitePilha - 10;
 	 
@@ -54,7 +54,7 @@ public class CodigoDestino implements Config
 		for (ComandoPrimitivo comandoPrimitivo : listaComandosPrimitivos.getListaComandosPrimitivos() ) 
 		{
 			codigoDestino.append( comandoPrimitivo.geraCodigoDestino() );
-			codigoDestino.append("\n");
+//			codigoDestino.append("\n");
 		}
  		
  		return codigoDestino;

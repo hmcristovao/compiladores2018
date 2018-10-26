@@ -20,6 +20,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo
 	public StringBuilder geraCodigoDestino() 
 	{
 		StringBuilder codigoDestino = new StringBuilder();
+		codigoDestino.append( ";\tINICIO CONDICIONAL\n" );
 		codigoDestino.append( this.expDestinoAssembler );
 		codigoDestino.append("dconst_0 \ndcmpg \n");
 		codigoDestino.append("ifeq " + this.labelFalse + "\n" );
@@ -29,7 +30,7 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo
 		{
 			codigoDestino.append( comandoPrimitivo.geraCodigoDestino() );
 		}
-		
+		codigoDestino.append( ";\tFIM CONDICIONAL\n" );
 		return codigoDestino;
 	}
 

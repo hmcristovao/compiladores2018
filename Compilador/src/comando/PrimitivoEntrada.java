@@ -40,13 +40,15 @@ public class PrimitivoEntrada extends ComandoPrimitivo
 				prefixoLoad = ' ';
 		}
 		
-		codigoDestino.append( "new java/util/Scanner \ndup \ngetstatic java/lang/System/in Ljava/io/InputStream;\n" + 
-							  "invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V\n");
+		codigoDestino.append( ";\tINICIO ENTRADA\n"
+							  + "new java/util/Scanner \ndup \ngetstatic java/lang/System/in Ljava/io/InputStream;\n"  
+							  + "invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V\n");
 		codigoDestino.append("astore_0 \n");
 		codigoDestino.append("aload_0 \n");
 		codigoDestino.append("invokevirtual java/util/Scanner/next" + paramEntrada + "()" + tipoRetorno + "\n");
 		
-		codigoDestino.append( prefixoLoad + "store" + separador + referenciaVariavel + "\n"); 
+		codigoDestino.append( prefixoLoad + "store" + separador + referenciaVariavel 
+							 + "\n;\tFIM ENTRADA \n"); 
 		return codigoDestino;
 	}
 

@@ -144,7 +144,7 @@ public class Expressao
 		    				op_comando += "invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;\n"
 		    							   + "aload " + refTempB + "\n" 
 		    							   + "invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;\n";
-		    				op_comando += "invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;\n";
+		    				op_comando += "invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;";
 		    				CodigoDestino.liberarReferenciaTemporaria( TipoDado.STR );
 		    				CodigoDestino.liberarReferenciaTemporaria( TipoDado.STR );
 	    				break;
@@ -182,6 +182,27 @@ public class Expressao
 	public TipoElemento tipoElementoExpressao()
 	{
 		return ((Operando)this.getExpressaoInfixa().getFirst()).getTipoElemento();
+	}
+	
+	public void limiteMaximoPilha()
+	{
+		int limiteMaximoPilha, tamExpPosFixa;
+		Item item;
+		
+		tamExpPosFixa = expressaoPosfixa.size();
+		limiteMaximoPilha = 1;
+		
+		for ( int i = 0; i < tamExpPosFixa; i++ ) 
+		{
+			item = expressaoPosfixa.get(i);
+			if ( item instanceof Operando )
+				limiteMaximoPilha  += Compilador.tabela.incrementoReferencia( ((Operando)item).getTipoDado() );
+			else if ( item instanceof Operador )
+			{
+				limiteMaximoPilha -= 2*Compilador.tabela.incrementoReferencia( ((Operando)expressaoPosfixa.get(i-1)).getTipoDado() );
+			}
+				
+		}
 	}
 	
 	@Override

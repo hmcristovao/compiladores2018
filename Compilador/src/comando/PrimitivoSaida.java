@@ -19,7 +19,8 @@ public class PrimitivoSaida extends ComandoPrimitivo
 	public StringBuilder geraCodigoDestino()
 	{
 		StringBuilder codigoDestino = new StringBuilder();
-		codigoDestino.append("getstatic java/lang/System/out Ljava/io/PrintStream;\r\n");
+		codigoDestino.append( ";\tINICIO SAIDA\n"
+							 + "getstatic java/lang/System/out Ljava/io/PrintStream;\r\n");
 		codigoDestino.append(this.getExpDestinoAssembler());
 		String paramExibicao = new String();
 		
@@ -34,7 +35,8 @@ public class PrimitivoSaida extends ComandoPrimitivo
 				break;
 		}
 		
-		codigoDestino.append("invokevirtual java/io/PrintStream/print(" + paramExibicao + ")V\r\n" );
+		codigoDestino.append("invokevirtual java/io/PrintStream/print(" + paramExibicao + ")V\r\n" 
+							+ ";\t FIM SAIDA\n");
 		
 		return codigoDestino;
 	}
