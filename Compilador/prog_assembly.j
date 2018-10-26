@@ -12,7 +12,15 @@ return
 .limit stack 90
 .limit locals 100
 ldc2_w 5.0
+ldc2_w -2.5
+dadd
 dstore 7
+
+ldc2_w -5.0
+dstore 9
+
+ldc "joao"
+astore 14
 
 ldc2_w 2.0
 ldc2_w 3.0
@@ -23,6 +31,18 @@ dstore_1
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
 dload_1
+invokevirtual java/io/PrintStream/print(D)V
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "g = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+dload 7
 invokevirtual java/io/PrintStream/print(D)V
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
@@ -111,7 +131,7 @@ labelFim_8:
 dstore 5
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "Ou logico: "
+ldc "LOGICO OU: C: "
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
@@ -124,6 +144,8 @@ invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
 dload_3
 ldc2_w 8.0
+dsub
+ldc2_w 0.0
 dcmpg 
 ifne labelFalseExpRelacional_9
 dconst_1 
@@ -156,7 +178,7 @@ goto labelFim_14
 labelTrue_13:
 dconst_1
 labelFim_14:
-ldc "joaA"
+ldc "joaO"
 ldc "joao"
 astore 80
 astore 81
@@ -188,6 +210,38 @@ goto labelFim_18
 labelTrue_17:
 dconst_1
 labelFim_18:
+ldc "joao"
+aload 14
+astore 80
+astore 81
+ 
+new java/lang/String 
+invokespecial java/lang/String/<init>()V
+aload 80
+aload 81
+invokevirtual java/lang/String/compareTo(Ljava/lang/String;)I
+iconst_0
+if_icmpeq  labelFalseExpRelacional_19
+dconst_0
+goto labelFimExpRelacional_20
+
+labelFalseExpRelacional_19:
+dconst_1
+labelFimExpRelacional_20:
+dstore 80
+dconst_0
+dcmpg
+ifne labelTrue_21
+dload 80
+dconst_0 
+dcmpg 
+ifne labelTrue_21
+dconst_0 
+goto labelFim_22
+
+labelTrue_21:
+dconst_1
+labelFim_22:
 dstore 5
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
@@ -209,49 +263,53 @@ invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
 astore_0 
 aload_0 
 invokevirtual java/util/Scanner/nextDouble()D
-dstore 9
+dstore 11
 
+dload 11
 dload 9
-dload 7
 dcmpg 
-ifne labelFalseExpRelacional_20
+ifne labelFalseExpRelacional_24
 dconst_1 
-goto labelFimExpRelacional_21
+goto labelFimExpRelacional_25
 
-labelFalseExpRelacional_20: 
+labelFalseExpRelacional_24: 
 dconst_0
-labelFimExpRelacional_21:
-dconst_0 
-dcmpg 
-ifeq LabelFalse_19
-
-getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "igual a variavel d\n"
-invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
-
-LabelFalse_19:
-
-ldc2_w 1.0
-dstore 9
-
-LabelInicio_24:
-
-dload 9
-ldc2_w 1.0
-dcmpg 
-ifne labelFalseExpRelacional_25
-dconst_1 
-goto labelFimExpRelacional_26
-
-labelFalseExpRelacional_25: 
-dconst_0
-labelFimExpRelacional_26:
+labelFimExpRelacional_25:
 dconst_0 
 dcmpg 
 ifeq LabelFalse_23
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "entre com o valor de n:\n"
+ldc "igual a variavel d\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+
+LabelFalse_23:
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "\nPrimeiro enquanto\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+
+ldc2_w 1.0
+dstore 11
+
+LabelInicio_30:
+
+dload 11
+ldc2_w 1.0
+dcmpg 
+ifne labelFalseExpRelacional_31
+dconst_1 
+goto labelFimExpRelacional_32
+
+labelFalseExpRelacional_31: 
+dconst_0
+labelFimExpRelacional_32:
+dconst_0 
+dcmpg 
+ifeq LabelFalse_29
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "Entre com o valor de n:\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 new java/util/Scanner 
 dup 
@@ -260,76 +318,85 @@ invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
 astore_0 
 aload_0 
 invokevirtual java/util/Scanner/nextDouble()D
-dstore 9
+dstore 11
 getstatic java/lang/System/out Ljava/io/PrintStream;
 ldc "n = "
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 getstatic java/lang/System/out Ljava/io/PrintStream;
-dload 9
+dload 11
 invokevirtual java/io/PrintStream/print(D)V
-dload 9
+dload 11
 ldc2_w 1.0
 dsub
+ldc2_w 0.0
+dcmpg 
+ifne labelFalseExpRelacional_27
+dconst_1 
+goto labelFimExpRelacional_28
+
+labelFalseExpRelacional_27: 
+dconst_0
+labelFimExpRelacional_28:
 dconst_0 
 dcmpg 
-ifeq LabelFalse_22
+ifeq LabelFalse_26
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "\n Finalizou o loop.\n"
+ldc "\n Roda de novo.\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
-LabelFalse_22:
+LabelFalse_26:
 
-goto LabelInicio_24
+goto LabelInicio_30
 
 
-LabelFalse_23:
+LabelFalse_29:
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "\nProximo enquanto\n"
+ldc "\nSegundo enquanto\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
-LabelInicio_28:
+LabelInicio_34:
 
-dload 7
+dload 9
 ldc2_w 5.0
 dcmpg 
-ifne labelFalseExpRelacional_29
+ifne labelFalseExpRelacional_35
 dconst_1 
-goto labelFimExpRelacional_30
+goto labelFimExpRelacional_36
 
-labelFalseExpRelacional_29: 
+labelFalseExpRelacional_35: 
 dconst_0
-labelFimExpRelacional_30:
+labelFimExpRelacional_36:
 dconst_0 
 dcmpg 
-ifeq LabelFalse_27
+ifeq LabelFalse_33
 
-dload 7
+dload 9
 ldc2_w 1.0
 dadd
-dstore 7
+dstore 9
 getstatic java/lang/System/out Ljava/io/PrintStream;
-dload 7
+dload 9
 invokevirtual java/io/PrintStream/print(D)V
 
-goto LabelInicio_28
+goto LabelInicio_34
 
 
-LabelFalse_27:
+LabelFalse_33:
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
 ldc "\n Teste de concatenação\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
 ldc "Compila"
-astore 11
+astore 13
 
 ldc "dores\n"
-astore 12
+astore 14
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
-aload 11
-aload 12
+aload 13
+aload 14
 swap
 astore 80
 astore 81
@@ -344,8 +411,8 @@ invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;
 
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
-aload 11
-aload 12
+aload 13
+aload 14
 swap
 astore 80
 astore 81
@@ -358,11 +425,11 @@ aload 81
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;
 
-astore 13
+astore 15
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
 ldc "Resultado: "
-aload 13
+aload 15
 swap
 astore 80
 astore 81
@@ -406,27 +473,27 @@ getstatic java/lang/System/out Ljava/io/PrintStream;
 ldc "\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 
-LabelInicio_32:
+LabelInicio_38:
 
 dload_1
 dload_3
 dstore 80
 dconst_0
 dcmpg
-ifne labelTrue_33
+ifne labelTrue_39
 dload 80
 dconst_0 
 dcmpg 
-ifne labelTrue_33
+ifne labelTrue_39
 dconst_0 
-goto labelFim_34
+goto labelFim_40
 
-labelTrue_33:
+labelTrue_39:
 dconst_1
-labelFim_34:
+labelFim_40:
 dconst_0 
 dcmpg 
-ifeq LabelFalse_31
+ifeq LabelFalse_37
 
 getstatic java/lang/System/out Ljava/io/PrintStream;
 dload_1
@@ -457,10 +524,77 @@ aload_0
 invokevirtual java/util/Scanner/nextDouble()D
 dstore_3
 
-goto LabelInicio_32
+goto LabelInicio_38
 
 
-LabelFalse_31:
+LabelFalse_37:
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "informe o número de linhas do triangulo:\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+
+new java/util/Scanner 
+dup 
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
+astore_0 
+aload_0 
+invokevirtual java/util/Scanner/nextDouble()D
+dstore 11
+
+dload 11
+dstore_3
+
+LabelInicio_44:
+
+dload 11
+dconst_0 
+dcmpg 
+ifeq LabelFalse_43
+
+dload_3
+dload 11
+dsub
+ldc2_w 1.0
+dadd
+dstore_1
+ldc2_w 1.0
+dstore 5
+LabelInicio_42:
+dload_1
+dconst_0 
+dcmpg 
+ifeq LabelFalse_41
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+dload 5
+invokevirtual java/io/PrintStream/print(D)V
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc " "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+dload_1
+ldc2_w 1.0
+dsub
+dstore_1
+dload 5
+ldc2_w 1.0
+dadd
+dstore 5
+goto LabelInicio_42
+
+LabelFalse_41:
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+dload 11
+ldc2_w 1.0
+dsub
+dstore 11
+
+goto LabelInicio_44
+
+
+LabelFalse_43:
 
 return
 .end method

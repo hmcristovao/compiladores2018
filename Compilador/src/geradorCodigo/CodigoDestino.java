@@ -18,7 +18,7 @@ public class CodigoDestino implements Config
 	 {
          BufferedWriter arqSaida;
          try {
-               arqSaida = new BufferedWriter(new FileWriter( pacoteExemplos + nomeArquivoAssembler + extensaoSegPassagem));
+               arqSaida = new BufferedWriter(new FileWriter( nomeArquivoAssembler + extensaoSegPassagem));
                arqSaida.write(".source " + nomeArquivoAssembler +".java\r\n");
                arqSaida.write(".class public "+ nomeArquivoAssembler +"\r\n");
                arqSaida.write(".super java/lang/Object\r\n");

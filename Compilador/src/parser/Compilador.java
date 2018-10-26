@@ -12,7 +12,7 @@ public class Compilador implements Config, CompiladorConstants {
   public static Tabela tabela;
   public static ListaComandosAltoNivel listaComandosAltoNivel = null;
   public static ListaComandosPrimitivos listaComandosPrimitivos = null;
-  public static String arquivo[] = { pacoteExemplos + nomeArquivoAssembler + extensaoSegPassagem };
+  public static String arquivo[] = { nomeArquivoAssembler + extensaoSegPassagem };
 
   public static void main(String args []) throws ParseException
   {
@@ -22,7 +22,7 @@ public class Compilador implements Config, CompiladorConstants {
 
         try
     {
-                compilador = new Compilador(new FileInputStream( pacoteExemplos + nomeArquivo + extensaoFonte));
+                compilador = new Compilador(new FileInputStream( nomeArquivo + extensaoFonte));
                 tabela = new Tabela();
                 listaComandosAltoNivel = Compilador.inicio();;
                 listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosTotal();
