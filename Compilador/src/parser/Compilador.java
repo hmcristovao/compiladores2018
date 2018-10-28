@@ -24,7 +24,7 @@ public class Compilador implements Config, CompiladorConstants {
     {
                 compilador = new Compilador(new FileInputStream( nomeArquivo + extensaoFonte));
                 tabela = new Tabela();
-                listaComandosAltoNivel = Compilador.inicio();;
+                listaComandosAltoNivel = Compilador.inicio();
                 listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosTotal();
                 CodigoDestino.geraCodigoAssembler( listaComandosPrimitivos );
 
@@ -266,11 +266,11 @@ public class Compilador implements Config, CompiladorConstants {
       case LEITURA:
       case SE:
       case ENQUANTO:
+      case COMENTLINHA:
+      case COMENTBLOCO:
       case NUMERO:
       case PALAVRA:
       case VAR:
-      case COMENTLINHA:
-      case COMENTBLOCO:
         ;
         break;
       default:
@@ -469,7 +469,7 @@ public class Compilador implements Config, CompiladorConstants {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x20000,0x80000,0x100000,0x6000,0x6000,0x18000,0x18000,0x8c006000,0x8c406000,0x38001ae0,0x38001ae0,0x1800,0x40000,0x2000000,0x40000,0x2000000,0x2000000,};
+      jj_la1_0 = new int[] {0x80000,0x200000,0x400000,0x18000,0x18000,0x60000,0x60000,0xb0018000,0xb1018000,0x20007ae0,0x20007ae0,0x6000,0x100000,0x8000000,0x100000,0x8000000,0x8000000,};
    }
 
   /** Constructor with InputStream. */

@@ -184,6 +184,7 @@ public class Expressao
 		return ((Operando)this.getExpressaoInfixa().getFirst()).getTipoElemento();
 	}
 	
+//	Necessário terminar a implementação
 	public void limiteMaximoPilha()
 	{
 		int limiteMaximoPilha, tamExpPosFixa;

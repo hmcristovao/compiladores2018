@@ -2,14 +2,14 @@
 .class public prog_assembly
 .super java/lang/Object
 .method public <init>()V
-.limit stack 26
+.limit stack 28
 .limit locals 100
 aload_0
 invokespecial java/lang/Object/<init>()V
 return
 .end method
 .method public static main([Ljava/lang/String;)V
-.limit stack 26
+.limit stack 28
 .limit locals 100
 ;	INICIO ATRIBUICAO 
 ldc2_w 5.0
@@ -90,11 +90,11 @@ dstore 5
 ;	INICIO ATRIBUICAO 
 ldc2_w 0.0
 ldc2_w 0.0
-dstore 16
+dstore 18
 dconst_0
 dcmpg
 ifne labelTrue_3
-dload 16
+dload 18
 dconst_0 
 dcmpg 
 ifne labelTrue_3
@@ -109,11 +109,11 @@ ldc2_w 2.5
 ldc2_w 2.5
 ddiv
 dsub
-dstore 16
+dstore 18
 dconst_0
 dcmpg
 ifne labelTrue_5
-dload 16
+dload 18
 dconst_0 
 dcmpg 
 ifne labelTrue_5
@@ -128,11 +128,11 @@ ldc2_w 1000.0
 ldc2_w 8.0
 dadd
 dmul
-dstore 16
+dstore 18
 dconst_0
 dcmpg
 ifne labelTrue_7
-dload 16
+dload 18
 dconst_0 
 dcmpg 
 ifne labelTrue_7
@@ -182,11 +182,11 @@ goto labelFimExpRelacional_12
 labelFalseExpRelacional_11: 
 dconst_0
 labelFimExpRelacional_12:
-dstore 16
+dstore 18
 dconst_0
 dcmpg
 ifne labelTrue_13
-dload 16
+dload 18
 dconst_0 
 dcmpg 
 ifne labelTrue_13
@@ -198,13 +198,13 @@ dconst_1
 labelFim_14:
 ldc "joaO"
 ldc "joao"
-astore 16
-astore 17
+astore 18
+astore 19
  
 new java/lang/String 
 invokespecial java/lang/String/<init>()V
-aload 16
-aload 17
+aload 18
+aload 19
 invokevirtual java/lang/String/compareTo(Ljava/lang/String;)I
 iconst_0
 if_icmpeq  labelFalseExpRelacional_15
@@ -214,11 +214,11 @@ goto labelFimExpRelacional_16
 labelFalseExpRelacional_15:
 dconst_1
 labelFimExpRelacional_16:
-dstore 16
+dstore 18
 dconst_0
 dcmpg
 ifne labelTrue_17
-dload 16
+dload 18
 dconst_0 
 dcmpg 
 ifne labelTrue_17
@@ -230,13 +230,13 @@ dconst_1
 labelFim_18:
 ldc "joao"
 aload 14
-astore 16
-astore 17
+astore 18
+astore 19
  
 new java/lang/String 
 invokespecial java/lang/String/<init>()V
-aload 16
-aload 17
+aload 18
+aload 19
 invokevirtual java/lang/String/compareTo(Ljava/lang/String;)I
 iconst_0
 if_icmpeq  labelFalseExpRelacional_19
@@ -246,11 +246,11 @@ goto labelFimExpRelacional_20
 labelFalseExpRelacional_19:
 dconst_1
 labelFimExpRelacional_20:
-dstore 16
+dstore 18
 dconst_0
 dcmpg
 ifne labelTrue_21
-dload 16
+dload 18
 dconst_0 
 dcmpg 
 ifne labelTrue_21
@@ -441,14 +441,14 @@ getstatic java/lang/System/out Ljava/io/PrintStream;
 aload 13
 aload 14
 swap
-astore 16
-astore 17
+astore 18
+astore 19
 new java/lang/StringBuilder 
 dup
 invokespecial java/lang/StringBuilder/<init>()V
-aload 16
+aload 18
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-aload 17
+aload 19
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
@@ -457,14 +457,14 @@ invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 aload 13
 aload 14
 swap
-astore 16
-astore 17
+astore 18
+astore 19
 new java/lang/StringBuilder 
 dup
 invokespecial java/lang/StringBuilder/<init>()V
-aload 16
+aload 18
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-aload 17
+aload 19
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;
 astore 15
@@ -474,26 +474,26 @@ getstatic java/lang/System/out Ljava/io/PrintStream;
 ldc "Resultado: "
 aload 15
 swap
-astore 16
-astore 17
+astore 18
+astore 19
 new java/lang/StringBuilder 
 dup
 invokespecial java/lang/StringBuilder/<init>()V
-aload 16
+aload 18
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-aload 17
+aload 19
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;
 ldc " Ahh miserávi!\n"
 swap
-astore 16
-astore 17
+astore 18
+astore 19
 new java/lang/StringBuilder 
 dup
 invokespecial java/lang/StringBuilder/<init>()V
-aload 16
+aload 18
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-aload 17
+aload 19
 invokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 invokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
@@ -522,11 +522,11 @@ LabelInicio_38:
 ;	INICIO CONDICIONAL
 dload_1
 dload_3
-dstore 16
+dstore 18
 dconst_0
 dcmpg
 ifne labelTrue_39
-dload 16
+dload 18
 dconst_0 
 dcmpg 
 ifne labelTrue_39
@@ -586,7 +586,7 @@ goto LabelInicio_38
 LabelFalse_37:
 ;	INICIO SAIDA
 getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "informe o número de linhas do triangulo:\n"
+ldc "Informe o número de linhas do triangulo:\n"
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 ;	 FIM SAIDA
 ;	INICIO ENTRADA
@@ -670,5 +670,62 @@ dstore 11
 goto LabelInicio_44
 
 LabelFalse_43:
+;	INICIO SAIDA
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "Informe um valor pra  calcular o fatorial:\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+;	 FIM SAIDA
+;	INICIO ENTRADA
+new java/util/Scanner 
+dup 
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
+astore_0 
+aload_0 
+invokevirtual java/util/Scanner/nextDouble()D
+dstore 11
+;	FIM ENTRADA 
+;	INICIO ATRIBUICAO 
+ldc2_w 1.0
+dstore 16
+;	FIM ATRIBUICAO
+LabelInicio_46:
+;	INICIO CONDICIONAL
+dload 11
+dconst_0 
+dcmpg 
+ifeq LabelFalse_45
+
+;	INICIO ATRIBUICAO 
+dload 16
+dload 11
+dmul
+dstore 16
+;	FIM ATRIBUICAO
+;	INICIO ATRIBUICAO 
+dload 11
+ldc2_w 1.0
+dsub
+dstore 11
+;	FIM ATRIBUICAO
+;	FIM CONDICIONAL
+goto LabelInicio_46
+
+LabelFalse_45:
+;	INICIO SAIDA
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "Fatorial = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+;	 FIM SAIDA
+;	INICIO SAIDA
+getstatic java/lang/System/out Ljava/io/PrintStream;
+dload 16
+invokevirtual java/io/PrintStream/print(D)V
+;	 FIM SAIDA
+;	INICIO SAIDA
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+;	 FIM SAIDA
 return
 .end method

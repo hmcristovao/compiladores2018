@@ -71,7 +71,7 @@ enquanto ( a OR b )
 fim-enquanto
 
 // Criando triangulo
-exibe "informe o número de linhas do triangulo:\n";
+exibe "Informe o número de linhas do triangulo:\n";
 le n;
 b <- n;
 enquanto ( n )
@@ -85,3 +85,13 @@ enquanto ( n )
 	exibe "\n";
 	n <- n - 1; 
 fim-enquanto
+
+// Programa que calcula o fatorial de um outro número
+exibe "Informe um valor pra  calcular o fatorial:\n";
+le n;
+numero fat <- 1;
+enquanto ( n )
+	fat <- fat * n;
+	n <- n - 1;
+fim-enquanto
+exibe "Fatorial = ",fat,"\n";
