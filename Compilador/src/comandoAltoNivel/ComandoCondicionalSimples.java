@@ -12,7 +12,7 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 	}
 	
 	@Override
-	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		
 		ListaComandosPrimitivos listaComandosPrimitivosTrue = listaComandosAltoNivelTrue.geraListaComandoPrimitivosCompleta();
 		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");

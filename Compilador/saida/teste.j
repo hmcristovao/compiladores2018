@@ -40,6 +40,28 @@ ldc2_w 16.0
 dcmpg
 istore 5
 
+ldc2_w 0.0
+ldc2_w 1.0
+ior
+dstore 5
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+dload 5
+invokevirtual java/io/PrintStream/println(D)V
+
+dload_3
+ldc2_w 8.0
+dcmpg
+dload_1
+ldc2_w 10.0
+dcmpg
+ior
+istore 5
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+dload 5
+invokevirtual java/io/PrintStream/println(D)V
+
 getstatic java/lang/System/out Ljava/io/PrintStream;
 ldc "Digite um numero:\n"
 invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
@@ -105,6 +127,11 @@ dload 7
 ldc2_w 5.0
 dcmpg
 ifne LabelFalse_3
+dload 7
+ldc2_w 1.0
+dadd
+dstore 7
+
 getstatic java/lang/System/out Ljava/io/PrintStream;
 dload 7
 invokevirtual java/io/PrintStream/println(D)V
@@ -113,6 +140,31 @@ invokevirtual java/io/PrintStream/println(D)V
 goto LabelEnquanto_4
 
 LabelFalse_3:
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+ldc "\n Teste de concatenação\n"
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
+
+ldc "Compila"
+dstore 11
+
+ldc "dores\n"
+dstore 12
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+aload 11
+aload 12
+ldc "Digite um numero:\nigual a variavel d\n"
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
+
+aload 11
+aload 12
+ldc "entre com o valor de n:\nn = "
+dstore 13
+
+getstatic java/lang/System/out Ljava/io/PrintStream;
+aload 13
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
 
 return
 .end method

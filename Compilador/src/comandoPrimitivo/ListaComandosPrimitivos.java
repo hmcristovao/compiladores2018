@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class ListaComandosPrimitivos {
 	
-	LinkedList<ComandoPrimitivo> listaComandosPrimitivos;
+	private LinkedList<ComandoPrimitivo> listaComandosPrimitivos;
 	
 	public ListaComandosPrimitivos() {
 		this.listaComandosPrimitivos = new LinkedList<ComandoPrimitivo>(); 

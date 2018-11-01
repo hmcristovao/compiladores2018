@@ -6,8 +6,8 @@ import parser.Token;
 
 public class ComandoEnquanto extends ComandoAltoNivel{
 	
-	ListaComandosAltoNivel listaComandosAltoNivelTrue;
-	Expressao expressao;
+	private ListaComandosAltoNivel listaComandosAltoNivelTrue;
+	private Expressao expressao;
 	
 	public ComandoEnquanto (Expressao expressao, ListaComandosAltoNivel listaComandosAltoNivelTrue, Token token) {
 		this.expressao = expressao;
@@ -20,7 +20,7 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 	}
 
 	@Override
-	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		
 		ListaComandosPrimitivos listaComandosPrimitivosTrue = listaComandosAltoNivelTrue.geraListaComandoPrimitivosCompleta();
 		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");

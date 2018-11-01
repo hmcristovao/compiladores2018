@@ -1,0 +1,8 @@
+numero a,b;
+numero d <- 5, n;
+palavra x, y, z;
+
+a <- 2*(3+5);
+exibe a;
+b <- a/2;
+exibe b;

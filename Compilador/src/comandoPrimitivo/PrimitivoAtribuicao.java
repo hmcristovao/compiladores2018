@@ -4,9 +4,9 @@ import semantico.TipoDado;
 
 public class PrimitivoAtribuicao extends ComandoPrimitivo {
 	
-	int referencia;
-	TipoDado tipo;
-	String expDestinoAssembler;
+	private int referencia;
+	private TipoDado tipo;
+	private String expDestinoAssembler;
 	
 	
 	public PrimitivoAtribuicao(int referencia, TipoDado tipo, String expDestinoAssembler) {

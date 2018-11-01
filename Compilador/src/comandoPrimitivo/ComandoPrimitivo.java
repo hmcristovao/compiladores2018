@@ -2,14 +2,12 @@ package comandoPrimitivo;
 
 public abstract class ComandoPrimitivo {
 	
-	String geraCodigoDestino() {
+	public String geraCodigoDestino() {
 		return null;
 	}
 	
-	
-	 @Override
-	 public String toString() {
-	     return null;
-	 }
-
+	@Override
+	public String toString() {
+	    return null;
+	}
 }

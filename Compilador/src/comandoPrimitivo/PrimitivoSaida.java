@@ -4,8 +4,8 @@ import semantico.TipoDado;
 
 public class PrimitivoSaida extends ComandoPrimitivo{
 	
-	TipoDado tipo;
-	String expDestinoAssembler;
+	private TipoDado tipo;
+	private String expDestinoAssembler;
 	
 	
 	public PrimitivoSaida(TipoDado tipo, String expDestinoAssembler) {

@@ -4,8 +4,8 @@ import semantico.TipoDado;
 
 public class PrimitivoEntrada extends ComandoPrimitivo {
 	
-	int referencia;
-	TipoDado tipo;
+	private int referencia;
+	private TipoDado tipo;
 	
 	
 	public PrimitivoEntrada(int referencia, TipoDado tipo) {

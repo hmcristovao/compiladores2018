@@ -5,14 +5,14 @@ import parser.Token;
 
 public abstract class ComandoAltoNivel {
 	
-	Token token;
+	public Token token;
 		
-	String getLexama() {
+	public String getLexama() {
 		return token.image;
 	}
 	
-	abstract ListaComandosPrimitivos geraListaComandosPrimitivos();	
+	public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();	
 		
-	abstract public String toString();
+	public abstract String toString();
 
 }

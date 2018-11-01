@@ -2,6 +2,7 @@ package geradorCodigo;
 
 import java.io.*;
 
+import apoio.Config;
 import comandoPrimitivo.ListaComandosPrimitivos;
 import parser.Compilador;
 
@@ -15,7 +16,7 @@ public class CodigoDestino {
 		
 			BufferedWriter arqSaida = new BufferedWriter(new FileWriter(nome));
 			arqSaida.write(".source prog_destino.java\n");
-	        arqSaida.write(".class public prog_destino\n");
+	        arqSaida.write(".class public "+Config.nomeArquivo+"\n");
 	        arqSaida.write(".super java/lang/Object\n");
 	        arqSaida.write(".method public <init>()V\n");
 	        arqSaida.write(".limit stack 1\n");

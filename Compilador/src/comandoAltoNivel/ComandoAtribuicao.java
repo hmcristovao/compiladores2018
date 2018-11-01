@@ -7,8 +7,8 @@ import semantico.*;
 
 public class ComandoAtribuicao extends ComandoAltoNivel {
 
-	Simbolo simbolo;
-	Expressao expressao;
+	private Simbolo simbolo;
+	private Expressao expressao;
 	
 	public ComandoAtribuicao (Simbolo simbolo, Expressao expressao, Token token) {
 		this.simbolo = simbolo;
@@ -21,15 +21,10 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 	}
 
 	@Override
-	ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
-		
 		PrimitivoAtribuicao comando = new PrimitivoAtribuicao(this.simbolo.getReferencia(), this.simbolo.getTipo(), this.expressao.geraCodigoDestino());
-		
 		lista.addComando(comando);
-				
 		return lista;
-	}
-	
+	}	
 }

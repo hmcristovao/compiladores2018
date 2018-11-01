@@ -1,5 +1,5 @@
 .source prog_destino.java
-.class public prog_destino
+.class public exemplo21
 .super java/lang/Object
 .method public <init>()V
 .limit stack 1
@@ -10,32 +10,30 @@ return
 .end method
 
 .method public static main([Ljava/lang/String;)V
-.limit stack 4
-.limit locals5
+.limit stack 400
+.limit locals 14
+ldc2_w 5.0
+dstore 5
+
 ldc2_w 2.0
 ldc2_w 3.0
+ldc2_w 5.0
 dadd
+dmul
 dstore_1
 
-ldc2_w 2.0
-ldc2_w 2.0
-dcmpg
-dconst_0
-dcmpg
-ifeq LabelFalse_0
 getstatic java/lang/System/out Ljava/io/PrintStream;
-ldc "Igual!!"
+dload_1
 invokevirtual java/io/PrintStream/println(D)V
 
+dload_1
+ldc2_w 2.0
+ddiv
+dstore_3
 
-:LabelFalse_0
-
-new java/util/Scanner
-dup
-getstatic java/lang/System.in Ljava/io/InputStream;
-invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
-invokevirtual java/util/Scanner.nextDouble()D
-dstore_1
+getstatic java/lang/System/out Ljava/io/PrintStream;
+dload_3
+invokevirtual java/io/PrintStream/println(D)V
 
 return
 .end method

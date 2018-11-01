@@ -7,35 +7,29 @@ import comandoPrimitivo.ListaComandosPrimitivos;
 
 public class ListaComandosAltoNivel {
 	
-
-	LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
+	private LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
 	
 	public ListaComandosAltoNivel() {
-		listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();   
+		this.listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();   
 	}
 	
 	public void addComando(ComandoAltoNivel comando) {
-		listaComandosAltoNivel.add(comando);
+		this.listaComandosAltoNivel.add(comando);
 	}
 	
 	public LinkedList<ComandoAltoNivel> getListaComandosAltoNivel(){
-		return listaComandosAltoNivel;
+		return this.listaComandosAltoNivel;
 	}
 	
 	public ListaComandosPrimitivos geraListaComandoPrimitivosCompleta() {
 		
 		ListaComandosPrimitivos listaComandosPrimitivosCompleta = new ListaComandosPrimitivos();
-		
 		for(ComandoAltoNivel comando : listaComandosAltoNivel ){
-			
 			ListaComandosPrimitivos listaComandosPrimitivos = comando.geraListaComandosPrimitivos();
-			
 			for(ComandoPrimitivo comandoPrimitivo : listaComandosPrimitivos.getListaComandosPrimitivos()){
 				listaComandosPrimitivosCompleta.addComando(comandoPrimitivo);
 			}
-			
 		}
-		
 		return listaComandosPrimitivosCompleta;
 		
 		

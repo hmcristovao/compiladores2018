@@ -2,9 +2,9 @@ package comandoPrimitivo;
 
 public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 	
-	String expDestinoAssembler;
-	PrimitivoLabel labelFalse;
-	ListaComandosPrimitivos listaComandosPrimitivosTrue;
+	private String expDestinoAssembler;
+	private PrimitivoLabel labelFalse;
+	private ListaComandosPrimitivos listaComandosPrimitivosTrue;
 	
 	public PrimitivoSeExpFalsoGoto(String expDestinoAssembler, PrimitivoLabel labelFalse, ListaComandosPrimitivos listaComandosPrimitivosTrue){
 		this.expDestinoAssembler = expDestinoAssembler;

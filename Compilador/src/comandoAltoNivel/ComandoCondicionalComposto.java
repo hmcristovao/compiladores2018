@@ -5,7 +5,7 @@ import geradorCodigo.Expressao;
 
 public class ComandoCondicionalComposto extends ComandoCondicional{
 	
-	ListaComandosAltoNivel listaComandosAltoNivelFalse;
+	private ListaComandosAltoNivel listaComandosAltoNivelFalse;
 
 	public ComandoCondicionalComposto(Expressao expressao, ListaComandosAltoNivel listaComandosAltoNivelTrue, ListaComandosAltoNivel listaComandosAltoNivelFalse) {
 		super(expressao, listaComandosAltoNivelTrue);
@@ -17,7 +17,7 @@ public class ComandoCondicionalComposto extends ComandoCondicional{
 	}
 
 	@Override
-	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		// TODO Auto-generated method stub
 		return null;
 	}

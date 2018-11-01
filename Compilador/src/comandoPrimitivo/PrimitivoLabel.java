@@ -2,8 +2,8 @@ package comandoPrimitivo;
 
 public class PrimitivoLabel extends ComandoPrimitivo{
 	
-	String label;
-	static int contador = 0;
+	private String label;
+	private static int contador = 0;
 	
 	public PrimitivoLabel(String label) {
 		this.label = label + "_" +  this.contador;	

@@ -7,7 +7,7 @@ import semantico.*;
 
 public class ComandoSaida extends ComandoAltoNivel {
 	
-	Expressao expressao;
+	private Expressao expressao;
 	
 	public ComandoSaida (Expressao expressao, Token token) {
 		this.expressao = expressao;
@@ -19,21 +19,17 @@ public class ComandoSaida extends ComandoAltoNivel {
 	}
 
 	@Override
-	ListaComandosPrimitivos geraListaComandosPrimitivos() {
+	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
 		TipoDado tipo = TipoDado.NUMERO;
 		
 		for(Item item : expressao.getListaExpPosFixa()) {
-			
 			if(item.getLexema().equals("Operando")) {
-				
 				Operando operando = (Operando)item;
-				
 				if(operando.getTipoDado() == TipoDado.PALAVRA) {
 					tipo = TipoDado.PALAVRA;
 				}
 			}
-			
 		}
 		
 		PrimitivoSaida comando = new PrimitivoSaida(tipo, this.expressao.geraCodigoDestino());
