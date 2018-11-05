@@ -18,24 +18,19 @@ public class ListaComandosPrimitivos {
 		return this.listaComandosPrimitivos;
 	}
 	
-	public String geraCodigoDestinoCompleto() {
+	public String geraCodigoDestinoTotal() {
 		
-		String codigoDestinoCompleto = "";
+		StringBuilder codigo = new StringBuilder();
 	
-		for(ComandoPrimitivo comamadoPrimitivo : this.listaComandosPrimitivos) {
-			String codigoDestino = comamadoPrimitivo.geraCodigoDestino();
-			
-			if(!codigoDestino.isEmpty()) {
-				codigoDestinoCompleto += codigoDestino + "\n";
-			}
+		for(ComandoPrimitivo comandoPrimitivo : this.listaComandosPrimitivos) {
+			codigo.append(comandoPrimitivo.geraCodigoDestino());
 		}
-		return codigoDestinoCompleto;
+		return codigo.toString();
 	}
 	
 	@Override
-	public String toString()
-	{
-		return  this.getListaComandosPrimitivos().toString();
+	public String toString() {
+		return  this.listaComandosPrimitivos.toString();
 	}
 	
 }

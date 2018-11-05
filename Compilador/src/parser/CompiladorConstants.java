@@ -11,58 +11,60 @@ public interface CompiladorConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int EXIBE = 5;
+  int EXIBE = 8;
   /** RegularExpression Id. */
-  int LEITURA = 6;
+  int LEITURA = 9;
   /** RegularExpression Id. */
-  int SE = 7;
+  int SE = 10;
   /** RegularExpression Id. */
-  int FIMSE = 8;
+  int FIMSE = 11;
   /** RegularExpression Id. */
-  int ENQUANTO = 9;
+  int ENQUANTO = 12;
   /** RegularExpression Id. */
-  int FIMENQUANTO = 10;
+  int FIMENQUANTO = 13;
   /** RegularExpression Id. */
-  int NUMERO = 11;
+  int NUMERO = 14;
   /** RegularExpression Id. */
-  int PALAVRA = 12;
+  int PALAVRA = 15;
   /** RegularExpression Id. */
-  int CHAR = 13;
+  int CHAR = 16;
   /** RegularExpression Id. */
-  int AP = 14;
+  int AP = 17;
   /** RegularExpression Id. */
-  int FP = 15;
+  int FP = 18;
   /** RegularExpression Id. */
-  int PV = 16;
+  int PV = 19;
   /** RegularExpression Id. */
-  int VIRGULA = 17;
+  int VIRGULA = 20;
   /** RegularExpression Id. */
-  int STRING = 18;
+  int STRING = 21;
   /** RegularExpression Id. */
-  int VAR = 19;
+  int VAR = 22;
   /** RegularExpression Id. */
-  int DIGIT = 20;
+  int DIGIT = 23;
   /** RegularExpression Id. */
-  int NUM = 21;
+  int NUM = 24;
   /** RegularExpression Id. */
-  int SOMA = 22;
+  int SOMA = 25;
   /** RegularExpression Id. */
-  int SUB = 23;
+  int SUB = 26;
   /** RegularExpression Id. */
-  int MUL = 24;
+  int MUL = 27;
   /** RegularExpression Id. */
-  int DIV = 25;
+  int DIV = 28;
   /** RegularExpression Id. */
-  int OU = 26;
+  int OU = 29;
   /** RegularExpression Id. */
-  int ATRIB = 27;
+  int ATRIB = 30;
   /** RegularExpression Id. */
-  int IGUAL = 28;
+  int IGUAL = 31;
   /** RegularExpression Id. */
-  int CONCAT = 29;
+  int CONCAT = 32;
 
   /** Lexical state. */
   int DEFAULT = 0;
+  /** Lexical state. */
+  int comentarioGeral = 1;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -71,6 +73,9 @@ public interface CompiladorConstants {
     "\"\\t\"",
     "\"\\r\"",
     "\"\\n\"",
+    "\"/*\"",
+    "\"*/\"",
+    "<token of kind 7>",
     "\"exibe\"",
     "\"le\"",
     "\"se\"",

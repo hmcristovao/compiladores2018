@@ -1,0 +1,9 @@
+numero n;
+n <- 1;
+enquanto ( n = 1 )
+	exibe "Digite um valor para n:";
+	le n;
+	exibe "Enquanto n igual a 1 solicita outro valor"; 
+fim-enquanto
+exibe "\nFim do enquanto. O valor de n = ", n;
+

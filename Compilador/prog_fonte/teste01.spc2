@@ -1,0 +1,30 @@
+exibe "Teste de declaracoes, variaveis a,b,d,x,c";
+numero a,b,d;
+palavra x;
+numero c <- 5, n;
+
+exibe "Teste atribuicoes de cte e expressao aritmetica";
+a <- 2;
+b <- 3*(1+2);
+d <- (a-1)*(b-2)*(c-3)+1;
+
+exibe "Teste de exibicoes de expressoes";
+exibe "a = ", a;
+exibe "b = 3*(1+2) = ", b;
+exibe "c = ", c;
+exibe "d = (a-1)*(b-2)*(c-3)+1 = ", d;
+
+exibe "Teste de entrada de numero e exibicao multipla - digite um numero para n:";
+le n;
+exibe "Proximos 3 sucessores de n = ", n+1, n+2, n+3;
+
+exibe "Teste de atribuicao de string";
+palavra s;
+s <- "string de teste";
+exibe s;
+
+exibe "Teste de entrada de string - digite uma string para x:";
+le x;
+exibe "String digitada para x = ", x;
+
+

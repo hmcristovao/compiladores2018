@@ -1,7 +1,6 @@
 package comandoAltoNivel;
 
 import comandoPrimitivo.*;
-import geradorCodigo.Expressao;
 import parser.Token;
 import semantico.*;
 
@@ -16,15 +15,19 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		this.token = token;
 	}
 	
-	public String toString() {
-		return this.getLexama() + " " + this.simbolo.getNome() + " " + this.expressao.getListaExpPosFixa() + "\n";
-	}
-
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
 		PrimitivoAtribuicao comando = new PrimitivoAtribuicao(this.simbolo.getReferencia(), this.simbolo.getTipo(), this.expressao.geraCodigoDestino());
 		lista.addComando(comando);
 		return lista;
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		return "\nComando Atribuicao - lexema: \""+this.getLexema() 
+		     + "\" - simbolo: " + this.simbolo.getNome() 
+		     + " - expressao: " + this.expressao;
+	}
+
 }

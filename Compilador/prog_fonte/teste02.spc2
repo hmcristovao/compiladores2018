@@ -1,0 +1,9 @@
+exibe "Teste de expressao com operador igual";
+
+numero a,b;
+
+a <- 55;
+b <- a = 55;
+
+exibe b;
+exibe a = b;

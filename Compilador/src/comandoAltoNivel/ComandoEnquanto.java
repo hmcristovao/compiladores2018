@@ -1,8 +1,8 @@
 package comandoAltoNivel;
 
 import comandoPrimitivo.*;
-import geradorCodigo.Expressao;
 import parser.Token;
+import semantico.Expressao;
 
 public class ComandoEnquanto extends ComandoAltoNivel{
 	
@@ -14,28 +14,31 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 		this.token = token;
 	}
-	
-	public String toString() {
-		return this.getLexama() + " " + this.expressao.getListaExpPosFixa() + "\n" + listaComandosAltoNivelTrue.toString() + "\n";
-	}
 
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		
-		ListaComandosPrimitivos listaComandosPrimitivosTrue = listaComandosAltoNivelTrue.geraListaComandoPrimitivosCompleta();
-		PrimitivoLabel labelFalse = new PrimitivoLabel("LabelFalse");
-		PrimitivoLabel labelInicioEnquanto = new PrimitivoLabel("LabelEnquanto");
+		ListaComandosPrimitivos listaTrue = listaComandosAltoNivelTrue.geraListaComandoPrimitivosCompleta();
+		PrimitivoLabel labelFalse = new PrimitivoLabel("LABELFALSE");
+		PrimitivoLabel labelInicioEnquanto = new PrimitivoLabel("LABELINICIOENQUANTO");
 		PrimitivoGoto comandoGoto = new PrimitivoGoto(labelInicioEnquanto);
 		
-		PrimitivoSeExpFalsoGoto comando = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFalse, listaComandosPrimitivosTrue);
+		PrimitivoSeExpFalsoGoto comandoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFalse, listaTrue);
 		 
 		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
 		lista.addComando(labelInicioEnquanto);
-		lista.addComando(comando);
+		lista.addComando(comandoSeExpFalsoGoto);
 		lista.addComando(comandoGoto);		
 		lista.addComando(labelFalse);	
 		
 		return lista;
+	}
+	
+	@Override
+	public String toString() {
+		return "\nComando Enquanto - lexema: \"" + this.getLexema() 
+		     + "\" - expressao: " + this.expressao + " - lista comandos true: " 
+			 + this.listaComandosAltoNivelTrue;
 	}
 
 }

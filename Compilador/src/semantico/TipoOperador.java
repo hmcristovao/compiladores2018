@@ -2,7 +2,6 @@ package semantico;
 
 public enum TipoOperador 
 {
-	
 	SOMA, 
 	SUB, 
 	MUL, 
@@ -12,5 +11,4 @@ public enum TipoOperador
 	CONCAT,
 	AP,
 	FP;
-	
 }

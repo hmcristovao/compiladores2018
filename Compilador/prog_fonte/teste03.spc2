@@ -1,0 +1,18 @@
+exibe "Teste de comando condicional simples\n";
+numero var1, var2, n;
+
+var1 <- 1;
+var2 <- 2;
+
+exibe "Digite um numero para n:";
+le n;
+
+se ( n = var1 ) 
+	exibe "n eh igual a variavel var1";
+fim-se
+
+exibe "Comando entre as condicionais";
+se ( n = var2 ) 
+	exibe "n eh igual a variavel var2";
+fim-se
+exibe "\nFim do teste!";

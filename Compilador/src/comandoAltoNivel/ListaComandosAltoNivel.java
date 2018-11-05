@@ -30,17 +30,12 @@ public class ListaComandosAltoNivel {
 				listaComandosPrimitivosCompleta.addComando(comandoPrimitivo);
 			}
 		}
-		return listaComandosPrimitivosCompleta;
-		
-		
+		return listaComandosPrimitivosCompleta;	
 	}
 	
-	
-	
 	@Override
-	public String toString()
-	{
-		return  this.getListaComandosAltoNivel().toString();
+	public String toString() {
+		return  this.listaComandosAltoNivel.toString();
 	}
 	
 

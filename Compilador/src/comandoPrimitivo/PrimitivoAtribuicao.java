@@ -3,42 +3,39 @@ package comandoPrimitivo;
 import semantico.TipoDado;
 
 public class PrimitivoAtribuicao extends ComandoPrimitivo {
-	
+
 	private int referencia;
 	private TipoDado tipo;
 	private String expDestinoAssembler;
-	
-	
+
+
 	public PrimitivoAtribuicao(int referencia, TipoDado tipo, String expDestinoAssembler) {
 		this.referencia = referencia;
 		this.tipo = tipo;
-		this.expDestinoAssembler = expDestinoAssembler;
-		
+		this.expDestinoAssembler = expDestinoAssembler;	
 	}
-	
+
 	public String geraCodigoDestino() {
-		
-		String codigoDestino = expDestinoAssembler;
-		
-		if(codigoDestino.contains("dcmpg")) {
-			if(referencia >= 4) {
-				codigoDestino += "istore " + this.referencia + "\n";
-			}else {
-				codigoDestino += "istore_" + this.referencia + "\n";
-			}
-		}else {
-			if(referencia >= 4) {
-				codigoDestino += "dstore " + this.referencia + "\n";
-			}else {
-				codigoDestino += "dstore_" + this.referencia + "\n";
-			}
+		String codigoDestino = this.expDestinoAssembler;
+		if(this.tipo == TipoDado.NUMERO) {
+			if(referencia >= 4) 
+				codigoDestino += "dstore " + this.referencia + "\r\n";
+			else 
+				codigoDestino += "dstore_" + this.referencia + "\r\n";
 		}
-		
+		else if(this.tipo == TipoDado.PALAVRA) {
+			if(referencia >= 4) 
+				codigoDestino += "astore " + this.referencia + "\r\n";
+			else 
+				codigoDestino += "astore_" + this.referencia + "\r\n";
+		}
 		return codigoDestino;
 	}
-	
+
 	public String toString() {
-		return "Primitivo Atribuicao " + this.referencia + " " + this.tipo + " " + this.expDestinoAssembler +"\n";
+		return "\nPrimitivo Atribuicao - referencia: " + this.referencia 
+			 + "; tipo: " + this.tipo + "; expressao assembler:\n" 
+			 + this.expDestinoAssembler;
 	}	
 
 }

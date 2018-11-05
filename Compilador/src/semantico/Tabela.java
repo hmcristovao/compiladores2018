@@ -9,44 +9,39 @@ import semantico.Simbolo;
 
 public class Tabela {
 	
+	private HashMap<String, Simbolo> tab = new HashMap<String, Simbolo>();
+	private int marcador = 1; // armazena a última referência incluída na tabela
 	
-	static HashMap<String, Simbolo> tab = new HashMap<String, Simbolo>();
-	
-	private static int marcador = 1; // armazena a última referência incluída na tabela
-	
-	
-	public static int getMarcador() {
+	public int getMarcador() {
 		return marcador;
 	}
 
-	public static void insereSimbolo(Simbolo simbolo) {
-		tab.put(simbolo.getNome(), simbolo);
+	public void insereSimbolo(Simbolo simbolo) {
+		this.tab.put(simbolo.getNome(), simbolo);
 	}
 
-	public static boolean verificaSimbolo(String chave) {
-		return tab.containsKey(chave);
+	public boolean verificaSimbolo(String chave) {
+		return this.tab.containsKey(chave);
 	}
 
 	public int tamanhoTabela() {
-		return tab.size();
+		return this.tab.size();
 	}
 	
-	public static Simbolo pesquisaTabela(String chave) {
-		return tab.get(chave);
+	public Simbolo pesquisaTabela(String chave) {
+		return this.tab.get(chave);
 	}
 	
-	public static void imprimeTabela(){
+	public void imprimeTabela(){
 		System.out.println(tab);
 	}
 	
-	public static TipoDado tipoVariavel(String chave) {		
+	public TipoDado tipoVariavel(String chave) {		
 		return tab.get(chave).getTipo();
 	}
 	
-	public static void incrementaMarcador(TipoDado tipo) {
-		
+	public void incrementaMarcador(TipoDado tipo) {
 		if(tipo == TipoDado.NUMERO) {
-			
 			marcador+=2;
 		}
 		if(tipo == TipoDado.PALAVRA) {
@@ -54,10 +49,8 @@ public class Tabela {
 		}
 	}
 	
-	
-	public static void insereNaTabela(Token variavel, TipoDado tipo) {
-		 
-		 if(tab.containsKey(variavel.image) == false) {
+	public void insereNaTabela(Token variavel, TipoDado tipo) {
+		 if(this.tab.containsKey(variavel.image) == false) {
 			  Simbolo simbolo = new Simbolo(variavel, tipo, getMarcador());
 			  simbolo.setToken(variavel);
 		  	  simbolo.setTipo(tipo);
@@ -70,15 +63,13 @@ public class Tabela {
 	  	  }
 	 }
 	
-	public static void verificaVariavelDeclarada(String variavel) {
+	public void verificaVariavelDeclarada(String variavel) {
 		 if(tab.containsKey(variavel) == false) {
 		  	  	throw new ErroSemantico ("Variavel "+ variavel + " nao declarada");
 		 }
-		 
-	 }
+	}
 	
 	public String toString() {
 		return this.tab.toString();
 	}
-
 }

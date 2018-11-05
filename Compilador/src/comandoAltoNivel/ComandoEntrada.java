@@ -14,10 +14,6 @@ public class ComandoEntrada extends ComandoAltoNivel {
 		this.token = token;
 	}
 	
-	public String toString() {
-		return  this.getLexama() + " " + this.simbolo.getNome() + "\n";
-	}
-
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		
@@ -27,5 +23,9 @@ public class ComandoEntrada extends ComandoAltoNivel {
 		return lista;
 	}
 	
-
+	@Override
+	public String toString() {
+		return "\nComando Leitura - lexema: \""+this.getLexema() 
+		     + "\" - simbolo: " + this.simbolo.getNome();
+	}
 }

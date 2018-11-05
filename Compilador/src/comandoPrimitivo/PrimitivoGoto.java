@@ -10,12 +10,12 @@ public class PrimitivoGoto extends ComandoPrimitivo{
 	
 	public String geraCodigoDestino() {
 		
-		String codigoDestino = "goto " + this.label.getLabel() + "\n";		
+		String codigoDestino = "goto " + this.label.getLabel() + "\r\n";		
 		return codigoDestino;
 	}
 	
 	public String toString() {
-		return "Primitivo Goto " + this.label + "\n";
+		return "\nPrimitivo Goto - nome do label: " + this.label;
 	}
 
 }

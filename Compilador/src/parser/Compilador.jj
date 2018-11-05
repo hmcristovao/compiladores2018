@@ -13,15 +13,16 @@ package parser;
 
 import java.io.*;
 import semantico.*;
-import geradorCodigo.*;
 import apoio.*;
 import tratamentoErro.*;
 import comandoAltoNivel.*;
-import java.util.LinkedList;
 import comandoPrimitivo.*;
+import codigoDestino.*;
 
 public class Compilador {
+  
    public static Tabela tabela = new Tabela();
+   
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
        try {
@@ -31,38 +32,50 @@ public class Compilador {
 		 // Primeira passagem
          ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
          Compilador.inicio(listaComandosAltoNivel);
-         System.out.println("***** Primeira Passagem *****\nLista de Comandos Alto Nível:\n"+listaComandosAltoNivel);
+         System.out.println("***** Primeira Passagem *****\n"
+                          + "Lista de Comandos Alto Nivel:\n"
+                          + listaComandosAltoNivel);
 
 		 // Exibicao da tabela de simbolos
-         System.out.println("\n\n***** Tabela de Simbolos *****\n"+tabela);
+         System.out.println("\n\n***** Tabela de Simbolos *****\n"
+                          + tabela);
 
 		 // Segunda passagem
          ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
          listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosCompleta();
-         System.out.println("\n\n***** Segunda Passagem *****\nLista de Comandos Primitivos:\n"+listaComandosPrimitivos);
+         System.out.println("\n\n***** Segunda Passagem *****\n"
+                          + "Lista de Comandos Primitivos:\n"
+                          + listaComandosPrimitivos);
 
 		 // Terceira passagem
-		 CodigoDestino codigoDestino = new CodigoDestino();
-		 codigoDestino.geraArquivo(Config.pathSaida + Config.nomeArquivo + Config.extensaoCodigoDestino, listaComandosPrimitivos);
-         System.out.println("\n\n***** Terceira Passagem *****\nLista de Comandos Destino:\n"+listaComandosPrimitivos);
+		 CodigoDestino codigoDestino = new CodigoDestino(listaComandosPrimitivos);
+         System.out.println("\n\n***** Terceira Passagem *****\n"
+                          + "Lista de Comandos Destino:\n"
+                          + codigoDestino);
+
+		 // Criacao do arquivo destino
+		 codigoDestino.geraArquivo(Config.pathSaida + Config.nomeArquivo + Config.extensaoCodigoDestino );
+         System.out.println("\n\n***** Criacao do arquivo destino *****\n"
+                          + "Arquivo destino: "
+                          + Config.pathSaida + Config.nomeArquivo + Config.extensaoCodigoDestino);
 
 		 // Fim
-         System.out.println("\n\n***** Compilacao bem sucedida! *****\n"+tabela);
+         System.out.println("\n\n***** Compilacao bem sucedida! *****");
+         
       }
-      catch(FileNotFoundException e)
-      {
+      catch(FileNotFoundException e) {
          System.err.println("\nErro: arquivo nao encontrado");
       }
-      catch(TokenMgrError e)
-      {
+      catch (IOException e) {
+		 System.out.println("Erro de criacao de arquivo" + e.getMessage());
+	  }
+      catch(TokenMgrError e) {
          System.err.println("\nErro lexico: " + e.getMessage());
       }
-      catch(ParseException e)
-      {
+      catch(ParseException e) {
 		System.err.println("\nErro Sintatico: " + e.getMessage());
       }
-      catch(ErroSemantico e)
-      {
+      catch(ErroSemantico e) {
 		System.err.println("\nErro Semantico: " + e.getMessage());
       }
    }
@@ -70,6 +83,9 @@ public class Compilador {
 PARSER_END(Compilador)
  
 SKIP : { " " | "\t" | "\r" | "\n" }
+
+SKIP : { "/*" : comentarioGeral }
+<comentarioGeral> SKIP: { "*/" : DEFAULT | <~[]> }
 
 //TOKENS DE COMANDOS 
 TOKEN [IGNORE_CASE] : {
@@ -206,36 +222,37 @@ void termo3(Expressao exp):
 
 void termo4(Expressao exp):
 {
-    Token var, entrada, sinal;
+    Token tokenVar, tokenEntrada;
     Item item = null;
 }
 {
-   <AP> expressao(exp) <FP> 
-   |entrada=<NUM>
+   <AP> expressao(exp) <FP>
+   
+   | tokenEntrada = <NUM>
       {
-  	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, entrada);
+  	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);
   	     exp.addListaExpPosFixa(item);
       } 
-   |<SOMA>entrada=<NUM>
+   | <SOMA> tokenEntrada = <NUM>
       {
-  	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, entrada);
+  	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);
   	     exp.addListaExpPosFixa(item);
       }
-   |sinal=<SUB>entrada=<NUM>
+   | <SUB> tokenEntrada = <NUM>
       {
-  	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, entrada, sinal);
+  	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.NEG);
   	     exp.addListaExpPosFixa(item);
       }
-   |var=<VAR>
+   | tokenVar = <VAR>
       {
-  	     Tabela.verificaVariavelDeclarada(var.image);
-  	     item = new Operando(tabela.tipoVariavel(var.image),TipoElemento.VAR, var);
+  	     tabela.verificaVariavelDeclarada(tokenVar.image);
+  	     item = new Operando(tabela.tipoVariavel(tokenVar.image),TipoElemento.VAR, tokenVar, Sinal.POS);
   	     exp.addListaExpPosFixa(item);
   	
       }
-   |entrada=<STRING>
+   | tokenEntrada = <STRING>
       {
-  	     item = new Operando(TipoDado.PALAVRA,TipoElemento.CTE, entrada);
+  	     item = new Operando(TipoDado.PALAVRA,TipoElemento.CTE, tokenEntrada, Sinal.POS);
   	     exp.addListaExpPosFixa(item);
       }
 }
@@ -275,7 +292,7 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
 {
   	var=< VAR >
   	{
-  	  	Tabela.verificaVariavelDeclarada(var.image);
+  	  	tabela.verificaVariavelDeclarada(var.image);
   	}
   	atrib=< ATRIB > expressao = iniciaExpressao()
   	{
@@ -294,27 +311,33 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
     Expressao expressao = null;
 }
 {
-  	(<NUMERO> {tipo = TipoDado.NUMERO;} |<PALAVRA> {tipo = TipoDado.PALAVRA;}) variavel=<VAR> 
+  	(
+  	    <NUMERO>  {tipo = TipoDado.NUMERO;}
+  	  |
+  	    <PALAVRA> {tipo = TipoDado.PALAVRA;}
+  	)
+  	variavel=<VAR> 
   	{
-  		Tabela.insereNaTabela(variavel, tipo);
+  		tabela.insereNaTabela(variavel, tipo);
   	}
   	( atrib = <ATRIB> expressao=iniciaExpressao() 
-  	{
-  	  	comando = new ComandoAtribuicao(Tabela.pesquisaTabela(variavel.image), expressao, atrib);
+  	  {
+  	  	comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
   	  	listaComandosAltoNivel.addComando(comando);
-  	}
+  	  }
   	)?
-  	 (<VIRGULA>  variavel=<VAR>
-  	 {
-  	   //System.out.println(variavel.image);
-	  	Tabela.insereNaTabela(variavel, tipo);
-  	 }
-  	 ( atrib = <ATRIB> expressao=iniciaExpressao()
-  	{
-  	  	comando = new ComandoAtribuicao(Tabela.pesquisaTabela(variavel.image), expressao, atrib);
-  	  	listaComandosAltoNivel.addComando(comando);
-  	}
-  	)? 
+  	(
+  	  <VIRGULA>  variavel=<VAR>
+  	  {
+  	     //System.out.println(variavel.image);
+	  	 tabela.insereNaTabela(variavel, tipo);
+  	  }
+  	  ( atrib = <ATRIB> expressao=iniciaExpressao()
+  	    {
+  	  	   comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
+  	  	   listaComandosAltoNivel.addComando(comando);
+  	    }
+  	  )? 
   	)* <PV> 
   	
 }
@@ -386,10 +409,10 @@ void exibe(ListaComandosAltoNivel listaExibe):
 	  	listaExibe.addComando(comando);	
 	}
 	( <VIRGULA> expressao = iniciaExpressao()
-	{
-	  	comando = new ComandoSaida(expressao, exibe);
-	  	listaExibe.addComando(comando);  	
-	}
+	   {
+	  	  comando = new ComandoSaida(expressao, exibe);
+	  	  listaExibe.addComando(comando);  	
+	   }
 	)* <PV>
 }
 	

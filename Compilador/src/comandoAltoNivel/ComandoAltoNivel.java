@@ -7,7 +7,7 @@ public abstract class ComandoAltoNivel {
 	
 	public Token token;
 		
-	public String getLexama() {
+	public String getLexema() {
 		return token.image;
 	}
 	

@@ -1,6 +1,6 @@
 package comandoAltoNivel;
 
-import geradorCodigo.Expressao;
+import semantico.Expressao;
 
 public abstract class ComandoCondicional extends ComandoAltoNivel{
 	
@@ -11,7 +11,5 @@ public abstract class ComandoCondicional extends ComandoAltoNivel{
 		this.expressao = expressao;
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 	}
-
 	public abstract String toString();
-
 }

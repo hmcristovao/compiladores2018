@@ -13,18 +13,20 @@ public class PrimitivoSeExpFalsoGoto extends ComandoPrimitivo{
 	}
 	
 	public String geraCodigoDestino() {
-		
-		String codigoDestino = this.expDestinoAssembler
-				+ "ifne "+this.labelFalse.getLabel() + "\n"
-				+ this.listaComandosPrimitivosTrue.geraCodigoDestinoCompleto();
+		String codigoDestino = 
+			      this.expDestinoAssembler
+				+ "dconst_0 \r\n"
+				+ "dcmpg \r\n"
+				+ "ifeq "+this.labelFalse.getLabel() + "\r\n"
+				+ this.listaComandosPrimitivosTrue.geraCodigoDestinoTotal();
 		
 		return codigoDestino;
 	}
 	
 	public String toString() {
-		return "Primitivo SeExpFalsoGoto" + this.expDestinoAssembler + " " + this.labelFalse + " \t" + this.listaComandosPrimitivosTrue;
+		return "\nPrimitivo SeExpFalsoGoto - expressao assembler:\n" 
+	         + this.expDestinoAssembler + "; label do goto: " 
+			 + this.labelFalse + "; lista comandos true:\n" 
+	         + this.listaComandosPrimitivosTrue;
 	}
-	
-	
-
 }

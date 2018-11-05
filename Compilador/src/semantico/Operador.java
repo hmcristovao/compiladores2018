@@ -19,10 +19,8 @@ public class Operador extends Item{
 	     return this.tipoOperador;
    }
 
-@Override
-	public String toString() {
-    	return this.token.image + "(" + this.tipoOperador +") ";
-
-	}
-
+   @Override
+   public String toString() {
+      return this.token.image + " (tipo: " + this.tipoOperador +")";
+   }
 }

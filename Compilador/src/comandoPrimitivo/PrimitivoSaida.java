@@ -6,32 +6,28 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 	
 	private TipoDado tipo;
 	private String expDestinoAssembler;
-	
-	
+		
 	public PrimitivoSaida(TipoDado tipo, String expDestinoAssembler) {
 		this.tipo = tipo;
 		this.expDestinoAssembler = expDestinoAssembler;
-		
 	}
 	
 	public String geraCodigoDestino() {
 		
-		String codigoDestino = "getstatic java/lang/System/out Ljava/io/PrintStream;\n"
+		String codigoDestino = "getstatic java/lang/System/out Ljava/io/PrintStream; \r\n"
 				+ this.expDestinoAssembler;
 		
-		if(tipo == TipoDado.NUMERO) { 
-			codigoDestino+="invokevirtual java/io/PrintStream/println(D)V\n";
+		if(this.tipo == TipoDado.NUMERO) { 
+			codigoDestino+="invokevirtual java/io/PrintStream/println(D)V \r\n";
 		}else { 
-			codigoDestino+= "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n";	
+			codigoDestino+= "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V \r\n";	
 		}
-		
-		
 		return codigoDestino;
-		
 	}
 	
 	public String toString() {
-		return "Primitivo Saida " + this.tipo + " " + this.expDestinoAssembler +"\n";
+		return "\nPrimitivo Saida - tipo: " + this.tipo 
+			 + "; expressao assembler:\n" + this.expDestinoAssembler;
 	}
 
 }
