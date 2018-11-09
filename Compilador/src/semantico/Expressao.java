@@ -30,7 +30,7 @@ public class Expressao {
 	}
 	
 	public void addListaExpInfixa(Item item) {
-		this.listaExpPosFixa.add(item);
+		this.listaExpInfixa.add(item);
 	}
 	public void addListaExpPosFixa(Item item) {
 		this.listaExpPosFixa.add(item);

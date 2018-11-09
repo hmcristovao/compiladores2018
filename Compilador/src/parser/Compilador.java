@@ -74,7 +74,6 @@ public class Compilador implements CompiladorConstants {
   static final public Expressao iniciaExpressao() throws ParseException {
    Expressao exp = new Expressao();
     expressao(exp);
-                //exp.imprimeExpressao();
                 {if (true) return exp;}
     throw new Error("Missing return statement in function");
   }
@@ -94,6 +93,8 @@ public class Compilador implements CompiladorConstants {
         break label_1;
       }
       t = jj_consume_token(OU);
+                item = new Operador(TipoOperador.OU,t);
+                exp.addListaExpInfixa(item);
       termo(exp);
               item = new Operador(TipoOperador.OU,t);
                   exp.addListaExpPosFixa(item);
@@ -107,6 +108,8 @@ public class Compilador implements CompiladorConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IGUAL:
       t = jj_consume_token(IGUAL);
+                  item = new Operador(TipoOperador.IGUAL,t);
+                  exp.addListaExpInfixa(item);
       termo1(exp);
                   item = new Operador(TipoOperador.IGUAL,t);
                   exp.addListaExpPosFixa(item);
@@ -132,6 +135,8 @@ public class Compilador implements CompiladorConstants {
         break label_2;
       }
       t = jj_consume_token(CONCAT);
+                  item = new Operador(TipoOperador.CONCAT,t);
+                  exp.addListaExpInfixa(item);
       termo2(exp);
                   item = new Operador(TipoOperador.CONCAT,t);
                   exp.addListaExpPosFixa(item);
@@ -168,6 +173,8 @@ public class Compilador implements CompiladorConstants {
         jj_consume_token(-1);
         throw new ParseException();
       }
+                  item = new Operador(operador,t);
+                  exp.addListaExpInfixa(item);
       termo3(exp);
                   item = new Operador(operador,t);
                   exp.addListaExpPosFixa(item);
@@ -204,6 +211,8 @@ public class Compilador implements CompiladorConstants {
         jj_consume_token(-1);
         throw new ParseException();
       }
+         item = new Operador(operador,t);
+         exp.addListaExpInfixa(item);
       termo4(exp);
          item = new Operador(operador,t);
          exp.addListaExpPosFixa(item);
@@ -222,29 +231,34 @@ public class Compilador implements CompiladorConstants {
     case NUM:
       tokenEntrada = jj_consume_token(NUM);
              item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);
+             exp.addListaExpInfixa(item);
              exp.addListaExpPosFixa(item);
       break;
     case SOMA:
       jj_consume_token(SOMA);
       tokenEntrada = jj_consume_token(NUM);
              item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);
+             exp.addListaExpInfixa(item);
              exp.addListaExpPosFixa(item);
       break;
     case SUB:
       jj_consume_token(SUB);
       tokenEntrada = jj_consume_token(NUM);
              item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.NEG);
+             exp.addListaExpInfixa(item);
              exp.addListaExpPosFixa(item);
       break;
     case VAR:
       tokenVar = jj_consume_token(VAR);
              tabela.verificaVariavelDeclarada(tokenVar.image);
              item = new Operando(tabela.tipoVariavel(tokenVar.image),TipoElemento.VAR, tokenVar, Sinal.POS);
+             exp.addListaExpInfixa(item);
              exp.addListaExpPosFixa(item);
       break;
     case STRING:
       tokenEntrada = jj_consume_token(STRING);
              item = new Operando(TipoDado.PALAVRA,TipoElemento.CTE, tokenEntrada, Sinal.POS);
+             exp.addListaExpInfixa(item);
              exp.addListaExpPosFixa(item);
       break;
     default:

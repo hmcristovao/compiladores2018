@@ -137,7 +137,7 @@ Expressao iniciaExpressao():
 }
 {
 	expressao(exp)
-	{	//exp.imprimeExpressao();
+	{
 		return exp;
 	}	
 }
@@ -149,7 +149,13 @@ void expressao(Expressao exp):
 }
 {
 	 termo(exp)
-	 (t=< OU > termo(exp)
+	 (t=< OU >
+	 {
+	   	item = new Operador(TipoOperador.OU,t);
+	 	exp.addListaExpInfixa(item);
+
+	 }
+	 termo(exp)
 	    {
 	      item = new Operador(TipoOperador.OU,t);
 	 	  exp.addListaExpPosFixa(item);	 	
@@ -164,7 +170,12 @@ void  termo(Expressao exp):
 }
 {
   	termo1(exp)
-  	(t=< IGUAL > termo1(exp)
+  	(t=< IGUAL >
+  	{
+  	  	  item = new Operador(TipoOperador.IGUAL,t);
+	 	  exp.addListaExpInfixa(item);
+  	}
+  	termo1(exp)
   	   {
   	  	  item = new Operador(TipoOperador.IGUAL,t);
 	 	  exp.addListaExpPosFixa(item);
@@ -179,7 +190,12 @@ void termo1(Expressao exp):
 }
 {
   	termo2(exp)
-  	(t=< CONCAT > termo2(exp)
+  	(t=< CONCAT >
+  	{
+  	 	  item = new Operador(TipoOperador.CONCAT,t);
+  		  exp.addListaExpInfixa(item); 
+  	}
+  	termo2(exp)
   	   {
   	  	  item = new Operador(TipoOperador.CONCAT,t);
   		  exp.addListaExpPosFixa(item);
@@ -195,7 +211,12 @@ void termo2(Expressao exp):
 {
   	termo3(exp)
   	(
-  	  (t=< SOMA > {operador = TipoOperador.SOMA;} | t=< SUB > {operador = TipoOperador.SUB;}) termo3(exp)
+  	  (t=< SOMA > {operador = TipoOperador.SOMA;} | t=< SUB > {operador = TipoOperador.SUB;})
+  	  {
+  	   	  item = new Operador(operador,t);
+  		  exp.addListaExpInfixa(item);
+  	  }
+  	  termo3(exp)
   	  {
   	  	  item = new Operador(operador,t);
   		  exp.addListaExpPosFixa(item);
@@ -212,7 +233,12 @@ void termo3(Expressao exp):
 {
    termo4(exp)
    (
-      (t=< MUL > {operador = TipoOperador.MUL;} | t=< DIV > {operador = TipoOperador.DIV;}) termo4(exp)
+      (t=< MUL > {operador = TipoOperador.MUL;} | t=< DIV > {operador = TipoOperador.DIV;})
+      {
+       	 item = new Operador(operador,t);
+     	 exp.addListaExpInfixa(item);
+      }
+      termo4(exp)
       {
      	 item = new Operador(operador,t);
      	 exp.addListaExpPosFixa(item);
@@ -231,28 +257,33 @@ void termo4(Expressao exp):
    | tokenEntrada = <NUM>
       {
   	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);
+  	     exp.addListaExpInfixa(item);
   	     exp.addListaExpPosFixa(item);
       } 
    | <SOMA> tokenEntrada = <NUM>
       {
   	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);
+  	     exp.addListaExpInfixa(item);
   	     exp.addListaExpPosFixa(item);
       }
    | <SUB> tokenEntrada = <NUM>
       {
   	     item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.NEG);
+  	     exp.addListaExpInfixa(item);
   	     exp.addListaExpPosFixa(item);
       }
    | tokenVar = <VAR>
       {
   	     tabela.verificaVariavelDeclarada(tokenVar.image);
   	     item = new Operando(tabela.tipoVariavel(tokenVar.image),TipoElemento.VAR, tokenVar, Sinal.POS);
+  	     exp.addListaExpInfixa(item);
   	     exp.addListaExpPosFixa(item);
   	
       }
    | tokenEntrada = <STRING>
       {
   	     item = new Operando(TipoDado.PALAVRA,TipoElemento.CTE, tokenEntrada, Sinal.POS);
+  	     exp.addListaExpInfixa(item);
   	     exp.addListaExpPosFixa(item);
       }
 }
