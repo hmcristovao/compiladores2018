@@ -224,9 +224,13 @@ public class Compilador implements CompiladorConstants {
     Item item = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AP:
-      jj_consume_token(AP);
+      tokenEntrada = jj_consume_token(AP);
+                 item = new Operador(TipoOperador.AP, tokenEntrada);
+         exp.addListaExpInfixa(item);
       expressao(exp);
-      jj_consume_token(FP);
+      tokenEntrada = jj_consume_token(FP);
+                 item = new Operador(TipoOperador.FP, tokenEntrada);
+         exp.addListaExpInfixa(item);
       break;
     case NUM:
       tokenEntrada = jj_consume_token(NUM);

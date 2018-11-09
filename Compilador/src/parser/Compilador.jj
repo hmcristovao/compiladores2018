@@ -252,7 +252,17 @@ void termo4(Expressao exp):
     Item item = null;
 }
 {
-   <AP> expressao(exp) <FP>
+   tokenEntrada = <AP>
+	{
+	  	 item = new Operador(TipoOperador.AP, tokenEntrada);
+     	 exp.addListaExpInfixa(item);
+	}
+   expressao(exp)
+   tokenEntrada = <FP>
+   {
+	  	 item = new Operador(TipoOperador.FP, tokenEntrada);
+     	 exp.addListaExpInfixa(item);
+	}
    
    | tokenEntrada = <NUM>
       {
