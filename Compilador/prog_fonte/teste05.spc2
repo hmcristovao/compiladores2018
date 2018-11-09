@@ -1,45 +1,4 @@
 numero a,b,c;
-numero d <- 5, n;
-palavra x, y, z;
-
-a <- 2*(3+5);
-exibe a;
-b <- a/2;
-exibe b;
-c <- (a = 16);
-
-	
-c <- 0 OR 1;
-exibe c;
-c <- (b = 8) OR ( a = 10 );
-exibe c;
-
-  
-exibe "Digite um numero:\n";
-le n;
-
-se ( n = d ) 
-	exibe "igual a variavel d\n";
-fim-se
-
-n <- 1;
-enquanto ( n = 1 )
-	exibe "entre com o valor de n:\n";
-	le n;
-	exibe "n = ", n; 
-fim-enquanto
-
-exibe "\nProximo enquanto\n";
-
-enquanto ( d = 5 )
-	d <- d + 1;
-	exibe d;
-fim-enquanto
-
-exibe "\n Teste de concatenação\n";
-x <- "Compila";
-y <- "dores\n";
-exibe x & y;
-
-z <- x & y;
-exibe z;
+a <- 1+2;
+b <- (3*((1+(2))+5));
+c <- a*(a-1)*(b-2)*(c-3)+(1*b);
