@@ -10,7 +10,7 @@ import comandoPrimitivo.*;
 import codigoDestino.*;
 
 public class Compilador implements CompiladorConstants {
-
+        //java -jar jasmin.jar teste05.j && java teste05 
    public static Tabela tabela = new Tabela();
 
    public static void main(String args[])  throws ParseException  {
@@ -22,6 +22,7 @@ public class Compilador implements CompiladorConstants {
                  // Primeira passagem
          ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
          Compilador.inicio(listaComandosAltoNivel);
+
          System.out.println("***** Primeira Passagem *****\u005cn"
                           + "Lista de Comandos Alto Nivel:\u005cn"
                           + listaComandosAltoNivel);

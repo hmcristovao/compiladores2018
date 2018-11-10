@@ -10,7 +10,7 @@ public abstract class ComandoAltoNivel {
 	public String getLexema() {
 		return token.image;
 	}
-	
+		
 	public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();	
 		
 	public abstract String toString();

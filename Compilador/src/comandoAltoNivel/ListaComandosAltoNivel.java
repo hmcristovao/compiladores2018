@@ -9,6 +9,7 @@ public class ListaComandosAltoNivel {
 	
 	private LinkedList<ComandoAltoNivel> listaComandosAltoNivel;
 	
+	
 	public ListaComandosAltoNivel() {
 		this.listaComandosAltoNivel = new LinkedList<ComandoAltoNivel>();   
 	}
@@ -21,8 +22,7 @@ public class ListaComandosAltoNivel {
 		return this.listaComandosAltoNivel;
 	}
 	
-	public ListaComandosPrimitivos geraListaComandoPrimitivosCompleta() {
-		
+	public ListaComandosPrimitivos geraListaComandoPrimitivosCompleta() {		
 		ListaComandosPrimitivos listaComandosPrimitivosCompleta = new ListaComandosPrimitivos();
 		for(ComandoAltoNivel comando : listaComandosAltoNivel ){
 			ListaComandosPrimitivos listaComandosPrimitivos = comando.geraListaComandosPrimitivos();
@@ -32,6 +32,8 @@ public class ListaComandosAltoNivel {
 		}
 		return listaComandosPrimitivosCompleta;	
 	}
+	
+	
 	
 	@Override
 	public String toString() {

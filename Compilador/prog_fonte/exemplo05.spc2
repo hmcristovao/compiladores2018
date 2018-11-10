@@ -1,2 +1,9 @@
 numero a <- -1--2+-3++4-+5;
-exibe a;
+
+numero b <- (2 + 3) * a;
+
+numero d, e;
+
+palavra k, l , m;
+
+exibe b;

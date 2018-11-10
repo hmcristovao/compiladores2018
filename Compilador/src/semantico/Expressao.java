@@ -1,7 +1,7 @@
 package semantico;
 
 import java.util.LinkedList;
-
+import codigoDestino.*;
 import comandoPrimitivo.*;
 import parser.Compilador;
 
@@ -9,6 +9,7 @@ public class Expressao {
 	
 	LinkedList<Item> listaExpInfixa;
 	LinkedList<Item> listaExpPosFixa;
+	public int tam = 0;
 	
 	static LinkedList<String> listaOperandoString =  new LinkedList<String>();
 	
@@ -51,6 +52,7 @@ public class Expressao {
 				if(operando.getTipoDado() == TipoDado.NUMERO) {
 					if(operando.getTipoElemento() == TipoElemento.CTE){
 						codigoDestinoExpressao += "ldc2_w " + operando.getLexema() + "\r\n";
+						
 					}
 					if(operando.getTipoElemento() == TipoElemento.VAR){
 						int referencia = Compilador.tabela.pesquisaTabela(operando.getLexema()). getReferencia();
@@ -59,7 +61,12 @@ public class Expressao {
 						}else {
 							codigoDestinoExpressao += "dload_" + referencia + "\r\n";
 						}
+						
 					}
+					//calculo da stack
+					CodigoDestino.aux += 2;
+					if(CodigoDestino.aux > CodigoDestino.tam)
+						CodigoDestino.tam = CodigoDestino.aux;
 				}
 				// se for string
 				if(operando.getTipoDado() == TipoDado.PALAVRA) {
@@ -70,6 +77,10 @@ public class Expressao {
 						int referencia = Compilador.tabela.pesquisaTabela(operando.getLexema()).getReferencia();						
 						codigoDestinoExpressao += "aload " + referencia + "\r\n";
 					}
+					//calculo da stack
+					CodigoDestino.aux += 1;
+					if(CodigoDestino.aux > CodigoDestino.tam)
+						CodigoDestino.tam = CodigoDestino.aux;
 				}
 			}
 			// se for operador
@@ -104,6 +115,8 @@ public class Expressao {
 							                + "dconst_1 \r\n"
 							                + labelSAIDA.geraCodigoDestino();
 				}
+				//calculo da stack
+				CodigoDestino.aux -= 2;
 			}			
 		}		
 		return codigoDestinoExpressao;	

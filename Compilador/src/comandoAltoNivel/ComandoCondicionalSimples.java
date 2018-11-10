@@ -23,7 +23,7 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 		
 		return lista;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "\nComando Condicional Simples - lexema: \"" + this.getLexema() 

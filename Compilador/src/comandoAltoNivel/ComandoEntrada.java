@@ -1,9 +1,11 @@
 package comandoAltoNivel;
 
+import codigoDestino.CodigoDestino;
 import comandoPrimitivo.ListaComandosPrimitivos;
 import comandoPrimitivo.PrimitivoEntrada;
 import parser.Token;
 import semantico.Simbolo;
+import semantico.TipoDado;
 
 public class ComandoEntrada extends ComandoAltoNivel {
 	
@@ -19,6 +21,13 @@ public class ComandoEntrada extends ComandoAltoNivel {
 		
 		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
 		PrimitivoEntrada comando = new PrimitivoEntrada(this.simbolo.getReferencia(), this.simbolo.getTipo());
+		
+		//calculo da stack
+		if(this.simbolo.getTipo() == TipoDado.NUMERO)
+			CodigoDestino.aux -=2;
+		else if(this.simbolo.getTipo() == TipoDado.PALAVRA)
+			CodigoDestino.aux -=1;
+		
 		lista.addComando(comando);
 		return lista;
 	}

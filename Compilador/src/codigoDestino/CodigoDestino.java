@@ -3,11 +3,27 @@ package codigoDestino;
 import java.io.*;
 
 import apoio.Config;
+import comandoAltoNivel.ComandoAltoNivel;
+import comandoAltoNivel.ComandoAtribuicao;
+import comandoAltoNivel.ListaComandosAltoNivel;
+import comandoPrimitivo.ComandoPrimitivo;
 import comandoPrimitivo.ListaComandosPrimitivos;
 import parser.Compilador;
 
 public class CodigoDestino {
-	
+	/*Alocação dinamica da pilha
+	 * para cada instrucao no codigo destino:
+	 * 	se for operação de empilhar, soma 2 se for NUMERO, e 1 se for PALAVRA, na variavel aux
+	 * 	se for operação de desempilhar, subtrai 2 se for NUMERO, e 1 se for PALAVRA, na variavel aux
+	 * a cada vez que aux for incrementado:
+	 * 	se aux > tam, então tam = aux, onde aux é o tamanho atual da pilha
+	 * 								, e tam é o MAIOR tamanho que a pilha alcançou até então
+	 * 
+	 * a manipulação de aux é feita durante a geração de codigo destino da expressao (classe Expressao)
+	 * e após a criação do comando primitivo (classes ComandoAtribuicao e ComandoEntrada)
+	 * 
+	 * */
+	public static int tam = 0, aux = 0;
 	StringBuilder codigo;
 	
 	public CodigoDestino(ListaComandosPrimitivos listaComandosPrimitivos) {
@@ -24,7 +40,7 @@ public class CodigoDestino {
 		this.codigo.append(".end method \r\n\r\n");
 		
 		this.codigo.append(".method public static main([Ljava/lang/String;)V \r\n");
-		this.codigo.append(".limit stack 100 \r\n");  // deve ser calculado!!!
+		this.codigo.append(".limit stack "+ this.tam +" \r\n");  // deve ser calculado!!!
 		this.codigo.append(".limit locals " + (Compilador.tabela.getMarcador()+2) +"\r\n"); 
 		
 		this.codigo.append(listaComandosPrimitivos.geraCodigoDestinoTotal());
@@ -41,8 +57,8 @@ public class CodigoDestino {
 		arqSaida.write(this.codigo.toString());
 		arqSaida.flush();
 	    arqSaida.close();    
-	}
-
+	}	
+	
 	public String toString() {
 		return this.codigo.toString();
 	}

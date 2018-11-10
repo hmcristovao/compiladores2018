@@ -1,6 +1,7 @@
 package comandoPrimitivo;
 
 import semantico.TipoDado;
+import codigoDestino.CodigoDestino;
 
 public class PrimitivoAtribuicao extends ComandoPrimitivo {
 

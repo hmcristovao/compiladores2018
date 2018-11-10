@@ -1,5 +1,6 @@
 package comandoPrimitivo;
 
+import codigoDestino.CodigoDestino;
 import semantico.TipoDado;
 
 public class PrimitivoEntrada extends ComandoPrimitivo {
@@ -28,7 +29,7 @@ public class PrimitivoEntrada extends ComandoPrimitivo {
 				codigoDestino += "dstore " + this.referencia + "\r\n";
 			else 
 				codigoDestino += "dstore_" + this.referencia + "\r\n";
-			
+		
 		} else if(this.tipo == TipoDado.PALAVRA) { 
 			codigoDestino+="invokevirtual java/util/Scanner.nextLine()Ljava/lang/String; \r\n";
 			if(referencia >= 4) 

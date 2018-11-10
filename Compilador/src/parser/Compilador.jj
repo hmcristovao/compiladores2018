@@ -20,7 +20,7 @@ import comandoPrimitivo.*;
 import codigoDestino.*;
 
 public class Compilador {
-  
+  	//java -jar jasmin.jar teste05.j && java teste05 
    public static Tabela tabela = new Tabela();
    
    public static void main(String args[])  throws ParseException  {
@@ -32,6 +32,7 @@ public class Compilador {
 		 // Primeira passagem
          ListaComandosAltoNivel listaComandosAltoNivel = new ListaComandosAltoNivel();
          Compilador.inicio(listaComandosAltoNivel);
+
          System.out.println("***** Primeira Passagem *****\n"
                           + "Lista de Comandos Alto Nivel:\n"
                           + listaComandosAltoNivel);
@@ -52,7 +53,7 @@ public class Compilador {
          System.out.println("\n\n***** Terceira Passagem *****\n"
                           + "Lista de Comandos Destino:\n"
                           + codigoDestino);
-
+		
 		 // Criacao do arquivo destino
 		 codigoDestino.geraArquivo(Config.pathSaida + Config.nomeArquivo + Config.extensaoCodigoDestino );
          System.out.println("\n\n***** Criacao do arquivo destino *****\n"
@@ -61,7 +62,7 @@ public class Compilador {
 
 		 // Fim
          System.out.println("\n\n***** Compilacao bem sucedida! *****");
-         
+
       }
       catch(FileNotFoundException e) {
          System.err.println("\nErro: arquivo nao encontrado");
@@ -408,7 +409,7 @@ void  enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
 	ComandoAltoNivel comando = null;
 }
 {
-  	enq = <ENQUANTO> <AP> expressao=iniciaExpressao() <FP> programa(listaProgramaEnquanto)
+  	enq = <ENQUANTO> <AP> expressao = iniciaExpressao() <FP> programa(listaProgramaEnquanto)
   	{
   	  	comando = new ComandoEnquanto(expressao, listaProgramaEnquanto, enq);
   	  	listaComandosAltoNivel.addComando(comando);  

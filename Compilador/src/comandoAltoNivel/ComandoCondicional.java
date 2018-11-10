@@ -11,5 +11,6 @@ public abstract class ComandoCondicional extends ComandoAltoNivel{
 		this.expressao = expressao;
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 	}
+	
 	public abstract String toString();
 }

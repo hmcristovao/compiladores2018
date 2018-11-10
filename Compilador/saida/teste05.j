@@ -10,8 +10,8 @@ return
 .end method 
 
 .method public static main([Ljava/lang/String;)V 
-.limit stack 100 
-.limit locals 9
+.limit stack 6 
+.limit locals 14
 ldc2_w 1.0
 ldc2_w 2.0
 dadd 
@@ -33,7 +33,7 @@ dload_3
 ldc2_w 2.0
 dsub 
 dmul 
-dload 5
+dload_1
 ldc2_w 3.0
 dsub 
 dmul 
