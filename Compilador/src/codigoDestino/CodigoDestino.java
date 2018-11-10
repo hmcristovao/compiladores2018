@@ -23,7 +23,7 @@ public class CodigoDestino {
 	 * e após a criação do comando primitivo (classes ComandoAtribuicao e ComandoEntrada)
 	 * 
 	 * */
-	public static int tam = 0, aux = 0;
+	public static int tamanhoTotalPilha = 0, tamanhoPilha = 0;
 	StringBuilder codigo;
 	
 	public CodigoDestino(ListaComandosPrimitivos listaComandosPrimitivos) {
@@ -40,7 +40,7 @@ public class CodigoDestino {
 		this.codigo.append(".end method \r\n\r\n");
 		
 		this.codigo.append(".method public static main([Ljava/lang/String;)V \r\n");
-		this.codigo.append(".limit stack "+ this.tam +" \r\n");  // deve ser calculado!!!
+		this.codigo.append(".limit stack "+ CodigoDestino.tamanhoTotalPilha +" \r\n");  // deve ser calculado!!!
 		this.codigo.append(".limit locals " + (Compilador.tabela.getMarcador()+2) +"\r\n"); 
 		
 		this.codigo.append(listaComandosPrimitivos.geraCodigoDestinoTotal());

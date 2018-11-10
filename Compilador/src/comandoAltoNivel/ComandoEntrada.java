@@ -24,9 +24,9 @@ public class ComandoEntrada extends ComandoAltoNivel {
 		
 		//calculo da stack
 		if(this.simbolo.getTipo() == TipoDado.NUMERO)
-			CodigoDestino.aux -=2;
+			CodigoDestino.tamanhoPilha -=2;
 		else if(this.simbolo.getTipo() == TipoDado.PALAVRA)
-			CodigoDestino.aux -=1;
+			CodigoDestino.tamanhoPilha -=1;
 		
 		lista.addComando(comando);
 		return lista;

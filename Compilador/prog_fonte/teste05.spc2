@@ -1,9 +1,9 @@
-numero a,b,c, e;
+numero a,b,c,d,e;
+palavra k, l , m;
 
 a <- 1+2;
-
 b <- (3*((1+(2))+5));
-
 c <- a*(a-1)*(b-2)*(a-3)+(1*b);
-
-palavra k, l , m;
+d <- c;
+e <- a+(b+(c+(d+(a+(b+(c+(d+(a+(b+(c+(d+1)))))))))));
+exibe a+b+c+d+e;
