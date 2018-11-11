@@ -7,6 +7,7 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
+import jasmin.*;
 
 /** Token Manager. */
 public class CompiladorTokenManager implements CompiladorConstants
@@ -66,6 +67,7 @@ static private int jjMoveStringLiteralDfa0_0()
          jjmatchedKind = 19;
          return jjMoveNfa_0(0, 0);
       case 60:
+         jjmatchedKind = 33;
          return jjMoveStringLiteralDfa1_0(0x40000000L);
       case 61:
          jjmatchedKind = 31;
@@ -685,7 +687,7 @@ static final int[] jjnextStates = {
 public static final String[] jjstrLiteralImages = {
 "", null, null, null, null, null, null, null, null, null, null, null, null, 
 null, null, null, null, "\50", "\51", "\73", "\54", null, null, null, null, "\53", 
-"\55", "\52", "\57", "\117\122\40", "\74\55", "\75", "\46", };
+"\55", "\52", "\57", "\117\122\40", "\74\55", "\75", "\46", "\74", };
 
 /** Lexer state names. */
 public static final String[] lexStateNames = {
@@ -696,10 +698,10 @@ public static final String[] lexStateNames = {
 /** Lex State array. */
 public static final int[] jjnewLexState = {
    -1, -1, -1, -1, -1, 1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-   -1, -1, -1, -1, -1, -1, -1, -1, 
+   -1, -1, -1, -1, -1, -1, -1, -1, -1, 
 };
 static final long[] jjtoToken = {
-   0x1ff7eff01L, 
+   0x3ff7eff01L, 
 };
 static final long[] jjtoSkip = {
    0xfeL, 

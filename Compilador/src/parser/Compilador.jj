@@ -18,6 +18,7 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
+import jasmin.*;
 
 public class Compilador {
   	//java -jar jasmin.jar teste05.j && java teste05 
@@ -126,7 +127,8 @@ TOKEN : {
     < OU: "OR " > |
     < ATRIB: "<-"  > |
     < IGUAL: "=" > |
-   	< CONCAT: "&" > 
+   	< CONCAT: "&" > |
+   	< MENOR: "<" >
 }
   
 
@@ -168,20 +170,22 @@ void  termo(Expressao exp):
 {
     Token t;
     Item item = null;
+    TipoOperador operador;
 }
 {
   	termo1(exp)
-  	(t=< IGUAL >
-  	{
-  	  	  item = new Operador(TipoOperador.IGUAL,t);
-	 	  exp.addListaExpInfixa(item);
-  	}
-  	termo1(exp)
-  	   {
-  	  	  item = new Operador(TipoOperador.IGUAL,t);
-	 	  exp.addListaExpPosFixa(item);
+  	(	  
+  		(t=< IGUAL > { operador = TipoOperador.IGUAL; } | t = < MENOR > { operador = TipoOperador.MENOR; })
+  		{
+  	  		  item = new Operador(operador,t);
+	 	  	exp.addListaExpInfixa(item);
+  		}
+  		termo1(exp)
+  	   	{
+  	  	  	item = new Operador(operador,t);
+	 	  	exp.addListaExpPosFixa(item);
   	   }
-  	)?
+  	)? 
 }
 
 void termo1(Expressao exp):

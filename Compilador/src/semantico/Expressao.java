@@ -102,6 +102,18 @@ public class Expressao {
 				if(operador.getTipoOperador() == TipoOperador.DIV) {
 					codigoDestinoExpressao += "ddiv \r\n";
 				}
+				
+				if(operador.getTipoOperador() == TipoOperador.OU) {
+					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
+
+					codigoDestinoExpressao += "dconst_0 \r\n"	//Primeiro empilha 0 e compara com a expressão
+					+"dcmpg \r\n"								//se o resultado for igual, quer dizer que
+					+"ifeq " + labelSAIDA.getLabel()			//a expressão é falsa, portanto deve sair
+					+"pop2 \r\n"	
+					+"dconst_1 \r\n"							//Sendo a expressao verdadeira, basta desempilhar 
+					+ labelSAIDA.geraCodigoDestino();			//a expressão e empilhar 1 como resultado válido
+					
+				}
 
 				if(operador.getTipoOperador() == TipoOperador.IGUAL) {
 					PrimitivoLabel labelCOLOCATRUE = new PrimitivoLabel("COLOCATRUE");
@@ -109,6 +121,21 @@ public class Expressao {
 
 					codigoDestinoExpressao += "dcmpg \r\n"
 							+ "ifeq "+labelCOLOCATRUE.getLabel() 
+							+ "dconst_0 \r\n"
+							+ "goto "+labelSAIDA.getLabel()
+							+ labelCOLOCATRUE.geraCodigoDestino()
+							+ "dconst_1 \r\n"
+							+ labelSAIDA.geraCodigoDestino();
+				}
+				
+				//Análogo ao caso igual, porem diferenciado no uso do iflt que pega se for menor
+				//que é o caso do do operador relacional menor 
+				if(operador.getTipoOperador() == TipoOperador.MENOR) {
+					PrimitivoLabel labelCOLOCATRUE = new PrimitivoLabel("COLOCATRUE");
+					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
+					
+					codigoDestinoExpressao += "dcmpg \r\n"
+							+ "iflt "+labelCOLOCATRUE.getLabel() 
 							+ "dconst_0 \r\n"
 							+ "goto "+labelSAIDA.getLabel()
 							+ labelCOLOCATRUE.geraCodigoDestino()

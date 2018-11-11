@@ -9,6 +9,7 @@ public enum TipoOperador
 	OU,
 	IGUAL,
 	CONCAT,
+	MENOR,
 	AP,
 	FP;
 }

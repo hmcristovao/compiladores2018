@@ -60,6 +60,8 @@ public interface CompiladorConstants {
   int IGUAL = 31;
   /** RegularExpression Id. */
   int CONCAT = 32;
+  /** RegularExpression Id. */
+  int MENOR = 33;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -101,6 +103,7 @@ public interface CompiladorConstants {
     "\"<-\"",
     "\"=\"",
     "\"&\"",
+    "\"<\"",
   };
 
 }
