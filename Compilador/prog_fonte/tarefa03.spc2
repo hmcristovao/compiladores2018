@@ -1,0 +1,22 @@
+/* Teste para a Tarefa 02 (grupo 01): 
+Operador lógico OR e operador relacional <
+*/
+numero a,b,c;
+numero r1, r2, r3, r4, r5, r6, r7, r8, r9;
+
+a <- 2;
+b <- 3;
+c <- 4;
+
+r1 <- 0<1;                  /* 1 */
+r2 <- a < b;                /* 1 */
+r3 <- (a+2) < (b+1);        /* 0 */
+r4 <- 1<0;                  /* 0 */
+
+r5 <- 0 OU 0;               /* 0 */
+r6 <- 0 OU 1;               /* 1 */
+r7 <- 1 OU 0;               /* 1 */
+r8 <- 1 OU 1;               /* 1 */
+r9 <- (a+1)*2<1+5 OU c=3*a; /* 0 */ 
+
+exibe r1,r2,r3,r4,r5,r6,r7,r8,r9;

@@ -8,10 +8,8 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
-import jasmin.*;
 
 public class Compilador implements CompiladorConstants {
-        //java -jar jasmin.jar teste05.j && java teste05 
    public static Tabela tabela = new Tabela();
 
    public static void main(String args[])  throws ParseException  {

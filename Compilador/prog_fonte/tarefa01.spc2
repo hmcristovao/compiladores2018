@@ -1,0 +1,9 @@
+/* Teste para a Tarefa 01 (grupo 03): 
+Armazenamento da expressão infixa na classe Expressao
+*/
+numero a,b,c,d;
+a <- 2;
+b <- 3*(1+2);
+c <- a+b;
+d <- (a-1)*(b-2)*(c-3)+1;
+

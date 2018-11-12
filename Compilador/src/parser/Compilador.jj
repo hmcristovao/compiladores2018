@@ -1,6 +1,11 @@
 /* Compilador para a Linguagem Removename (extensão spc2)
    Turma de Compiladores 2018 - Eng de Computação e Ciencia da Computacao
    UFES - Campus de São Mateus
+
+   Para executar (prompt no diretorio saida):
+   java -jar jasmin.jar teste.j
+   java teste 
+   
 */
 options {
   DEBUG_PARSER = false;
@@ -18,10 +23,8 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
-import jasmin.*;
 
 public class Compilador {
-  	//java -jar jasmin.jar teste05.j && java teste05 
    public static Tabela tabela = new Tabela();
    
    public static void main(String args[])  throws ParseException  {
@@ -124,7 +127,7 @@ TOKEN : {
 	< SUB: "-" > |
 	< MUL: "*" > |
     < DIV: "/" > |
-    < OU: "OR " > |
+    < OU: "OU " > |
     < ATRIB: "<-"  > |
     < IGUAL: "=" > |
    	< CONCAT: "&" > |
