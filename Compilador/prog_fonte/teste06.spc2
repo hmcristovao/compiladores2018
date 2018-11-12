@@ -1,0 +1,20 @@
+numero n,x;
+n <- 1;
+x <- 0;
+enquanto ( n < 10 OR n = 15)
+	se(n = 9 OR n = 0)
+		exibe "Digite um valor para x - Valores menores que 20 ou igual 99 -";
+		enquanto(x = 99 OR x < 20)
+			exibe "Digite 99 ou menor que 20 para permanecer";
+			le x;
+		fim-enquanto
+		exibe "Saindo do teste interno";
+	fim-se
+	exibe "Digite um valor para n - Menor que 10 ou igual 15 -";
+	exibe "Digite 9 ou 0 para entrar no teste interno ";
+	le n;
+fim-enquanto
+
+exibe "\nFim do enquanto. O valor de n = ", n;
+exibe "O valor de x = ", x;
+
