@@ -1,6 +1,6 @@
-/* Compilador para a Linguagem Removename (extensão spc2)
-   Turma de Compiladores 2018 - Eng de Computação e Ciencia da Computacao
-   UFES - Campus de São Mateus
+/* Compilador para a Linguagem Removename (extensï¿½o spc2)
+   Turma de Compiladores 2018 - Eng de Computaï¿½ï¿½o e Ciencia da Computacao
+   UFES - Campus de Sï¿½o Mateus
 */
 options {
   DEBUG_PARSER = false;
@@ -27,7 +27,7 @@ public class Compilador {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
        try {
-         // Leitura do arquivo com o código fonte
+         // Leitura do arquivo com o cï¿½digo fonte
          compilador = new Compilador(new FileInputStream(Config.pathProgFonte + Config.nomeArquivo + Config.extensaoFonte));
 
 		 // Primeira passagem
@@ -125,10 +125,12 @@ TOKEN : {
 	< MUL: "*" > |
     < DIV: "/" > |
     < OU: "OR " > |
+    < E: "AND " > |
     < ATRIB: "<-"  > |
     < IGUAL: "=" > |
    	< CONCAT: "&" > |
-   	< MENOR: "<" >
+   	< MENOR: "<" > |
+   	< MAIORIGUAL: ">=" >
 }
   
 
@@ -152,18 +154,26 @@ void expressao(Expressao exp):
 }
 {
 	 termo(exp)
-	 (t=< OU >
+	 (	   (t=< OU > 
 	 {
 	   	item = new Operador(TipoOperador.OU,t);
 	 	exp.addListaExpInfixa(item);
 
 	 }
+	 | t=< E >
+	 {
+	   	item = new Operador(TipoOperador.E,t);
+	 	exp.addListaExpInfixa(item);
+
+	 } ) 
 	 termo(exp)
 	    {
 	      item = new Operador(TipoOperador.OU,t);
 	 	  exp.addListaExpPosFixa(item);	 	
 	    }
-	 )*		
+	 )*
+
+	 	
 }
 
 void  termo(Expressao exp):
@@ -175,7 +185,7 @@ void  termo(Expressao exp):
 {
   	termo1(exp)
   	(	  
-  		(t=< IGUAL > { operador = TipoOperador.IGUAL; } | t = < MENOR > { operador = TipoOperador.MENOR; })
+  		(t=< IGUAL > { operador = TipoOperador.IGUAL; } | t = < MENOR > { operador = TipoOperador.MENOR; } | t = < MAIORIGUAL > {operador = TipoOperador.MAIORIGUAL; })
   		{
   	  		  item = new Operador(operador,t);
 	 	  	exp.addListaExpInfixa(item);

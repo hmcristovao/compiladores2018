@@ -25,7 +25,7 @@ public class Expressao {
 		return this.listaExpPosFixa;
 	}
 
-	// o tipo da expressao é igual ao tipo do primeiro elemento posfixo (que deve ser um operando)
+	// o tipo da expressao ï¿½ igual ao tipo do primeiro elemento posfixo (que deve ser um operando)
 	public TipoDado getTipo() {
 		return ((Operando)(this.listaExpPosFixa.getFirst())).tipoDado;
 	}
@@ -106,12 +106,24 @@ public class Expressao {
 				if(operador.getTipoOperador() == TipoOperador.OU) {
 					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
 
-					codigoDestinoExpressao += "dconst_0 \r\n"	//Primeiro empilha 0 e compara com a expressão
+					codigoDestinoExpressao += "dconst_0 \r\n"	//Primeiro empilha 0 e compara com a expressï¿½o
 					+"dcmpg \r\n"								//se o resultado for igual, quer dizer que
-					+"ifeq " + labelSAIDA.getLabel()			//a expressão é falsa, portanto deve sair
+					+"ifeq " + labelSAIDA.getLabel()			//a expressï¿½o ï¿½ falsa, portanto deve sair
 					+"pop2 \r\n"	
 					+"dconst_1 \r\n"							//Sendo a expressao verdadeira, basta desempilhar 
-					+ labelSAIDA.geraCodigoDestino();			//a expressão e empilhar 1 como resultado válido
+					+ labelSAIDA.geraCodigoDestino();			//a expressï¿½o e empilhar 1 como resultado vï¿½lido
+					
+				}
+				
+				if(operador.getTipoOperador() == TipoOperador.E) {
+					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
+
+					codigoDestinoExpressao += "dconst_0 \r\n"	//Empilha 0 e compara com a expressao 
+							+"dcmpg \r\n"						//caso for igual, expressao falsa
+							+"ifeq " + labelSAIDA.getLabel()	//sai do programa
+							+"pop2 \r\n"						//desempilha e joga fora o Ãºltimo resultado
+							+"dconst_1 \r\n"					//empilha o 1 como resultado vÃ¡lido e verdadeiro
+							+ labelSAIDA.geraCodigoDestino();	//sai
 					
 				}
 
@@ -128,8 +140,8 @@ public class Expressao {
 							+ labelSAIDA.geraCodigoDestino();
 				}
 				
-				//Análogo ao caso igual, porem diferenciado no uso do iflt que pega se for menor
-				//que é o caso do do operador relacional menor 
+				//Anï¿½logo ao caso igual, porem diferenciado no uso do iflt que pega se for menor
+				//que ï¿½ o caso do do operador relacional menor 
 				if(operador.getTipoOperador() == TipoOperador.MENOR) {
 					PrimitivoLabel labelCOLOCATRUE = new PrimitivoLabel("COLOCATRUE");
 					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
@@ -142,6 +154,22 @@ public class Expressao {
 							+ "dconst_1 \r\n"
 							+ labelSAIDA.geraCodigoDestino();
 				}
+				
+				//compara e se for maior ou igual, entÃ£o Ã© verdadeiro e empilha 0
+				//caso falso, empilha 1 e sai do programa
+				if(operador.getTipoOperador() == TipoOperador.MAIORIGUAL) {
+					PrimitivoLabel labelCOLOCATRUE = new PrimitivoLabel("COLOCATRUE");
+					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
+					
+					codigoDestinoExpressao += "dcmpg \r\n"
+							+ "ifge " + labelCOLOCATRUE.getLabel() 
+							+ "dconst_0 \r\n"
+							+ "goto "+labelSAIDA.getLabel()
+							+ labelCOLOCATRUE.geraCodigoDestino()
+							+ "dconst_1 \r\n"
+							+ labelSAIDA.geraCodigoDestino();
+				}
+				
 				//calculo da stack
 				CodigoDestino.tamanhoPilha -= 2;
 			}			

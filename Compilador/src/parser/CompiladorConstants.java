@@ -55,13 +55,17 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int OU = 29;
   /** RegularExpression Id. */
-  int ATRIB = 30;
+  int E = 30;
   /** RegularExpression Id. */
-  int IGUAL = 31;
+  int ATRIB = 31;
   /** RegularExpression Id. */
-  int CONCAT = 32;
+  int IGUAL = 32;
   /** RegularExpression Id. */
-  int MENOR = 33;
+  int CONCAT = 33;
+  /** RegularExpression Id. */
+  int MENOR = 34;
+  /** RegularExpression Id. */
+  int MAIORIGUAL = 35;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -100,10 +104,12 @@ public interface CompiladorConstants {
     "\"*\"",
     "\"/\"",
     "\"OR \"",
+    "\"AND \"",
     "\"<-\"",
     "\"=\"",
     "\"&\"",
     "\"<\"",
+    "\">=\"",
   };
 
 }

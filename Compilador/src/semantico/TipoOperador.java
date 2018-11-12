@@ -7,9 +7,11 @@ public enum TipoOperador
 	MUL, 
 	DIV,
 	OU,
+	E,
 	IGUAL,
 	CONCAT,
 	MENOR,
+	MAIORIGUAL,
 	AP,
 	FP;
 }
