@@ -106,15 +106,7 @@ TOKEN [IGNORE_CASE] : {
   		<NUMERO: "numero" >  |
   		<PALAVRA: "palavra" >  
 }
-//----------CARACTERES----------
-TOKEN : {
-		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
-   		< AP: "(" > |
-    	< FP: ")" > |
-		< PV: ";" > |
-		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > 
-}
+
 //-----------NUMEROS-----------
 TOKEN : {
 	< #DIGIT: ["0"-"9"] > |  
@@ -134,7 +126,15 @@ TOKEN : {
    	< MENOR: "<" > |
    	< MAIORIGUAL: ">=" >
 }
-
+//----------CARACTERES----------
+TOKEN : {
+		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+   		< AP: "(" > |
+    	< FP: ")" > |
+		< PV: ";" > |
+		< VIRGULA: "," > |
+    	< STRING: "\"" (~["\""])* "\"" >     	
+}
 //----------VARIAVEL---------
 TOKEN : {
    		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
@@ -175,7 +175,7 @@ void expressao(Expressao exp):
 	 } ) 
 	 termo(exp)
 	    {
-	      item = new Operador(TipoOperador.OU,t);
+	      //item = new Operador(TipoOperador.OU,t);
 	 	  exp.addListaExpPosFixa(item);	 	
 	    }
 	 )*

@@ -64,38 +64,38 @@ SAIDA_7:
 dstore 13
 ldc2_w 0.0
 ldc2_w 0.0
-dconst_0 
+dconst_1 
 dcmpg 
 ifeq SAIDA_8
 pop2 
-dconst_1 
+dconst_0 
 SAIDA_8:
 dstore 15
 ldc2_w 0.0
 ldc2_w 1.0
-dconst_0 
+dconst_1 
 dcmpg 
 ifeq SAIDA_9
 pop2 
-dconst_1 
+dconst_0 
 SAIDA_9:
 dstore 17
 ldc2_w 1.0
 ldc2_w 0.0
-dconst_0 
+dconst_1 
 dcmpg 
 ifeq SAIDA_10
 pop2 
-dconst_1 
+dconst_0 
 SAIDA_10:
 dstore 19
 ldc2_w 1.0
 ldc2_w 1.0
-dconst_0 
+dconst_1 
 dcmpg 
 ifeq SAIDA_11
 pop2 
-dconst_1 
+dconst_0 
 SAIDA_11:
 dstore 21
 dload_1
@@ -124,11 +124,11 @@ goto SAIDA_15
 COLOCATRUE_14:
 dconst_1 
 SAIDA_15:
-dconst_0 
+dconst_1 
 dcmpg 
 ifeq SAIDA_16
 pop2 
-dconst_1 
+dconst_0 
 SAIDA_16:
 dstore 23
 getstatic java/lang/System/out Ljava/io/PrintStream; 

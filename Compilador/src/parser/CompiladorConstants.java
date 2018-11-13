@@ -27,43 +27,43 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int PALAVRA = 15;
   /** RegularExpression Id. */
-  int CHAR = 16;
+  int DIGIT = 16;
   /** RegularExpression Id. */
-  int AP = 17;
+  int NUM = 17;
   /** RegularExpression Id. */
-  int FP = 18;
+  int SOMA = 18;
   /** RegularExpression Id. */
-  int PV = 19;
+  int SUB = 19;
   /** RegularExpression Id. */
-  int VIRGULA = 20;
+  int MUL = 20;
   /** RegularExpression Id. */
-  int STRING = 21;
+  int DIV = 21;
   /** RegularExpression Id. */
-  int DIGIT = 22;
+  int OU = 22;
   /** RegularExpression Id. */
-  int NUM = 23;
+  int E = 23;
   /** RegularExpression Id. */
-  int SOMA = 24;
+  int ATRIB = 24;
   /** RegularExpression Id. */
-  int SUB = 25;
+  int IGUAL = 25;
   /** RegularExpression Id. */
-  int MUL = 26;
+  int CONCAT = 26;
   /** RegularExpression Id. */
-  int DIV = 27;
+  int MENOR = 27;
   /** RegularExpression Id. */
-  int OU = 28;
+  int MAIORIGUAL = 28;
   /** RegularExpression Id. */
-  int E = 29;
+  int CHAR = 29;
   /** RegularExpression Id. */
-  int ATRIB = 30;
+  int AP = 30;
   /** RegularExpression Id. */
-  int IGUAL = 31;
+  int FP = 31;
   /** RegularExpression Id. */
-  int CONCAT = 32;
+  int PV = 32;
   /** RegularExpression Id. */
-  int MENOR = 33;
+  int VIRGULA = 33;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 34;
+  int STRING = 34;
   /** RegularExpression Id. */
   int VAR = 35;
 
@@ -90,12 +90,6 @@ public interface CompiladorConstants {
     "\"fim-enquanto\"",
     "\"numero\"",
     "\"palavra\"",
-    "<CHAR>",
-    "\"(\"",
-    "\")\"",
-    "\";\"",
-    "\",\"",
-    "<STRING>",
     "<DIGIT>",
     "<NUM>",
     "\"+\"",
@@ -109,6 +103,12 @@ public interface CompiladorConstants {
     "\"&\"",
     "\"<\"",
     "\">=\"",
+    "<CHAR>",
+    "\"(\"",
+    "\")\"",
+    "\";\"",
+    "\",\"",
+    "<STRING>",
     "<VAR>",
   };
 

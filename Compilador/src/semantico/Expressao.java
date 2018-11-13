@@ -121,7 +121,7 @@ public class Expressao {
 					codigoDestinoExpressao += "dconst_1 \r\n"			//Primeiro empilha 1 e compara com o topo
 							+"dcmpg \r\n"								//se o resultado for igual, quer dizer que que o segundo que decide o resultado
 							+"ifeq " + labelSAIDA.getLabel()			//portanto deve sair
-							+"pop2 \r\n"								//se não for 1, ele desempilha e empilha 0
+							+"pop2 \r\n"								//se nao for 1, ele desempilha e empilha 0
 							+"dconst_0 \r\n"							//Sai
 							+ labelSAIDA.geraCodigoDestino();			
 				}
