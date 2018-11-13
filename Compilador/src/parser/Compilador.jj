@@ -1,7 +1,12 @@
-/* Compilador para a Linguagem Removename (extens�o spc2)
-   Turma de Compiladores 2018 - Eng de Computa��o e Ciencia da Computacao
-   UFES - Campus de S�o Mateus
+/* Compilador para a Linguagem Removename (extensao spc2)
+   Turma de Compiladores 2018 - Eng de Computacao e Ciencia da Computacao
+   UFES - Campus de Sao Mateus
+
+   Para executar (prompt no diretorio saida):
+   java -jar jasmin.jar teste.j
+   java teste 
 */
+   
 options {
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
@@ -18,10 +23,8 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
-import jasmin.*;
 
 public class Compilador {
-  	//java -jar jasmin.jar teste05.j && java teste05 
    public static Tabela tabela = new Tabela();
    
    public static void main(String args[])  throws ParseException  {
@@ -103,6 +106,15 @@ TOKEN [IGNORE_CASE] : {
   		<NUMERO: "numero" >  |
   		<PALAVRA: "palavra" >  
 }
+//----------CARACTERES----------
+TOKEN : {
+		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+   		< AP: "(" > |
+    	< FP: ")" > |
+		< PV: ";" > |
+		< VIRGULA: "," > |
+    	< STRING: "\"" (~["\""])* "\"" > 
+}
 //-----------NUMEROS-----------
 TOKEN : {
 	< #DIGIT: ["0"-"9"] > |  
@@ -114,25 +126,19 @@ TOKEN : {
 	< SUB: "-" > |
 	< MUL: "*" > |
     < DIV: "/" > |
-    < OU: "OR " > |
-    < E: "AND" > |
+    < OU: "OU" > |
+    < E: "E" > |
     < ATRIB: "<-"  > |
     < IGUAL: "=" > |
    	< CONCAT: "&" > |
    	< MENOR: "<" > |
    	< MAIORIGUAL: ">=" >
 }
-  
-//----------CARACTERES----------
+
+//----------VARIAVEL---------
 TOKEN : {
-		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
-   		< AP: "(" > |
-    	< FP: ")" > |
-		< PV: ";" > |
-		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > |
    		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
-}
+}  
 
 //Gramatica de expressoes:
 
@@ -154,22 +160,23 @@ void expressao(Expressao exp):
 }
 {
 	 termo(exp)
-	 (	   (t=< OU > 
+	 (
+	   (t=< OU > 
 	 {
 	   	item = new Operador(TipoOperador.OU,t);
 	 	exp.addListaExpInfixa(item);
-		
+
 	 }
 	 | t=< E >
 	 {
 	   	item = new Operador(TipoOperador.E,t);
 	 	exp.addListaExpInfixa(item);
+
 	 } ) 
 	 termo(exp)
 	    {
-	      //item = new Operador(TipoOperador.OU,t);
-	 	  exp.addListaExpPosFixa(item);
-	 	    	
+	      item = new Operador(TipoOperador.OU,t);
+	 	  exp.addListaExpPosFixa(item);	 	
 	    }
 	 )*
 
@@ -330,7 +337,8 @@ void programa(ListaComandosAltoNivel listaComandosAltoNivel) :
 
 void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 {}
-{    ( atribuicao(listaComandosAltoNivel)
+{
+    ( atribuicao(listaComandosAltoNivel)
     | declaracao(listaComandosAltoNivel) 
     | se(listaComandosAltoNivel)  
     | enquanto(listaComandosAltoNivel)
