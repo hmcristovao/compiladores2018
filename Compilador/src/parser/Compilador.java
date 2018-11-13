@@ -86,29 +86,15 @@ public class Compilador implements CompiladorConstants {
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case OU:
-      case E:
         ;
         break;
       default:
         jj_la1[0] = jj_gen;
         break label_1;
       }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case OU:
-        t = jj_consume_token(OU);
+      t = jj_consume_token(OU);
                 item = new Operador(TipoOperador.OU,t);
                 exp.addListaExpInfixa(item);
-        break;
-      case E:
-        t = jj_consume_token(E);
-                item = new Operador(TipoOperador.E,t);
-                exp.addListaExpInfixa(item);
-        break;
-      default:
-        jj_la1[1] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
       termo(exp);
               //item = new Operador(TipoOperador.OU,t);
                   exp.addListaExpPosFixa(item);
@@ -116,10 +102,32 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void termo(Expressao exp) throws ParseException {
+        Token t;
+        Item item = null;
+    termo1(exp);
+    label_2:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case E:
+        ;
+        break;
+      default:
+        jj_la1[1] = jj_gen;
+        break label_2;
+      }
+      t = jj_consume_token(E);
+                        item = new Operador(TipoOperador.E,t);
+                        exp.addListaExpInfixa(item);
+      termo1(exp);
+                        exp.addListaExpPosFixa(item);
+    }
+  }
+
+  static final public void termo1(Expressao exp) throws ParseException {
     Token t;
     Item item = null;
     TipoOperador operador;
-    termo1(exp);
+    termo2(exp);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IGUAL:
     case MENOR:
@@ -144,7 +152,7 @@ public class Compilador implements CompiladorConstants {
       }
                           item = new Operador(operador,t);
                         exp.addListaExpInfixa(item);
-      termo1(exp);
+      termo2(exp);
                         item = new Operador(operador,t);
                         exp.addListaExpPosFixa(item);
       break;
@@ -154,11 +162,11 @@ public class Compilador implements CompiladorConstants {
     }
   }
 
-  static final public void termo1(Expressao exp) throws ParseException {
+  static final public void termo2(Expressao exp) throws ParseException {
      Token t;
      Item item = null;
-    termo2(exp);
-    label_2:
+    termo3(exp);
+    label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case CONCAT:
@@ -166,23 +174,23 @@ public class Compilador implements CompiladorConstants {
         break;
       default:
         jj_la1[4] = jj_gen;
-        break label_2;
+        break label_3;
       }
       t = jj_consume_token(CONCAT);
                   item = new Operador(TipoOperador.CONCAT,t);
                   exp.addListaExpInfixa(item);
-      termo2(exp);
+      termo3(exp);
                   item = new Operador(TipoOperador.CONCAT,t);
                   exp.addListaExpPosFixa(item);
     }
   }
 
-  static final public void termo2(Expressao exp) throws ParseException {
+  static final public void termo3(Expressao exp) throws ParseException {
      Token t;
      TipoOperador operador;
      Item item = null;
-    termo3(exp);
-    label_3:
+    termo4(exp);
+    label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case SOMA:
@@ -191,7 +199,7 @@ public class Compilador implements CompiladorConstants {
         break;
       default:
         jj_la1[5] = jj_gen;
-        break label_3;
+        break label_4;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case SOMA:
@@ -209,18 +217,18 @@ public class Compilador implements CompiladorConstants {
       }
                   item = new Operador(operador,t);
                   exp.addListaExpInfixa(item);
-      termo3(exp);
+      termo4(exp);
                   item = new Operador(operador,t);
                   exp.addListaExpPosFixa(item);
     }
   }
 
-  static final public void termo3(Expressao exp) throws ParseException {
+  static final public void termo4(Expressao exp) throws ParseException {
      Token t;
      TipoOperador operador;
      Item item = null;
-    termo4(exp);
-    label_4:
+    termo5(exp);
+    label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MUL:
@@ -229,7 +237,7 @@ public class Compilador implements CompiladorConstants {
         break;
       default:
         jj_la1[7] = jj_gen;
-        break label_4;
+        break label_5;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MUL:
@@ -247,13 +255,13 @@ public class Compilador implements CompiladorConstants {
       }
          item = new Operador(operador,t);
          exp.addListaExpInfixa(item);
-      termo4(exp);
+      termo5(exp);
          item = new Operador(operador,t);
          exp.addListaExpPosFixa(item);
     }
   }
 
-  static final public void termo4(Expressao exp) throws ParseException {
+  static final public void termo5(Expressao exp) throws ParseException {
     Token tokenVar, tokenEntrada;
     Item item = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -313,7 +321,7 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void programa(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-    label_5:
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case EXIBE:
@@ -327,7 +335,7 @@ public class Compilador implements CompiladorConstants {
         break;
       default:
         jj_la1[10] = jj_gen;
-        break label_5;
+        break label_6;
       }
       comando(listaComandosAltoNivel);
     }
@@ -406,7 +414,7 @@ public class Compilador implements CompiladorConstants {
       jj_la1[13] = jj_gen;
       ;
     }
-    label_6:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VIRGULA:
@@ -414,7 +422,7 @@ public class Compilador implements CompiladorConstants {
         break;
       default:
         jj_la1[14] = jj_gen;
-        break label_6;
+        break label_7;
       }
       jj_consume_token(VIRGULA);
       variavel = jj_consume_token(VAR);
@@ -472,7 +480,7 @@ public class Compilador implements CompiladorConstants {
     t = jj_consume_token(VAR);
         comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
         listaComandosAltoNivel.addComando(comando);
-    label_7:
+    label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VIRGULA:
@@ -480,7 +488,7 @@ public class Compilador implements CompiladorConstants {
         break;
       default:
         jj_la1[16] = jj_gen;
-        break label_7;
+        break label_8;
       }
       jj_consume_token(VIRGULA);
       t = jj_consume_token(VAR);
@@ -498,7 +506,7 @@ public class Compilador implements CompiladorConstants {
     expressao = iniciaExpressao();
                 comando = new ComandoSaida(expressao, exibe);
                 listaExibe.addComando(comando);
-    label_8:
+    label_9:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case VIRGULA:
@@ -506,7 +514,7 @@ public class Compilador implements CompiladorConstants {
         break;
       default:
         jj_la1[17] = jj_gen;
-        break label_8;
+        break label_9;
       }
       jj_consume_token(VIRGULA);
       expressao = iniciaExpressao();
@@ -534,7 +542,7 @@ public class Compilador implements CompiladorConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xc00000,0xc00000,0x1a000000,0x1a000000,0x4000000,0xc0000,0xc0000,0x300000,0x300000,0x400e0000,0xd700,0xd700,0xc000,0x1000000,0x0,0x1000000,0x0,0x0,};
+      jj_la1_0 = new int[] {0x400000,0x800000,0x1a000000,0x1a000000,0x4000000,0xc0000,0xc0000,0x300000,0x300000,0x400e0000,0xd700,0xd700,0xc000,0x1000000,0x0,0x1000000,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
       jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xc,0x8,0x8,0x0,0x0,0x2,0x0,0x2,0x2,};

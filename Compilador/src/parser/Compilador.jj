@@ -160,44 +160,53 @@ void expressao(Expressao exp):
 }
 {
 	 termo(exp)
-	 (
 	   (t=< OU > 
 	 {
 	   	item = new Operador(TipoOperador.OU,t);
 	 	exp.addListaExpInfixa(item);
-
 	 }
-	 | t=< E >
-	 {
-	   	item = new Operador(TipoOperador.E,t);
-	 	exp.addListaExpInfixa(item);
-
-	 } ) 
 	 termo(exp)
 	    {
 	      //item = new Operador(TipoOperador.OU,t);
 	 	  exp.addListaExpPosFixa(item);	 	
 	    }
-	 )*
-
-	 	
+	 )*	 	
 }
 
-void  termo(Expressao exp):
+void termo(Expressao exp):
+{
+  	Token t;
+  	Item item = null;
+}
+{
+  	termo1(exp)
+  		(t=< E >
+		{
+			item = new Operador(TipoOperador.E,t);
+	 		exp.addListaExpInfixa(item);
+		}
+	termo1(exp)
+		{
+		  	exp.addListaExpPosFixa(item);
+		}
+	)* 
+}
+
+void  termo1(Expressao exp):
 {
     Token t;
     Item item = null;
     TipoOperador operador;
 }
 {
-  	termo1(exp)
+  	termo2(exp)
   	(	  
   		(t=< IGUAL > { operador = TipoOperador.IGUAL; } | t = < MENOR > { operador = TipoOperador.MENOR; } | t = < MAIORIGUAL > {operador = TipoOperador.MAIORIGUAL; })
   		{
   	  		  item = new Operador(operador,t);
 	 	  	exp.addListaExpInfixa(item);
   		}
-  		termo1(exp)
+  		termo2(exp)
   	   	{
   	  	  	item = new Operador(operador,t);
 	 	  	exp.addListaExpPosFixa(item);
@@ -205,47 +214,25 @@ void  termo(Expressao exp):
   	)? 
 }
 
-void termo1(Expressao exp):
+void termo2(Expressao exp):
 {
      Token t;
      Item item = null;
 }
 {
-  	termo2(exp)
+  	termo3(exp)
   	(t=< CONCAT >
   	{
   	 	  item = new Operador(TipoOperador.CONCAT,t);
   		  exp.addListaExpInfixa(item); 
   	}
-  	termo2(exp)
+  	termo3(exp)
   	   {
   	  	  item = new Operador(TipoOperador.CONCAT,t);
   		  exp.addListaExpPosFixa(item);
   	   }
   	)*
 } 
-void termo2(Expressao exp):
-{
-     Token t;
-     TipoOperador operador;
-     Item item = null;
-}
-{
-  	termo3(exp)
-  	(
-  	  (t=< SOMA > {operador = TipoOperador.SOMA;} | t=< SUB > {operador = TipoOperador.SUB;})
-  	  {
-  	   	  item = new Operador(operador,t);
-  		  exp.addListaExpInfixa(item);
-  	  }
-  	  termo3(exp)
-  	  {
-  	  	  item = new Operador(operador,t);
-  		  exp.addListaExpPosFixa(item);
-  	  }
-  	)*
-}
-
 void termo3(Expressao exp):
 {
      Token t;
@@ -253,14 +240,36 @@ void termo3(Expressao exp):
      Item item = null;
 }
 {
-   termo4(exp)
+  	termo4(exp)
+  	(
+  	  (t=< SOMA > {operador = TipoOperador.SOMA;} | t=< SUB > {operador = TipoOperador.SUB;})
+  	  {
+  	   	  item = new Operador(operador,t);
+  		  exp.addListaExpInfixa(item);
+  	  }
+  	  termo4(exp)
+  	  {
+  	  	  item = new Operador(operador,t);
+  		  exp.addListaExpPosFixa(item);
+  	  }
+  	)*
+}
+
+void termo4(Expressao exp):
+{
+     Token t;
+     TipoOperador operador;
+     Item item = null;
+}
+{
+   termo5(exp)
    (
       (t=< MUL > {operador = TipoOperador.MUL;} | t=< DIV > {operador = TipoOperador.DIV;})
       {
        	 item = new Operador(operador,t);
      	 exp.addListaExpInfixa(item);
       }
-      termo4(exp)
+      termo5(exp)
       {
      	 item = new Operador(operador,t);
      	 exp.addListaExpPosFixa(item);
@@ -268,7 +277,7 @@ void termo3(Expressao exp):
    )*
 }
 
-void termo4(Expressao exp):
+void termo5(Expressao exp):
 {
     Token tokenVar, tokenEntrada;
     Item item = null;
@@ -406,7 +415,7 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
   	
 }
 
-void  se(ListaComandosAltoNivel listaComandosAltoNivel):
+void se(ListaComandosAltoNivel listaComandosAltoNivel):
 {
   	Token se;
   	ListaComandosAltoNivel listaProgramaSe =  new ListaComandosAltoNivel();
@@ -423,7 +432,7 @@ void  se(ListaComandosAltoNivel listaComandosAltoNivel):
 
 }
  
-void  enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
+void enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
 {
   	Token enq;
   	ListaComandosAltoNivel listaProgramaEnquanto = new ListaComandosAltoNivel();
