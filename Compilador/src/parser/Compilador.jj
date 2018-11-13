@@ -1,12 +1,12 @@
-/* Compilador para a Linguagem Removename (extensão spc2)
-   Turma de Compiladores 2018 - Eng de Computação e Ciencia da Computacao
+/* Compilador para a Linguagem Removename (extensao spc2)
+   Turma de Compiladores 2018 - Eng de Computacao e Ciencia da Computacao
    UFES - Campus de São Mateus
 
    Para executar (prompt no diretorio saida):
    java -jar jasmin.jar teste.j
    java teste 
-   
 */
+   
 options {
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
@@ -30,7 +30,7 @@ public class Compilador {
    public static void main(String args[])  throws ParseException  {
       Compilador compilador = null;
        try {
-         // Leitura do arquivo com o código fonte
+         // Leitura do arquivo com o cï¿½digo fonte
          compilador = new Compilador(new FileInputStream(Config.pathProgFonte + Config.nomeArquivo + Config.extensaoFonte));
 
 		 // Primeira passagem
@@ -113,8 +113,7 @@ TOKEN : {
     	< FP: ")" > |
 		< PV: ";" > |
 		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > |
-   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+    	< STRING: "\"" (~["\""])* "\"" > 
 }
 //-----------NUMEROS-----------
 TOKEN : {
@@ -127,13 +126,19 @@ TOKEN : {
 	< SUB: "-" > |
 	< MUL: "*" > |
     < DIV: "/" > |
-    < OU: "OU " > |
+    < OU: "OU" > |
+    < E: "E" > |
     < ATRIB: "<-"  > |
     < IGUAL: "=" > |
    	< CONCAT: "&" > |
-   	< MENOR: "<" >
+   	< MENOR: "<" > |
+   	< MAIORIGUAL: ">=" >
 }
-  
+
+//----------VARIAVEL---------
+TOKEN : {
+   		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
+}  
 
 //Gramatica de expressoes:
 
@@ -155,18 +160,26 @@ void expressao(Expressao exp):
 }
 {
 	 termo(exp)
-	 (t=< OU >
+	 (	   (t=< OU > 
 	 {
 	   	item = new Operador(TipoOperador.OU,t);
 	 	exp.addListaExpInfixa(item);
 
 	 }
+	 | t=< E >
+	 {
+	   	item = new Operador(TipoOperador.E,t);
+	 	exp.addListaExpInfixa(item);
+
+	 } ) 
 	 termo(exp)
 	    {
 	      item = new Operador(TipoOperador.OU,t);
 	 	  exp.addListaExpPosFixa(item);	 	
 	    }
-	 )*		
+	 )*
+
+	 	
 }
 
 void  termo(Expressao exp):
@@ -178,7 +191,7 @@ void  termo(Expressao exp):
 {
   	termo1(exp)
   	(	  
-  		(t=< IGUAL > { operador = TipoOperador.IGUAL; } | t = < MENOR > { operador = TipoOperador.MENOR; })
+  		(t=< IGUAL > { operador = TipoOperador.IGUAL; } | t = < MENOR > { operador = TipoOperador.MENOR; } | t = < MAIORIGUAL > {operador = TipoOperador.MAIORIGUAL; })
   		{
   	  		  item = new Operador(operador,t);
 	 	  	exp.addListaExpInfixa(item);

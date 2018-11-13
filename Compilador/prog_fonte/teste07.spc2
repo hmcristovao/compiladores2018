@@ -1,0 +1,9 @@
+numero i<-0;
+numero a<-5;
+
+enquanto (a >= 5 E i >= 0)
+
+    i<-i+1;
+    
+
+fim-enquanto
