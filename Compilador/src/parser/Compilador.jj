@@ -1,12 +1,7 @@
-/* Compilador para a Linguagem Removename (extensao spc2)
-   Turma de Compiladores 2018 - Eng de Computacao e Ciencia da Computacao
-   UFES - Campus de São Mateus
-
-   Para executar (prompt no diretorio saida):
-   java -jar jasmin.jar teste.j
-   java teste 
+/* Compilador para a Linguagem Removename (extensï¿½o spc2)
+   Turma de Compiladores 2018 - Eng de Computaï¿½ï¿½o e Ciencia da Computacao
+   UFES - Campus de Sï¿½o Mateus
 */
-   
 options {
   DEBUG_PARSER = false;
   DEBUG_TOKEN_MANAGER = false;
@@ -23,8 +18,10 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
+import jasmin.*;
 
 public class Compilador {
+  	//java -jar jasmin.jar teste05.j && java teste05 
    public static Tabela tabela = new Tabela();
    
    public static void main(String args[])  throws ParseException  {
@@ -106,15 +103,6 @@ TOKEN [IGNORE_CASE] : {
   		<NUMERO: "numero" >  |
   		<PALAVRA: "palavra" >  
 }
-//----------CARACTERES----------
-TOKEN : {
-		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
-   		< AP: "(" > |
-    	< FP: ")" > |
-		< PV: ";" > |
-		< VIRGULA: "," > |
-    	< STRING: "\"" (~["\""])* "\"" > 
-}
 //-----------NUMEROS-----------
 TOKEN : {
 	< #DIGIT: ["0"-"9"] > |  
@@ -126,19 +114,25 @@ TOKEN : {
 	< SUB: "-" > |
 	< MUL: "*" > |
     < DIV: "/" > |
-    < OU: "OU" > |
-    < E: "E" > |
+    < OU: "OR " > |
+    < E: "AND" > |
     < ATRIB: "<-"  > |
     < IGUAL: "=" > |
    	< CONCAT: "&" > |
    	< MENOR: "<" > |
    	< MAIORIGUAL: ">=" >
 }
-
-//----------VARIAVEL---------
+  
+//----------CARACTERES----------
 TOKEN : {
+		< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
+   		< AP: "(" > |
+    	< FP: ")" > |
+		< PV: ";" > |
+		< VIRGULA: "," > |
+    	< STRING: "\"" (~["\""])* "\"" > |
    		< VAR: (< CHAR >)+ (["a" - "z", "A" - "Z" ,"0" - "9", "_"])* > 
-}  
+}
 
 //Gramatica de expressoes:
 
@@ -164,18 +158,18 @@ void expressao(Expressao exp):
 	 {
 	   	item = new Operador(TipoOperador.OU,t);
 	 	exp.addListaExpInfixa(item);
-
+		
 	 }
 	 | t=< E >
 	 {
 	   	item = new Operador(TipoOperador.E,t);
 	 	exp.addListaExpInfixa(item);
-
 	 } ) 
 	 termo(exp)
 	    {
-	      item = new Operador(TipoOperador.OU,t);
-	 	  exp.addListaExpPosFixa(item);	 	
+	      //item = new Operador(TipoOperador.OU,t);
+	 	  exp.addListaExpPosFixa(item);
+	 	    	
 	    }
 	 )*
 

@@ -8,8 +8,10 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
+import jasmin.*;
 
 public class Compilador implements CompiladorConstants {
+        //java -jar jasmin.jar teste05.j && java teste05 
    public static Tabela tabela = new Tabela();
 
    public static void main(String args[])  throws ParseException  {
@@ -110,7 +112,7 @@ public class Compilador implements CompiladorConstants {
         throw new ParseException();
       }
       termo(exp);
-              item = new Operador(TipoOperador.OU,t);
+              //item = new Operador(TipoOperador.OU,t);
                   exp.addListaExpPosFixa(item);
     }
   }
@@ -534,10 +536,10 @@ public class Compilador implements CompiladorConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x30000000,0x30000000,0x80000000,0x80000000,0x0,0x3000000,0x3000000,0xc000000,0xc000000,0x3a20000,0xd700,0xd700,0xc000,0x40000000,0x100000,0x40000000,0x100000,0x100000,};
+      jj_la1_0 = new int[] {0xc00000,0xc00000,0x1a000000,0x1a000000,0x4000000,0xc0000,0xc0000,0x300000,0x300000,0x400e0000,0xd700,0xd700,0xc000,0x1000000,0x0,0x1000000,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x6,0x6,0x1,0x0,0x0,0x0,0x0,0x8,0x8,0x8,0x0,0x0,0x0,0x0,0x0,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xc,0x8,0x8,0x0,0x0,0x2,0x0,0x2,0x2,};
    }
 
   /** Constructor with InputStream. */
