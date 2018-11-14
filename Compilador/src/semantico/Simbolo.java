@@ -8,13 +8,15 @@ public class Simbolo {
 	private TipoDado tipo;    // representa os tipos usados na linguagem
 	private int referencia;   //referencia usada na geracao do codigo destino
 	private Token token;
-	private boolean isInicializada;  // atributo para cuidar do erro semantico: falta de inicializacao de vriavel
+	private boolean isInicializada;  // atributo para cuidar do erro semantico: falta de inicializacao de variavel
+	private boolean isUtilizada; //atributo utilizado para verificar o warning de utilização
 	
 	public Simbolo(Token token, TipoDado tipo) {
 		this.token = token;
 		this.tipo = tipo;
 		this.nome = token.image;
 		this.isInicializada = false;
+		this.isUtilizada = false;
 	}
 	
 	public Simbolo(Token token, TipoDado tipo, int referencia) {
@@ -68,5 +70,13 @@ public class Simbolo {
 
 	public void setIsInicializada(boolean status) {
 		this.isInicializada = status;
+	}
+	
+	public boolean getIsUtilizada() {
+		return isUtilizada;
+	}
+
+	public void setIsUtilizada(boolean status) {
+		this.isUtilizada = status;
 	}
 }

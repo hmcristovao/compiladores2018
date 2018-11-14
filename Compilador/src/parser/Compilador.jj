@@ -383,7 +383,8 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
 	{
 		AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(var.image), expressao, var);
 		comando = new ComandoAtribuicao(tabela.pesquisaTabela(var.image), expressao, atrib);
-		tabela.pesquisaTabela(var.image).setStatus(true);
+		tabela.pesquisaTabela(var.image).setIsInicializada(true);
+		//tabela.pesquisaTabela(var.image).setIsUtilizada(true);
 		AcoesSemanticas.faltaInicializacaoVariavel(expressao,var);
 		listaComandosAltoNivel.addComando(comando);
 	}
@@ -411,11 +412,14 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 		{
 			AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(variavel.image), expressao, variavel);
 			comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
-			tabela.pesquisaTabela(variavel.image).setStatus(true);
-			AcoesSemanticas.faltaInicializacaoVariavel(expressao,variavel);
+			tabela.pesquisaTabela(variavel.image).setIsInicializada(true);			
+			AcoesSemanticas.faltaInicializacaoVariavel(expressao,variavel);			
 			listaComandosAltoNivel.addComando(comando);
 		}
 	)?
+	{ //warning		
+		AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
+	}
 	(
 		<VIRGULA> variavel = <VAR>
 		{
@@ -427,11 +431,14 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 			{
 				AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(variavel.image), expressao, variavel);
 				comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
-				tabela.pesquisaTabela(variavel.image).setStatus(true);
+				tabela.pesquisaTabela(variavel.image).setIsInicializada(true);
 				AcoesSemanticas.faltaInicializacaoVariavel(expressao,variavel);
 				listaComandosAltoNivel.addComando(comando);
 			}
 		)?
+		{ //warning		
+			AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
+		}
 	)* <PV>
 }
 
@@ -477,13 +484,14 @@ void le(ListaComandosAltoNivel listaComandosAltoNivel):
 	le = <LEITURA> t = <VAR>
 	{
 		comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
-		tabela.pesquisaTabela(t.image).setStatus(true);
+		tabela.pesquisaTabela(t.image).setIsInicializada(true);
+		tabela.pesquisaTabela(t.image).setIsUtilizada(true);
 		listaComandosAltoNivel.addComando(comando);  
 	}
 	( <VIRGULA> t = <VAR>
 		{
 			comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
-			tabela.pesquisaTabela(t.image).setStatus(true);
+			tabela.pesquisaTabela(t.image).setIsInicializada(true);
 			listaComandosAltoNivel.addComando(comando);		
 		}
 	)* <PV>

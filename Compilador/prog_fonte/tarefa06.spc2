@@ -1,0 +1,5 @@
+palavra a <- "aaaa";
+palavra b <- "bbbbb";
+palavra c, d, e;
+palavra g <- "hello", h <- "world";
+

@@ -61,4 +61,30 @@ public class AcoesSemanticas {
 			}
 		}
 	}
+	
+	public static void warningInicializacaoVariavel(Simbolo simbolo, Token token) {
+		if(simbolo.getIsInicializada() == false) {
+			System.out.println("\nWarning: Variável "+token.image+" não inicializada na linha "+token.endLine+"\n");
+		}
+	}
+	
+	public static void warningUtilizacaoVariavelExpressao(Expressao expressao) {
+		//expressao
+		//le
+		
+		for(Item itemAux : expressao.getListaExpInfixa()) {
+			//Verifica somente os itens que sao operando.
+			if(itemAux instanceof Operando) {
+				Operando operandoAux = (Operando)itemAux;
+				//Verifica somente os itens que sao operando do tipo elemento VAR.
+				if(operandoAux.getTipoElemento() == TipoElemento.VAR){
+					//Consulta o simbolo, retornando seu status (True ou False).
+					if(Compilador.tabela.pesquisaTabela(operandoAux.getLexema()).getIsInicializada() == false) { 
+						//Warning variavel declarada, inicializada e não utilizada no programa inteiro
+						System.out.println("Warning: Variavel " + Compilador.tabela.pesquisaTabela(operandoAux.getLexema()).getNome()+" declarada e inicializada, porém não utilizada.");
+					}
+				}
+			}
+		}
+	}
 }

@@ -385,6 +385,7 @@ public class Compilador implements CompiladorConstants {
                 AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(var.image), expressao, var);
                 comando = new ComandoAtribuicao(tabela.pesquisaTabela(var.image), expressao, atrib);
                 tabela.pesquisaTabela(var.image).setIsInicializada(true);
+                //tabela.pesquisaTabela(var.image).setIsUtilizada(true);
                 AcoesSemanticas.faltaInicializacaoVariavel(expressao,var);
                 listaComandosAltoNivel.addComando(comando);
     jj_consume_token(PV);
@@ -425,6 +426,8 @@ public class Compilador implements CompiladorConstants {
       jj_la1[13] = jj_gen;
       ;
     }
+          //warning		
+                AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
     label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -453,6 +456,8 @@ public class Compilador implements CompiladorConstants {
         jj_la1[15] = jj_gen;
         ;
       }
+                  //warning		
+                        AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
     }
     jj_consume_token(PV);
   }
@@ -496,6 +501,7 @@ public class Compilador implements CompiladorConstants {
     t = jj_consume_token(VAR);
                 comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
                 tabela.pesquisaTabela(t.image).setIsInicializada(true);
+                tabela.pesquisaTabela(t.image).setIsUtilizada(true);
                 listaComandosAltoNivel.addComando(comando);
     label_8:
     while (true) {
