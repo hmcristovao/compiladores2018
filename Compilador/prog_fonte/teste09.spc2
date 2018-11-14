@@ -1,0 +1,7 @@
+numero a;
+numero c;
+palavra d;
+
+a<-5;
+c<-25;
+d<- a+c;

@@ -5,19 +5,16 @@ import parser.Token;
 public class Simbolo {
 	
 	private String nome;      // nome do identificador
-	
-	private TipoDado tipo;        // representa os tipos usados na linguagem
-
-	private int referencia;   //referência usada na geração do código destino
-	
+	private TipoDado tipo;    // representa os tipos usados na linguagem
+	private int referencia;   //referencia usada na geracao do codigo destino
 	private Token token;
-	
+	private boolean status;
 	
 	public Simbolo(Token token, TipoDado tipo) {
 		this.token = token;
 		this.tipo = tipo;
 		this.nome = token.image;
-		
+		this.status = false;
 	}
 	
 	public Simbolo(Token token, TipoDado tipo, int referencia) {
@@ -25,7 +22,7 @@ public class Simbolo {
 		this.tipo = tipo;
 		this.referencia = referencia;
 		this.nome = token.image;
-		
+		this.status = false;	
 	}
 
 	public Token getToken() {
@@ -40,21 +37,17 @@ public class Simbolo {
 		return nome;
 	}
 
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 
 	public TipoDado getTipo() {
 		return tipo;
 	}
 
-
 	public void setTipo(TipoDado tipo) {
 		this.tipo = tipo;
 	}
-
 
 	public int getReferencia() {
 		return referencia;
@@ -64,13 +57,16 @@ public class Simbolo {
 		this.referencia = marcador;
 	}
 
-	
 	public String toString() {
-
 	      return "Nome:"+this.getNome() + "\t" + "Tipo:"+this.getTipo()
-	             + "\t" + "Referência:"+this.getReferencia() + "\n";
-	      
+	             + "\t" + "Referencia:"+this.getReferencia() + "\n";	      
 	 }
-	 
 
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 }

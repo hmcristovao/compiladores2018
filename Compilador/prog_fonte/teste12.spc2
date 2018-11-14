@@ -1,0 +1,5 @@
+numero a,b;
+
+se(a=b)
+	exibe "Igual";
+fim-se

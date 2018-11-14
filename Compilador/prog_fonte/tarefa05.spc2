@@ -1,0 +1,59 @@
+/* Teste para a Tarefa 05 (grupo 10): 
+Tratamento de erros semânticos: 
+	(i) incompatibilidade de tipos entre elementos de uma expressão;
+	(ii) incompatibilidade de tipos no comando de atribuição, isto é, 
+		entre a variável que recebe a expressão e a expressão;
+	(iii) falta de inicialização de uma variável. 
+	
+	Atencao: Dividido em 3 testes, pois o tratamento consiste em um throw 
+	caso ocorra um erro, logo terminando a sequencia de execucao.
+
+	**Também estão como exemplos**
+*/
+
+/*Caso i*/
+numero a<-2;
+palavra b<-"oi";
+exibe a+b;
+/*
+*/
+
+/*
+se (2="oi")
+	exibe "Igual";
+fim-se
+*/
+
+
+/*						Caso ii*/
+/*
+numero a;
+numero c;
+palavra d;
+a<-5;
+c<-25;
+d<- a+c;
+*/
+
+/*
+palavra a;
+numero c;
+a <-2+1;
+exibe a,c;
+*/
+
+
+/*						Caso iii*/
+/*
+numero a;
+numero b;
+a<-5;
+exibe a+b;
+*/
+
+/*
+numero a,b;
+se(a=b)
+	exibe "Igual";
+fim-se
+*/

@@ -10,7 +10,7 @@ import semantico.Simbolo;
 public class Tabela {
 	
 	private HashMap<String, Simbolo> tab = new HashMap<String, Simbolo>();
-	private int marcador = 1; // armazena a última referência incluída na tabela
+	private int marcador = 1; // armazena a ultima referencia incluida na tabela
 	
 	public int getMarcador() {
 		return marcador;

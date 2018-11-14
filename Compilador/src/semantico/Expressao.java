@@ -25,7 +25,7 @@ public class Expressao {
 		return this.listaExpPosFixa;
 	}
 
-	// o tipo da expressao � igual ao tipo do primeiro elemento posfixo (que deve ser um operando)
+	// o tipo da expressao eh igual ao tipo do primeiro elemento posfixo (que deve ser um operando)
 	public TipoDado getTipo() {
 		return ((Operando)(this.listaExpPosFixa.getFirst())).tipoDado;
 	}
@@ -106,12 +106,12 @@ public class Expressao {
 				if(operador.getTipoOperador() == TipoOperador.OU) {
 					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
 
-					codigoDestinoExpressao += "dconst_0 \r\n"	//Primeiro empilha 0 e compara com a express�o
+					codigoDestinoExpressao += "dconst_0 \r\n"	//Primeiro empilha 0 e compara com a expressao
 					+"dcmpg \r\n"								//se o resultado for igual, quer dizer que
-					+"ifeq " + labelSAIDA.getLabel()			//a express�o � falsa, portanto deve sair
+					+"ifeq " + labelSAIDA.getLabel()			//a expressao eh falsa, portanto deve sair
 					+"pop2 \r\n"	
 					+"dconst_1 \r\n"							//Sendo a expressao verdadeira, basta desempilhar 
-					+ labelSAIDA.geraCodigoDestino();			//a express�o e empilhar 1 como resultado v�lido
+					+ labelSAIDA.geraCodigoDestino();			//a expressao e empilhar 1 como resultado valido
 					
 				}
 				
@@ -119,7 +119,8 @@ public class Expressao {
 					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
 					
 					codigoDestinoExpressao += "dconst_1 \r\n"			//Primeiro empilha 1 e compara com o topo
-							+"dcmpg \r\n"								//se o resultado for igual, quer dizer que que o segundo que decide o resultado
+							+"dcmpg \r\n"								//se o resultado for igual, quer dizer que 
+																		//o segundo que decide o resultado
 							+"ifeq " + labelSAIDA.getLabel()			//portanto deve sair
 							+"pop2 \r\n"								//se nao for 1, ele desempilha e empilha 0
 							+"dconst_0 \r\n"							//Sai
@@ -139,8 +140,8 @@ public class Expressao {
 							+ labelSAIDA.geraCodigoDestino();
 				}
 				
-				//An�logo ao caso igual, porem diferenciado no uso do iflt que pega se for menor
-				//que � o caso do do operador relacional menor 
+				//Analogo ao caso igual, porem diferenciado no uso do iflt que pega se for menor
+				//que eh o caso do do operador relacional menor 
 				if(operador.getTipoOperador() == TipoOperador.MENOR) {
 					PrimitivoLabel labelCOLOCATRUE = new PrimitivoLabel("COLOCATRUE");
 					PrimitivoLabel labelSAIDA = new PrimitivoLabel("SAIDA");
@@ -154,7 +155,7 @@ public class Expressao {
 							+ labelSAIDA.geraCodigoDestino();
 				}
 				
-				//compara e se for maior ou igual, então é verdadeiro e empilha 0
+				//compara e se for maior ou igual, entao eh verdadeiro e empilha 0
 				//caso falso, empilha 1 e sai do programa
 				if(operador.getTipoOperador() == TipoOperador.MAIORIGUAL) {
 					PrimitivoLabel labelCOLOCATRUE = new PrimitivoLabel("COLOCATRUE");
