@@ -53,7 +53,7 @@ public class AcoesSemanticas {
 															//Verifica somente os itens que sao operando do tipo elemento VAR.
 				if(operandoAux.getTipoElemento() == TipoElemento.VAR){
 															//Consulta o simbolo, retornando seu status (True ou False).
-					if(!(Compilador.tabela.pesquisaTabela(operandoAux.getLexema()).getStatus())) { 
+					if(!(Compilador.tabela.pesquisaTabela(operandoAux.getLexema()).getIsInicializada())) { 
 															//Erro, falta inicializacao de uma variavel se for False.
 						throw new ErroSemantico("Falta de inicializacao de uma variavel na linha : " + token.beginLine);
 					}

@@ -384,7 +384,7 @@ public class Compilador implements CompiladorConstants {
     expressao = iniciaExpressao();
                 AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(var.image), expressao, var);
                 comando = new ComandoAtribuicao(tabela.pesquisaTabela(var.image), expressao, atrib);
-                tabela.pesquisaTabela(var.image).setStatus(true);
+                tabela.pesquisaTabela(var.image).setIsInicializada(true);
                 AcoesSemanticas.faltaInicializacaoVariavel(expressao,var);
                 listaComandosAltoNivel.addComando(comando);
     jj_consume_token(PV);
@@ -417,7 +417,7 @@ public class Compilador implements CompiladorConstants {
       expressao = iniciaExpressao();
                         AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(variavel.image), expressao, variavel);
                         comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
-                        tabela.pesquisaTabela(variavel.image).setStatus(true);
+                        tabela.pesquisaTabela(variavel.image).setIsInicializada(true);
                         AcoesSemanticas.faltaInicializacaoVariavel(expressao,variavel);
                         listaComandosAltoNivel.addComando(comando);
       break;
@@ -445,7 +445,7 @@ public class Compilador implements CompiladorConstants {
         expressao = iniciaExpressao();
                                 AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(variavel.image), expressao, variavel);
                                 comando = new ComandoAtribuicao(tabela.pesquisaTabela(variavel.image), expressao, atrib);
-                                tabela.pesquisaTabela(variavel.image).setStatus(true);
+                                tabela.pesquisaTabela(variavel.image).setIsInicializada(true);
                                 AcoesSemanticas.faltaInicializacaoVariavel(expressao,variavel);
                                 listaComandosAltoNivel.addComando(comando);
         break;
@@ -495,7 +495,7 @@ public class Compilador implements CompiladorConstants {
     le = jj_consume_token(LEITURA);
     t = jj_consume_token(VAR);
                 comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
-                tabela.pesquisaTabela(t.image).setStatus(true);
+                tabela.pesquisaTabela(t.image).setIsInicializada(true);
                 listaComandosAltoNivel.addComando(comando);
     label_8:
     while (true) {
@@ -510,7 +510,7 @@ public class Compilador implements CompiladorConstants {
       jj_consume_token(VIRGULA);
       t = jj_consume_token(VAR);
                         comando = new ComandoEntrada(tabela.pesquisaTabela(t.image), le);
-                        tabela.pesquisaTabela(t.image).setStatus(true);
+                        tabela.pesquisaTabela(t.image).setIsInicializada(true);
                         listaComandosAltoNivel.addComando(comando);
     }
     jj_consume_token(PV);
