@@ -8,7 +8,7 @@ Tratamento de erros semânticos:
 	Atencao: Dividido em 3 testes, pois o tratamento consiste em um throw 
 	caso ocorra um erro, logo terminando a sequencia de execucao.
 
-	**Também estão como exemplos**
+	**Também estão como testes**
 */
 
 /*Caso i*/
