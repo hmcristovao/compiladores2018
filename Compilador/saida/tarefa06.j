@@ -10,8 +10,8 @@ return
 .end method 
 
 .method public static main([Ljava/lang/String;)V 
-.limit stack 1 
-.limit locals 10
+.limit stack 4 
+.limit locals 16
 ldc "aaaa"
 astore_1
 ldc "bbbbb"
@@ -20,5 +20,11 @@ ldc "hello"
 astore 6
 ldc "world"
 astore 7
+ldc2_w 10.0
+dstore 8
+dload 8
+ldc2_w 1.0
+dadd 
+dstore 10
 return 
 .end method 

@@ -167,7 +167,6 @@ void expressao(Expressao exp):
 		}
 		termo(exp)
 		{
-			// item = new Operador(TipoOperador.OU,t);
 			exp.addListaExpPosFixa(item);	 	
 		}
 	)*	 	

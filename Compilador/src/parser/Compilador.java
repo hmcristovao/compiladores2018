@@ -96,7 +96,6 @@ public class Compilador implements CompiladorConstants {
                         item = new Operador(TipoOperador.OU,t);
                         exp.addListaExpInfixa(item);
       termo(exp);
-                        // item = new Operador(TipoOperador.OU,t);
                         exp.addListaExpPosFixa(item);
     }
   }
