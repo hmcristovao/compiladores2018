@@ -26,5 +26,9 @@ dload 8
 ldc2_w 1.0
 dadd 
 dstore 10
+dload 8
+dload 10
+dadd 
+dstore 12
 return 
 .end method 

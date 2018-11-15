@@ -45,6 +45,9 @@ public class Compilador {
 			System.out.println("\n\n***** Tabela de Simbolos *****\n"
 								+ tabela);
 
+			//Warnings
+			AcoesSemanticas.warnings();
+
 			// Segunda passagem
 			ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
 			listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosCompleta();
@@ -65,7 +68,12 @@ public class Compilador {
 								+ Config.pathSaida + Config.nomeArquivo + Config.extensaoCodigoDestino);
 
 			// Fim
-			System.out.println("\n\n***** Compilacao bem sucedida! *****");
+			if(AcoesSemanticas.qtdWarnings > 0 ) {
+			  System.out.println("\n\n***** Compilacao bem sucedida com "+AcoesSemanticas.qtdWarnings+" warnings! *****");
+			}else {
+				System.out.println("\n\n***** Compilacao bem sucedida! *****");
+			}
+			
 
 		}
 		catch(FileNotFoundException e) {
@@ -327,6 +335,7 @@ void termo5(Expressao exp):
 		tabela.verificaVariavelDeclarada(tokenVar.image);
 		item = new Operando(tabela.tipoVariavel(tokenVar.image),TipoElemento.VAR, tokenVar, Sinal.POS);
 		AcoesSemanticas.incompatibilidadeTipoExpressao(item,exp,tokenVar);
+		tabela.pesquisaTabela(tokenVar.image).setIsUtilizada(true);
 		exp.addListaExpInfixa(item);
 		exp.addListaExpPosFixa(item);
 	}
@@ -383,7 +392,6 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
 		AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(var.image), expressao, var);
 		comando = new ComandoAtribuicao(tabela.pesquisaTabela(var.image), expressao, atrib);
 		tabela.pesquisaTabela(var.image).setIsInicializada(true);
-		//tabela.pesquisaTabela(var.image).setIsUtilizada(true);
 		AcoesSemanticas.faltaInicializacaoVariavel(expressao,var);
 		listaComandosAltoNivel.addComando(comando);
 	}
@@ -416,9 +424,6 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 			listaComandosAltoNivel.addComando(comando);
 		}
 	)?
-	{ //warning		
-		AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
-	}
 	(
 		<VIRGULA> variavel = <VAR>
 		{
@@ -435,9 +440,6 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 				listaComandosAltoNivel.addComando(comando);
 			}
 		)?
-		{ //warning		
-			AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
-		}
 	)* <PV>
 }
 

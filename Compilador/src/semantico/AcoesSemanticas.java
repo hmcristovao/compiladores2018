@@ -1,10 +1,13 @@
 package semantico;
 
+
 import parser.Compilador;
 import parser.Token;
 import tratamentoErro.ErroSemantico;
 
 public class AcoesSemanticas {
+	
+	public static int qtdWarnings = 0;
 	
 	public static void incompatibilidadeTipoExpressao (Item item, Expressao expressao, Token token) {
 		Operando operando = (Operando) item;
@@ -62,29 +65,21 @@ public class AcoesSemanticas {
 		}
 	}
 	
-	public static void warningInicializacaoVariavel(Simbolo simbolo, Token token) {
-		if(simbolo.getIsInicializada() == false) {
-			System.out.println("\nWarning: Variável "+token.image+" não inicializada na linha "+token.endLine+"\n");
-		}
-	}
-	
-	public static void warningUtilizacaoVariavelExpressao(Expressao expressao) {
-		//expressao
-		//le
-		
-		for(Item itemAux : expressao.getListaExpInfixa()) {
-			//Verifica somente os itens que sao operando.
-			if(itemAux instanceof Operando) {
-				Operando operandoAux = (Operando)itemAux;
-				//Verifica somente os itens que sao operando do tipo elemento VAR.
-				if(operandoAux.getTipoElemento() == TipoElemento.VAR){
-					//Consulta o simbolo, retornando seu status (True ou False).
-					if(Compilador.tabela.pesquisaTabela(operandoAux.getLexema()).getIsInicializada() == false) { 
-						//Warning variavel declarada, inicializada e não utilizada no programa inteiro
-						System.out.println("Warning: Variavel " + Compilador.tabela.pesquisaTabela(operandoAux.getLexema()).getNome()+" declarada e inicializada, porém não utilizada.");
-					}
-				}
+	public static void warnings() {
+		//percorrer tabela de simbolos
+		Compilador.tabela.tab.forEach((key, value) -> {
+			//verificar se isInicializada == false, a variavel não foi inicializada
+			if(value.getIsInicializada() == false) {
+				System.out.println("Warning: Variável declarada "+value.getNome()+" declarada, mas não inicializada.");
+				qtdWarnings++;
 			}
-		}
+			
+			//verificar se isInicializada == true isUtilizada == false, variavel foi inicializada porém não foi utilizada
+			if(value.getIsInicializada() == true && value.getIsUtilizada() == false) {
+				System.out.println("Warning: Variável "+value.getNome()+" declarada, inicializada, mas não utilizada.");
+				qtdWarnings++;
+			}
+		});
+			
 	}
 }

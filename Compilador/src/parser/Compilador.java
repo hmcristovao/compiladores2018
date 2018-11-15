@@ -30,6 +30,9 @@ public class Compilador implements CompiladorConstants {
                         System.out.println("\u005cn\u005cn***** Tabela de Simbolos *****\u005cn"
                                                                 + tabela);
 
+                        //Warnings
+                        AcoesSemanticas.warnings();
+
                         // Segunda passagem
                         ListaComandosPrimitivos listaComandosPrimitivos = new ListaComandosPrimitivos();
                         listaComandosPrimitivos = listaComandosAltoNivel.geraListaComandoPrimitivosCompleta();
@@ -50,7 +53,12 @@ public class Compilador implements CompiladorConstants {
                                                                 + Config.pathSaida + Config.nomeArquivo + Config.extensaoCodigoDestino);
 
                         // Fim
-                        System.out.println("\u005cn\u005cn***** Compilacao bem sucedida! *****");
+                        if(AcoesSemanticas.qtdWarnings > 0 ) {
+                          System.out.println("\u005cn\u005cn***** Compilacao bem sucedida com "+AcoesSemanticas.qtdWarnings+" warnings! *****");
+                        }else {
+                                System.out.println("\u005cn\u005cn***** Compilacao bem sucedida! *****");
+                        }
+
 
                 }
                 catch(FileNotFoundException e) {
@@ -301,6 +309,7 @@ public class Compilador implements CompiladorConstants {
                 tabela.verificaVariavelDeclarada(tokenVar.image);
                 item = new Operando(tabela.tipoVariavel(tokenVar.image),TipoElemento.VAR, tokenVar, Sinal.POS);
                 AcoesSemanticas.incompatibilidadeTipoExpressao(item,exp,tokenVar);
+                tabela.pesquisaTabela(tokenVar.image).setIsUtilizada(true);
                 exp.addListaExpInfixa(item);
                 exp.addListaExpPosFixa(item);
       break;
@@ -384,7 +393,6 @@ public class Compilador implements CompiladorConstants {
                 AcoesSemanticas.incompatibilidadeTipoAtribuicao (tabela.pesquisaTabela(var.image), expressao, var);
                 comando = new ComandoAtribuicao(tabela.pesquisaTabela(var.image), expressao, atrib);
                 tabela.pesquisaTabela(var.image).setIsInicializada(true);
-                //tabela.pesquisaTabela(var.image).setIsUtilizada(true);
                 AcoesSemanticas.faltaInicializacaoVariavel(expressao,var);
                 listaComandosAltoNivel.addComando(comando);
     jj_consume_token(PV);
@@ -425,8 +433,6 @@ public class Compilador implements CompiladorConstants {
       jj_la1[13] = jj_gen;
       ;
     }
-          //warning		
-                AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
     label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -455,8 +461,6 @@ public class Compilador implements CompiladorConstants {
         jj_la1[15] = jj_gen;
         ;
       }
-                  //warning		
-                        AcoesSemanticas.warningInicializacaoVariavel(tabela.pesquisaTabela(variavel.image), variavel);
     }
     jj_consume_token(PV);
   }

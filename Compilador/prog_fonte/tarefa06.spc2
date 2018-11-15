@@ -12,3 +12,5 @@ numero x,y,z;
 x <- 10;
 y <- x+1;
 
+z <- x+y;
+
