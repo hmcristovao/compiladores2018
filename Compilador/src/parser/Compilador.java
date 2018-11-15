@@ -82,6 +82,7 @@ public class Compilador implements CompiladorConstants {
   static final public Expressao iniciaExpressao() throws ParseException {
         Expressao exp = new Expressao();
     expressao(exp);
+                exp.otimizaPosfixa();
                 {if (true) return exp;}
     throw new Error("Missing return statement in function");
   }

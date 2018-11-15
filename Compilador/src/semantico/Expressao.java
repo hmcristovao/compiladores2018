@@ -181,4 +181,88 @@ public class Expressao {
 		return "[infixa: "+this.getListaExpInfixa() +
 				"]; posfixa: ["+this.getListaExpPosFixa()+"]";
 	}
+	//Tarefa 07
+	public void otimizaPosfixa() {
+		int tam=this.listaExpPosFixa.size();
+		LinkedList<Item> listaExpPosFixaOtimizada=this.listaExpPosFixa;
+		for(int i=0;i< tam-2;) {
+			int otimizou=0,zero=0;
+			//a verificacao usa os proximos 3 itens
+			Item item1=listaExpPosFixaOtimizada.get(i);
+			Item item2=listaExpPosFixaOtimizada.get(i+1);
+			Item item3=listaExpPosFixaOtimizada.get(i+2);
+			//se for a sequencia operando operando operador
+			if(item1 instanceof Operando && item2 instanceof Operando && item3 instanceof Operador) {
+				Operando op1=(Operando) item1;
+				Operando op2=(Operando) item2;
+				//se seguir a sequencia 0 x operador
+				if(op1.getTipoDado()==TipoDado.NUMERO &&
+						item1.getLexema().equals("0.0") && op2.getTipoDado()==TipoDado.NUMERO &&
+								op2.getTipoElemento()==TipoElemento.VAR) {
+					Operador operador=(Operador) item3;
+					//substitui por 0 ou por x dependendo do operador
+					switch(operador.getTipoOperador()) {
+						case SOMA:
+							listaExpPosFixaOtimizada.remove(i);
+								listaExpPosFixaOtimizada.remove(i+1);
+								otimizou=1;
+							break;
+						case SUB:
+								listaExpPosFixaOtimizada.remove(i);
+								listaExpPosFixaOtimizada.remove(i+1);
+								otimizou=1;
+							break;
+						case MUL:
+								listaExpPosFixaOtimizada.remove(i+1);
+								listaExpPosFixaOtimizada.remove(i+1);
+								otimizou=1;
+							break;
+						case DIV:
+								listaExpPosFixaOtimizada.remove(i+1);
+								listaExpPosFixaOtimizada.remove(i+1);
+								otimizou=1;
+							break;
+						default:
+							break;
+					}
+				}
+				else {
+					//se for a sequencia x 0 operador
+					if(op2.getTipoDado()==TipoDado.NUMERO &&
+							item2.getLexema().equals("0.0") && op1.getTipoDado()==TipoDado.NUMERO &&
+									op1.getTipoElemento()==TipoElemento.VAR) {
+						Operador operador=(Operador) item3;
+						//substitui por 0 ou por x dependendo do operador
+						switch(operador.getTipoOperador()) {
+						case SOMA:
+							listaExpPosFixaOtimizada.remove(i+1);
+							listaExpPosFixaOtimizada.remove(i+1);
+							otimizou=1;
+						break;
+					case SUB:
+							listaExpPosFixaOtimizada.remove(i+1);
+							listaExpPosFixaOtimizada.remove(i+1);
+							otimizou=1;
+						break;
+					case MUL:
+							listaExpPosFixaOtimizada.remove(i);
+							listaExpPosFixaOtimizada.remove(i+1);
+							otimizou=1;
+						break;
+					default:
+						break;
+						}
+					}
+				}
+			}
+			//se otimizou, vericar se precisa otimizar novamente do inicio da expressao
+			if(otimizou==1) {
+				tam=listaExpPosFixaOtimizada.size();
+				i=0;
+			}
+			else i++;
+		}
+		//substui a expPosFixa pela sua versao otimizada
+		this.listaExpPosFixa=listaExpPosFixaOtimizada;
+	}
 }

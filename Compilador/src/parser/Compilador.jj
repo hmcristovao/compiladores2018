@@ -157,6 +157,7 @@ Expressao iniciaExpressao():
 {
 	expressao(exp)
 	{
+	  	exp.otimizaPosfixa();
 		return exp;
 	}	
 }
