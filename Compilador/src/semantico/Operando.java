@@ -30,6 +30,7 @@ public class Operando extends Item {
 		if(this.sinal == Sinal.NEG)
 			operandoCompleto.append("-");
 		
+		/*
 		operandoCompleto.append(super.getLexema());
 				
 		// se for constante numerica e inteira, coloca uma casa decimal com zero (devido a exigencia do comando assembler ldc2_w)
@@ -38,7 +39,14 @@ public class Operando extends Item {
 			int auxInt = Integer.parseInt(this.token.image);
 		    if(auxDouble == auxInt)  
 		       operandoCompleto.append(".0");
-		}
+		}*/
+		
+		// Adicionado na tarefa 08 : Resolve o problema no parseInt no caso de número já ser Double
+		if(this.tipoElemento == TipoElemento.CTE && this.tipoDado == TipoDado.NUMERO) 
+		{	operandoCompleto.append( Double.toString( Double.parseDouble( this.token.image ) ) ); }
+		else
+		{ 	operandoCompleto.append( super.getLexema() ); } 
+		
 		return operandoCompleto.toString();
 	}
 

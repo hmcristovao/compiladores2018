@@ -1,0 +1,23 @@
+/*
+Teste para a Tarefa 8  - Grupo 11: 
+Otimizacao de codigo tipo elemento neutro envolvendo a constante 1.
+*/
+
+numero a <- -14.56, b, c;
+
+/* 1 a esquerda do * e uma variavel sendo divida por 1  */
+c <- 1*(a/1);
+
+/* 1 a direita multiplicando */ 
+b <- (b/c)*1.0;
+
+
+a <- 1*1*(1/1)*1/(1/1)*1;
+
+
+/* Expressoes mais complexas */ 
+a <- 1*(( 1/3 - 5/1)*3/1+(4/a*1/3)/1-(3/1)/(a/1-3) )*1;
+
+a <- a + b + c / (1/a - 4 * (1/3*1) - (5/1*c/a*1));
+
+

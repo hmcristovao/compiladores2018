@@ -265,4 +265,96 @@ public class Expressao {
 		//substui a expPosFixa pela sua versao otimizada
 		this.listaExpPosFixa=listaExpPosFixaOtimizada;
 	}
+
+	// Tarefa 08
+	// Otimizacao de codigo tipo elemento neutro envolvendo a constante 1
+	public void otimizarPosFixaConst1()
+	{
+		int idItem, qtdOperandosPendentes, i;
+		Item itemAtual, itemA, itemB;
+		// Considere a expressao no formato: A (segundo op.) B (primeiro op.) <operador>
+		for( idItem = 0; idItem < this.listaExpPosFixa.size(); idItem++)
+		{
+			itemAtual = this.listaExpPosFixa.get(idItem);
+			if( itemAtual instanceof Operador )
+			{
+				TipoOperador tipoOp =  ((Operador)itemAtual).getTipoOperador() ;
+				// Verifica se o primeiro elemento a esquerda de / e um operando
+				if( tipoOp == TipoOperador.DIV )
+				{
+					itemB = this.listaExpPosFixa.get(idItem-1);
+					if ( itemB instanceof Operando && ((Operando)itemB).getTipoElemento() == TipoElemento.CTE )
+					{
+						if ( Double.parseDouble( ((Operando)itemB).getLexema() ) == 1.0 )
+						{
+							this.getListaExpPosFixa().remove( idItem );
+							this.getListaExpPosFixa().remove( idItem - 1 );
+							idItem -= 2;
+						}
+					}
+				} else 
+				{
+					if ( tipoOp == TipoOperador.MUL )
+					{
+						itemB = this.listaExpPosFixa.get(idItem-1);
+						if ( itemB instanceof Operando )
+						{
+								// Se o primeiro elemento a esquerda de * eh um operando constante de valor 1
+								if ( ((Operando)itemB).getTipoElemento() == TipoElemento.CTE && Double.parseDouble( ((Operando)itemB).getLexema() ) == 1.0 )
+								{
+									this.getListaExpPosFixa().remove( idItem );
+									this.getListaExpPosFixa().remove( idItem - 1 );
+									idItem -= 2;
+								} else
+								{ 
+									// Analise o segundo operando 
+									itemA = this.listaExpPosFixa.get(idItem-2);
+									if ( itemA instanceof Operando && ((Operando)itemA).getTipoElemento() == TipoElemento.CTE && Double.parseDouble( ((Operando)itemA).getLexema() ) == 1.0)
+									{
+										
+										this.getListaExpPosFixa().remove( idItem );
+										this.getListaExpPosFixa().remove( idItem - 2 );
+										idItem -= 2;
+									}
+								}
+								
+						} else
+						{
+							// Caso o primeiro elemento seja um operador 
+							// Procura o segundo operando do * com base na quantidade de operandos que cada operador requer.
+							qtdOperandosPendentes = 2;
+							itemA = null;
+							for ( i = idItem - 1; i > 0 && qtdOperandosPendentes > 0; i-- )
+							{
+								itemA = this.listaExpPosFixa.get(i);
+										
+								if ( itemA instanceof Operando )
+									qtdOperandosPendentes--;
+								else if ( itemA instanceof Operador )
+									qtdOperandosPendentes++;
+							}
+							
+							
+							// i guarda o indice do primeiro elemento que compoe o segundo operando de *
+							if ( !( this.listaExpPosFixa.get(i) instanceof Operando && 
+									this.listaExpPosFixa.get(i+1) instanceof Operando && this.listaExpPosFixa.get(i+2) instanceof Operador ) )
+							{
+							// se e possivel otimizar remove o operador * e o operando localizado.
+								if ( itemA instanceof Operando && ((Operando)itemA).getTipoElemento() == TipoElemento.CTE && 
+										Double.parseDouble( ((Operando)itemA).getLexema() ) == 1.0)
+								{
+										this.getListaExpPosFixa().remove( idItem );
+										this.getListaExpPosFixa().remove( i );
+										idItem -= 2;
+								} 
+							}
+
+						}
+					}
+				}
+			}
+		}
+		
+	}
+	
 }
