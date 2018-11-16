@@ -5,17 +5,17 @@ Otimização de código tipo elemento neutro envolvendo a constante 0.
 
 numero x <- 1, y <- 3;
 
-x <- x * 0;
-x <- 0 * x;
-x <- x + 0;
-x <- 0 + x;
-x <- x - 0;
-x <- 0 - x;
-x <- x / 0;
-x <- 0 / x;
+x <- x * 0; exibe x;
+x <- 0 * x; exibe x;
+x <- x + 0; exibe x;
+x <- 0 + x; exibe x;
+x <- x - 0; exibe x;
+x <- 0 - x; exibe x;
+x <- x / 0; exibe x;
+x <- 0 / x; exibe x;
 
-x <- x * 0 + 0 * x;
-x <- x * 0 - 0 * x;
-x <- 0 / x + x * 0 + 5;
+x <- x * 0 + 0 * x; exibe x;
+x <- x * 0 - 0 * x; exibe x;
+x <- 0 / x + x * 0 + 5; exibe x;
 
-x <- x * y + x * 3 * 0 - y * 0;
+x <- x * y + x * 3 * 0 - y * 0; exibe x;

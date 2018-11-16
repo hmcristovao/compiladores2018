@@ -1,6 +1,6 @@
 /* Compilador para a Linguagem Removename (extensao spc2)
-	 Turma de Compiladores 2018 - Eng de Computacao e Ciencia da Computacao
-	 UFES - Campus de Sao Mateus
+   Turma de Compiladores 2018 - Eng de Computacao e Ciencia da Computacao
+   UFES - Campus de Sao Mateus
 
 	 Para executar (prompt no diretorio saida):
 	 java -jar jasmin.jar teste.j
@@ -210,10 +210,12 @@ void  termo1(Expressao exp):
 {
 	termo2(exp)
 	(	  
-		( t = <IGUAL> { operador = TipoOperador.IGUAL; } 
-		| t = <MENOR> { operador = TipoOperador.MENOR; } 
-		| t = <MAIORIGUAL> {operador = TipoOperador.MAIORIGUAL; })
-		{
+	    (
+	         t = <IGUAL> { operador = TipoOperador.IGUAL; } 
+		   | t = <MENOR> { operador = TipoOperador.MENOR; } 
+		   | t = <MAIORIGUAL> {operador = TipoOperador.MAIORIGUAL; }
+	    )
+	    {
 			item = new Operador(operador,t);
 			exp.addListaExpInfixa(item);
 		}
@@ -232,7 +234,7 @@ void termo2(Expressao exp):
 }
 {
 	termo3(exp)
-	(t = <CONCAT>
+	( t = <CONCAT>
 		{
 			item = new Operador(TipoOperador.CONCAT,t);
 			exp.addListaExpInfixa(item); 
@@ -253,8 +255,10 @@ void termo3(Expressao exp):
 {
 	termo4(exp)
 	(
-		( t = <SOMA> {operador = TipoOperador.SOMA;} 
-		| t = <SUB> {operador = TipoOperador.SUB;})
+		(
+		    t = <SOMA> {operador = TipoOperador.SOMA;} 
+		  | t = <SUB> {operador = TipoOperador.SUB;}
+		)
 		{
 			item = new Operador(operador,t);
 			exp.addListaExpInfixa(item);
@@ -276,8 +280,10 @@ void termo4(Expressao exp):
 {
 	termo5(exp)
 	(
-		( t = <MUL> {operador = TipoOperador.MUL;} 
-		| t = <DIV> {operador = TipoOperador.DIV;})
+		(
+		   t = <MUL> {operador = TipoOperador.MUL;} 
+		 | t = <DIV> {operador = TipoOperador.DIV;}
+		)
 		{
 			item = new Operador(operador,t);
 			exp.addListaExpInfixa(item);
@@ -369,12 +375,13 @@ void programa(ListaComandosAltoNivel listaComandosAltoNivel) :
 void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 {}
 {
-	( atribuicao(listaComandosAltoNivel)
-	| declaracao(listaComandosAltoNivel) 
-	| se(listaComandosAltoNivel)  
-	| enquanto(listaComandosAltoNivel)
-	| le(listaComandosAltoNivel)
-	| exibe(listaComandosAltoNivel) 
+	(
+	    atribuicao(listaComandosAltoNivel)
+	  | declaracao(listaComandosAltoNivel) 
+	  | se(listaComandosAltoNivel)  
+	  | enquanto(listaComandosAltoNivel)
+	  | le(listaComandosAltoNivel)
+	  | exibe(listaComandosAltoNivel) 
 	)	
 }
 
@@ -408,8 +415,9 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 	Expressao expressao = null;
 }
 {
-	( <NUMERO> {tipo = TipoDado.NUMERO;}
-	| <PALAVRA> {tipo = TipoDado.PALAVRA;}
+	(
+	    <NUMERO> {tipo = TipoDado.NUMERO;}
+	  | <PALAVRA> {tipo = TipoDado.PALAVRA;}
 	)
 	
 	variavel = <VAR> 

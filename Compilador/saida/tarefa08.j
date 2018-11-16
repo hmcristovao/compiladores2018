@@ -11,7 +11,7 @@ return
 
 .method public static main([Ljava/lang/String;)V 
 .limit stack 12 
-.limit locals 9
+.limit locals 11
 ldc2_w -14.56
 dstore_1
 dload_1
@@ -64,5 +64,13 @@ dsub
 ddiv 
 dadd 
 dstore_1
+ldc2_w -2.0
+ldc2_w 3.0
+dmul 
+dstore 7
+ldc2_w 3.0
+dstore 7
+ldc2_w 4.0
+dstore 7
 return 
 .end method 

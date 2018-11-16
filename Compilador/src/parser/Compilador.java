@@ -144,15 +144,15 @@ public class Compilador implements CompiladorConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case IGUAL:
         t = jj_consume_token(IGUAL);
-                                operador = TipoOperador.IGUAL;
+                               operador = TipoOperador.IGUAL;
         break;
       case MENOR:
         t = jj_consume_token(MENOR);
-                                operador = TipoOperador.MENOR;
+                                   operador = TipoOperador.MENOR;
         break;
       case MAIORIGUAL:
         t = jj_consume_token(MAIORIGUAL);
-                                    operador = TipoOperador.MAIORIGUAL;
+                                       operador = TipoOperador.MAIORIGUAL;
         break;
       default:
         jj_la1[2] = jj_gen;
@@ -213,11 +213,11 @@ public class Compilador implements CompiladorConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case SOMA:
         t = jj_consume_token(SOMA);
-                              operador = TipoOperador.SOMA;
+                                operador = TipoOperador.SOMA;
         break;
       case SUB:
         t = jj_consume_token(SUB);
-                             operador = TipoOperador.SUB;
+                               operador = TipoOperador.SUB;
         break;
       default:
         jj_la1[6] = jj_gen;
@@ -251,11 +251,11 @@ public class Compilador implements CompiladorConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MUL:
         t = jj_consume_token(MUL);
-                             operador = TipoOperador.MUL;
+                              operador = TipoOperador.MUL;
         break;
       case DIV:
         t = jj_consume_token(DIV);
-                             operador = TipoOperador.DIV;
+                              operador = TipoOperador.DIV;
         break;
       default:
         jj_la1[8] = jj_gen;
@@ -408,11 +408,11 @@ public class Compilador implements CompiladorConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NUMERO:
       jj_consume_token(NUMERO);
-                    tipo = TipoDado.NUMERO;
+                      tipo = TipoDado.NUMERO;
       break;
     case PALAVRA:
       jj_consume_token(PALAVRA);
-                     tipo = TipoDado.PALAVRA;
+                       tipo = TipoDado.PALAVRA;
       break;
     default:
       jj_la1[12] = jj_gen;
