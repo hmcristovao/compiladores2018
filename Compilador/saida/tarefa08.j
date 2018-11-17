@@ -70,5 +70,15 @@ ldc2_w 3.0
 dstore 7
 ldc2_w 4.0
 dstore 7
+dload_1
+ldc2_w 0.0
+dload_3
+dload 5
+ddiv 
+dadd 
+ldc2_w 0.0
+dmul 
+dsub 
+dstore 5
 return 
 .end method 
