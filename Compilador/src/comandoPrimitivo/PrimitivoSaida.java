@@ -18,9 +18,9 @@ public class PrimitivoSaida extends ComandoPrimitivo{
 				+ this.expDestinoAssembler;
 		
 		if(this.tipo == TipoDado.NUMERO) { 
-			codigoDestino+="invokevirtual java/io/PrintStream/println(D)V \r\n";
+			codigoDestino+="invokevirtual java/io/PrintStream/print(D)V \r\n";
 		}else { 
-			codigoDestino+= "invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V \r\n";	
+			codigoDestino+= "invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V \r\n";	
 		}
 		return codigoDestino;
 	}
