@@ -107,7 +107,9 @@ TOKEN [IGNORE_CASE] : {
 	<SE: "se" > |
 	<FIMSE: "fim-se" > |
 	<ENQUANTO: "enquanto" > |
-	<FIMENQUANTO: "fim-enquanto" > 
+	<FIMENQUANTO: "fim-enquanto" > |
+	<MATRIX3D : "matrix3D" > |
+	<FIMMATRIX3D: "fim-matrix3D" >
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -132,7 +134,8 @@ TOKEN : {
 	< IGUAL: "=" > |
 	< CONCAT: "&" > |
 	< MENOR: "<" > |
-	< MAIORIGUAL: ">=" >
+	< MAIORIGUAL: ">=" > |
+	< TO: "to" >
 }
 //----------CARACTERES----------
 TOKEN : {
@@ -381,7 +384,8 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	  | se(listaComandosAltoNivel)  
 	  | enquanto(listaComandosAltoNivel)
 	  | le(listaComandosAltoNivel)
-	  | exibe(listaComandosAltoNivel) 
+	  | exibe(listaComandosAltoNivel)
+	  | matrix3D( listaComandosAltoNivel )
 	)	
 }
 
@@ -529,4 +533,17 @@ void exibe(ListaComandosAltoNivel listaExibe):
 		}
 	)* <PV>
 }
-	
+
+// Tarefa 18
+void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
+{
+  	Token matrix3D;
+}
+{
+	matrix3D = <MATRIX3D> <AP>
+				<VAR> <VIRGULA> <VAR> <VIRGULA> <VAR> <SUB>
+				<NUMERO> <TO> <NUMERO>
+				<FP>
+					programa( listaMatrix3D )
+				<FIMMATRIX3D>
+}
