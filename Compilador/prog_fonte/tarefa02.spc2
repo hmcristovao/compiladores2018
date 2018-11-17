@@ -1,12 +1,13 @@
 /* Teste para a Tarefa 02 (grupo 08): 
 Cálculo do tamanho da pilha para expressões usada no comando .limit stack n
 */
-numero a,b,c,d,e;
+numero a,b,c,d,e,x;
 palavra k, l , m;
 
+x <- 3**(4+3)**3;
 a <- 1+2;
 b <- (3*((1+(2))+5));
 c <- a*(a-1)*(b-2)*(a-3)+(1*b);
-d <- c;
+d <- x;
 e <- a+(b+(c+(d+(a+(b+(c+(d+(a+(b+(c+(d+1)))))))))));
-exibe a+b+c+d+e;
+exibe a+b+c+d+e+x;

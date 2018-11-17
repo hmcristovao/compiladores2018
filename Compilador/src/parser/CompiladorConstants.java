@@ -39,33 +39,35 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int DIV = 21;
   /** RegularExpression Id. */
-  int OU = 22;
+  int POT = 22;
   /** RegularExpression Id. */
-  int E = 23;
+  int OU = 23;
   /** RegularExpression Id. */
-  int ATRIB = 24;
+  int E = 24;
   /** RegularExpression Id. */
-  int IGUAL = 25;
+  int ATRIB = 25;
   /** RegularExpression Id. */
-  int CONCAT = 26;
+  int IGUAL = 26;
   /** RegularExpression Id. */
-  int MENOR = 27;
+  int CONCAT = 27;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 28;
+  int MENOR = 28;
   /** RegularExpression Id. */
-  int CHAR = 29;
+  int MAIORIGUAL = 29;
   /** RegularExpression Id. */
-  int AP = 30;
+  int CHAR = 30;
   /** RegularExpression Id. */
-  int FP = 31;
+  int AP = 31;
   /** RegularExpression Id. */
-  int PV = 32;
+  int FP = 32;
   /** RegularExpression Id. */
-  int VIRGULA = 33;
+  int PV = 33;
   /** RegularExpression Id. */
-  int STRING = 34;
+  int VIRGULA = 34;
   /** RegularExpression Id. */
-  int VAR = 35;
+  int STRING = 35;
+  /** RegularExpression Id. */
+  int VAR = 36;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -96,6 +98,7 @@ public interface CompiladorConstants {
     "\"-\"",
     "\"*\"",
     "\"/\"",
+    "\"**\"",
     "\"OU\"",
     "\"E\"",
     "\"<-\"",

@@ -6,6 +6,7 @@ public enum TipoOperador
 	SUB, 
 	MUL, 
 	DIV,
+	POT,
 	OU,
 	E,
 	IGUAL,

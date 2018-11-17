@@ -98,6 +98,10 @@ public class Expressao {
 				if(operador.getTipoOperador() == TipoOperador.MUL) {
 					codigoDestinoExpressao += "dmul \r\n";
 				}
+				if(operador.getTipoOperador() == TipoOperador.POT) {
+					
+					codigoDestinoExpressao += "invokestatic java/lang/Math/pow(DD)D \r\n";
+				}
 
 				if(operador.getTipoOperador() == TipoOperador.DIV) {
 					codigoDestinoExpressao += "ddiv \r\n";

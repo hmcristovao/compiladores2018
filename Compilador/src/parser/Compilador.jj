@@ -126,6 +126,7 @@ TOKEN : {
 	< SUB: "-" > |
 	< MUL: "*" > |
 	< DIV: "/" > |
+	< POT : "**" >|
 	< OU: "OU" > |
 	< E: "E" > |
 	< ATRIB: "<-"  > |
@@ -278,7 +279,7 @@ void termo4(Expressao exp):
 	Item item = null;
 }
 {
-	termo5(exp)
+	pot(exp)
 	(
 		(
 		   t = <MUL> {operador = TipoOperador.MUL;} 
@@ -288,13 +289,36 @@ void termo4(Expressao exp):
 			item = new Operador(operador,t);
 			exp.addListaExpInfixa(item);
 		}
-		termo5(exp)
+		pot(exp)
 		{
 			item = new Operador(operador,t);
 			exp.addListaExpPosFixa(item);
 		}
 	)*
 }
+
+void pot(Expressao exp) :
+{
+	Token t;
+	TipoOperador operador;
+	Item item = null;}
+{
+	termo5(exp)
+	(
+	  t=<POT> { operador = TipoOperador.POT; }
+	  {  
+	        item = new Operador(operador, t);
+            exp.addListaExpInfixa(item);
+	  } 
+	  pot(exp)
+	  {
+	    	item = new Operador(operador, t);
+            exp.addListaExpPosFixa(item);
+	  }  
+	)?
+}
+
+
 
 void termo5(Expressao exp):
 {
