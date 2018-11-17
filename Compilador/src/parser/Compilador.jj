@@ -537,13 +537,21 @@ void exibe(ListaComandosAltoNivel listaExibe):
 // Tarefa 18
 void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
 {
-  	Token matrix3D;
+  	Token matrix3D, varCtrlA, varCtrlB, varCtrlC, varInit, varLimSup;
+  	ComandoAltoNivel comandoMatrix3D = null;
+  	ListaComandosAltoNivel blocoComandosMatrix = new ListaComandosAltoNivel();
 }
 {
 	matrix3D = <MATRIX3D> <AP>
-				<VAR> <VIRGULA> <VAR> <VIRGULA> <VAR> <SUB>
-				<NUM> <TO> <NUM>
+				varCtrlA = <VAR> { tabela.insereNaTabela( varCtrlA, TipoDado.NUMERO ); } <VIRGULA>
+				varCtrlB = <VAR> { tabela.insereNaTabela( varCtrlB, TipoDado.NUMERO ); } <VIRGULA>
+				varCtrlC = <VAR> { tabela.insereNaTabela( varCtrlC, TipoDado.NUMERO ); } <SUB>
+				varInit = <NUM> <TO> varLimSup = <NUM>
 				<FP>
-					programa( listaMatrix3D )
+					programa( blocoComandosMatrix )
 				<FIMMATRIX3D>
+				{
+					comandoMatrix3D = new ComandoMatrix3D( matrix3D, varCtrlA, varCtrlB, varCtrlC, varInit, varLimSup, blocoComandosMatrix );
+					listaMatrix3D.addComando( comandoMatrix3D );
+				}
 }
