@@ -1,0 +1,12 @@
+/*
+Teste para a Tarefa 09  - Grupo 06: 
+Operacao de potenciacao
+*/
+
+numero a,b,c;
+
+a <- 2**3;
+b <- 2**(1/2);      /* raiz de 2 */
+c <- 1+2*3**2*2+a;  /* teste de precedencia = 45 */
+
+exibe a,b,c;
