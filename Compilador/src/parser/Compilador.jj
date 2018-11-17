@@ -547,9 +547,21 @@ void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
 }
 {
 	matrix3D = <MATRIX3D> <AP>
-				varDimX = <VAR> { tabela.insereNaTabela( varDimX, TipoDado.NUMERO ); tabela.pesquisaTabela( varDimX.image ).setIsInicializada(true); } <VIRGULA>
-				varDimY = <VAR> { tabela.insereNaTabela( varDimY, TipoDado.NUMERO ); tabela.pesquisaTabela( varDimY.image ).setIsInicializada(true); } <VIRGULA>
-				varDimZ = <VAR> { tabela.insereNaTabela( varDimZ, TipoDado.NUMERO ); tabela.pesquisaTabela( varDimZ.image ).setIsInicializada(true); } <SUB>
+				varDimX = <VAR>
+				{
+				  tabela.insereNaTabela( varDimX, TipoDado.NUMERO );
+				  tabela.pesquisaTabela( varDimX.image ).setIsInicializada(true);
+				} <VIRGULA>
+				varDimY = <VAR>
+				{
+				  tabela.insereNaTabela( varDimY, TipoDado.NUMERO );
+				  tabela.pesquisaTabela( varDimY.image ).setIsInicializada(true);
+				} <VIRGULA>
+				varDimZ = <VAR>
+				{
+				  tabela.insereNaTabela( varDimZ, TipoDado.NUMERO );
+				  tabela.pesquisaTabela( varDimZ.image ).setIsInicializada(true);
+				} <SUB>
 				cteInit = <NUM>
 				{
 				  cteInicializacao = new Operando( TipoDado.NUMERO, TipoElemento.CTE, cteInit, Sinal.POS );
