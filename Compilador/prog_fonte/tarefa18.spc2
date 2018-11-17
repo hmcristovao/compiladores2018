@@ -5,7 +5,11 @@ Comando matrix3D
 numero i <- 0, j, k;
 j <- i;
 k <- j;
+numero contador <-0;
 
-matrix3D( v_1, v_2 , v_3 - 1 to 10 )
-	exibe i,j, k;
+matrix3D( a, b, c - 1 to 10 )
+	exibe "a = ", a,"/ b = ", b, "/ c = ", c, "\n";
+	contador <- contador +  1;	
 fim-matrix3D
+
+exibe contador, " possibilidades\n";

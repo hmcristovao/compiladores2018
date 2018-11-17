@@ -537,8 +537,12 @@ void exibe(ListaComandosAltoNivel listaExibe):
 // Tarefa 18
 void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
 {
-  	Token matrix3D, varCtrlA, varCtrlB, varCtrlC, varInit, varLimSup;
+  	Token matrix3D, varCtrlA, varCtrlB, varCtrlC, cteInit, cteLimSup;
   	ComandoAltoNivel comandoMatrix3D = null;
+  	Item cteInicializacao = null;
+	Item cteLimiteSuperior = null;
+	Expressao expInicializacao = new Expressao();
+	Expressao expCondicaoParada = new Expressao();
   	ListaComandosAltoNivel blocoComandosMatrix = new ListaComandosAltoNivel();
 }
 {
@@ -546,12 +550,20 @@ void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
 				varCtrlA = <VAR> { tabela.insereNaTabela( varCtrlA, TipoDado.NUMERO ); } <VIRGULA>
 				varCtrlB = <VAR> { tabela.insereNaTabela( varCtrlB, TipoDado.NUMERO ); } <VIRGULA>
 				varCtrlC = <VAR> { tabela.insereNaTabela( varCtrlC, TipoDado.NUMERO ); } <SUB>
-				varInit = <NUM> <TO> varLimSup = <NUM>
-				<FP>
-					programa( blocoComandosMatrix )
-				<FIMMATRIX3D>
+				cteInit = <NUM>
 				{
-					comandoMatrix3D = new ComandoMatrix3D( matrix3D, varCtrlA, varCtrlB, varCtrlC, varInit, varLimSup, blocoComandosMatrix );
+				  cteInicializacao = new Operando( TipoDado.NUMERO, TipoElemento.CTE, cteInit, Sinal.POS );
+				  expInicializacao.addListaExpInfixa( cteInicializacao );
+				  expInicializacao.addListaExpPosFixa( cteInicializacao );
+				}  <TO>
+				cteLimSup = <NUM>
+				{
+				  cteLimiteSuperior = new Operando( TipoDado.NUMERO, TipoElemento.CTE, cteLimSup, Sinal.POS );
+				  expCondicaoParada.addListaExpInfixa( cteLimiteSuperior );
+				  expCondicaoParada.addListaExpPosFixa( cteLimiteSuperior );
+				} <FP> programa( blocoComandosMatrix ) <FIMMATRIX3D>
+				{
+					comandoMatrix3D = new ComandoMatrix3D( matrix3D, varCtrlA, varCtrlB, varCtrlC, expInicializacao, expCondicaoParada, blocoComandosMatrix );
 					listaMatrix3D.addComando( comandoMatrix3D );
 				}
 }
