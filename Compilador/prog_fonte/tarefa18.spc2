@@ -1,0 +1,7 @@
+/*
+Teste para a Tarefa 18  - Grupo 11: 
+Comando matrix3D
+*/
+
+matrix3D( v_1, v_2 , v_3 - 1 to 10 )
+fim-matrix3D

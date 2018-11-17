@@ -542,7 +542,7 @@ void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
 {
 	matrix3D = <MATRIX3D> <AP>
 				<VAR> <VIRGULA> <VAR> <VIRGULA> <VAR> <SUB>
-				<NUMERO> <TO> <NUMERO>
+				<NUM> <TO> <NUM>
 				<FP>
 					programa( listaMatrix3D )
 				<FIMMATRIX3D>
