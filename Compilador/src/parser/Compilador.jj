@@ -105,6 +105,7 @@ TOKEN [IGNORE_CASE] : {
 	<EXIBE: "exibe" >  |
 	<LEITURA: "le" > | 
 	<SE: "se" > |
+	<SENAO: "senao" > |
 	<FIMSE: "fim-se" > |
 	<ENQUANTO: "enquanto" > |
 	<FIMENQUANTO: "fim-enquanto" > 
@@ -140,6 +141,8 @@ TOKEN : {
 	< #CHAR: ["a"-"z"] | ["A" - "Z"] > | 
 	< AP: "(" > |
 	< FP: ")" > |
+	< AC: "{" > |
+	< FC: "}" > |
 	< PV: ";" > |
 	< VIRGULA: "," > |
 	< STRING: "\"" (~["\""])* "\"" >     	
@@ -402,7 +405,7 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	(
 	    atribuicao(listaComandosAltoNivel)
 	  | declaracao(listaComandosAltoNivel) 
-	  | se(listaComandosAltoNivel)  
+	  | se(listaComandosAltoNivel)
 	  | enquanto(listaComandosAltoNivel)
 	  | le(listaComandosAltoNivel)
 	  | exibe(listaComandosAltoNivel) 
@@ -477,22 +480,31 @@ void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
 	)* <PV>
 }
 
+//Inclusão do senao(else) como opcional apos a leitura da listaProgramaSe
 void  se(ListaComandosAltoNivel listaComandosAltoNivel):
 {
-	Token se;
-	ListaComandosAltoNivel listaProgramaSe =  new ListaComandosAltoNivel();
+	Token se,senao;
+	ListaComandosAltoNivel listaProgramaSe =  new ListaComandosAltoNivel();	
+	ListaComandosAltoNivel listaProgramaSenao =  new ListaComandosAltoNivel();
 	Expressao expressao = null;
 	ComandoAltoNivel  comando = null;
 }
-{
-	se = <SE> <AP> expressao = iniciaExpressao() <FP> programa(listaProgramaSe) <FIMSE>
+{	se = <SE> <AP> expressao = iniciaExpressao() <FP> programa(listaProgramaSe)
 	{
 		comando = new ComandoCondicionalSimples(expressao, listaProgramaSe, se);
 		AcoesSemanticas.faltaInicializacaoVariavel(expressao,se);
-		listaComandosAltoNivel.addComando(comando);   
-	}
+	}  
+	(	  senao = <SENAO> programa(listaProgramaSenao)
+	  {
+	    comando = new ComandoCondicionalCompleto(expressao, listaProgramaSe, listaProgramaSenao, se);
+	  }
+	)?
+	<FIMSE>
+	{
+	  listaComandosAltoNivel.addComando(comando); 
+	}	
 }
- 
+
 void  enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
 {
 	Token enq;

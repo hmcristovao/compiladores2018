@@ -488,9 +488,11 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(PV);
   }
 
+//Inclusão do senao(else) como opcional apos a leitura da listaProgramaSe
   static final public void se(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-        Token se;
+        Token se,senao;
         ListaComandosAltoNivel listaProgramaSe =  new ListaComandosAltoNivel();
+        ListaComandosAltoNivel listaProgramaSenao =  new ListaComandosAltoNivel();
         Expressao expressao = null;
         ComandoAltoNivel  comando = null;
     se = jj_consume_token(SE);
@@ -498,10 +500,20 @@ public class Compilador implements CompiladorConstants {
     expressao = iniciaExpressao();
     jj_consume_token(FP);
     programa(listaProgramaSe);
-    jj_consume_token(FIMSE);
                 comando = new ComandoCondicionalSimples(expressao, listaProgramaSe, se);
                 AcoesSemanticas.faltaInicializacaoVariavel(expressao,se);
-                listaComandosAltoNivel.addComando(comando);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case SENAO:
+      senao = jj_consume_token(SENAO);
+      programa(listaProgramaSenao);
+            comando = new ComandoCondicionalCompleto(expressao, listaProgramaSe, listaProgramaSenao, se);
+      break;
+    default:
+      jj_la1[17] = jj_gen;
+      ;
+    }
+    jj_consume_token(FIMSE);
+          listaComandosAltoNivel.addComando(comando);
   }
 
   static final public void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
@@ -536,7 +548,7 @@ public class Compilador implements CompiladorConstants {
         ;
         break;
       default:
-        jj_la1[17] = jj_gen;
+        jj_la1[18] = jj_gen;
         break label_8;
       }
       jj_consume_token(VIRGULA);
@@ -564,7 +576,7 @@ public class Compilador implements CompiladorConstants {
         ;
         break;
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[19] = jj_gen;
         break label_9;
       }
       jj_consume_token(VIRGULA);
@@ -586,7 +598,7 @@ public class Compilador implements CompiladorConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[19];
+  static final private int[] jj_la1 = new int[20];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -594,10 +606,10 @@ public class Compilador implements CompiladorConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x800000,0x1000000,0x34000000,0x34000000,0x8000000,0xc0000,0xc0000,0x300000,0x300000,0x400000,0x800e0000,0xd700,0xd700,0xc000,0x2000000,0x0,0x2000000,0x0,0x0,};
+      jj_la1_0 = new int[] {0x1000000,0x2000000,0x68000000,0x68000000,0x10000000,0x180000,0x180000,0x600000,0x600000,0x800000,0x1c0000,0x1a700,0x1a700,0x18000,0x4000000,0x0,0x4000000,0x800,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x18,0x10,0x10,0x0,0x0,0x4,0x0,0x4,0x4,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xc1,0x80,0x80,0x0,0x0,0x20,0x0,0x0,0x20,0x20,};
    }
 
   /** Constructor with InputStream. */
@@ -618,7 +630,7 @@ public class Compilador implements CompiladorConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -632,7 +644,7 @@ public class Compilador implements CompiladorConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -649,7 +661,7 @@ public class Compilador implements CompiladorConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -659,7 +671,7 @@ public class Compilador implements CompiladorConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -675,7 +687,7 @@ public class Compilador implements CompiladorConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -684,7 +696,7 @@ public class Compilador implements CompiladorConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -735,12 +747,12 @@ public class Compilador implements CompiladorConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[37];
+    boolean[] la1tokens = new boolean[40];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 19; i++) {
+    for (int i = 0; i < 20; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -752,7 +764,7 @@ public class Compilador implements CompiladorConstants {
         }
       }
     }
-    for (int i = 0; i < 37; i++) {
+    for (int i = 0; i < 40; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

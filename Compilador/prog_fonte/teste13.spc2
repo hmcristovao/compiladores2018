@@ -1,0 +1,18 @@
+numero a,b <- 10;
+exibe "\nDigite um valor de 'a' abaixo de 50;";
+exibe "\n-Para exibir o valor de a, digite abaixo de 10;";
+exibe "-Para exibir o valor de b, digite 10 ou mais;";
+exibe "-Se a = 25 exibe mensagem diferente(Caso de um 'se' dentro de um 'senao');";
+le a;
+enquanto(a < 50)
+	se(a < 10)
+		exibe "\nValor de a",a;
+	senao
+		exibe "\nValor de b",b;
+		se(a = 25)
+			exibe "Voce estrou em uma condicional dentro de uma condicional(Inception!)";
+		fim-se
+	fim-se
+	exibe "\nDigite um valor de a";
+	le a;
+fim-enquanto

@@ -1,5 +1,6 @@
 package comandoAltoNivel;
 
+import comandoPrimitivo.ListaComandosPrimitivos;
 import semantico.Expressao;
 
 public abstract class ComandoCondicional extends ComandoAltoNivel{
@@ -12,5 +13,10 @@ public abstract class ComandoCondicional extends ComandoAltoNivel{
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 	}
 	
+	@Override
+	public abstract ListaComandosPrimitivos geraListaComandosPrimitivos();
+	
+	@Override
 	public abstract String toString();
+	
 }
