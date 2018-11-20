@@ -23,6 +23,8 @@ import tratamentoErro.*;
 import comandoAltoNivel.*;
 import comandoPrimitivo.*;
 import codigoDestino.*;
+import java.util.LinkedList;
+
 
 public class Compilador {
 	public static Tabela tabela = new Tabela();
@@ -110,7 +112,11 @@ TOKEN [IGNORE_CASE] : {
 	<ENQUANTO: "enquanto" > |
 	<FIMENQUANTO: "fim-enquanto" > |
 	<PARA: "para" > |
-	<FIMPARA: "fim-para" >
+	<FIMPARA: "fim-para" > |
+	<SELETOR: "seletor" > |
+	<FIMSELETOR: "fim-seletor"> |
+	<CASO: "caso"> |
+	<FIMCASO: "fim-caso">
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -146,6 +152,7 @@ TOKEN : {
 	< AC: "{" > |
 	< FC: "}" > |
 	< PV: ";" > |
+	< DP: ":" > |
 	< VIRGULA: "," > |
 	< STRING: "\"" (~["\""])* "\"" >     	
 }
@@ -412,6 +419,7 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	  | le(listaComandosAltoNivel)
 	  | exibe(listaComandosAltoNivel)
 	  | para(listaComandosAltoNivel)
+	  | seletor(listaComandosAltoNivel)
 	)	
 }
 
@@ -584,4 +592,38 @@ void para(ListaComandosAltoNivel listaComandosAltoNivel):
   	  	AcoesSemanticas.faltaInicializacaoVariavel(expressao, tokenPara);
   	  	listaComandosAltoNivel.addComando(comando);
  	}
+}
+
+void seletor(ListaComandosAltoNivel listaComandosAltoNivel):
+{
+  	Token tokenSeletor, tokenEntrada;
+  	Item itemCaso = null;
+  	Expressao expressaoSeletor = null;
+  	ComandoAltoNivel comando = null;
+  	ListaComandosAltoNivel listaPrograma = new ListaComandosAltoNivel();
+  	LinkedList<ListaComandosAltoNivel> listaComandosAltoNivelCasos = new LinkedList<ListaComandosAltoNivel>();
+  	LinkedList<Item> listaOpcaoCasos = new LinkedList<Item>(); 
+  	
+}
+{
+ 	tokenSeletor = <SELETOR> <AP> expressaoSeletor = iniciaExpressao() <FP>
+ 	(<CASO>
+ 	( 	   	tokenEntrada = <NUM> {itemCaso = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);}
+		|<SOMA> tokenEntrada = <NUM> {itemCaso = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);}
+		|<SUB> tokenEntrada = <NUM> {itemCaso = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.NEG);}
+	)
+ 	<DP> programa(listaPrograma)
+ 	{
+ 	  listaComandosAltoNivelCasos.add(listaPrograma);
+ 	  listaOpcaoCasos.add(itemCaso);
+ 	  listaPrograma = new ListaComandosAltoNivel();
+ 	  
+ 	}
+ 	<FIMCASO>)+
+ 	{
+ 	  comando = new ComandoSeletor(expressaoSeletor, listaComandosAltoNivelCasos, listaOpcaoCasos, token);
+ 	  AcoesSemanticas.faltaInicializacaoVariavel(expressaoSeletor, tokenSeletor);
+  	  listaComandosAltoNivel.addComando(comando);
+ 	}
+ 	<FIMSELETOR> 	 
 }

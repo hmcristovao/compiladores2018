@@ -2,23 +2,58 @@
 Teste para a Tarefa 12  - Grupo 03: 
 
 */
+
 exibe "\nTeste A\n";
-numero x;
-para (x<-5; x>=0; x<-x-1)
-   exibe " x=",x;
-fim-para
+numero x <- 2;
 
+seletor(x+2)
+
+	caso 10:
+		exibe "Errado - caso 10\n";
+	fim-caso
+	
+	caso 4:
+		palavra a <- "Acertou - caso 4!!\n";
+		exibe a;
+	fim-caso
+	
+	caso 2:
+		exibe x;
+		exibe "\nErrado - caso 2\n";
+	fim-caso
+	
+fim-seletor
+	
+	
 exibe "\n\nTeste B\n";
-numero a,b;
 
-para (a<-0; a<10; a<-a+1)
+numero y <- -1;
 
-	para (b<-0; b<10; b<-b+1)
-		exibe a," ", b,"\n";
-		se(a=b)
-		   exibe "os dois sao iguais\n";
-		fim-se
-	fim-para
-fim-para
+seletor(x-y)
+
+	caso 1:
+		exibe "Errado - caso 10\n";
+	fim-caso
+	
+	caso 4:
+		exibe "Errado - caso 4\n";
+	fim-caso
+	
+	caso 2:
+		exibe x;
+		exibe "Errado - caso 2\n";
+	fim-caso
+	
+	caso 3:
+		exibe "Acertou - caso 3!!\n";
+		
+		x <- x*10 + y;
+		exibe x;
+	fim-caso
+	
+fim-seletor
+
+
+
 
 

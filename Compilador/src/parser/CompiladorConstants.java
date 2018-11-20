@@ -29,55 +29,65 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int FIMPARA = 16;
   /** RegularExpression Id. */
-  int NUMERO = 17;
+  int SELETOR = 17;
   /** RegularExpression Id. */
-  int PALAVRA = 18;
+  int FIMSELETOR = 18;
   /** RegularExpression Id. */
-  int DIGIT = 19;
+  int CASO = 19;
   /** RegularExpression Id. */
-  int NUM = 20;
+  int FIMCASO = 20;
   /** RegularExpression Id. */
-  int SOMA = 21;
+  int NUMERO = 21;
   /** RegularExpression Id. */
-  int SUB = 22;
+  int PALAVRA = 22;
   /** RegularExpression Id. */
-  int MUL = 23;
+  int DIGIT = 23;
   /** RegularExpression Id. */
-  int DIV = 24;
+  int NUM = 24;
   /** RegularExpression Id. */
-  int POT = 25;
+  int SOMA = 25;
   /** RegularExpression Id. */
-  int OU = 26;
+  int SUB = 26;
   /** RegularExpression Id. */
-  int E = 27;
+  int MUL = 27;
   /** RegularExpression Id. */
-  int ATRIB = 28;
+  int DIV = 28;
   /** RegularExpression Id. */
-  int IGUAL = 29;
+  int POT = 29;
   /** RegularExpression Id. */
-  int CONCAT = 30;
+  int OU = 30;
   /** RegularExpression Id. */
-  int MENOR = 31;
+  int E = 31;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 32;
+  int ATRIB = 32;
   /** RegularExpression Id. */
-  int CHAR = 33;
+  int IGUAL = 33;
   /** RegularExpression Id. */
-  int AP = 34;
+  int CONCAT = 34;
   /** RegularExpression Id. */
-  int FP = 35;
+  int MENOR = 35;
   /** RegularExpression Id. */
-  int AC = 36;
+  int MAIORIGUAL = 36;
   /** RegularExpression Id. */
-  int FC = 37;
+  int CHAR = 37;
   /** RegularExpression Id. */
-  int PV = 38;
+  int AP = 38;
   /** RegularExpression Id. */
-  int VIRGULA = 39;
+  int FP = 39;
   /** RegularExpression Id. */
-  int STRING = 40;
+  int AC = 40;
   /** RegularExpression Id. */
-  int VAR = 41;
+  int FC = 41;
+  /** RegularExpression Id. */
+  int PV = 42;
+  /** RegularExpression Id. */
+  int DP = 43;
+  /** RegularExpression Id. */
+  int VIRGULA = 44;
+  /** RegularExpression Id. */
+  int STRING = 45;
+  /** RegularExpression Id. */
+  int VAR = 46;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -103,6 +113,10 @@ public interface CompiladorConstants {
     "\"fim-enquanto\"",
     "\"para\"",
     "\"fim-para\"",
+    "\"seletor\"",
+    "\"fim-seletor\"",
+    "\"caso\"",
+    "\"fim-caso\"",
     "\"numero\"",
     "\"palavra\"",
     "<DIGIT>",
@@ -125,6 +139,7 @@ public interface CompiladorConstants {
     "\"{\"",
     "\"}\"",
     "\";\"",
+    "\":\"",
     "\",\"",
     "<STRING>",
     "<VAR>",
