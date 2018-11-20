@@ -593,13 +593,13 @@ public class Compilador implements CompiladorConstants {
   }
 
   static final public void para(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
-        Token para;
+        Token tokenPara;
         ListaComandosAltoNivel listaProgramaPara = new ListaComandosAltoNivel();
         Expressao expressao = null;
         ComandoAltoNivel comando = null;
         ListaComandosAltoNivel listaAtribuicaoInicio = new ListaComandosAltoNivel();
         ListaComandosAltoNivel listaAtribuicaoPasso = new ListaComandosAltoNivel();
-    para = jj_consume_token(PARA);
+    tokenPara = jj_consume_token(PARA);
     jj_consume_token(AP);
     atribuicao(listaAtribuicaoInicio);
     jj_consume_token(PV);
@@ -609,8 +609,8 @@ public class Compilador implements CompiladorConstants {
     jj_consume_token(FP);
     programa(listaProgramaPara);
     jj_consume_token(FIMPARA);
-                comando = new ComandoPara(listaAtribuicaoInicio, expressao, listaAtribuicaoPasso, listaProgramaPara, para);
-                AcoesSemanticas.faltaInicializacaoVariavel(expressao, para);
+                comando = new ComandoPara(listaAtribuicaoInicio, expressao, listaAtribuicaoPasso, listaProgramaPara, tokenPara);
+                AcoesSemanticas.faltaInicializacaoVariavel(expressao, tokenPara);
                 listaComandosAltoNivel.addComando(comando);
   }
 

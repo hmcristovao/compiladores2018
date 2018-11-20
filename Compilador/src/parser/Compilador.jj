@@ -570,7 +570,7 @@ void exibe(ListaComandosAltoNivel listaExibe):
 
 void para(ListaComandosAltoNivel listaComandosAltoNivel):
 {
-  	Token para;
+  	Token tokenPara;
   	ListaComandosAltoNivel listaProgramaPara = new ListaComandosAltoNivel();
   	Expressao expressao = null;
   	ComandoAltoNivel comando = null;
@@ -578,10 +578,10 @@ void para(ListaComandosAltoNivel listaComandosAltoNivel):
   	ListaComandosAltoNivel listaAtribuicaoPasso = new ListaComandosAltoNivel();
 }
 {
-  	para = <PARA> <AP> atribuicao(listaAtribuicaoInicio) <PV> expressao=iniciaExpressao() <PV> atribuicao(listaAtribuicaoPasso) <FP> programa(listaProgramaPara)< FIMPARA>
+  	tokenPara = <PARA> <AP> atribuicao(listaAtribuicaoInicio) <PV> expressao=iniciaExpressao() <PV> atribuicao(listaAtribuicaoPasso) <FP> programa(listaProgramaPara)< FIMPARA>
   	{
-  	  	comando = new ComandoPara(listaAtribuicaoInicio, expressao, listaAtribuicaoPasso, listaProgramaPara, para);
-  	  	AcoesSemanticas.faltaInicializacaoVariavel(expressao, para);
+  	  	comando = new ComandoPara(listaAtribuicaoInicio, expressao, listaAtribuicaoPasso, listaProgramaPara, tokenPara);
+  	  	AcoesSemanticas.faltaInicializacaoVariavel(expressao, tokenPara);
   	  	listaComandosAltoNivel.addComando(comando);
  	}
 }

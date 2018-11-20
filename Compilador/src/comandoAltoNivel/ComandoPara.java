@@ -22,8 +22,10 @@ public class ComandoPara extends ComandoAltoNivel {
 
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
-		ListaComandosAltoNivel listaCorpoPara = listaComandosAltoNivelTrue; // copia de listaComandosAltoNivelTrue para ser manipulada
+		// primeiro coloca corpo de comandos
+		ListaComandosAltoNivel listaCorpoPara = this.listaComandosAltoNivelTrue; // copia de listaComandosAltoNivelTrue para ser manipulada
 		
+		// depois coloca o comando dpo passo 
 		for (ComandoAltoNivel comando : this.listaAtribuicaoPasso.getListaComandosAltoNivel()) { //Colocando passo na lista de comandos copia
 			listaCorpoPara.addComando(comando);
 		}

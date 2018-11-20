@@ -2,12 +2,23 @@
 Teste para a Tarefa 11  - Grupo 02: 
 Comando para-fim-para
 */
+exibe "\nTeste A\n";
+numero x;
+para (x<-5; x>=0; x<-x-1)
+   exibe " x=",x;
+fim-para
 
+exibe "\n\nTeste B\n";
 numero a,b;
 
 para (a<-0; a<10; a<-a+1)
 
 	para (b<-0; b<10; b<-b+1)
 		exibe a," ", b,"\n";
+		se(a=b)
+		   exibe "os dois sao iguais\n";
+		fim-se
 	fim-para
 fim-para
+
+
