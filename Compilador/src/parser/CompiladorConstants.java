@@ -25,55 +25,59 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int FIMENQUANTO = 14;
   /** RegularExpression Id. */
-  int NUMERO = 15;
+  int PARA = 15;
   /** RegularExpression Id. */
-  int PALAVRA = 16;
+  int FIMPARA = 16;
   /** RegularExpression Id. */
-  int DIGIT = 17;
+  int NUMERO = 17;
   /** RegularExpression Id. */
-  int NUM = 18;
+  int PALAVRA = 18;
   /** RegularExpression Id. */
-  int SOMA = 19;
+  int DIGIT = 19;
   /** RegularExpression Id. */
-  int SUB = 20;
+  int NUM = 20;
   /** RegularExpression Id. */
-  int MUL = 21;
+  int SOMA = 21;
   /** RegularExpression Id. */
-  int DIV = 22;
+  int SUB = 22;
   /** RegularExpression Id. */
-  int POT = 23;
+  int MUL = 23;
   /** RegularExpression Id. */
-  int OU = 24;
+  int DIV = 24;
   /** RegularExpression Id. */
-  int E = 25;
+  int POT = 25;
   /** RegularExpression Id. */
-  int ATRIB = 26;
+  int OU = 26;
   /** RegularExpression Id. */
-  int IGUAL = 27;
+  int E = 27;
   /** RegularExpression Id. */
-  int CONCAT = 28;
+  int ATRIB = 28;
   /** RegularExpression Id. */
-  int MENOR = 29;
+  int IGUAL = 29;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 30;
+  int CONCAT = 30;
   /** RegularExpression Id. */
-  int CHAR = 31;
+  int MENOR = 31;
   /** RegularExpression Id. */
-  int AP = 32;
+  int MAIORIGUAL = 32;
   /** RegularExpression Id. */
-  int FP = 33;
+  int CHAR = 33;
   /** RegularExpression Id. */
-  int AC = 34;
+  int AP = 34;
   /** RegularExpression Id. */
-  int FC = 35;
+  int FP = 35;
   /** RegularExpression Id. */
-  int PV = 36;
+  int AC = 36;
   /** RegularExpression Id. */
-  int VIRGULA = 37;
+  int FC = 37;
   /** RegularExpression Id. */
-  int STRING = 38;
+  int PV = 38;
   /** RegularExpression Id. */
-  int VAR = 39;
+  int VIRGULA = 39;
+  /** RegularExpression Id. */
+  int STRING = 40;
+  /** RegularExpression Id. */
+  int VAR = 41;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -97,6 +101,8 @@ public interface CompiladorConstants {
     "\"fim-se\"",
     "\"enquanto\"",
     "\"fim-enquanto\"",
+    "\"para\"",
+    "\"fim-para\"",
     "\"numero\"",
     "\"palavra\"",
     "<DIGIT>",

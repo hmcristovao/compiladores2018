@@ -11,7 +11,7 @@ public class AcoesSemanticas {
 	
 	public static void incompatibilidadeTipoExpressao (Item item, Expressao expressao, Token token) {
 		Operando operando = (Operando) item;
-															//Tratamento de incompatibilidade de tipos entre expressoes.
+		 													//Tratamento de incompatibilidade de tipos entre expressoes.
 															//Percorre a lista a listaExpInfixa.
 		for(Item itemAux : expressao.getListaExpInfixa()) { 
 															//Verifica somente os itens que sao operando.
@@ -68,15 +68,15 @@ public class AcoesSemanticas {
 	public static void warnings() {
 		//percorrer tabela de simbolos
 		Compilador.tabela.tab.forEach((key, value) -> {
-			//verificar se isInicializada == false, a variavel não foi inicializada
+			//verificar se isInicializada == false, a variavel nï¿½o foi inicializada
 			if(value.getIsInicializada() == false) {
-				System.out.println("Warning: Variável declarada "+value.getNome()+" declarada, mas não inicializada.");
+				System.out.println("Warning: Variï¿½vel declarada "+value.getNome()+" declarada, mas nï¿½o inicializada.");
 				qtdWarnings++;
 			}
 			
-			//verificar se isInicializada == true isUtilizada == false, variavel foi inicializada porém não foi utilizada
+			//verificar se isInicializada == true isUtilizada == false, variavel foi inicializada porï¿½m nï¿½o foi utilizada
 			if(value.getIsInicializada() == true && value.getIsUtilizada() == false) {
-				System.out.println("Warning: Variável "+value.getNome()+" declarada, inicializada, mas não utilizada.");
+				System.out.println("Warning: Variï¿½vel "+value.getNome()+" declarada, inicializada, mas nï¿½o utilizada.");
 				qtdWarnings++;
 			}
 		});

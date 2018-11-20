@@ -1,0 +1,13 @@
+/*
+Teste para a Tarefa 11  - Grupo 02: 
+Comando para-fim-para
+*/
+
+numero a,b;
+
+para (a<-0; a<10; a<-a+1)
+
+	para (b<-0; b<10; b<-b+1)
+		exibe a," ", b,"\n";
+	fim-para
+fim-para

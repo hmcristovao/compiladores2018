@@ -108,7 +108,9 @@ TOKEN [IGNORE_CASE] : {
 	<SENAO: "senao" > |
 	<FIMSE: "fim-se" > |
 	<ENQUANTO: "enquanto" > |
-	<FIMENQUANTO: "fim-enquanto" > 
+	<FIMENQUANTO: "fim-enquanto" > |
+	<PARA: "para" > |
+	<FIMPARA: "fim-para" >
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -403,12 +405,13 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 {}
 {
 	(
-	    atribuicao(listaComandosAltoNivel)
+	    atribuicao(listaComandosAltoNivel) <PV>
 	  | declaracao(listaComandosAltoNivel) 
 	  | se(listaComandosAltoNivel)
 	  | enquanto(listaComandosAltoNivel)
 	  | le(listaComandosAltoNivel)
-	  | exibe(listaComandosAltoNivel) 
+	  | exibe(listaComandosAltoNivel)
+	  | para(listaComandosAltoNivel)
 	)	
 }
 
@@ -431,7 +434,6 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
 		AcoesSemanticas.faltaInicializacaoVariavel(expressao,var);
 		listaComandosAltoNivel.addComando(comando);
 	}
-	<PV>
 }
 
 void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
@@ -565,4 +567,21 @@ void exibe(ListaComandosAltoNivel listaExibe):
 		}
 	)* <PV>
 }
-	
+
+void para(ListaComandosAltoNivel listaComandosAltoNivel):
+{
+  	Token para;
+  	ListaComandosAltoNivel listaProgramaPara = new ListaComandosAltoNivel();
+  	Expressao expressao = null;
+  	ComandoAltoNivel comando = null;
+  	ListaComandosAltoNivel listaAtribuicaoInicio = new ListaComandosAltoNivel();
+  	ListaComandosAltoNivel listaAtribuicaoPasso = new ListaComandosAltoNivel();
+}
+{
+  	para = <PARA> <AP> atribuicao(listaAtribuicaoInicio) <PV> expressao=iniciaExpressao() <PV> atribuicao(listaAtribuicaoPasso) <FP> programa(listaProgramaPara)< FIMPARA>
+  	{
+  	  	comando = new ComandoPara(listaAtribuicaoInicio, expressao, listaAtribuicaoPasso, listaProgramaPara, para);
+  	  	AcoesSemanticas.faltaInicializacaoVariavel(expressao, para);
+  	  	listaComandosAltoNivel.addComando(comando);
+ 	}
+}
