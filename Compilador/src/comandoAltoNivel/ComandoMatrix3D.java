@@ -1,16 +1,8 @@
 package comandoAltoNivel;
 
-import java.util.LinkedList;
 import comandoPrimitivo.*;
 import parser.*;
-import semantico.Expressao;
-import semantico.Item;
-import semantico.Operador;
-import semantico.Operando;
-import semantico.Sinal;
-import semantico.TipoDado;
-import semantico.TipoElemento;
-import semantico.TipoOperador;
+import semantico.*;
 
 public class ComandoMatrix3D extends ComandoAltoNivel 
 {
@@ -68,39 +60,43 @@ public class ComandoMatrix3D extends ComandoAltoNivel
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() 
 	{
-		// Lista de comando temporaria 
-		ListaComandosAltoNivel listaComandosMatrix = new ListaComandosAltoNivel();
-		ListaComandosAltoNivel lstComando1D, lstComando2D, lstComando3D;
+		ListaComandosAltoNivel listaInicializacao, listaPasso, listaComandosTrue; 
+		Token varDimZ = this.getVarDimensaoZ();
+		Token varDimX = this.getVarDimensaoX();
+		Token varDimY = this.getVarDimensaoY();
 		
+		// Laço 1D : Laço mais intero cujo corpo é o bloco de instrucoes do Matrix3D		
+		// Cria a inicializacao e o passo adequados e repassa ao comando PARA	
+		listaInicializacao = new ListaComandosAltoNivel();
+		listaInicializacao.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela( varDimZ.image), this.getExpInicializacao(), varDimZ));
 		
-		// Laço  mais interno : Composto pelo bloco de instruções + incremento da variavel de controle mais interna Z
-		Token varDimZ =  this.getVarDimensaoZ();
-		lstComando1D = this.getListaComandosAltoNivelMatrix();
-		lstComando1D.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela(varDimZ.image) , this.gerarExpressaoIncremento(varDimZ), this.token ) );
-		ComandoAltoNivel comandoEnquanto1D = new ComandoEnquanto( this.gerarExpressaoParada(this.getVarDimensaoZ()), lstComando1D, this.token );
+		listaPasso = new ListaComandosAltoNivel();
+		listaPasso.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela( varDimZ.image ), this.gerarExpressaoIncremento(varDimZ), varDimZ) );
+		ComandoAltoNivel laco1D = new ComandoPara( listaInicializacao, this.gerarExpressaoParada(varDimZ), listaPasso, this.listaComandosAltoNivelMatrix, varDimZ );
 		
-		// Laço intermediário : Composto pelo laço mais interno + incremento da variavel de controle Y
-		Token varDimY =  this.getVarDimensaoY();
-		lstComando2D = new ListaComandosAltoNivel();
-		lstComando2D.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela(varDimZ.image) , this.getExpInicializacao(), this.token ));
-		lstComando2D.addComando( comandoEnquanto1D );
-		lstComando2D.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela(varDimY.image) , this.gerarExpressaoIncremento(varDimY), this.token ) ); 
-		ComandoAltoNivel comandoEnquanto2D = new ComandoEnquanto( this.gerarExpressaoParada(varDimY), lstComando2D, this.token );
+		listaComandosTrue = new ListaComandosAltoNivel();
+		listaComandosTrue.addComando( laco1D );
 		
-		// Laço mais externo : Composto pelos outros 2 laços + incremento da variável de controle Z
-		Token varDimX =  this.getVarDimensaoX();
-		lstComando3D = new ListaComandosAltoNivel();
-		lstComando3D.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela(varDimY.image) , this.getExpInicializacao(), this.token )); 
-		lstComando3D.addComando( comandoEnquanto2D );
-		lstComando3D.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela(varDimX.image) , this.gerarExpressaoIncremento(varDimX), this.token ) );
-		ComandoAltoNivel comandoEnquanto3D = new ComandoEnquanto( this.gerarExpressaoParada(varDimX), lstComando3D, this.token );
+		// Laço 2D - Laço intermediario : Seu bloco de instrucoes eh o laco 1D que esta em listaComandosTrue
+		listaInicializacao = new ListaComandosAltoNivel();
+		listaInicializacao.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela( varDimY.image), this.getExpInicializacao(), varDimY));
 		
-		// Inicializa a primeira variavel 
-		listaComandosMatrix.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela( varDimX.image ), this.getExpInicializacao(), this.token ));
-		listaComandosMatrix.addComando( comandoEnquanto3D );
-		ListaComandosPrimitivos lstComandosPrimitivosMatrix = listaComandosMatrix.geraListaComandoPrimitivosCompleta();
+		listaPasso = new ListaComandosAltoNivel();
+		listaPasso.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela( varDimY.image ), this.gerarExpressaoIncremento(varDimY), varDimY) );
+		ComandoAltoNivel laco2D = new ComandoPara( listaInicializacao, this.gerarExpressaoParada(varDimY), listaPasso, listaComandosTrue, varDimY );
 		
-		return lstComandosPrimitivosMatrix;
+		listaComandosTrue = new ListaComandosAltoNivel();
+		listaComandosTrue.addComando( laco2D );
+		
+		// Laco 3D - Laco mais externo : Seu bloco de instrucoes eh o lado 2D encapsulado
+		listaInicializacao = new ListaComandosAltoNivel();
+		listaInicializacao.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela( varDimX.image), this.getExpInicializacao(), varDimX));
+		
+		listaPasso = new ListaComandosAltoNivel();
+		listaPasso.addComando( new ComandoAtribuicao( Compilador.tabela.pesquisaTabela( varDimX.image ), this.gerarExpressaoIncremento(varDimX), varDimX) );
+		ComandoAltoNivel laco3D = new ComandoPara( listaInicializacao, this.gerarExpressaoParada(varDimX), listaPasso, listaComandosTrue, varDimX );
+		
+		return laco3D.geraListaComandosPrimitivos();
 	}
 
 	public Expressao getExpInicializacao() 

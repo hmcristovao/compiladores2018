@@ -108,6 +108,8 @@ TOKEN [IGNORE_CASE] : {
 	<FIMSE: "fim-se" > |
 	<ENQUANTO: "enquanto" > |
 	<FIMENQUANTO: "fim-enquanto" > |
+	<PARA: "para" > |
+	<FIMPARA: "fim-para" > |
 	<MATRIX3D : "matrix3D" > |
 	<FIMMATRIX3D: "fim-matrix3D" >
 }
@@ -379,12 +381,13 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 {}
 {
 	(
-	    atribuicao(listaComandosAltoNivel)
+	    atribuicao(listaComandosAltoNivel) < PV >
 	  | declaracao(listaComandosAltoNivel) 
 	  | se(listaComandosAltoNivel)  
 	  | enquanto(listaComandosAltoNivel)
 	  | le(listaComandosAltoNivel)
 	  | exibe(listaComandosAltoNivel)
+	  | para(listaComandosAltoNivel)
 	  | matrix3D( listaComandosAltoNivel )
 	)	
 }
@@ -408,7 +411,7 @@ void atribuicao(ListaComandosAltoNivel listaComandosAltoNivel):
 		AcoesSemanticas.faltaInicializacaoVariavel(expressao,var);
 		listaComandosAltoNivel.addComando(comando);
 	}
-	<PV>
+	//<PV>
 }
 
 void declaracao(ListaComandosAltoNivel listaComandosAltoNivel):
@@ -534,6 +537,25 @@ void exibe(ListaComandosAltoNivel listaExibe):
 	)* <PV>
 }
 
+void para(ListaComandosAltoNivel listaComandosAltoNivel):
+{
+  	Token tokenPara;
+  	ListaComandosAltoNivel listaProgramaPara = new ListaComandosAltoNivel();
+  	Expressao expressao = null;
+  	ComandoAltoNivel comando = null;
+  	ListaComandosAltoNivel listaAtribuicaoInicio = new ListaComandosAltoNivel();
+  	ListaComandosAltoNivel listaAtribuicaoPasso = new ListaComandosAltoNivel();
+}
+{
+  	tokenPara = <PARA> <AP> atribuicao(listaAtribuicaoInicio) <PV> expressao=iniciaExpressao() <PV> atribuicao(listaAtribuicaoPasso) <FP> programa(listaProgramaPara)< FIMPARA>
+  	{
+  	  	comando = new ComandoPara(listaAtribuicaoInicio, expressao, listaAtribuicaoPasso, listaProgramaPara, tokenPara);
+  	  	AcoesSemanticas.faltaInicializacaoVariavel(expressao, tokenPara);
+  	  	listaComandosAltoNivel.addComando(comando);
+ 	}
+}
+
+
 // Tarefa 18
 void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
 {
@@ -580,3 +602,4 @@ void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
 										
 				}
 }
+
