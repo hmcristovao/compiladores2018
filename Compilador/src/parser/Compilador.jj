@@ -116,7 +116,9 @@ TOKEN [IGNORE_CASE] : {
 	<SELETOR: "seletor" > |
 	<FIMSELETOR: "fim-seletor"> |
 	<CASO: "caso"> |
-	<FIMCASO: "fim-caso">
+	<FIMCASO: "fim-caso"> |
+	<FACA: "faca"> |
+	<FAZERENQUANTO: "fazer-enquanto">
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -420,6 +422,7 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	  | exibe(listaComandosAltoNivel)
 	  | para(listaComandosAltoNivel)
 	  | seletor(listaComandosAltoNivel)
+	  | fazerEnquanto(listaComandosAltoNivel)
 	)	
 }
 
@@ -515,6 +518,22 @@ void  se(ListaComandosAltoNivel listaComandosAltoNivel):
 	}	
 }
 
+void  fazerEnquanto(ListaComandosAltoNivel listaComandosAltoNivel):
+{
+	Token fazer;
+	ListaComandosAltoNivel listaProgramaFazerEnquanto = new ListaComandosAltoNivel();
+	Expressao expressao = null;
+	ComandoAltoNivel comando = null;
+}
+{
+	fazer = <FACA>programa(listaProgramaFazerEnquanto)<FAZERENQUANTO><AP>expressao = iniciaExpressao()<FP>< PV>
+	{
+		comando = new ComandoFazerEnquanto(expressao, listaProgramaFazerEnquanto, fazer);
+		AcoesSemanticas.faltaInicializacaoVariavel(expressao, fazer);
+		listaComandosAltoNivel.addComando(comando);
+	}
+}
+
 void  enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
 {
 	Token enq;
@@ -531,6 +550,8 @@ void  enquanto(ListaComandosAltoNivel listaComandosAltoNivel):
 	}
 	<FIMENQUANTO>
 }
+
+
  
 void le(ListaComandosAltoNivel listaComandosAltoNivel):
 {

@@ -368,6 +368,7 @@ public class Compilador implements CompiladorConstants {
       case ENQUANTO:
       case PARA:
       case SELETOR:
+      case FACA:
       case NUMERO:
       case PALAVRA:
       case VAR:
@@ -408,6 +409,9 @@ public class Compilador implements CompiladorConstants {
       break;
     case SELETOR:
       seletor(listaComandosAltoNivel);
+      break;
+    case FACA:
+      fazerEnquanto(listaComandosAltoNivel);
       break;
     default:
       jj_la1[12] = jj_gen;
@@ -524,6 +528,23 @@ public class Compilador implements CompiladorConstants {
     }
     jj_consume_token(FIMSE);
           listaComandosAltoNivel.addComando(comando);
+  }
+
+  static final public void fazerEnquanto(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+        Token fazer;
+        ListaComandosAltoNivel listaProgramaFazerEnquanto = new ListaComandosAltoNivel();
+        Expressao expressao = null;
+        ComandoAltoNivel comando = null;
+    fazer = jj_consume_token(FACA);
+    programa(listaProgramaFazerEnquanto);
+    jj_consume_token(FAZERENQUANTO);
+    jj_consume_token(AP);
+    expressao = iniciaExpressao();
+    jj_consume_token(FP);
+    jj_consume_token(PV);
+                comando = new ComandoFazerEnquanto(expressao, listaProgramaFazerEnquanto, fazer);
+                AcoesSemanticas.faltaInicializacaoVariavel(expressao, fazer);
+                listaComandosAltoNivel.addComando(comando);
   }
 
   static final public void enquanto(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
@@ -694,10 +715,10 @@ public class Compilador implements CompiladorConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x40000000,0x80000000,0x0,0x0,0x0,0x6000000,0x6000000,0x18000000,0x18000000,0x20000000,0x7000000,0x62a700,0x62a700,0x600000,0x0,0x0,0x0,0x800,0x0,0x0,0x7000000,0x80000,};
+      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x18000000,0x18000000,0x60000000,0x60000000,0x80000000,0x1c000000,0x1a2a700,0x1a2a700,0x1800000,0x0,0x0,0x0,0x800,0x0,0x0,0x1c000000,0x80000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x1a,0x1a,0x4,0x0,0x0,0x0,0x0,0x0,0x6040,0x4000,0x4000,0x0,0x1,0x1000,0x1,0x0,0x1000,0x1000,0x0,0x0,};
+      jj_la1_1 = new int[] {0x1,0x2,0x68,0x68,0x10,0x0,0x0,0x0,0x0,0x0,0x18100,0x10000,0x10000,0x0,0x4,0x4000,0x4,0x0,0x4000,0x4000,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -835,7 +856,7 @@ public class Compilador implements CompiladorConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[47];
+    boolean[] la1tokens = new boolean[49];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -852,7 +873,7 @@ public class Compilador implements CompiladorConstants {
         }
       }
     }
-    for (int i = 0; i < 47; i++) {
+    for (int i = 0; i < 49; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

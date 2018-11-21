@@ -1,0 +1,47 @@
+/* Teste para a Tarefa 13  - Grupo 04: do while
+
+faca
+	...
+fazer-enquanto(exp);
+
+*/
+
+exibe "Teste 01\n";
+numero x <- 10;
+
+faca
+	exibe x;
+	exibe "\n";
+fazer-enquanto(x = 0);
+
+exibe "Teste 02\n";
+numero y <- 0;
+
+faca
+	exibe "y: ";
+	exibe y;
+	exibe "\n";
+	y <- y+1;
+fazer-enquanto(y < 11);
+
+exibe "Teste 03\n";
+numero z;
+faca
+	exibe "Informe um valor para calcular o fatorial, 0 para sair: ";
+	le z;
+	
+	numero aux <- z, fat <- 1;
+	faca
+		fat <- fat * aux;
+		aux <- aux - 1;
+	fazer-enquanto(aux >= 1);
+	
+	se (z >= 1)
+		exibe "Resultado fatorial: ";
+		exibe fat;
+		exibe "\n";
+	fim-se
+	
+fazer-enquanto(z >= 1);
+
+
