@@ -639,7 +639,12 @@ void repeat(ListaComandosAltoNivel listaComandosAltoNivel):
   	Item item;
 }
 {
-  tokenRepeat = <REPEAT> <AP> tokenNumero = <NUM> {item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenNumero, Sinal.POS);} <FP> programa(listaProgramaRepeat)< FIMREPEAT>
+  tokenRepeat = <REPEAT>
+  <AP> tokenNumero = <NUM>
+  {
+      item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenNumero, Sinal.POS);
+  }
+  <FP> programa(listaProgramaRepeat)< FIMREPEAT>
   {
       comando = new ComandoRepeat(listaProgramaRepeat, tokenRepeat, item);
   	  listaComandosAltoNivel.addComando(comando);
