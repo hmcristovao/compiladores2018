@@ -41,57 +41,61 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int FAZERENQUANTO = 22;
   /** RegularExpression Id. */
-  int NUMERO = 23;
+  int REPETIR = 23;
   /** RegularExpression Id. */
-  int PALAVRA = 24;
+  int ATE = 24;
   /** RegularExpression Id. */
-  int DIGIT = 25;
+  int NUMERO = 25;
   /** RegularExpression Id. */
-  int NUM = 26;
+  int PALAVRA = 26;
   /** RegularExpression Id. */
-  int SOMA = 27;
+  int DIGIT = 27;
   /** RegularExpression Id. */
-  int SUB = 28;
+  int NUM = 28;
   /** RegularExpression Id. */
-  int MUL = 29;
+  int SOMA = 29;
   /** RegularExpression Id. */
-  int DIV = 30;
+  int SUB = 30;
   /** RegularExpression Id. */
-  int POT = 31;
+  int MUL = 31;
   /** RegularExpression Id. */
-  int OU = 32;
+  int DIV = 32;
   /** RegularExpression Id. */
-  int E = 33;
+  int POT = 33;
   /** RegularExpression Id. */
-  int ATRIB = 34;
+  int OU = 34;
   /** RegularExpression Id. */
-  int IGUAL = 35;
+  int E = 35;
   /** RegularExpression Id. */
-  int CONCAT = 36;
+  int ATRIB = 36;
   /** RegularExpression Id. */
-  int MENOR = 37;
+  int IGUAL = 37;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 38;
+  int CONCAT = 38;
   /** RegularExpression Id. */
-  int CHAR = 39;
+  int MENOR = 39;
   /** RegularExpression Id. */
-  int AP = 40;
+  int MAIORIGUAL = 40;
   /** RegularExpression Id. */
-  int FP = 41;
+  int CHAR = 41;
   /** RegularExpression Id. */
-  int AC = 42;
+  int AP = 42;
   /** RegularExpression Id. */
-  int FC = 43;
+  int FP = 43;
   /** RegularExpression Id. */
-  int PV = 44;
+  int AC = 44;
   /** RegularExpression Id. */
-  int DP = 45;
+  int FC = 45;
   /** RegularExpression Id. */
-  int VIRGULA = 46;
+  int PV = 46;
   /** RegularExpression Id. */
-  int STRING = 47;
+  int DP = 47;
   /** RegularExpression Id. */
-  int VAR = 48;
+  int VIRGULA = 48;
+  /** RegularExpression Id. */
+  int STRING = 49;
+  /** RegularExpression Id. */
+  int VAR = 50;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -123,6 +127,8 @@ public interface CompiladorConstants {
     "\"fim-caso\"",
     "\"faca\"",
     "\"fazer-enquanto\"",
+    "\"repetir\"",
+    "\"ate\"",
     "\"numero\"",
     "\"palavra\"",
     "<DIGIT>",

@@ -1,0 +1,70 @@
+/*
+Teste para a Tarefa 14  - Grupo 05: Comando repeat-until like pascal
+
+Estrutura utilizada:
+
+repetir
+	.
+	.
+	.
+ate exp ;
+
+obs: exp é alguma expressão tipo x = 3  
+
+*/
+
+exibe "\nTeste A\n";
+numero x <- 20;
+
+repetir
+	exibe x;
+	x <- x - 1;
+exibe "\n";
+ate x < 10 ;
+
+exibe "\nTeste B\n";
+numero y;
+
+repetir
+	numero cont <- 0;
+	exibe "\nDigite um numero para ver sua tabuada de multiplicacao ou 0 para sair:\n";
+	le y;
+	se( y >= 1 )
+		enquanto (cont < 10)
+			exibe "\n " , y , " x " , cont , " = " , ( y * cont );
+			cont <- cont + 1;
+		fim-enquanto
+		exibe "\n";
+	fim-se
+ate y = 0;
+exibe "\nFoi digitado o numero 0! programa encerrado!\n";
+
+exibe "\nTeste C\n";
+
+numero c <- 0;
+numero z <- 0;
+numero teste;
+
+exibe "\n Escreva 0 se quiser ver o Teste C! \n";
+le teste;
+se ( teste = 0 )
+	repetir
+		repetir 
+			exibe "\n Z :" , z , " C : " , c;
+			c <- c + 1;
+		ate c = 10;
+		c <- 0;
+		z <- z + 1;
+		exibe "\n";
+	ate z = 10;
+fim-se
+
+exibe "\nTeste D\n";
+
+numero  q<-0;
+
+repetir
+	exibe "\nAperte 1 !\n";
+	le q;
+ate q=1;
+exibe "\nObrigado\n";

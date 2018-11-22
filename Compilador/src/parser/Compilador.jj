@@ -118,7 +118,9 @@ TOKEN [IGNORE_CASE] : {
 	<CASO: "caso"> |
 	<FIMCASO: "fim-caso"> |
 	<FACA: "faca"> |
-	<FAZERENQUANTO: "fazer-enquanto">
+	<FAZERENQUANTO: "fazer-enquanto"> |
+	<REPETIR: "repetir">|
+	<ATE: "ate">
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -423,6 +425,7 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	  | para(listaComandosAltoNivel)
 	  | seletor(listaComandosAltoNivel)
 	  | fazerEnquanto(listaComandosAltoNivel)
+	  | repetir(listaComandosAltoNivel)
 	)	
 }
 
@@ -647,4 +650,20 @@ void seletor(ListaComandosAltoNivel listaComandosAltoNivel):
   	  listaComandosAltoNivel.addComando(comando);
  	}
  	<FIMSELETOR> 	 
+}
+
+void repetir(ListaComandosAltoNivel listaComandosAltoNivel):
+{
+	Token tokenRepetir; 
+	ListaComandosAltoNivel listaProgramaRepetir = new ListaComandosAltoNivel();
+	Expressao expressao = null;
+	ComandoAltoNivel comando = null;
+}
+{
+	tokenRepetir = <REPETIR> programa(listaProgramaRepetir) <ATE> expressao = iniciaExpressao() <PV>
+	{
+		comando = new ComandoRepetir(expressao, listaProgramaRepetir, tokenRepetir);
+		AcoesSemanticas.faltaInicializacaoVariavel(expressao,tokenRepetir);
+		listaComandosAltoNivel.addComando(comando);
+	}
 }
