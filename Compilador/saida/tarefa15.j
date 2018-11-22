@@ -10,17 +10,13 @@ return
 .end method 
 
 .method public static main([Ljava/lang/String;)V 
-.limit stack 13 
+.limit stack 10 
 .limit locals 11
 ldc2_w 2.0
 ldc2_w 3.0
 invokestatic java/lang/Math/pow(DD)D 
 dstore_1
 ldc2_w 2.0
-ldc2_w 1.0
-ldc2_w 2.0
-ddiv 
-invokestatic java/lang/Math/pow(DD)D 
 dstore_3
 ldc2_w 0.0
 dstore 7
@@ -40,26 +36,24 @@ ifeq LABELFALSE_0
 
 dload_1
 dload_3
-dadd 
+dmul 
 dstore 5
+dload_1
+dload_3
+dadd 
+dstore_1
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "\n\na = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
 getstatic java/lang/System/out Ljava/io/PrintStream; 
 dload_1
 invokevirtual java/io/PrintStream/print(D)V 
 getstatic java/lang/System/out Ljava/io/PrintStream; 
-ldc "\n"
-invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
-getstatic java/lang/System/out Ljava/io/PrintStream; 
-dload_3
-invokevirtual java/io/PrintStream/print(D)V 
-getstatic java/lang/System/out Ljava/io/PrintStream; 
-ldc "\n"
+ldc "\nc = "
 invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
 getstatic java/lang/System/out Ljava/io/PrintStream; 
 dload 5
 invokevirtual java/io/PrintStream/print(D)V 
-getstatic java/lang/System/out Ljava/io/PrintStream; 
-ldc "\n"
-invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
 dload 7
 ldc2_w 1.0
 dadd 

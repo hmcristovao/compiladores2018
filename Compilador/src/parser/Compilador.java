@@ -688,7 +688,7 @@ public class Compilador implements CompiladorConstants {
     tokenRepeat = jj_consume_token(REPEAT);
     jj_consume_token(AP);
     tokenNumero = jj_consume_token(NUM);
-                                                   item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenNumero, Sinal.POS);
+      item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenNumero, Sinal.POS);
     jj_consume_token(FP);
     programa(listaProgramaRepeat);
     jj_consume_token(FIMREPEAT);

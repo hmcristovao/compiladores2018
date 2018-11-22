@@ -5,11 +5,17 @@ repeat(n)
 
 numero a,b,c;
 a <- 2**3;
-b <- 2**(1/2); 
+b <- 2; 
 
 repeat(5)
-	c <- a + b;
-	exibe a, "\n";
-	exibe b, "\n";
-	exibe c, "\n";
+	c <- a * b;
+	a <- a + b;
+	
+	repeat(3)
+	   b <- b**(1/2);
+	   exibe "\nb = ",b;
+	fim-repeat   
+    
+    exibe "\n\na = ",a;
+	exibe "\nc = ",c;
 fim-repeat
