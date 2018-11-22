@@ -3,7 +3,7 @@ Teste para a Tarefa 6 - Grupo 04:
 Tratamento de warnings: 
 (i) variáveis declaradas e não inicializadas; 
 (ii) variáveis declaradas, inicializadas e não utilizadas.
-*/ 
+*/
 palavra a <- "aaaa";
 palavra b <- "bbbbb";
 palavra c, d, e;

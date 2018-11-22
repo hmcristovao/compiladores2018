@@ -1,0 +1,15 @@
+/*
+Teste para a Tarefa 15  - Grupo 06: 
+repeat(n)
+*/
+
+numero a,b,c;
+a <- 2**3;
+b <- 2**(1/2); 
+
+repeat(5)
+	c <- a + b;
+	exibe a, "\n";
+	exibe b, "\n";
+	exibe c, "\n";
+fim-repeat

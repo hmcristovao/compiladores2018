@@ -37,65 +37,61 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int FIMCASO = 20;
   /** RegularExpression Id. */
-  int FACA = 21;
+  int REPEAT = 21;
   /** RegularExpression Id. */
-  int FAZERENQUANTO = 22;
+  int FIMREPEAT = 22;
   /** RegularExpression Id. */
-  int REPETIR = 23;
+  int NUMERO = 23;
   /** RegularExpression Id. */
-  int ATE = 24;
+  int PALAVRA = 24;
   /** RegularExpression Id. */
-  int NUMERO = 25;
+  int DIGIT = 25;
   /** RegularExpression Id. */
-  int PALAVRA = 26;
+  int NUM = 26;
   /** RegularExpression Id. */
-  int DIGIT = 27;
+  int SOMA = 27;
   /** RegularExpression Id. */
-  int NUM = 28;
+  int SUB = 28;
   /** RegularExpression Id. */
-  int SOMA = 29;
+  int MUL = 29;
   /** RegularExpression Id. */
-  int SUB = 30;
+  int DIV = 30;
   /** RegularExpression Id. */
-  int MUL = 31;
+  int POT = 31;
   /** RegularExpression Id. */
-  int DIV = 32;
+  int OU = 32;
   /** RegularExpression Id. */
-  int POT = 33;
+  int E = 33;
   /** RegularExpression Id. */
-  int OU = 34;
+  int ATRIB = 34;
   /** RegularExpression Id. */
-  int E = 35;
+  int IGUAL = 35;
   /** RegularExpression Id. */
-  int ATRIB = 36;
+  int CONCAT = 36;
   /** RegularExpression Id. */
-  int IGUAL = 37;
+  int MENOR = 37;
   /** RegularExpression Id. */
-  int CONCAT = 38;
+  int MAIORIGUAL = 38;
   /** RegularExpression Id. */
-  int MENOR = 39;
+  int CHAR = 39;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 40;
+  int AP = 40;
   /** RegularExpression Id. */
-  int CHAR = 41;
+  int FP = 41;
   /** RegularExpression Id. */
-  int AP = 42;
+  int AC = 42;
   /** RegularExpression Id. */
-  int FP = 43;
+  int FC = 43;
   /** RegularExpression Id. */
-  int AC = 44;
+  int PV = 44;
   /** RegularExpression Id. */
-  int FC = 45;
+  int DP = 45;
   /** RegularExpression Id. */
-  int PV = 46;
+  int VIRGULA = 46;
   /** RegularExpression Id. */
-  int DP = 47;
+  int STRING = 47;
   /** RegularExpression Id. */
-  int VIRGULA = 48;
-  /** RegularExpression Id. */
-  int STRING = 49;
-  /** RegularExpression Id. */
-  int VAR = 50;
+  int VAR = 48;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -125,10 +121,8 @@ public interface CompiladorConstants {
     "\"fim-seletor\"",
     "\"caso\"",
     "\"fim-caso\"",
-    "\"faca\"",
-    "\"fazer-enquanto\"",
-    "\"repetir\"",
-    "\"ate\"",
+    "\"repeat\"",
+    "\"fim-repeat\"",
     "\"numero\"",
     "\"palavra\"",
     "<DIGIT>",
