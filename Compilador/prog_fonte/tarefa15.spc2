@@ -8,10 +8,11 @@ a <- 2**3;
 b <- 2**(1/2); 
 
 repeat(5)
-	c <- a + b;
-	exibe a, "\n";
-	exibe b, "\n";
-repeat(7)
-	exibe c, "\n";
-fim-repeat	
+   c <- a + b;
+   exibe "\n\nc = ",c,"\n";
+   repeat(3)
+      a <- a + c;
+      exibe "\na = ",a;
+   fim-repeat	
+   exibe "\n\nb = ",b;
 fim-repeat
