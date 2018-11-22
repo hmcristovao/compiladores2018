@@ -15,6 +15,7 @@ import semantico.TipoOperador;
 public class ComandoRepeat extends ComandoAltoNivel{
 		private ListaComandosAltoNivel listaComandosAltoNivel;
 		private Item numero;
+		static int count = 0;
 	
 	public ComandoRepeat (ListaComandosAltoNivel listaProgramaRepeat, Token tokenRepeat, Item numero) {		
 		this.listaComandosAltoNivel = listaProgramaRepeat;
@@ -25,8 +26,7 @@ public class ComandoRepeat extends ComandoAltoNivel{
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		
 		//____________usamos o comando for para implementar o repeat_______________//
-		
-		Token variavel = new Token(0,"repeat"); //cria um token para armazenar o nome da variavel repeat que sera usada para o comando PARA
+		Token variavel = new Token(0,"_repeat"+count); //cria um token para armazenar o nome da variavel repeat que sera usada para o comando PARA
 		//a nome da variavel tira a possibilidade do usuario declarar duas variaveis com o mesmo nome
 		//como o repeat eh uma funcao,nao eh possivel o usuario declarar com mesmo nome
 		
@@ -63,7 +63,7 @@ public class ComandoRepeat extends ComandoAltoNivel{
 		
 		//passa para o ComandoPara os parametros
 		ComandoPara repeat = new ComandoPara(inicial, exp1, passo, listaComandosAltoNivel, this.token);
-	
+		count++;
 		return repeat.geraListaComandosPrimitivos();
 		
 	}

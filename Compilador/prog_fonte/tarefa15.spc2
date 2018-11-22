@@ -11,5 +11,7 @@ repeat(5)
 	c <- a + b;
 	exibe a, "\n";
 	exibe b, "\n";
+repeat(7)
 	exibe c, "\n";
+fim-repeat	
 fim-repeat
