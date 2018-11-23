@@ -6,7 +6,6 @@ import semantico.*;
 import codigoDestino.CodigoDestino;
 
 public class ComandoAtribuicao extends ComandoAltoNivel {
-	
 	private Simbolo simbolo;
 	public Expressao expressao;
 	
@@ -31,13 +30,10 @@ public class ComandoAtribuicao extends ComandoAltoNivel {
 		return lista;
 	}
 	
-	
-	
 	@Override
 	public String toString() {
 		return "\nComando Atribuicao - lexema: \""+this.getLexema() 
 		     + "\" - simbolo: " + this.simbolo.getNome() 
 		     + " - expressao: " + this.expressao;
 	}
-
 }

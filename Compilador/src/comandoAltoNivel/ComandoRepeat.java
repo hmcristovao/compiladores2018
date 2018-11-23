@@ -65,7 +65,6 @@ public class ComandoRepeat extends ComandoAltoNivel{
 		ComandoPara repeat = new ComandoPara(inicial, exp1, passo, listaComandosAltoNivel, this.token);
 		count++;
 		return repeat.geraListaComandosPrimitivos();
-		
 	}
 	
 	public String toString() {

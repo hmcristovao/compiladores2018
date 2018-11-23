@@ -369,6 +369,7 @@ public class Compilador implements CompiladorConstants {
       case PARA:
       case SELETOR:
       case REPEAT:
+      case SEREPETE:
       case NUMERO:
       case PALAVRA:
       case VAR:
@@ -412,6 +413,9 @@ public class Compilador implements CompiladorConstants {
       break;
     case REPEAT:
       repeat(listaComandosAltoNivel);
+      break;
+    case SEREPETE:
+      seRepete(listaComandosAltoNivel);
       break;
     default:
       jj_la1[12] = jj_gen;
@@ -696,6 +700,26 @@ public class Compilador implements CompiladorConstants {
           listaComandosAltoNivel.addComando(comando);
   }
 
+  static final public void seRepete(ListaComandosAltoNivel listaComandosAltoNivel) throws ParseException {
+        Token se_repete, token_repete_n;
+        Expressao exp = null;
+        Item item;
+        ListaComandosAltoNivel lista_escopo_SeRepete = new ListaComandosAltoNivel();
+        ComandoAltoNivel comando = null;
+    se_repete = jj_consume_token(SEREPETE);
+    jj_consume_token(AP);
+    exp = iniciaExpressao();
+    jj_consume_token(VIRGULA);
+    token_repete_n = jj_consume_token(NUM);
+                item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, token_repete_n, Sinal.POS);
+    jj_consume_token(FP);
+    programa(lista_escopo_SeRepete);
+                comando = new ComandoSeRepete(exp, token_repete_n, item, lista_escopo_SeRepete);
+                AcoesSemanticas.faltaInicializacaoVariavel(exp, se_repete);
+                listaComandosAltoNivel.addComando(comando);
+    jj_consume_token(FIMSEREPETE);
+  }
+
   static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
   static public CompiladorTokenManager token_source;
@@ -714,10 +738,10 @@ public class Compilador implements CompiladorConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x18000000,0x18000000,0x60000000,0x60000000,0x80000000,0x1c000000,0x1a2a700,0x1a2a700,0x1800000,0x0,0x0,0x0,0x800,0x0,0x0,0x1c000000,0x80000,};
+      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x60000000,0x60000000,0x80000000,0x80000000,0x0,0x70000000,0x6a2a700,0x6a2a700,0x6000000,0x0,0x0,0x0,0x800,0x0,0x0,0x70000000,0x80000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x1,0x2,0x68,0x68,0x10,0x0,0x0,0x0,0x0,0x0,0x18100,0x10000,0x10000,0x0,0x4,0x4000,0x4,0x0,0x4000,0x4000,0x0,0x0,};
+      jj_la1_1 = new int[] {0x4,0x8,0x1a0,0x1a0,0x40,0x0,0x0,0x1,0x1,0x2,0x60400,0x40000,0x40000,0x0,0x10,0x10000,0x10,0x0,0x10000,0x10000,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -855,7 +879,7 @@ public class Compilador implements CompiladorConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[49];
+    boolean[] la1tokens = new boolean[51];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -872,7 +896,7 @@ public class Compilador implements CompiladorConstants {
         }
       }
     }
-    for (int i = 0; i < 49; i++) {
+    for (int i = 0; i < 51; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

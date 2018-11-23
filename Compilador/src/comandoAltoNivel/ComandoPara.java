@@ -19,7 +19,7 @@ public class ComandoPara extends ComandoAltoNivel {
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 		this.token = token;
 	}
-
+	
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		// primeiro coloca corpo de comandos

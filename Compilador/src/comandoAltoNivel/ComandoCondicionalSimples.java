@@ -19,7 +19,7 @@ public class ComandoCondicionalSimples extends ComandoCondicional{
 		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
 		PrimitivoSeExpFalsoGoto comando = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFalse, listaTrue);
 		lista.addComando(comando);
-		lista.addComando(labelFalse);	
+		lista.addComando(labelFalse);
 		
 		return lista;
 	}

@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import comandoPrimitivo.ComandoPrimitivo;
 import comandoPrimitivo.ListaComandosPrimitivos;
 
-
-
 public class ListaComandosAltoNivel {
 	
 	private LinkedList<ComandoAltoNivel> listaComandosAltoNivel;

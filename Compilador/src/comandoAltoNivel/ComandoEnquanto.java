@@ -14,7 +14,7 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 		this.listaComandosAltoNivelTrue = listaComandosAltoNivelTrue;
 		this.token = token;
 	}
-
+	
 	@Override
 	public ListaComandosPrimitivos geraListaComandosPrimitivos() {
 		
@@ -24,7 +24,7 @@ public class ComandoEnquanto extends ComandoAltoNivel{
 		PrimitivoGoto comandoGoto = new PrimitivoGoto(labelInicioEnquanto);
 		
 		PrimitivoSeExpFalsoGoto comandoSeExpFalsoGoto = new PrimitivoSeExpFalsoGoto(this.expressao.geraCodigoDestino(), labelFalse, listaTrue);
-		 
+		
 		ListaComandosPrimitivos lista = new ListaComandosPrimitivos();
 		lista.addComando(labelInicioEnquanto);
 		lista.addComando(comandoSeExpFalsoGoto);

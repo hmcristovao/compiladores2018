@@ -118,7 +118,9 @@ TOKEN [IGNORE_CASE] : {
 	<CASO: "caso"> |
 	<FIMCASO: "fim-caso"> |
 	<REPEAT: "repeat" > |
-	<FIMREPEAT: "fim-repeat">
+	<FIMREPEAT: "fim-repeat"> |
+	<SEREPETE: "se-repete"> |
+	<FIMSEREPETE: "fim-se-repete">
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -423,6 +425,7 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	  | para(listaComandosAltoNivel)
 	  | seletor(listaComandosAltoNivel)
 	  | repeat(listaComandosAltoNivel)
+	  | seRepete(listaComandosAltoNivel)
 	)	
 }
 
@@ -649,4 +652,27 @@ void repeat(ListaComandosAltoNivel listaComandosAltoNivel):
       comando = new ComandoRepeat(listaProgramaRepeat, tokenRepeat, item);
   	  listaComandosAltoNivel.addComando(comando);
   }
+}
+
+
+void  seRepete(ListaComandosAltoNivel listaComandosAltoNivel):
+{
+	Token se_repete, token_repete_n;
+	Expressao exp = null;
+	Item item;
+	ListaComandosAltoNivel lista_escopo_SeRepete = new ListaComandosAltoNivel();	
+	ComandoAltoNivel comando = null;
+}
+{  	
+	se_repete = <SEREPETE> <AP> exp = iniciaExpressao() <VIRGULA>  token_repete_n = <NUM> {
+	  
+		item = new Operando(TipoDado.NUMERO,TipoElemento.CTE, token_repete_n, Sinal.POS);
+		
+	} <FP> programa(lista_escopo_SeRepete)
+	{	  	
+		comando = new ComandoSeRepete(exp, token_repete_n, item, lista_escopo_SeRepete);
+		AcoesSemanticas.faltaInicializacaoVariavel(exp, se_repete);
+		listaComandosAltoNivel.addComando(comando);  
+	}
+	<FIMSEREPETE>
 }
