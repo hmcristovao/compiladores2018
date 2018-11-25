@@ -45,57 +45,61 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int FIMSEREPETE = 24;
   /** RegularExpression Id. */
-  int NUMERO = 25;
+  int DUPLO = 25;
   /** RegularExpression Id. */
-  int PALAVRA = 26;
+  int FIMDUPLO = 26;
   /** RegularExpression Id. */
-  int DIGIT = 27;
+  int NUMERO = 27;
   /** RegularExpression Id. */
-  int NUM = 28;
+  int PALAVRA = 28;
   /** RegularExpression Id. */
-  int SOMA = 29;
+  int DIGIT = 29;
   /** RegularExpression Id. */
-  int SUB = 30;
+  int NUM = 30;
   /** RegularExpression Id. */
-  int MUL = 31;
+  int SOMA = 31;
   /** RegularExpression Id. */
-  int DIV = 32;
+  int SUB = 32;
   /** RegularExpression Id. */
-  int POT = 33;
+  int MUL = 33;
   /** RegularExpression Id. */
-  int OU = 34;
+  int DIV = 34;
   /** RegularExpression Id. */
-  int E = 35;
+  int POT = 35;
   /** RegularExpression Id. */
-  int ATRIB = 36;
+  int OU = 36;
   /** RegularExpression Id. */
-  int IGUAL = 37;
+  int E = 37;
   /** RegularExpression Id. */
-  int CONCAT = 38;
+  int ATRIB = 38;
   /** RegularExpression Id. */
-  int MENOR = 39;
+  int IGUAL = 39;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 40;
+  int CONCAT = 40;
   /** RegularExpression Id. */
-  int CHAR = 41;
+  int MENOR = 41;
   /** RegularExpression Id. */
-  int AP = 42;
+  int MAIORIGUAL = 42;
   /** RegularExpression Id. */
-  int FP = 43;
+  int CHAR = 43;
   /** RegularExpression Id. */
-  int AC = 44;
+  int AP = 44;
   /** RegularExpression Id. */
-  int FC = 45;
+  int FP = 45;
   /** RegularExpression Id. */
-  int PV = 46;
+  int AC = 46;
   /** RegularExpression Id. */
-  int DP = 47;
+  int FC = 47;
   /** RegularExpression Id. */
-  int VIRGULA = 48;
+  int PV = 48;
   /** RegularExpression Id. */
-  int STRING = 49;
+  int DP = 49;
   /** RegularExpression Id. */
-  int VAR = 50;
+  int VIRGULA = 50;
+  /** RegularExpression Id. */
+  int STRING = 51;
+  /** RegularExpression Id. */
+  int VAR = 52;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -129,6 +133,8 @@ public interface CompiladorConstants {
     "\"fim-repeat\"",
     "\"se-repete\"",
     "\"fim-se-repete\"",
+    "\"duplo\"",
+    "\"fim-duplo\"",
     "\"numero\"",
     "\"palavra\"",
     "<DIGIT>",

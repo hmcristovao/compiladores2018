@@ -1,0 +1,23 @@
+/*
+	Apenas um leve problema na pilha,
+	Nao funciona sozinho, mas esta incluida na tarefa17.spc2
+*/
+
+palavra opc;
+duplo
+	exibe "\ndeseja sair?";
+	le opc;
+	duplo
+		exibe "deseja SAIR?";
+		le opc;
+		duplo
+			exibe "DESEJA SAIR?";
+			le opc;
+		fim-duplo
+		exibe "Eu perguntei se quer sair daqui?";
+		le opc;
+	fim-duplo
+	exibe "You Shall not pass, here?";
+	le opc;
+fim-duplo
+exibe "Adios mi amigo\n";

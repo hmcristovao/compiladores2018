@@ -1,0 +1,54 @@
+numero opc2;
+numero a;
+numero b <- 0;
+numero c <- 1;
+exibe "\n1 - Somar  dois numeros";
+exibe "\n2 - Multiplicar dois numeros";
+exibe "\nEntre com a opcao: ";
+le opc2;
+
+seletor(opc2)
+	caso 1:
+		exibe "\n\n## Soma 2 ##";
+		duplo
+			exibe "\nEntre com o numero ", c, ": ";
+			le a;
+			c <- c + 1;
+			b <- b + a;
+		fim-duplo
+		exibe "\nSomados: ", b, "\n";
+	fim-caso
+
+	caso 2:
+		b <- 1;
+		c <- 1;
+		exibe "\n\n## Multiplica 2 ##";
+		duplo
+			exibe "\nEntre com 0 numero ", c, ": ";
+			le a;
+			c <- c + 1;
+			b <- b * a;
+		fim-duplo
+		exibe "\nMultiplicados: ", b, "\n";
+	fim-caso
+fim-seletor
+
+/* Apenas um leve problema na pilha */
+palavra opc;
+duplo
+	exibe "\ndeseja sair?";
+	le opc;
+	duplo
+		exibe "deseja SAIR?";
+		le opc;
+		duplo
+			exibe "DESEJA SAIR?";
+			le opc;
+		fim-duplo
+		exibe "Eu perguntei se quer sair daqui?";
+		le opc;
+	fim-duplo
+	exibe "You Shall not pass, here?";
+	le opc;
+fim-duplo
+exibe "Adios mi amigo\n";

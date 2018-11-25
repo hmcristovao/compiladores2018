@@ -120,7 +120,9 @@ TOKEN [IGNORE_CASE] : {
 	<REPEAT: "repeat" > |
 	<FIMREPEAT: "fim-repeat"> |
 	<SEREPETE: "se-repete"> |
-	<FIMSEREPETE: "fim-se-repete">
+	<FIMSEREPETE: "fim-se-repete"> |
+	<DUPLO: "duplo"> |
+	<FIMDUPLO: "fim-duplo">
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -426,6 +428,7 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	  | seletor(listaComandosAltoNivel)
 	  | repeat(listaComandosAltoNivel)
 	  | seRepete(listaComandosAltoNivel)
+	  | duplo(listaComandosAltoNivel)
 	)	
 }
 
@@ -505,12 +508,14 @@ void  se(ListaComandosAltoNivel listaComandosAltoNivel):
 	Expressao expressao = null;
 	ComandoAltoNivel  comando = null;
 }
-{	se = <SE> <AP> expressao = iniciaExpressao() <FP> programa(listaProgramaSe)
+{
+	se = <SE> <AP> expressao = iniciaExpressao() <FP> programa(listaProgramaSe)
 	{
 		comando = new ComandoCondicionalSimples(expressao, listaProgramaSe, se);
 		AcoesSemanticas.faltaInicializacaoVariavel(expressao,se);
 	}  
-	(	  senao = <SENAO> programa(listaProgramaSenao)
+	(
+	  senao = <SENAO> programa(listaProgramaSenao)
 	  {
 	    comando = new ComandoCondicionalCompleto(expressao, listaProgramaSe, listaProgramaSenao, se);
 	  }
@@ -614,7 +619,8 @@ void seletor(ListaComandosAltoNivel listaComandosAltoNivel):
 {
  	tokenSeletor = <SELETOR> <AP> expressaoSeletor = iniciaExpressao() <FP>
  	(<CASO>
- 	( 	   	tokenEntrada = <NUM> {itemCaso = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);}
+ 	(
+ 	   	tokenEntrada = <NUM> {itemCaso = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);}
 		|<SOMA> tokenEntrada = <NUM> {itemCaso = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.POS);}
 		|<SUB> tokenEntrada = <NUM> {itemCaso = new Operando(TipoDado.NUMERO,TipoElemento.CTE, tokenEntrada, Sinal.NEG);}
 	)
@@ -675,4 +681,19 @@ void  seRepete(ListaComandosAltoNivel listaComandosAltoNivel):
 		listaComandosAltoNivel.addComando(comando);  
 	}
 	<FIMSEREPETE>
+}
+
+void duplo(ListaComandosAltoNivel listaComandosAltoNivel):
+{
+	Token tokenDuplo;
+	ListaComandosAltoNivel listaProgramaDuplo = new ListaComandosAltoNivel();
+	ComandoAltoNivel comando = null;
+}
+{
+  	tokenDuplo = <DUPLO> programa(listaProgramaDuplo) 
+  	{
+    	comando = new ComandoDuplo(listaProgramaDuplo, tokenDuplo);
+		listaComandosAltoNivel.addComando(comando);
+  	}
+  	<FIMDUPLO>
 }
