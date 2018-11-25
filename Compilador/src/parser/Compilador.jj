@@ -122,7 +122,10 @@ TOKEN [IGNORE_CASE] : {
 	<SEREPETE: "se-repete"> |
 	<FIMSEREPETE: "fim-se-repete"> |
 	<DUPLO: "duplo"> |
-	<FIMDUPLO: "fim-duplo">
+	<FIMDUPLO: "fim-duplo"> |
+	<MATRIX3D : "matrix3D" > |
+	<FIMMATRIX3D: "fim-matrix3D" >
+	
 }
 //TOKENS DE TIPOS 
 TOKEN [IGNORE_CASE] : {
@@ -148,7 +151,8 @@ TOKEN : {
 	< IGUAL: "=" > |
 	< CONCAT: "&" > |
 	< MENOR: "<" > |
-	< MAIORIGUAL: ">=" >
+	< MAIORIGUAL: ">=" > |
+	< TO: "to" >
 }
 //----------CARACTERES----------
 TOKEN : {
@@ -429,6 +433,7 @@ void comando(ListaComandosAltoNivel listaComandosAltoNivel):
 	  | repeat(listaComandosAltoNivel)
 	  | seRepete(listaComandosAltoNivel)
 	  | duplo(listaComandosAltoNivel)
+	  | matrix3D( listaComandosAltoNivel )
 	)	
 }
 
@@ -696,4 +701,50 @@ void duplo(ListaComandosAltoNivel listaComandosAltoNivel):
 		listaComandosAltoNivel.addComando(comando);
   	}
   	<FIMDUPLO>
+}
+
+// Tarefa 18
+void matrix3D(ListaComandosAltoNivel listaMatrix3D ):
+{
+  	Token tokenMatrix3D, tokenVarDimX, tokenVarDimY, tokenVarDimZ, tokenCteInit, tokenCteLimSup;
+  	ComandoAltoNivel comandoMatrix3D = null;
+  	Item cteInicializacao = null;
+	Item cteLimiteSuperior = null;
+	Expressao expInicializacao = new Expressao();
+	Expressao expCondicaoParada = new Expressao();
+  	ListaComandosAltoNivel blocoComandosMatrix = new ListaComandosAltoNivel();
+}
+{
+	tokenMatrix3D = <MATRIX3D> <AP>
+				tokenVarDimX = <VAR>
+				{
+				  if ( !tabela.verificaSimbolo( tokenVarDimX.image ) ) tabela.insereNaTabela( tokenVarDimX, TipoDado.NUMERO );
+				  tabela.pesquisaTabela( tokenVarDimX.image ).setIsInicializada(true);
+				} <VIRGULA>
+				tokenVarDimY = <VAR>
+				{
+				  if ( !tabela.verificaSimbolo( tokenVarDimY.image ) ) tabela.insereNaTabela( tokenVarDimY, TipoDado.NUMERO );
+				  tabela.pesquisaTabela( tokenVarDimY.image ).setIsInicializada(true);
+				} <VIRGULA>
+				tokenVarDimZ = <VAR>
+				{
+				  if ( !tabela.verificaSimbolo( tokenVarDimZ.image ) ) tabela.insereNaTabela( tokenVarDimZ, TipoDado.NUMERO );
+				  tabela.pesquisaTabela( tokenVarDimZ.image ).setIsInicializada(true);
+				} <SUB>
+				tokenCteInit = <NUM>
+				{
+				  cteInicializacao = new Operando( TipoDado.NUMERO, TipoElemento.CTE, tokenCteInit, Sinal.POS );
+				  expInicializacao.addListaExpInfixa( cteInicializacao );
+				  expInicializacao.addListaExpPosFixa( cteInicializacao );
+				}  <TO>
+				tokenCteLimSup = <NUM>
+				{
+				  cteLimiteSuperior = new Operando( TipoDado.NUMERO, TipoElemento.CTE, tokenCteLimSup, Sinal.POS );
+				  expCondicaoParada.addListaExpInfixa( cteLimiteSuperior );
+				  expCondicaoParada.addListaExpPosFixa( cteLimiteSuperior );
+				} <FP> programa( blocoComandosMatrix ) <FIMMATRIX3D>
+				{
+					comandoMatrix3D = new ComandoMatrix3D( tokenMatrix3D, tokenVarDimX, tokenVarDimY, tokenVarDimZ, expInicializacao, expCondicaoParada, blocoComandosMatrix );
+					listaMatrix3D.addComando( comandoMatrix3D );
+				}
 }

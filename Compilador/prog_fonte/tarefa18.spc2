@@ -1,0 +1,38 @@
+/*
+Teste para a Tarefa 18  - Grupo 11: 
+Comando matrix3D
+funciona como 3 for aninhados
+*/
+numero i <- 0, j, k, m;
+j <- i;
+k <- j;
+numero contador <-0;
+
+/*Teste variaveis ja declaradas e inicializadas*/
+exibe "*****Primeiro Teste ******\n";
+matrix3D( i, j, k - 1 to 2 )
+	exibe "i = ", i,"/ j = ", j, "/ k = ", k, "\n";
+	contador <- contador +  1;
+fim-matrix3D
+
+exibe contador, " possibilidades\n\n";
+
+
+/*Teste com variaveis declaradas mas nao inicializadas */
+exibe "\n*****Segundo Teste ******\n";
+numero var_1, var_2, var_3;
+matrix3d( var_1, var_2, var_3 - 2 to 2 )
+	exibe "var_1 = ", var_1,"/ var_2 = ", var_2, "/ var_3 = ", var_3, "\n";
+fim-matrix3d
+
+/*Teste com variaveis nao declaradas */
+exibe "\n*****Terceiro Teste ******\n";
+matrix3D( x, y, z - 2 to 4 )
+	/*exibe "x = ", x,"/ y = ", y, "/ z = ", z, "\n";*/
+	se ( x = y E y = z )
+		para( m <- 0; m < x - 1; m <- m + 1 )
+			exibe "indices iguais\n";
+		fim-para
+	fim-se
+fim-matrix3D 
+

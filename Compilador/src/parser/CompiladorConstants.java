@@ -49,57 +49,63 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int FIMDUPLO = 26;
   /** RegularExpression Id. */
-  int NUMERO = 27;
+  int MATRIX3D = 27;
   /** RegularExpression Id. */
-  int PALAVRA = 28;
+  int FIMMATRIX3D = 28;
   /** RegularExpression Id. */
-  int DIGIT = 29;
+  int NUMERO = 29;
   /** RegularExpression Id. */
-  int NUM = 30;
+  int PALAVRA = 30;
   /** RegularExpression Id. */
-  int SOMA = 31;
+  int DIGIT = 31;
   /** RegularExpression Id. */
-  int SUB = 32;
+  int NUM = 32;
   /** RegularExpression Id. */
-  int MUL = 33;
+  int SOMA = 33;
   /** RegularExpression Id. */
-  int DIV = 34;
+  int SUB = 34;
   /** RegularExpression Id. */
-  int POT = 35;
+  int MUL = 35;
   /** RegularExpression Id. */
-  int OU = 36;
+  int DIV = 36;
   /** RegularExpression Id. */
-  int E = 37;
+  int POT = 37;
   /** RegularExpression Id. */
-  int ATRIB = 38;
+  int OU = 38;
   /** RegularExpression Id. */
-  int IGUAL = 39;
+  int E = 39;
   /** RegularExpression Id. */
-  int CONCAT = 40;
+  int ATRIB = 40;
   /** RegularExpression Id. */
-  int MENOR = 41;
+  int IGUAL = 41;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 42;
+  int CONCAT = 42;
   /** RegularExpression Id. */
-  int CHAR = 43;
+  int MENOR = 43;
   /** RegularExpression Id. */
-  int AP = 44;
+  int MAIORIGUAL = 44;
   /** RegularExpression Id. */
-  int FP = 45;
+  int TO = 45;
   /** RegularExpression Id. */
-  int AC = 46;
+  int CHAR = 46;
   /** RegularExpression Id. */
-  int FC = 47;
+  int AP = 47;
   /** RegularExpression Id. */
-  int PV = 48;
+  int FP = 48;
   /** RegularExpression Id. */
-  int DP = 49;
+  int AC = 49;
   /** RegularExpression Id. */
-  int VIRGULA = 50;
+  int FC = 50;
   /** RegularExpression Id. */
-  int STRING = 51;
+  int PV = 51;
   /** RegularExpression Id. */
-  int VAR = 52;
+  int DP = 52;
+  /** RegularExpression Id. */
+  int VIRGULA = 53;
+  /** RegularExpression Id. */
+  int STRING = 54;
+  /** RegularExpression Id. */
+  int VAR = 55;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -135,6 +141,8 @@ public interface CompiladorConstants {
     "\"fim-se-repete\"",
     "\"duplo\"",
     "\"fim-duplo\"",
+    "\"matrix3D\"",
+    "\"fim-matrix3D\"",
     "\"numero\"",
     "\"palavra\"",
     "<DIGIT>",
@@ -151,6 +159,7 @@ public interface CompiladorConstants {
     "\"&\"",
     "\"<\"",
     "\">=\"",
+    "\"to\"",
     "<CHAR>",
     "\"(\"",
     "\")\"",
