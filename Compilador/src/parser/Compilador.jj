@@ -2,9 +2,14 @@
    Turma de Compiladores 2018 - Eng de Computacao e Ciencia da Computacao
    UFES - Campus de Sao Mateus
 
-	 Para executar (prompt no diretorio saida):
-	 java -jar jasmin.jar teste.j
-	 java teste 
+   Git: https://github.com/hmcristovao/compiladores2018
+   
+	 Para executar (prompt no diretorio 'saida'):
+	 > java -jar jasmin.jar teste.j
+	 > java teste 
+
+Obs.: o comando repetir-ate parou de funcionar (funcionava ate o commit da tarefa 14)
+ 
 */
 
 options {
