@@ -37,75 +37,79 @@ public interface CompiladorConstants {
   /** RegularExpression Id. */
   int FIMCASO = 20;
   /** RegularExpression Id. */
-  int REPEAT = 21;
+  int FACA = 21;
   /** RegularExpression Id. */
-  int FIMREPEAT = 22;
+  int FAZERENQUANTO = 22;
   /** RegularExpression Id. */
-  int SEREPETE = 23;
+  int REPEAT = 23;
   /** RegularExpression Id. */
-  int FIMSEREPETE = 24;
+  int FIMREPEAT = 24;
   /** RegularExpression Id. */
-  int DUPLO = 25;
+  int SEREPETE = 25;
   /** RegularExpression Id. */
-  int FIMDUPLO = 26;
+  int FIMSEREPETE = 26;
   /** RegularExpression Id. */
-  int MATRIX3D = 27;
+  int DUPLO = 27;
   /** RegularExpression Id. */
-  int FIMMATRIX3D = 28;
+  int FIMDUPLO = 28;
   /** RegularExpression Id. */
-  int NUMERO = 29;
+  int MATRIX3D = 29;
   /** RegularExpression Id. */
-  int PALAVRA = 30;
+  int FIMMATRIX3D = 30;
   /** RegularExpression Id. */
-  int DIGIT = 31;
+  int NUMERO = 31;
   /** RegularExpression Id. */
-  int NUM = 32;
+  int PALAVRA = 32;
   /** RegularExpression Id. */
-  int SOMA = 33;
+  int DIGIT = 33;
   /** RegularExpression Id. */
-  int SUB = 34;
+  int NUM = 34;
   /** RegularExpression Id. */
-  int MUL = 35;
+  int SOMA = 35;
   /** RegularExpression Id. */
-  int DIV = 36;
+  int SUB = 36;
   /** RegularExpression Id. */
-  int POT = 37;
+  int MUL = 37;
   /** RegularExpression Id. */
-  int OU = 38;
+  int DIV = 38;
   /** RegularExpression Id. */
-  int E = 39;
+  int POT = 39;
   /** RegularExpression Id. */
-  int ATRIB = 40;
+  int OU = 40;
   /** RegularExpression Id. */
-  int IGUAL = 41;
+  int E = 41;
   /** RegularExpression Id. */
-  int CONCAT = 42;
+  int ATRIB = 42;
   /** RegularExpression Id. */
-  int MENOR = 43;
+  int IGUAL = 43;
   /** RegularExpression Id. */
-  int MAIORIGUAL = 44;
+  int CONCAT = 44;
   /** RegularExpression Id. */
-  int TO = 45;
+  int MENOR = 45;
   /** RegularExpression Id. */
-  int CHAR = 46;
+  int MAIORIGUAL = 46;
   /** RegularExpression Id. */
-  int AP = 47;
+  int TO = 47;
   /** RegularExpression Id. */
-  int FP = 48;
+  int CHAR = 48;
   /** RegularExpression Id. */
-  int AC = 49;
+  int AP = 49;
   /** RegularExpression Id. */
-  int FC = 50;
+  int FP = 50;
   /** RegularExpression Id. */
-  int PV = 51;
+  int AC = 51;
   /** RegularExpression Id. */
-  int DP = 52;
+  int FC = 52;
   /** RegularExpression Id. */
-  int VIRGULA = 53;
+  int PV = 53;
   /** RegularExpression Id. */
-  int STRING = 54;
+  int DP = 54;
   /** RegularExpression Id. */
-  int VAR = 55;
+  int VIRGULA = 55;
+  /** RegularExpression Id. */
+  int STRING = 56;
+  /** RegularExpression Id. */
+  int VAR = 57;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -135,6 +139,8 @@ public interface CompiladorConstants {
     "\"fim-seletor\"",
     "\"caso\"",
     "\"fim-caso\"",
+    "\"faca\"",
+    "\"fazer-enquanto\"",
     "\"repeat\"",
     "\"fim-repeat\"",
     "\"se-repete\"",

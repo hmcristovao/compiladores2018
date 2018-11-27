@@ -10,8 +10,8 @@ return
 .end method 
 
 .method public static main([Ljava/lang/String;)V 
-.limit stack 53 
-.limit locals 25
+.limit stack 106 
+.limit locals 45
 ldc2_w 0.0
 dstore_1
 dload_1
@@ -363,5 +363,311 @@ dstore 17
 goto LABELINICIOENQUANTO_43
 
 LABELFALSE_42:
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "\n*****Quarto Teste ******\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+ldc2_w 1.0
+dstore 23
+ldc2_w 0.0
+dstore 25
+LABELINICIOENQUANTO_79:
+dload 25
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_80
+dconst_0 
+goto SAIDA_81
+COLOCATRUE_80:
+dconst_1 
+SAIDA_81:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_78
+
+ldc2_w 0.0
+dstore 27
+LABELINICIOENQUANTO_75:
+dload 27
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_76
+dconst_0 
+goto SAIDA_77
+COLOCATRUE_76:
+dconst_1 
+SAIDA_77:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_74
+
+ldc2_w 0.0
+dstore 29
+LABELINICIOENQUANTO_71:
+dload 29
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_72
+dconst_0 
+goto SAIDA_73
+COLOCATRUE_72:
+dconst_1 
+SAIDA_73:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_70
+
+ldc2_w 0.0
+dstore 31
+LABELINICIOENQUANTO_67:
+dload 31
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_68
+dconst_0 
+goto SAIDA_69
+COLOCATRUE_68:
+dconst_1 
+SAIDA_69:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_66
+
+ldc2_w 0.0
+dstore 33
+LABELINICIOENQUANTO_63:
+dload 33
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_64
+dconst_0 
+goto SAIDA_65
+COLOCATRUE_64:
+dconst_1 
+SAIDA_65:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_62
+
+ldc2_w 0.0
+dstore 35
+LABELINICIOENQUANTO_59:
+dload 35
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_60
+dconst_0 
+goto SAIDA_61
+COLOCATRUE_60:
+dconst_1 
+SAIDA_61:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_58
+
+ldc2_w 0.0
+dstore 37
+LABELINICIOENQUANTO_55:
+dload 37
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_56
+dconst_0 
+goto SAIDA_57
+COLOCATRUE_56:
+dconst_1 
+SAIDA_57:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_54
+
+ldc2_w 0.0
+dstore 39
+LABELINICIOENQUANTO_51:
+dload 39
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_52
+dconst_0 
+goto SAIDA_53
+COLOCATRUE_52:
+dconst_1 
+SAIDA_53:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_50
+
+ldc2_w 0.0
+dstore 41
+LABELINICIOENQUANTO_47:
+dload 41
+ldc2_w 2.0
+ldc2_w 1.0
+dadd 
+dcmpg 
+iflt COLOCATRUE_48
+dconst_0 
+goto SAIDA_49
+COLOCATRUE_48:
+dconst_1 
+SAIDA_49:
+dconst_0 
+dcmpg 
+ifeq LABELFALSE_46
+
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "n = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 23
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "x1 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 25
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "/ y1 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 27
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "/ z1 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 29
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "x2 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 31
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "/ y2 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 33
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "/ z2 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 35
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "x3 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 31
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "/ y3 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 39
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "/ z3 = "
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+dload 41
+invokevirtual java/io/PrintStream/print(D)V 
+getstatic java/lang/System/out Ljava/io/PrintStream; 
+ldc "\n\n"
+invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V 
+dload 23
+ldc2_w 1.0
+dadd 
+dstore 23
+dload 41
+ldc2_w 1.0
+dadd 
+dstore 41
+goto LABELINICIOENQUANTO_47
+
+LABELFALSE_46:
+dload 39
+ldc2_w 1.0
+dadd 
+dstore 39
+goto LABELINICIOENQUANTO_51
+
+LABELFALSE_50:
+dload 37
+ldc2_w 1.0
+dadd 
+dstore 37
+goto LABELINICIOENQUANTO_55
+
+LABELFALSE_54:
+dload 35
+ldc2_w 1.0
+dadd 
+dstore 35
+goto LABELINICIOENQUANTO_59
+
+LABELFALSE_58:
+dload 33
+ldc2_w 1.0
+dadd 
+dstore 33
+goto LABELINICIOENQUANTO_63
+
+LABELFALSE_62:
+dload 31
+ldc2_w 1.0
+dadd 
+dstore 31
+goto LABELINICIOENQUANTO_67
+
+LABELFALSE_66:
+dload 29
+ldc2_w 1.0
+dadd 
+dstore 29
+goto LABELINICIOENQUANTO_71
+
+LABELFALSE_70:
+dload 27
+ldc2_w 1.0
+dadd 
+dstore 27
+goto LABELINICIOENQUANTO_75
+
+LABELFALSE_74:
+dload 25
+ldc2_w 1.0
+dadd 
+dstore 25
+goto LABELINICIOENQUANTO_79
+
+LABELFALSE_78:
 return 
 .end method 

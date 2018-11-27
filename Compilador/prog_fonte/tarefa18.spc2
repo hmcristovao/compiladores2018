@@ -36,3 +36,18 @@ matrix3D( x, y, z - 2 to 4 )
 	fim-se
 fim-matrix3D 
 
+
+/*Teste com aninhamento */
+exibe "\n*****Quarto Teste ******\n";
+numero n <- 1;
+matrix3D( x1, y1, z1 - 0 to 2 )
+   matrix3D( x2, y2, z2 - 0 to 2 )
+      matrix3D( x3, y3, z3 - 0 to 2 )
+         exibe "n = ", n, "\n";
+	     exibe "x1 = ", x1,"/ y1 = ", y1, "/ z1 = ", z1, "\n";
+	     exibe "x2 = ", x2,"/ y2 = ", y2, "/ z2 = ", z2, "\n";
+	     exibe "x3 = ", x2,"/ y3 = ", y3, "/ z3 = ", z3, "\n\n";
+	     n <- n + 1;
+      fim-matrix3D 
+   fim-matrix3D 
+fim-matrix3D 
