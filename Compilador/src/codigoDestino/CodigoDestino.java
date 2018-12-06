@@ -40,7 +40,7 @@ public class CodigoDestino {
 		this.codigo.append(".end method \r\n\r\n");
 		
 		this.codigo.append(".method public static main([Ljava/lang/String;)V \r\n");
-		this.codigo.append(".limit stack "+ CodigoDestino.tamanhoTotalPilha +" \r\n");  // deve ser calculado!!!
+		this.codigo.append(".limit stack "+ CodigoDestino.tamanhoTotalPilha+2 +" \r\n");  // deve ser calculado!!!
 		this.codigo.append(".limit locals " + (Compilador.tabela.getMarcador()+2) +"\r\n"); 
 		
 		this.codigo.append(listaComandosPrimitivos.geraCodigoDestinoTotal());

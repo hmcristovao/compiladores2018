@@ -1,0 +1,4 @@
+numero a,b;
+a <- 2;
+b <- 0/0;
+exibe a/0, "\n",b;
